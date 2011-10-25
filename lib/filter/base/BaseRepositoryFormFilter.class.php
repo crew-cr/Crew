@@ -12,13 +12,15 @@ abstract class BaseRepositoryFormFilter extends BaseFormFilterPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'name'  => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'value' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'name'   => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'value'  => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'remote' => new sfWidgetFormFilterInput(array('with_empty' => false)),
     ));
 
     $this->setValidators(array(
-      'name'  => new sfValidatorPass(array('required' => false)),
-      'value' => new sfValidatorPass(array('required' => false)),
+      'name'   => new sfValidatorPass(array('required' => false)),
+      'value'  => new sfValidatorPass(array('required' => false)),
+      'remote' => new sfValidatorPass(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('repository_filters[%s]');
@@ -36,9 +38,10 @@ abstract class BaseRepositoryFormFilter extends BaseFormFilterPropel
   public function getFields()
   {
     return array(
-      'id'    => 'Number',
-      'name'  => 'Text',
-      'value' => 'Text',
+      'id'     => 'Number',
+      'name'   => 'Text',
+      'value'  => 'Text',
+      'remote' => 'Text',
     );
   }
 }

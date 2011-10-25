@@ -58,6 +58,7 @@ propel:
     id:                               ~
     name:                             { type: VARCHAR, size: '50', required: true }
     value:                            { type: VARCHAR, size: '255', required: true }
+    remote:                           { type: VARCHAR, size: '255', required: true }
   status:
     _attributes:
     id:                               ~
