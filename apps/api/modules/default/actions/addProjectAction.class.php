@@ -23,21 +23,26 @@ class addProjectAction extends sfAction
       ;
       $project1 = RepositoryQuery::create()
         ->filterByName($projectName)
-        ->count()
+        ->findOne()
       ;
       $project2 = RepositoryQuery::create()
         ->filterByRemote($remote)
-        ->count()
+        ->findOne()
       ;
       if($projectExiste)
       {
         $result['result'] = $projectExiste->getId();
         $result['message'] = sprintf("Project '%s' (remote: %s) already exists", $projectName, $remote);
       }
-      elseif($project1 || $project2)
+      elseif($project1)
       {
         $result['result'] = false;
-        $result['message'] = sprintf("A project (name: %s, remote: %s) already exists and conflicts with project you want to add", $projectName, $remote);
+        $result['message'] = sprintf("A project (name: %s, remote: %s) already exists and conflicts with project you want to add (name: %s, remote: %s)", $project1->getName(), $project1->getRemote() , $projectName, $remote);
+      }
+      elseif($project2)
+      {
+        $result['result'] = false;
+        $result['message'] = sprintf("A project (name: %s, remote: %s) already exists and conflicts with project you want to add (name: %s, remote: %s)", $project2->getName(), $project2->getRemote(), $projectName, $remote);
       }
       else
       {
