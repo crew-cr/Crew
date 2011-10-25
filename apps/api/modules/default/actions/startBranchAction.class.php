@@ -10,16 +10,15 @@ class startBranchAction extends sfAction
   {
     $projectId = $request->getParameter('project');
 
-    $project = RepositoryQuery::create()
+    $repository = RepositoryQuery::create()
       ->filterById($projectId)
       ->findOne()
     ;
 
     $result = array();
-    if($project)
+    if($repository)
     {
-      $branchs = GitCommand::getNoMergedBranchesInfos($project->repository);
-      Synchronize::branch($branchs, $project->getId());
+      BranchPeer::synchronize($repository);
       $result['result'] = true;
       $result['message'] = "Synchronisation OK";
     }
