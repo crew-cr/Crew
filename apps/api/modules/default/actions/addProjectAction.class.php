@@ -23,11 +23,11 @@ class addProjectAction extends sfAction
       ;
       $project1 = RepositoryQuery::create()
         ->filterByName($projectName)
-        ->findOne()
+        ->count()
       ;
       $project2 = RepositoryQuery::create()
         ->filterByRemote($remote)
-        ->findOne()
+        ->count()
       ;
       if($projectExiste)
       {
@@ -37,13 +37,14 @@ class addProjectAction extends sfAction
       elseif($project1 || $project2)
       {
         $result['result'] = false;
-        $result['message'] = sprintf("Un projet (name : %s, remote : %s) existe deja et rentre en conflit avec le projet que vous voulez ajouter", $projectName, $repository, $remote);
+        $result['message'] = sprintf("Un projet (name : %s, remote : %s) existe deja et rentre en conflit avec le projet que vous voulez ajouter", $projectName, $remote);
       }
       else
       {
         if(is_dir($repository))
         {
-          if(GitCommand::getRemote($repository) === $remote)
+          $currentRemote = GitCommand::getRemote($repository);
+          if($currentRemote === $remote)
           {
             $newProject = new Repository();
             $newProject
@@ -58,21 +59,20 @@ class addProjectAction extends sfAction
           else
           {
             $result['result'] = false;
-            $result['message'] = "Adresse remote invalide";
+            $result['message'] = sprintf("Le remote existant %s est différent de celui demandé %s", $currentRemote, $remote);
           }
         }
         else
         {
           $result['result'] = false;
-          $result['message'] = "Repository inexistant. Veuillez le creer !";
+          $result['message'] = sprintf("Repository % inexistant. Veuillez le creer !", $repository);
         }
       }
-
     }
     else
     {
       $result['result'] = false;
-      $result['message'] = "Parametre name ou remote inexistant";
+      $result['message'] = sprintf("Parametre name (%s) ou remote (%s) inexistant", $projectName, $remote);
     }
 
     $this->getResponse()->setContentType('application/json');

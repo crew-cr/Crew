@@ -5,6 +5,18 @@ class GitCommand
   /**
    * @static
    * @param string $gitDir
+   * @return string
+   */
+  public static function getRemote($gitDir)
+  {
+    $cmd = sprintf("git --git-dir='%s/.git' remote -v | grep origin | head -n1 | tr -d '\t' | sed 's/origin//' | cut -d' ' -f1", $gitDir);
+    exec($cmd, $remote);
+    return (count($remote)) ? $remote[0] : '';
+  }
+
+  /**
+   * @static
+   * @param string $gitDir
    * @return void
    */
   public static function fetch($gitDir)
