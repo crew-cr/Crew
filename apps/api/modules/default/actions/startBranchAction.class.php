@@ -20,12 +20,12 @@ class startBranchAction extends sfAction
     {
       BranchPeer::synchronize($repository);
       $result['result'] = true;
-      $result['message'] = "Synchronisation OK";
+      $result['message'] = sprintf("Synchronization OK: %s", $repository->getName());
     }
     else
     {
       $result['result'] = false;
-      $result['message'] = "Projet inexistant";
+      $result['message'] = sprintf("No valid project (id: %s)", $projectId);
     }
 
     $this->getResponse()->setContentType('application/json');

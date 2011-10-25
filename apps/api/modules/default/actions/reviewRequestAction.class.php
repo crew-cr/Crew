@@ -42,36 +42,36 @@ class reviewRequestAction extends sfAction
               $branch->setReviewRequest(1);
               $branch->save();
               $result['result'] = true;
-              $result['message'] = "Review engagee";
+              $result['message'] = sprintf("Review has been engaged");
             }
             else
             {
               $result['result'] = true;
-              $result['message'] = "Commit deja pris en compte";
+              $result['message'] = sprintf("Commit already used : '%s'", $commit);
             }
           }
           else
           {
             $result['result'] = false;
-            $result['message'] = "Commit non valide";
+            $result['message'] = sprintf("No valid commit '%s'", $commit);
           }
         }
         else
         {
           $result['result'] = false;
-          $result['message'] = "Review en cours";
+          $result['message'] = sprintf("Review pending");
         }
       }
       else
       {
         $result['result'] = false;
-        $result['message'] = "Branche invalide";
+        $result['message'] = sprintf("No valid Branch '%s'", $branchName);
       }
     }
     else
     {
       $result['result'] = false;
-      $result['message'] = "Projet invalide";
+      $result['message'] = sprintf("No valid project '%s'", $projectId);
     }
 
     $this->getResponse()->setContentType('application/json');
