@@ -37,7 +37,7 @@ class branchesAction extends sfAction
     else
     {
       $result['result'] = false;
-      $result['message'] = "Pas de branches";
+      $result['message'] = "No branches";
     }
 
     $this->getResponse()->setContentType('application/json');
