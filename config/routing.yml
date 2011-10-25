@@ -1,0 +1,7 @@
+# default rules
+homepage:
+  url:   /
+  param: { module: default, action: index }
+
+default:
+  url:   /:module/:action/*
