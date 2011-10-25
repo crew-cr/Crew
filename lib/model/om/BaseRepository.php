@@ -43,6 +43,12 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	protected $value;
 
 	/**
+	 * The value for the remote field.
+	 * @var        string
+	 */
+	protected $remote;
+
+	/**
 	 * @var        array Branch[] Collection to store aggregation of Branch objects.
 	 */
 	protected $collBranchs;
@@ -89,6 +95,16 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	public function getValue()
 	{
 		return $this->value;
+	}
+
+	/**
+	 * Get the [remote] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getRemote()
+	{
+		return $this->remote;
 	}
 
 	/**
@@ -152,6 +168,26 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	} // setValue()
 
 	/**
+	 * Set the value of [remote] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Repository The current object (for fluent API support)
+	 */
+	public function setRemote($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->remote !== $v) {
+			$this->remote = $v;
+			$this->modifiedColumns[] = RepositoryPeer::REMOTE;
+		}
+
+		return $this;
+	} // setRemote()
+
+	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -186,6 +222,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->name = ($row[$startcol + 1] !== null) ? (string) $row[$startcol + 1] : null;
 			$this->value = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->remote = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -194,7 +231,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 3; // 3 = RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 4; // 4 = RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Repository object", $e);
@@ -552,6 +589,9 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			case 2:
 				return $this->getValue();
 				break;
+			case 3:
+				return $this->getRemote();
+				break;
 			default:
 				return null;
 				break;
@@ -578,6 +618,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getName(),
 			$keys[2] => $this->getValue(),
+			$keys[3] => $this->getRemote(),
 		);
 		return $result;
 	}
@@ -618,6 +659,9 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			case 2:
 				$this->setValue($value);
 				break;
+			case 3:
+				$this->setRemote($value);
+				break;
 		} // switch()
 	}
 
@@ -645,6 +689,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setName($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setValue($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setRemote($arr[$keys[3]]);
 	}
 
 	/**
@@ -659,6 +704,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		if ($this->isColumnModified(RepositoryPeer::ID)) $criteria->add(RepositoryPeer::ID, $this->id);
 		if ($this->isColumnModified(RepositoryPeer::NAME)) $criteria->add(RepositoryPeer::NAME, $this->name);
 		if ($this->isColumnModified(RepositoryPeer::VALUE)) $criteria->add(RepositoryPeer::VALUE, $this->value);
+		if ($this->isColumnModified(RepositoryPeer::REMOTE)) $criteria->add(RepositoryPeer::REMOTE, $this->remote);
 
 		return $criteria;
 	}
@@ -722,6 +768,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	{
 		$copyObj->setName($this->name);
 		$copyObj->setValue($this->value);
+		$copyObj->setRemote($this->remote);
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -946,6 +993,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		$this->id = null;
 		$this->name = null;
 		$this->value = null;
+		$this->remote = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();

@@ -26,7 +26,7 @@ abstract class BaseRepositoryPeer {
 	const TM_CLASS = 'RepositoryTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 3;
+	const NUM_COLUMNS = 4;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -39,6 +39,9 @@ abstract class BaseRepositoryPeer {
 
 	/** the column name for the VALUE field */
 	const VALUE = 'repository.VALUE';
+
+	/** the column name for the REMOTE field */
+	const REMOTE = 'repository.REMOTE';
 
 	/**
 	 * An identiy map to hold any loaded instances of Repository objects.
@@ -63,12 +66,12 @@ abstract class BaseRepositoryPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Value', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'value', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::VALUE, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'VALUE', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'value', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'Name', 'Value', 'Remote', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'name', 'value', 'remote', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::NAME, self::VALUE, self::REMOTE, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'NAME', 'VALUE', 'REMOTE', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'name', 'value', 'remote', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -78,12 +81,12 @@ abstract class BaseRepositoryPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Value' => 2, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'value' => 2, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::VALUE => 2, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'VALUE' => 2, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'value' => 2, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'Name' => 1, 'Value' => 2, 'Remote' => 3, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'name' => 1, 'value' => 2, 'remote' => 3, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::NAME => 1, self::VALUE => 2, self::REMOTE => 3, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'NAME' => 1, 'VALUE' => 2, 'REMOTE' => 3, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'name' => 1, 'value' => 2, 'remote' => 3, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, )
 	);
 
 	/**
@@ -158,10 +161,12 @@ abstract class BaseRepositoryPeer {
 			$criteria->addSelectColumn(RepositoryPeer::ID);
 			$criteria->addSelectColumn(RepositoryPeer::NAME);
 			$criteria->addSelectColumn(RepositoryPeer::VALUE);
+			$criteria->addSelectColumn(RepositoryPeer::REMOTE);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.NAME');
 			$criteria->addSelectColumn($alias . '.VALUE');
+			$criteria->addSelectColumn($alias . '.REMOTE');
 		}
 	}
 

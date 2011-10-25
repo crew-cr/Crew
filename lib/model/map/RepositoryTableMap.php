@@ -40,6 +40,7 @@ class RepositoryTableMap extends TableMap {
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', true, 50, null);
 		$this->addColumn('VALUE', 'Value', 'VARCHAR', true, 255, null);
+		$this->addColumn('REMOTE', 'Remote', 'VARCHAR', true, 255, null);
 		// validators
 	} // initialize()
 
