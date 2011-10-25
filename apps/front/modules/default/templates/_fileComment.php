@@ -4,8 +4,8 @@
       <div class="comment_holder">
         <?php foreach ($globalComments as $globalComment) : ?>
         <div class="commit_comment">
-          <div class="comment_user"><span class="right"><?php echo sprintf('commenté le %s', $globalComment->getUpdatedAt()) ?></span></div>
-          <div class="comment_body"><?php echo $globalComment->getValue() ?></div>
+          <div class="comment_user"><?php echo sprintf("<span>commenté le %s par <strong>%s</strong></span>", $globalComment->getUpdatedAt('d/m/Y à H:i:s'), $globalComment->getsfGuardUser()) ?></div>
+          <div class="comment_body"><?php echo sprintf("%s", $globalComment->getValue()) ?></div>
         </div>
         <?php endforeach; ?>
       </div>

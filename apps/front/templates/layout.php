@@ -18,15 +18,20 @@
 <?php include_javascripts() ?>
 </head>
 <body onload="">
-  <div class="page">
-    <div class="header">
-      <div class="padding_container">
-        <h2 class="left"><?php echo link_to('Crew', 'default/repositoryList') ?></h2>
-        <?php echo include_component('default', 'menu') ?>
-      </div>
+  <div class="header">
+    <div class="userbox">
+      <?php include_component('default', 'userbox') ?>
     </div>
-    <div class="page_body">
-      <?php echo $sf_content ?>
+    <div class="padding_container">
+      <h2 class="left"><?php echo link_to('Crew, a code review tool for git projects', 'default/repositoryList') ?></h2>
+    </div>
+  </div>
+  <div class="site">
+    <div class="page">
+      <?php echo include_component('default', 'menu') ?>
+      <div class="page_body">
+        <?php echo $sf_content ?>
+      </div>
     </div>
   </div>
 </body>
