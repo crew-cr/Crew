@@ -11,6 +11,7 @@ body {
   font-size: 13px;
   font-family: 'Droid sans', Arial, Helvetica, sans-serif;
   color: #666;
+  background: url("../images/background-v2.png") repeat-x;
 }
 
 h2 {
@@ -112,9 +113,18 @@ button:hover {
   padding: 0 5px;
 }
 
+.site {
+  margin: 0 auto;
+  width: 945px;
+  padding: 0 15px;
+}
+
 .page {
   display: block;
-  width: 100%;
+  position: relative;
+  margin: -20px 0 10px -25px;
+  padding: 20px 25px 0;
+  background: url('../images/background-white.png') 0 0 no-repeat;
 }
 
 .page_header {
@@ -134,17 +144,46 @@ button:hover {
 }
 
 .header {
-  width: 90%;
-  margin: 20px auto;
-  height: 33px;
+  width: 945px;
+  margin: 0 auto;
+  padding: 0 15px;
+  height: 91px;
   line-height: 30px;
   font-size: 12px;
   color: #333;
-  background: url('../images/file_head.gif') 0 0 repeat-x #EEE;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
-  border: 1px solid #CCC;
-  border-collapse: collapse;
   overflow: hidden;
+}
+
+.header h2 {
+  font-size: 16px;
+  text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.header .userbox {
+  float: right;
+  padding: 0 10px 0 10px;
+  font-size: 12px;
+  border-top: none;
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+  background: whiteSmoke;
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#fcfcfc',endColorstr='#ececec');
+  background: -webkit-gradient(linear,0% 0,0% 100%,from(#FCFCFC),to(#E8E8E8));
+  background: -moz-linear-gradient(270deg,#FCFCFC,#ECECEC);
+  border-color: #EEE;
+  border: 1px solid #E9E9E9;
+  border-bottom-color: whiteSmoke;
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  box-shadow: 0 1px 1px rgba(0,0,0,0.2);
+  font-weight: bold;
+  color: #4183C4;
+  text-shadow: white 1px 1px 0;
 }
 
 .header select {
@@ -157,7 +196,7 @@ button:hover {
 
 .page_body {
   line-height: 1.4em;
-  width: 90%;
+  width: 100%;
   background: #f8f8f8;
   border: 1px solid #d8d8d8;
   margin: 15px auto 15px auto;
