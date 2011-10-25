@@ -15,7 +15,7 @@ propel.mysql.tableType     = InnoDB
 propel.addVendorInfo       = true
 propel.addGenericAccessors = true
 propel.addGenericMutators  = true
-propel.addTimeStamp        = true
+propel.addTimeStamp        = false
 propel.addValidators       = false
 propel.addIncludes         = false
 
