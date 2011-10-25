@@ -1,6 +1,6 @@
 <?php
  
-class string {
+class stringUtils {
   /**
    * @static
    * @param string $string

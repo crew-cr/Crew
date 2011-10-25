@@ -17,7 +17,7 @@
         <td>
           <div class="file_infos">
             <h3>
-              <?php echo link_to($file['Filename'], 'default/file', array('query_string' => 'file='.$file['Id'])) ?>
+              <?php echo link_to(stringUtils::lshorten($file['Filename']), 'default/file', array('title' => $file['Filename'], 'query_string' => 'file='.$file['Id'])) ?>
             </h3>
             <span class="file_comments">
               <?php echo link_to($file['NbFileComments'].' commentaire(s)', 'default/file', array('query_string' => 'file='.$file['Id'])) ?>
