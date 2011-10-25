@@ -15,8 +15,7 @@ class FileCommentForm extends BaseFileCommentForm
       'id'        => new sfWidgetFormInputHidden(),
       'user_id'   => new sfWidgetFormInputHidden(array(), array('value' => 1)),
       'file_id'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('file'))),
-      'value'     => new sfWidgetFormTextarea(),
-      'date'      => new sfWidgetFormInputHidden(array(), array('value' => time())),
+      'value'     => new sfWidgetFormTextarea()
     ));
 
     $this->widgetSchema->setNameFormat('comment[%s]');

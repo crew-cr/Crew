@@ -41,7 +41,8 @@ class BranchCommentTableMap extends TableMap {
 		$this->addForeignKey('USER_ID', 'UserId', 'INTEGER', 'sf_guard_user', 'ID', false, null, null);
 		$this->addForeignKey('BRANCH_ID', 'BranchId', 'INTEGER', 'branch', 'ID', true, 11, null);
 		$this->addColumn('VALUE', 'Value', 'LONGVARCHAR', true, null, null);
-		$this->addColumn('DATE', 'Date', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
+		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', true, null, null);
+		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', true, null, null);
 		// validators
 	} // initialize()
 
@@ -65,6 +66,7 @@ class BranchCommentTableMap extends TableMap {
 		return array(
 			'symfony' => array('form' => 'true', 'filter' => 'true', ),
 			'symfony_behaviors' => array(),
+			'symfony_timestampable' => array('create_column' => 'created_at', 'update_column' => 'updated_at', ),
 		);
 	} // getBehaviors()
 

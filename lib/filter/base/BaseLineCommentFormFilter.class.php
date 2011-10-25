@@ -18,7 +18,8 @@ abstract class BaseLineCommentFormFilter extends BaseFormFilterPropel
       'position'         => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'line'             => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'value'            => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'date'             => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
+      'created_at'       => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
+      'updated_at'       => new sfWidgetFormFilterDate(array('from_date' => new sfWidgetFormDate(), 'to_date' => new sfWidgetFormDate(), 'with_empty' => false)),
     ));
 
     $this->setValidators(array(
@@ -28,7 +29,8 @@ abstract class BaseLineCommentFormFilter extends BaseFormFilterPropel
       'position'         => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'line'             => new sfValidatorSchemaFilter('text', new sfValidatorInteger(array('required' => false))),
       'value'            => new sfValidatorPass(array('required' => false)),
-      'date'             => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
+      'created_at'       => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
+      'updated_at'       => new sfValidatorDateRange(array('required' => false, 'from_date' => new sfValidatorDate(array('required' => false)), 'to_date' => new sfValidatorDate(array('required' => false)))),
     ));
 
     $this->widgetSchema->setNameFormat('line_comment_filters[%s]');
@@ -53,7 +55,8 @@ abstract class BaseLineCommentFormFilter extends BaseFormFilterPropel
       'position'         => 'Number',
       'line'             => 'Number',
       'value'            => 'Text',
-      'date'             => 'Date',
+      'created_at'       => 'Date',
+      'updated_at'       => 'Date',
     );
   }
 }

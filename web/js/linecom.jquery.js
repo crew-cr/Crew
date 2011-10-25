@@ -35,11 +35,7 @@
           .next()
         ;
 
-        $('.add_comment', base.bloc).bind('click', function(event) {
-          event.preventDefault();
-
-          base.displayLineCommentForm();
-        });
+        base.bindingBloc();
       }
 
       base.$el.bind('click', function(event) {
@@ -47,116 +43,97 @@
       });
     };
 
+    base.bindingBloc = function() {
+
+      $('.close', base.bloc).bind('click', function() {
+        base.closeForm();
+      });
+
+      $('form', base.bloc).bind('submit', function(e) {
+        e.preventDefault();
+        base.submitForm(this);
+      });
+
+      $('.add_comment', base.bloc).bind('click', function(event) {
+        event.preventDefault();
+        $('.comment_add', base.bloc).hide();
+        $('.comment_form', base.bloc).show();
+      });
+    };
+
     base.displayLineCommentForm = function() {
       $.ajax({
-        type: "POST",
-        url: "/crew/_lineForm",
-        data: base.$el.attr('data'),
-        success: function(html) {
+        type: "GET",
+        url: base.$el.attr('data'),
+        success: function(json) {
+          // in cases where the element is visible
           if (base.visibled) {
             var tmpBaseBloc = base.bloc;
-            base.bloc = $(html);
+            base.bloc = $(json.html);
             tmpBaseBloc.after(base.bloc);
             tmpBaseBloc.remove();
           }
+          // in cases where the element is invisible
           else {
             base.bloc = base.$el
               .parent('td')
               .parent('tr')
-              .after($(html))
+              .after($(json.html))
               .next()
             ;
 
+            base.visibled = !base.visibled;
             base.formVisibled = true;
-            base.changeVisibility();
+            base.$el
+              .addClass('disabled')
+              .removeClass('enabled')
+            ;
           }
 
-          $('.close', base.bloc).bind('click', function() {
-            base.closeForm();
-          });
-
-          $('form', base.bloc).bind('submit', function(event) {
-            event.preventDefault();
-
-            base.submitForm(this);
-          });
+          base.bindingBloc();
         }
       });
     };
 
     base.submitForm = function(form) {
-      if (form.lineCommentAdd.value == '')
+      if (form.comment_value.value == '')
       {
-        $(form.lineCommentAdd).css({'background-color': '#FDD', 'border': '1px solid #FAA'});
-        $(form.lineCommentAdd).bind('click', function() {
+        $(form.comment_value).css({'background-color': '#FDD', 'border': '1px solid #FAA'});
+        $(form.comment_value).bind('click', function() {
           $(this).css({'background-color': '#FFF', 'border': '1px solid #DEDEDE'});
         });
       }
       else
       {
-        var dataString = $(form).serialize();
         $.ajax({
           type: "POST",
-          url: "/crew/lineAddComment",
-          data: dataString,
-          success: function(html) {
+          url: $(form).attr('action'),
+          data: $(form).serialize(),
+          success: function(json) {
             var tmpBaseBloc = base.bloc;
-            base.bloc = $(html);
+            base.bloc = $(json.html);
             tmpBaseBloc.after(base.bloc);
             tmpBaseBloc.remove();
+            base.commented = true;
 
-            $('.add_comment', base.bloc).bind('click', function() {
-              base.displayLineCommentForm();
-            });
+            base.bindingBloc();
           }
         });
       }
+
+      return false;
     };
 
     base.closeForm = function() {
       if (base.commented) {
-        $.ajax({
-          type: "POST",
-          url: "/crew/_lineComment",
-          data: base.$el.attr('data'),
-          success: function(html) {
-            if (base.visibled) {
-              var tmpBaseBloc = base.bloc;
-              base.bloc = $(html);
-              tmpBaseBloc.after(base.bloc);
-              tmpBaseBloc.remove();
-              
-              $('.add_comment', base.bloc).bind('click', function() {
-                base.displayLineCommentForm();
-              });
-            }
-            else {
-              base.bloc = base.$el
-                .parent('td')
-                .parent('tr')
-                .after($(html))
-                .next()
-              ;
-
-              base.formVisibled = true;
-              base.changeVisibility();
-            }
-          }
-        });
+        $('.comment_form', base.bloc).hide();
+        $('.comment_add', base.bloc).show();
       }
       else {
         base.bloc.remove();
         base.bloc = null;
+        base.visibled = false;
       }
-    };
-
-    base.changeVisibility = function() {
-      base.$el
-        .addClass('disabled')
-        .removeClass('enabled')
-      ;
-
-      base.visibled = !base.visibled;
     };
 
     base.init();

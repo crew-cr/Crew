@@ -21,7 +21,8 @@ abstract class BaseLineCommentForm extends BaseFormPropel
       'position'         => new sfWidgetFormInputText(),
       'line'             => new sfWidgetFormInputText(),
       'value'            => new sfWidgetFormTextarea(),
-      'date'             => new sfWidgetFormDateTime(),
+      'created_at'       => new sfWidgetFormDateTime(),
+      'updated_at'       => new sfWidgetFormDateTime(),
     ));
 
     $this->setValidators(array(
@@ -32,7 +33,8 @@ abstract class BaseLineCommentForm extends BaseFormPropel
       'position'         => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
       'line'             => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
       'value'            => new sfValidatorString(),
-      'date'             => new sfValidatorDateTime(),
+      'created_at'       => new sfValidatorDateTime(),
+      'updated_at'       => new sfValidatorDateTime(),
     ));
 
     $this->widgetSchema->setNameFormat('line_comment[%s]');
