@@ -22,15 +22,15 @@ class branchesAction extends sfAction
       foreach($branches as $branch)
       {
         $result[] = array(
-          'id' => $branch->id,
-          'name' => $branch->name,
-          'status' => $branch->status_id,
-          'projectId' => $branch->project_id,
-          'commitReference' => $branch->commit_reference,
-          'commitStatusChanged' => $branch->commit_status_changed,
-          'dateStatusChanged' => $branch->date_status_changed,
-          'isBlacklisted' => $branch->is_blacklisted,
-          'reviewRequest' => $branch->review_request
+          'id' => $branch->getId(),
+          'name' => $branch->getName(),
+          'status' => $branch->getStatusId,
+          'projectId' => $branch->getRepositoryId(),
+          'commitReference' => $branch->getCommitReference(),
+          'commitStatusChanged' => $branch->getCommitStatusChanged(),
+          'dateStatusChanged' => $branch->getDateStatusChanged,
+          'isBlacklisted' => $branch->getIsBlacklisted(),
+          'reviewRequest' => $branch->getReviewRequest()
         );
       }
     }
