@@ -13,7 +13,8 @@
  * @method     LineCommentQuery orderByPosition($order = Criteria::ASC) Order by the position column
  * @method     LineCommentQuery orderByLine($order = Criteria::ASC) Order by the line column
  * @method     LineCommentQuery orderByValue($order = Criteria::ASC) Order by the value column
- * @method     LineCommentQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method     LineCommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     LineCommentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     LineCommentQuery groupById() Group by the id column
  * @method     LineCommentQuery groupByUserId() Group by the user_id column
@@ -22,7 +23,8 @@
  * @method     LineCommentQuery groupByPosition() Group by the position column
  * @method     LineCommentQuery groupByLine() Group by the line column
  * @method     LineCommentQuery groupByValue() Group by the value column
- * @method     LineCommentQuery groupByDate() Group by the date column
+ * @method     LineCommentQuery groupByCreatedAt() Group by the created_at column
+ * @method     LineCommentQuery groupByUpdatedAt() Group by the updated_at column
  *
  * @method     LineCommentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     LineCommentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -46,7 +48,8 @@
  * @method     LineComment findOneByPosition(int $position) Return the first LineComment filtered by the position column
  * @method     LineComment findOneByLine(int $line) Return the first LineComment filtered by the line column
  * @method     LineComment findOneByValue(string $value) Return the first LineComment filtered by the value column
- * @method     LineComment findOneByDate(string $date) Return the first LineComment filtered by the date column
+ * @method     LineComment findOneByCreatedAt(string $created_at) Return the first LineComment filtered by the created_at column
+ * @method     LineComment findOneByUpdatedAt(string $updated_at) Return the first LineComment filtered by the updated_at column
  *
  * @method     array findById(int $id) Return LineComment objects filtered by the id column
  * @method     array findByUserId(int $user_id) Return LineComment objects filtered by the user_id column
@@ -55,7 +58,8 @@
  * @method     array findByPosition(int $position) Return LineComment objects filtered by the position column
  * @method     array findByLine(int $line) Return LineComment objects filtered by the line column
  * @method     array findByValue(string $value) Return LineComment objects filtered by the value column
- * @method     array findByDate(string $date) Return LineComment objects filtered by the date column
+ * @method     array findByCreatedAt(string $created_at) Return LineComment objects filtered by the created_at column
+ * @method     array findByUpdatedAt(string $updated_at) Return LineComment objects filtered by the updated_at column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -351,24 +355,24 @@ abstract class BaseLineCommentQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the date column
+	 * Filter the query on the created_at column
 	 * 
-	 * @param     string|array $date The value to use as filter.
+	 * @param     string|array $createdAt The value to use as filter.
 	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    LineCommentQuery The current query, for fluid interface
 	 */
-	public function filterByDate($date = null, $comparison = null)
+	public function filterByCreatedAt($createdAt = null, $comparison = null)
 	{
-		if (is_array($date)) {
+		if (is_array($createdAt)) {
 			$useMinMax = false;
-			if (isset($date['min'])) {
-				$this->addUsingAlias(LineCommentPeer::DATE, $date['min'], Criteria::GREATER_EQUAL);
+			if (isset($createdAt['min'])) {
+				$this->addUsingAlias(LineCommentPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
 				$useMinMax = true;
 			}
-			if (isset($date['max'])) {
-				$this->addUsingAlias(LineCommentPeer::DATE, $date['max'], Criteria::LESS_EQUAL);
+			if (isset($createdAt['max'])) {
+				$this->addUsingAlias(LineCommentPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
 				$useMinMax = true;
 			}
 			if ($useMinMax) {
@@ -378,7 +382,38 @@ abstract class BaseLineCommentQuery extends ModelCriteria
 				$comparison = Criteria::IN;
 			}
 		}
-		return $this->addUsingAlias(LineCommentPeer::DATE, $date, $comparison);
+		return $this->addUsingAlias(LineCommentPeer::CREATED_AT, $createdAt, $comparison);
+	}
+
+	/**
+	 * Filter the query on the updated_at column
+	 * 
+	 * @param     string|array $updatedAt The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    LineCommentQuery The current query, for fluid interface
+	 */
+	public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+	{
+		if (is_array($updatedAt)) {
+			$useMinMax = false;
+			if (isset($updatedAt['min'])) {
+				$this->addUsingAlias(LineCommentPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($updatedAt['max'])) {
+				$this->addUsingAlias(LineCommentPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(LineCommentPeer::UPDATED_AT, $updatedAt, $comparison);
 	}
 
 	/**

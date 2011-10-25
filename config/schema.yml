@@ -21,7 +21,8 @@ propel:
     user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
     branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     value:                            { type: LONGVARCHAR, required: true }
-    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    created_at:                       { type: timestamp, required: true}
+    updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }
   file:
     _attributes:
@@ -40,7 +41,8 @@ propel:
     user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
     file_id:                          { type: INTEGER, size: '11', required: true, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     value:                            { type: LONGVARCHAR, required: true }
-    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    created_at:                       { type: timestamp, required: true}
+    updated_at:                       { type: timestamp, required: true}
     _indexes:                         { file_comment_FI_1: [user_id], file_comment_FI_2: [file_id] }
   line_comment:
     _attributes:
@@ -51,7 +53,8 @@ propel:
     position:                         { type: INTEGER, size: '11', required: true }
     line:                             { type: INTEGER, size: '11', required: true }
     value:                            { type: LONGVARCHAR, required: true }
-    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    created_at:                       { type: timestamp, required: true}
+    updated_at:                       { type: timestamp, required: true}
     _indexes:                         { line_comment_FI_1: [user_id], line_comment_FI_2: [file_id] }
   repository:
     _attributes:

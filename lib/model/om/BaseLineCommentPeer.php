@@ -26,7 +26,7 @@ abstract class BaseLineCommentPeer {
 	const TM_CLASS = 'LineCommentTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 8;
+	const NUM_COLUMNS = 9;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -52,8 +52,11 @@ abstract class BaseLineCommentPeer {
 	/** the column name for the VALUE field */
 	const VALUE = 'line_comment.VALUE';
 
-	/** the column name for the DATE field */
-	const DATE = 'line_comment.DATE';
+	/** the column name for the CREATED_AT field */
+	const CREATED_AT = 'line_comment.CREATED_AT';
+
+	/** the column name for the UPDATED_AT field */
+	const UPDATED_AT = 'line_comment.UPDATED_AT';
 
 	/**
 	 * An identiy map to hold any loaded instances of LineComment objects.
@@ -78,12 +81,12 @@ abstract class BaseLineCommentPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'CommitReference', 'FileId', 'Position', 'Line', 'Value', 'Date', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'commitReference', 'fileId', 'position', 'line', 'value', 'date', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::COMMIT_REFERENCE, self::FILE_ID, self::POSITION, self::LINE, self::VALUE, self::DATE, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'COMMIT_REFERENCE', 'FILE_ID', 'POSITION', 'LINE', 'VALUE', 'DATE', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'commit_reference', 'file_id', 'position', 'line', 'value', 'date', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'CommitReference', 'FileId', 'Position', 'Line', 'Value', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'commitReference', 'fileId', 'position', 'line', 'value', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::COMMIT_REFERENCE, self::FILE_ID, self::POSITION, self::LINE, self::VALUE, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'COMMIT_REFERENCE', 'FILE_ID', 'POSITION', 'LINE', 'VALUE', 'CREATED_AT', 'UPDATED_AT', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'commit_reference', 'file_id', 'position', 'line', 'value', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
 	/**
@@ -93,12 +96,12 @@ abstract class BaseLineCommentPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'CommitReference' => 2, 'FileId' => 3, 'Position' => 4, 'Line' => 5, 'Value' => 6, 'Date' => 7, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'commitReference' => 2, 'fileId' => 3, 'position' => 4, 'line' => 5, 'value' => 6, 'date' => 7, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::COMMIT_REFERENCE => 2, self::FILE_ID => 3, self::POSITION => 4, self::LINE => 5, self::VALUE => 6, self::DATE => 7, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'COMMIT_REFERENCE' => 2, 'FILE_ID' => 3, 'POSITION' => 4, 'LINE' => 5, 'VALUE' => 6, 'DATE' => 7, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'commit_reference' => 2, 'file_id' => 3, 'position' => 4, 'line' => 5, 'value' => 6, 'date' => 7, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'CommitReference' => 2, 'FileId' => 3, 'Position' => 4, 'Line' => 5, 'Value' => 6, 'CreatedAt' => 7, 'UpdatedAt' => 8, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'commitReference' => 2, 'fileId' => 3, 'position' => 4, 'line' => 5, 'value' => 6, 'createdAt' => 7, 'updatedAt' => 8, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::COMMIT_REFERENCE => 2, self::FILE_ID => 3, self::POSITION => 4, self::LINE => 5, self::VALUE => 6, self::CREATED_AT => 7, self::UPDATED_AT => 8, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'COMMIT_REFERENCE' => 2, 'FILE_ID' => 3, 'POSITION' => 4, 'LINE' => 5, 'VALUE' => 6, 'CREATED_AT' => 7, 'UPDATED_AT' => 8, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'commit_reference' => 2, 'file_id' => 3, 'position' => 4, 'line' => 5, 'value' => 6, 'created_at' => 7, 'updated_at' => 8, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
 	/**
@@ -177,7 +180,8 @@ abstract class BaseLineCommentPeer {
 			$criteria->addSelectColumn(LineCommentPeer::POSITION);
 			$criteria->addSelectColumn(LineCommentPeer::LINE);
 			$criteria->addSelectColumn(LineCommentPeer::VALUE);
-			$criteria->addSelectColumn(LineCommentPeer::DATE);
+			$criteria->addSelectColumn(LineCommentPeer::CREATED_AT);
+			$criteria->addSelectColumn(LineCommentPeer::UPDATED_AT);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.USER_ID');
@@ -186,7 +190,8 @@ abstract class BaseLineCommentPeer {
 			$criteria->addSelectColumn($alias . '.POSITION');
 			$criteria->addSelectColumn($alias . '.LINE');
 			$criteria->addSelectColumn($alias . '.VALUE');
-			$criteria->addSelectColumn($alias . '.DATE');
+			$criteria->addSelectColumn($alias . '.CREATED_AT');
+			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 		}
 	}
 

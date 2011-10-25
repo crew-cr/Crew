@@ -93,6 +93,10 @@ button:hover {
   background:-moz-linear-gradient(top,#599bdc,#3072b3);
 }
 
+.hidden {
+  display: none;
+}
+
 .marge {
   clear: both;
   padding: 20px 20px;

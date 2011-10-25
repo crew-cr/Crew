@@ -4,7 +4,7 @@
       <div class="comment_holder">
         <?php foreach ($globalComments as $globalComment) : ?>
         <div class="commit_comment">
-          <div class="comment_user"><span class="right"><?php echo sprintf('commenté le %s', $globalComment->getDate()) ?></span></div>
+          <div class="comment_user"><span class="right"><?php echo sprintf('commenté le %s', $globalComment->getUpdatedAt()) ?></span></div>
           <div class="comment_body"><?php echo $globalComment->getValue() ?></div>
         </div>
         <?php endforeach; ?>
