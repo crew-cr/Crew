@@ -1,0 +1,25 @@
+# You can find more information about this file on the symfony website:
+# http://www.symfony-project.org/reference/1_4/en/13-View
+
+default:
+  http_metas:
+    content-type: text/html
+
+  metas:
+    title:        Code review tool for git projects > Crew
+    #description:  symfony project
+    #keywords:     symfony, project
+    #language:     en
+    #robots:       index, follow
+
+  stylesheets:
+    - main.css
+
+  javascripts:
+    - vendor/jquery/jquery-1.6.4.min.js
+    - toggleState.js
+    - context.js
+    - globalComment.js
+
+  has_layout:     true
+  layout:         layout
