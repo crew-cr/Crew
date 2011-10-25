@@ -11,7 +11,7 @@ class GitCommand
   {
     $cmd = sprintf("git --git-dir='%s/.git' remote -v | grep origin | head -n1 | tr -d '\t' | sed 's/origin//' | cut -d' ' -f1", $gitDir);
     exec($cmd, $remote);
-    return $remote[0];
+    return (count($remote)) ? $remote[0] : '';
   }
 
   /**
