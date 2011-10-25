@@ -32,12 +32,12 @@ class addProjectAction extends sfAction
       if($projectExiste)
       {
         $result['result'] = $projectExiste->getId();
-        $result['message'] = sprintf("Le projet %s (remote : %s) existait deja", $projectName, $remote);
+        $result['message'] = sprintf("Project '%s' (remote: %s) already exists", $projectName, $remote);
       }
       elseif($project1 || $project2)
       {
         $result['result'] = false;
-        $result['message'] = sprintf("Un projet (name : %s, remote : %s) existe deja et rentre en conflit avec le projet que vous voulez ajouter", $projectName, $remote);
+        $result['message'] = sprintf("A project (name: %s, remote: %s) already exists and conflicts with project you want to add", $projectName, $remote);
       }
       else
       {
@@ -54,25 +54,25 @@ class addProjectAction extends sfAction
               ->save()
             ;
             $result['result'] = $newProject->getId();
-            $result['message'] = "Ajout nouveau projet OK";
+            $result['message'] = "Adding project OK";
           }
           else
           {
             $result['result'] = false;
-            $result['message'] = sprintf("Le remote existant %s est différent de celui demandé %s", $currentRemote, $remote);
+            $result['message'] = sprintf("Existing remote '%s' is different from remote '%s' you want", $currentRemote, $remote);
           }
         }
         else
         {
           $result['result'] = false;
-          $result['message'] = sprintf("Repository % inexistant. Veuillez le creer !", $repository);
+          $result['message'] = sprintf("Repository '%s' not found. Create it !", $repository);
         }
       }
     }
     else
     {
       $result['result'] = false;
-      $result['message'] = sprintf("Parametre name (%s) ou remote (%s) inexistant", $projectName, $remote);
+      $result['message'] = sprintf("Parameter name (%s) or remote (%s) not found", $projectName, $remote);
     }
 
     $this->getResponse()->setContentType('application/json');

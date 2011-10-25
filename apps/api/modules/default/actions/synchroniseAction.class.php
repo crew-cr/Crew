@@ -26,18 +26,18 @@ class synchroniseAction extends sfAction
         $branch->setCommitReference($commit);
         $branch->save();
         $result['result'] = true;
-        $result['message'] = "Synchronisation valide";
+        $result['message'] = sprintf("Synchronization OK : %s", $commit);
       }
       else
       {
         $result['result'] = false;
-        $result['message'] = "Commit non valide";
+        $result['message'] = sprintf("No valid commit '%s'", $commit);
       }
     }
     else
     {
         $result['result'] = false;
-        $result['message'] = "Branche inexistante";
+        $result['message'] = sprintf("No valid Branch '%s' on project (id: %s)", $branchName, $projectId);
     }
 
     $this->getResponse()->setContentType('application/json');

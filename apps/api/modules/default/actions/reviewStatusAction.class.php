@@ -24,18 +24,18 @@ class reviewStatusAction extends sfAction
       if($branch->getCommitStatusChanged() == $commit)
       {
         $result['result'] = $branch->getStatusId();
-        $result['message'] = "Status : ".$branch->getStatusId();
+        $result['message'] = "Status: ".$branch->getStatusId();
       }
       else
       {
         $result['result'] = 4;
-        $result['message'] = "Votre dernier commit ne correspond pas a celui de la derniere review";
+        $result['message'] = sprintf("Last commit %s doesn't match with the commit of last review %s", $commit, $branch->getCommitStatusChanged());
       }
     }
     else
     {
       $result['result'] = 4;
-      $result['message'] = "Branche inexistante";
+      $result['message'] = sprintf("No valid branch '%s' on project (id: %s)", $branchName, $projectId);
     }
 
     $this->getResponse()->setContentType('application/json');

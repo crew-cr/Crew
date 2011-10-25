@@ -8,7 +8,7 @@ class projectsAction extends sfAction
    */
   public function execute($request)
   {
-    $repositories = RepositoryQuery::('project')
+    $repositories = RepositoryQuery::create()
       ->find()
     ;
     if(count($repositories) > 0)
@@ -27,7 +27,7 @@ class projectsAction extends sfAction
     else
     {
       $result['result'] = false;
-      $result['message'] = "Pas de projet";
+      $result['message'] = "No projects";
     }
 
     $this->getResponse()->setContentType('application/json');
