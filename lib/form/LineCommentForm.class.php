@@ -15,7 +15,7 @@ class LineCommentForm extends BaseLineCommentForm
       'id'        => new sfWidgetFormInputHidden(),
       'user_id'   => new sfWidgetFormInputHidden(array(), array('value' => 1)),
       'commit_reference'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('commit_reference'))),
-      'file_id'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('file'))),
+      'file_id'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('file_id'))),
       'position'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('position'))),
       'line'   => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('line'))),
       'value'     => new sfWidgetFormTextarea()
