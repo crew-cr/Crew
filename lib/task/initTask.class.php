@@ -49,6 +49,22 @@ EOF;
       return $return;
     }
 
+    // clear cache
+    $clearCacheTask = new cacheClearTask($this->dispatcher, $this->formatter);
+    $return = $clearCacheTask->run(array(), array());
+    if ($return)
+    {
+      return $return;
+    }
+
+    // clear log
+    $clearLogTask = new logClearTask($this->dispatcher, $this->formatter);
+    $return = $clearLogTask->run(array(), array());
+    if ($return)
+    {
+      return $return;
+    }
+
     return 0;
   }
 }
