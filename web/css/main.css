@@ -186,8 +186,25 @@ button:hover {
   text-shadow: white 1px 1px 0;
 }
 
-.header select {
-  height: 33px;
+#context select {
+  position: relative;
+  font-family: helvetica,arial,freesans,clean,sans-serif;
+  display: inline-block;
+  color: #333;
+  text-shadow: 1px 1px 0 white;
+  white-space: nowrap;
+  border: none;
+  overflow: visible;
+  cursor: pointer;
+  border: 1px solid #D4D4D4;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background: #F4F4F4;
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f4f4f4',endColorstr='#ececec');
+  background: -webkit-gradient(linear,left top,left bottom,from(#F4F4F4),to(#ECECEC));
+  background: -moz-linear-gradient(top,#F4F4F4,#ECECEC);
+  height: 32px;
 }
 
 .header .padding_container {
@@ -198,7 +215,6 @@ button:hover {
   line-height: 1.4em;
   width: 100%;
   background: #f8f8f8;
-  border: 1px solid #d8d8d8;
   margin: 15px auto 15px auto;
 }
 
@@ -288,6 +304,14 @@ button:hover {
   background: #fcffff;
 }
 
+.data {
+  overflow: hidden;
+  position: relative;
+  left: -32px;
+  width: 100%;
+  padding-left: 32px;
+}
+
 .data, .list {
   font-family: 'Bitstream Vera Sans Mono','Courier New',monospace;
 }
@@ -314,10 +338,14 @@ button:hover {
   color: #4183C4;
 }
 
+.data_head {
+  border: 1px solid #d8d8d8;
+}
+
 .data_body {
-  /*max-height: 650px;*/
-  /*overflow: scroll;*/
   position: relative;
+  border: 1px solid #d8d8d8;
+  border-top:  none;
 }
 
 .data_body table tr:hover td.line {
@@ -395,6 +423,11 @@ button:hover {
   color: #777;
   text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.7);
 }
+
+.commit_comment .comment_user button {
+  height: 22px;
+}
+
 .commit_comment .comment_body {
   padding: 6px;
   border-bottom: 1px solid #CCC;
@@ -435,6 +468,10 @@ button:hover {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
   cursor: default!important;
+}
+
+.list {
+  border: 1px solid #d8d8d8;
 }
 
 .list_body table {
@@ -557,4 +594,13 @@ a.status-blacklist {
   width: 11px;
   height: 17px;
   background: url('../images/minibutton_icons.png') -80px 0 no-repeat;
+}
+
+/* Filtre du context */
+#sfWebDebugBar[id]
+{
+  positino: absolute;
+  bottom:0;
+  right: 0;
+  top: auto;
 }
