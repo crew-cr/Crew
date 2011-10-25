@@ -65,6 +65,14 @@ EOF;
       return $return;
     }
 
+    // permission
+    $permissionsTask = new sfProjectPermissionsTask($this->dispatcher, $this->formatter);
+    $return = $permissionsTask->run(array(), array());
+    if ($return)
+    {
+      return $return;
+    }
+
     return 0;
   }
 }

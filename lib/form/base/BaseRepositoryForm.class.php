@@ -14,15 +14,17 @@ abstract class BaseRepositoryForm extends BaseFormPropel
   public function setup()
   {
     $this->setWidgets(array(
-      'id'    => new sfWidgetFormInputHidden(),
-      'name'  => new sfWidgetFormInputText(),
-      'value' => new sfWidgetFormInputText(),
+      'id'     => new sfWidgetFormInputHidden(),
+      'name'   => new sfWidgetFormInputText(),
+      'value'  => new sfWidgetFormInputText(),
+      'remote' => new sfWidgetFormInputText(),
     ));
 
     $this->setValidators(array(
-      'id'    => new sfValidatorPropelChoice(array('model' => 'Repository', 'column' => 'id', 'required' => false)),
-      'name'  => new sfValidatorString(array('max_length' => 50)),
-      'value' => new sfValidatorString(array('max_length' => 255)),
+      'id'     => new sfValidatorPropelChoice(array('model' => 'Repository', 'column' => 'id', 'required' => false)),
+      'name'   => new sfValidatorString(array('max_length' => 50)),
+      'value'  => new sfValidatorString(array('max_length' => 255)),
+      'remote' => new sfValidatorString(array('max_length' => 255)),
     ));
 
     $this->widgetSchema->setNameFormat('repository[%s]');
