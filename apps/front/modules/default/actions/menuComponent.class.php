@@ -8,9 +8,10 @@ class menuComponent extends sfComponent
    */
   public function execute($request)
   {
-    $this->typeContext   = null;
-    $this->widgetDefault = null;
-    $this->form          = new sfForm();
+    $this->typeContext         = null;
+    $this->widgetDefault       = null;
+    $this->form                = new sfForm();
+    $this->userIsAuthenticated = $this->user = $this->getUser()->isAuthenticated();
 
     if ($widgetDefault = $request->getParameter('repository'))
     {
