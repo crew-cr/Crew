@@ -1,0 +1,64 @@
+propel:
+  _attributes:
+    package: lib.model
+    defaultIdMethod: native
+  branch:
+    _attributes:
+    id:                               ~
+    status_id:                        { type: INTEGER, size: '11', required: true, foreignTable: status, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    repository_id:                    { type: INTEGER, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    name:                             { type: VARCHAR, size: '255', required: true }
+    commit_reference:                 { type: VARCHAR, size: '50', required: true }
+    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
+    date_status_changed:              { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    is_blacklisted:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    review_request:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    _indexes:                         { branch_FI_1: [status_id], branch_FI_2: [user_status_changed] }
+  branch_comment:
+    _attributes:
+    id:                               ~
+    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    value:                            { type: LONGVARCHAR, required: true }
+    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }
+  file:
+    _attributes:
+    id:                               ~
+    branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    status_id:                        { type: INTEGER, size: '11', required: true, foreignTable: status, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    state:                            { type: CHAR, size: '1', required: true }
+    filename:                         { type: VARCHAR, size: '255', required: true }
+    commit_status_changed:            { type: VARCHAR, size: '50', required: true }
+    user_status_changed:              { type: INTEGER, size: '11', required: true }
+    date_status_changed:              { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    _indexes:                         { file_FI_1: [branch_id], file_FI_2: [status_id] }
+  file_comment:
+    _attributes:
+    id:                               ~
+    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    file_id:                          { type: INTEGER, size: '11', required: true, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    value:                            { type: LONGVARCHAR, required: true }
+    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    _indexes:                         { file_comment_FI_1: [user_id], file_comment_FI_2: [file_id] }
+  line_comment:
+    _attributes:
+    id:                               ~
+    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    commit_reference:                 { type: VARCHAR, size: '50', required: true }
+    file_id:                          { type: INTEGER, size: '11', required: true, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    position:                         { type: INTEGER, size: '11', required: true }
+    line:                             { type: INTEGER, size: '11', required: true }
+    value:                            { type: LONGVARCHAR, required: true }
+    date:                             { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
+    _indexes:                         { line_comment_FI_1: [user_id], line_comment_FI_2: [file_id] }
+  repository:
+    _attributes:
+    id:                               ~
+    name:                             { type: VARCHAR, size: '50', required: true }
+    value:                            { type: VARCHAR, size: '255', required: true }
+  status:
+    _attributes:
+    id:                               ~
+    name:                             { type: VARCHAR, size: '50', required: true }

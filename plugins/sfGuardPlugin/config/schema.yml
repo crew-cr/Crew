@@ -1,0 +1,48 @@
+propel:
+  _attributes:      { package: plugins.sfGuardPlugin.lib.model }
+  
+  sf_guard_group:
+    _attributes:    { phpName: sfGuardGroup }
+    id:             ~
+    name:           { type: varchar, size: 255, required: true, index: unique }
+    description:    { type: longvarchar }
+  
+  sf_guard_permission:
+    _attributes:    { phpName: sfGuardPermission }
+    id:             ~
+    name:           { type: varchar, size: 255, required: true, index: unique }
+    description:    { type: longvarchar }
+  
+  sf_guard_group_permission:
+    _attributes:    { phpName: sfGuardGroupPermission }
+    group_id:       { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_group, foreignReference: id, onDelete: cascade }
+    permission_id:  { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_permission, foreignReference: id, onDelete: cascade }
+  
+  sf_guard_user:
+    _attributes:    { phpName: sfGuardUser }
+    id:             ~
+    username:       { type: varchar, size: 128, required: true, index: unique }
+    algorithm:      { type: varchar, size: 128, required: true, default: sha1 }
+    salt:           { type: varchar, size: 128, required: true }
+    password:       { type: varchar, size: 128, required: true }
+    created_at:     ~
+    last_login:     { type: timestamp }
+    is_active:      { type: boolean, required: true, default: 1 }
+    is_super_admin: { type: boolean, required: true, default: 0 }
+  
+  sf_guard_user_permission:
+    _attributes:    { phpName: sfGuardUserPermission }
+    user_id:        { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_user, foreignReference: id, onDelete: cascade }
+    permission_id:  { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_permission, foreignReference: id, onDelete: cascade }
+  
+  sf_guard_user_group:
+    _attributes:    { phpName: sfGuardUserGroup }
+    user_id:        { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_user, foreignReference: id, onDelete: cascade }
+    group_id:       { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_group, foreignReference: id, onDelete: cascade }
+    
+  sf_guard_remember_key:
+    _attributes:    { phpName: sfGuardRememberKey }
+    user_id:        { type: integer, primaryKey: true, required: true, foreignTable: sf_guard_user, foreignReference: id, onDelete: cascade }
+    remember_key:   { type: varchar, size: 32 }
+    ip_address:     { type: varchar, size: 50, primaryKey: true }
+    created_at:     ~
