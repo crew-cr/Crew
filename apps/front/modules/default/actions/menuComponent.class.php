@@ -30,7 +30,7 @@ class menuComponent extends sfComponent
 
     if ($this->typeContext !== null)
     {
-      $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'add_empty' => true, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
+      $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'add_empty' => false, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
     }
   }
 }
