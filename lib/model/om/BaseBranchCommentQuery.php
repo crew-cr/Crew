@@ -10,13 +10,15 @@
  * @method     BranchCommentQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
  * @method     BranchCommentQuery orderByBranchId($order = Criteria::ASC) Order by the branch_id column
  * @method     BranchCommentQuery orderByValue($order = Criteria::ASC) Order by the value column
- * @method     BranchCommentQuery orderByDate($order = Criteria::ASC) Order by the date column
+ * @method     BranchCommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     BranchCommentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     BranchCommentQuery groupById() Group by the id column
  * @method     BranchCommentQuery groupByUserId() Group by the user_id column
  * @method     BranchCommentQuery groupByBranchId() Group by the branch_id column
  * @method     BranchCommentQuery groupByValue() Group by the value column
- * @method     BranchCommentQuery groupByDate() Group by the date column
+ * @method     BranchCommentQuery groupByCreatedAt() Group by the created_at column
+ * @method     BranchCommentQuery groupByUpdatedAt() Group by the updated_at column
  *
  * @method     BranchCommentQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     BranchCommentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -37,13 +39,15 @@
  * @method     BranchComment findOneByUserId(int $user_id) Return the first BranchComment filtered by the user_id column
  * @method     BranchComment findOneByBranchId(int $branch_id) Return the first BranchComment filtered by the branch_id column
  * @method     BranchComment findOneByValue(string $value) Return the first BranchComment filtered by the value column
- * @method     BranchComment findOneByDate(string $date) Return the first BranchComment filtered by the date column
+ * @method     BranchComment findOneByCreatedAt(string $created_at) Return the first BranchComment filtered by the created_at column
+ * @method     BranchComment findOneByUpdatedAt(string $updated_at) Return the first BranchComment filtered by the updated_at column
  *
  * @method     array findById(int $id) Return BranchComment objects filtered by the id column
  * @method     array findByUserId(int $user_id) Return BranchComment objects filtered by the user_id column
  * @method     array findByBranchId(int $branch_id) Return BranchComment objects filtered by the branch_id column
  * @method     array findByValue(string $value) Return BranchComment objects filtered by the value column
- * @method     array findByDate(string $date) Return BranchComment objects filtered by the date column
+ * @method     array findByCreatedAt(string $created_at) Return BranchComment objects filtered by the created_at column
+ * @method     array findByUpdatedAt(string $updated_at) Return BranchComment objects filtered by the updated_at column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -255,24 +259,24 @@ abstract class BaseBranchCommentQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the date column
+	 * Filter the query on the created_at column
 	 * 
-	 * @param     string|array $date The value to use as filter.
+	 * @param     string|array $createdAt The value to use as filter.
 	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchCommentQuery The current query, for fluid interface
 	 */
-	public function filterByDate($date = null, $comparison = null)
+	public function filterByCreatedAt($createdAt = null, $comparison = null)
 	{
-		if (is_array($date)) {
+		if (is_array($createdAt)) {
 			$useMinMax = false;
-			if (isset($date['min'])) {
-				$this->addUsingAlias(BranchCommentPeer::DATE, $date['min'], Criteria::GREATER_EQUAL);
+			if (isset($createdAt['min'])) {
+				$this->addUsingAlias(BranchCommentPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
 				$useMinMax = true;
 			}
-			if (isset($date['max'])) {
-				$this->addUsingAlias(BranchCommentPeer::DATE, $date['max'], Criteria::LESS_EQUAL);
+			if (isset($createdAt['max'])) {
+				$this->addUsingAlias(BranchCommentPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
 				$useMinMax = true;
 			}
 			if ($useMinMax) {
@@ -282,7 +286,38 @@ abstract class BaseBranchCommentQuery extends ModelCriteria
 				$comparison = Criteria::IN;
 			}
 		}
-		return $this->addUsingAlias(BranchCommentPeer::DATE, $date, $comparison);
+		return $this->addUsingAlias(BranchCommentPeer::CREATED_AT, $createdAt, $comparison);
+	}
+
+	/**
+	 * Filter the query on the updated_at column
+	 * 
+	 * @param     string|array $updatedAt The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchCommentQuery The current query, for fluid interface
+	 */
+	public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+	{
+		if (is_array($updatedAt)) {
+			$useMinMax = false;
+			if (isset($updatedAt['min'])) {
+				$this->addUsingAlias(BranchCommentPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($updatedAt['max'])) {
+				$this->addUsingAlias(BranchCommentPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(BranchCommentPeer::UPDATED_AT, $updatedAt, $comparison);
 	}
 
 	/**

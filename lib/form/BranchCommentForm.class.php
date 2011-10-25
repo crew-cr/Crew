@@ -15,8 +15,7 @@ class BranchCommentForm extends BaseBranchCommentForm
       'id'        => new sfWidgetFormInputHidden(),
       'user_id'   => new sfWidgetFormInputHidden(array(), array('value' => 1)),
       'branch_id' => new sfWidgetFormInputHidden(array(), array('value' => $this->getOption('branch'))),
-      'value'     => new sfWidgetFormTextarea(),
-      'date'      => new sfWidgetFormInputHidden(array(), array('value' => time())),
+      'value'     => new sfWidgetFormTextarea()
     ));
 
     $this->widgetSchema->setNameFormat('comment[%s]');

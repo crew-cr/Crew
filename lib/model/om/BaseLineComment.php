@@ -67,11 +67,16 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	protected $value;
 
 	/**
-	 * The value for the date field.
-	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
+	 * The value for the created_at field.
 	 * @var        string
 	 */
-	protected $date;
+	protected $created_at;
+
+	/**
+	 * The value for the updated_at field.
+	 * @var        string
+	 */
+	protected $updated_at;
 
 	/**
 	 * @var        sfGuardUser
@@ -96,26 +101,6 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
-
-	/**
-	 * Initializes internal state of BaseLineComment object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -188,7 +173,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [optionally formatted] temporal [date] column value.
+	 * Get the [optionally formatted] temporal [created_at] column value.
 	 * 
 	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -196,22 +181,60 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
 	 * @throws     PropelException - if unable to parse/validate the date/time value.
 	 */
-	public function getDate($format = 'Y-m-d H:i:s')
+	public function getCreatedAt($format = 'Y-m-d H:i:s')
 	{
-		if ($this->date === null) {
+		if ($this->created_at === null) {
 			return null;
 		}
 
 
-		if ($this->date === '0000-00-00 00:00:00') {
+		if ($this->created_at === '0000-00-00 00:00:00') {
 			// while technically this is not a default value of NULL,
 			// this seems to be closest in meaning.
 			return null;
 		} else {
 			try {
-				$dt = new DateTime($this->date);
+				$dt = new DateTime($this->created_at);
 			} catch (Exception $x) {
-				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->date, true), $x);
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->created_at, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	/**
+	 * Get the [optionally formatted] temporal [updated_at] column value.
+	 * 
+	 *
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the raw DateTime object will be returned.
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @throws     PropelException - if unable to parse/validate the date/time value.
+	 */
+	public function getUpdatedAt($format = 'Y-m-d H:i:s')
+	{
+		if ($this->updated_at === null) {
+			return null;
+		}
+
+
+		if ($this->updated_at === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->updated_at);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->updated_at, true), $x);
 			}
 		}
 
@@ -374,13 +397,13 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	} // setValue()
 
 	/**
-	 * Sets the value of [date] column to a normalized version of the date/time value specified.
+	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
 	 * @return     LineComment The current object (for fluent API support)
 	 */
-	public function setDate($v)
+	public function setCreatedAt($v)
 	{
 		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
 		// -- which is unexpected, to say the least.
@@ -405,22 +428,71 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 			}
 		}
 
-		if ( $this->date !== null || $dt !== null ) {
+		if ( $this->created_at !== null || $dt !== null ) {
 			// (nested ifs are a little easier to read in this case)
 
-			$currNorm = ($this->date !== null && $tmpDt = new DateTime($this->date)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
 			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
 
 			if ( ($currNorm !== $newNorm) // normalized values don't match 
 					)
 			{
-				$this->date = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = LineCommentPeer::DATE;
+				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = LineCommentPeer::CREATED_AT;
 			}
 		} // if either are not null
 
 		return $this;
-	} // setDate()
+	} // setCreatedAt()
+
+	/**
+	 * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+	 * 
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
+	 *						be treated as NULL for temporal objects.
+	 * @return     LineComment The current object (for fluent API support)
+	 */
+	public function setUpdatedAt($v)
+	{
+		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->updated_at !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = LineCommentPeer::UPDATED_AT;
+			}
+		} // if either are not null
+
+		return $this;
+	} // setUpdatedAt()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -461,7 +533,8 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 			$this->position = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->line = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->value = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->date = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -470,7 +543,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 8; // 8 = LineCommentPeer::NUM_COLUMNS - LineCommentPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 9; // 9 = LineCommentPeer::NUM_COLUMNS - LineCommentPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating LineComment object", $e);
@@ -634,8 +707,20 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 			  }
 			}
 
+			// symfony_timestampable behavior
+			if ($this->isModified() && !$this->isColumnModified(LineCommentPeer::UPDATED_AT))
+			{
+			  $this->setUpdatedAt(time());
+			}
+
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
+				// symfony_timestampable behavior
+				if (!$this->isColumnModified(LineCommentPeer::CREATED_AT))
+				{
+				  $this->setCreatedAt(time());
+				}
+
 			} else {
 				$ret = $ret && $this->preUpdate($con);
 			}
@@ -868,7 +953,10 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 				return $this->getValue();
 				break;
 			case 7:
-				return $this->getDate();
+				return $this->getCreatedAt();
+				break;
+			case 8:
+				return $this->getUpdatedAt();
 				break;
 			default:
 				return null;
@@ -901,7 +989,8 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 			$keys[4] => $this->getPosition(),
 			$keys[5] => $this->getLine(),
 			$keys[6] => $this->getValue(),
-			$keys[7] => $this->getDate(),
+			$keys[7] => $this->getCreatedAt(),
+			$keys[8] => $this->getUpdatedAt(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->asfGuardUser) {
@@ -963,7 +1052,10 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 				$this->setValue($value);
 				break;
 			case 7:
-				$this->setDate($value);
+				$this->setCreatedAt($value);
+				break;
+			case 8:
+				$this->setUpdatedAt($value);
 				break;
 		} // switch()
 	}
@@ -996,7 +1088,8 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 		if (array_key_exists($keys[4], $arr)) $this->setPosition($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setLine($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setValue($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setDate($arr[$keys[7]]);
+		if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
 	}
 
 	/**
@@ -1015,7 +1108,8 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(LineCommentPeer::POSITION)) $criteria->add(LineCommentPeer::POSITION, $this->position);
 		if ($this->isColumnModified(LineCommentPeer::LINE)) $criteria->add(LineCommentPeer::LINE, $this->line);
 		if ($this->isColumnModified(LineCommentPeer::VALUE)) $criteria->add(LineCommentPeer::VALUE, $this->value);
-		if ($this->isColumnModified(LineCommentPeer::DATE)) $criteria->add(LineCommentPeer::DATE, $this->date);
+		if ($this->isColumnModified(LineCommentPeer::CREATED_AT)) $criteria->add(LineCommentPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(LineCommentPeer::UPDATED_AT)) $criteria->add(LineCommentPeer::UPDATED_AT, $this->updated_at);
 
 		return $criteria;
 	}
@@ -1083,7 +1177,8 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 		$copyObj->setPosition($this->position);
 		$copyObj->setLine($this->line);
 		$copyObj->setValue($this->value);
-		$copyObj->setDate($this->date);
+		$copyObj->setCreatedAt($this->created_at);
+		$copyObj->setUpdatedAt($this->updated_at);
 
 		$copyObj->setNew(true);
 		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1237,11 +1332,11 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 		$this->position = null;
 		$this->line = null;
 		$this->value = null;
-		$this->date = null;
+		$this->created_at = null;
+		$this->updated_at = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();
-		$this->applyDefaultValues();
 		$this->resetModified();
 		$this->setNew(true);
 		$this->setDeleted(false);

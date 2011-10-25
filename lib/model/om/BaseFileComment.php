@@ -49,11 +49,16 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 	protected $value;
 
 	/**
-	 * The value for the date field.
-	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
+	 * The value for the created_at field.
 	 * @var        string
 	 */
-	protected $date;
+	protected $created_at;
+
+	/**
+	 * The value for the updated_at field.
+	 * @var        string
+	 */
+	protected $updated_at;
 
 	/**
 	 * @var        sfGuardUser
@@ -78,26 +83,6 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
-
-	/**
-	 * Applies default values to this object.
-	 * This method should be called from the object's constructor (or
-	 * equivalent initialization method).
-	 * @see        __construct()
-	 */
-	public function applyDefaultValues()
-	{
-	}
-
-	/**
-	 * Initializes internal state of BaseFileComment object.
-	 * @see        applyDefaults()
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-		$this->applyDefaultValues();
-	}
 
 	/**
 	 * Get the [id] column value.
@@ -140,7 +125,7 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [optionally formatted] temporal [date] column value.
+	 * Get the [optionally formatted] temporal [created_at] column value.
 	 * 
 	 *
 	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
@@ -148,22 +133,60 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
 	 * @throws     PropelException - if unable to parse/validate the date/time value.
 	 */
-	public function getDate($format = 'Y-m-d H:i:s')
+	public function getCreatedAt($format = 'Y-m-d H:i:s')
 	{
-		if ($this->date === null) {
+		if ($this->created_at === null) {
 			return null;
 		}
 
 
-		if ($this->date === '0000-00-00 00:00:00') {
+		if ($this->created_at === '0000-00-00 00:00:00') {
 			// while technically this is not a default value of NULL,
 			// this seems to be closest in meaning.
 			return null;
 		} else {
 			try {
-				$dt = new DateTime($this->date);
+				$dt = new DateTime($this->created_at);
 			} catch (Exception $x) {
-				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->date, true), $x);
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->created_at, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	/**
+	 * Get the [optionally formatted] temporal [updated_at] column value.
+	 * 
+	 *
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the raw DateTime object will be returned.
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @throws     PropelException - if unable to parse/validate the date/time value.
+	 */
+	public function getUpdatedAt($format = 'Y-m-d H:i:s')
+	{
+		if ($this->updated_at === null) {
+			return null;
+		}
+
+
+		if ($this->updated_at === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->updated_at);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->updated_at, true), $x);
 			}
 		}
 
@@ -266,13 +289,13 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 	} // setValue()
 
 	/**
-	 * Sets the value of [date] column to a normalized version of the date/time value specified.
+	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
 	 *						be treated as NULL for temporal objects.
 	 * @return     FileComment The current object (for fluent API support)
 	 */
-	public function setDate($v)
+	public function setCreatedAt($v)
 	{
 		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
 		// -- which is unexpected, to say the least.
@@ -297,22 +320,71 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 			}
 		}
 
-		if ( $this->date !== null || $dt !== null ) {
+		if ( $this->created_at !== null || $dt !== null ) {
 			// (nested ifs are a little easier to read in this case)
 
-			$currNorm = ($this->date !== null && $tmpDt = new DateTime($this->date)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
 			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
 
 			if ( ($currNorm !== $newNorm) // normalized values don't match 
 					)
 			{
-				$this->date = ($dt ? $dt->format('Y-m-d H:i:s') : null);
-				$this->modifiedColumns[] = FileCommentPeer::DATE;
+				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = FileCommentPeer::CREATED_AT;
 			}
 		} // if either are not null
 
 		return $this;
-	} // setDate()
+	} // setCreatedAt()
+
+	/**
+	 * Sets the value of [updated_at] column to a normalized version of the date/time value specified.
+	 * 
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
+	 *						be treated as NULL for temporal objects.
+	 * @return     FileComment The current object (for fluent API support)
+	 */
+	public function setUpdatedAt($v)
+	{
+		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
+		// -- which is unexpected, to say the least.
+		if ($v === null || $v === '') {
+			$dt = null;
+		} elseif ($v instanceof DateTime) {
+			$dt = $v;
+		} else {
+			// some string/numeric value passed; we normalize that so that we can
+			// validate it.
+			try {
+				if (is_numeric($v)) { // if it's a unix timestamp
+					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
+					// We have to explicitly specify and then change the time zone because of a
+					// DateTime bug: http://bugs.php.net/bug.php?id=43003
+					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
+				} else {
+					$dt = new DateTime($v);
+				}
+			} catch (Exception $x) {
+				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
+			}
+		}
+
+		if ( $this->updated_at !== null || $dt !== null ) {
+			// (nested ifs are a little easier to read in this case)
+
+			$currNorm = ($this->updated_at !== null && $tmpDt = new DateTime($this->updated_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
+
+			if ( ($currNorm !== $newNorm) // normalized values don't match 
+					)
+			{
+				$this->updated_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+				$this->modifiedColumns[] = FileCommentPeer::UPDATED_AT;
+			}
+		} // if either are not null
+
+		return $this;
+	} // setUpdatedAt()
 
 	/**
 	 * Indicates whether the columns in this object are only set to default values.
@@ -350,7 +422,8 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 			$this->user_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->file_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
 			$this->value = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->date = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->created_at = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->updated_at = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -359,7 +432,7 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 5; // 5 = FileCommentPeer::NUM_COLUMNS - FileCommentPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 6; // 6 = FileCommentPeer::NUM_COLUMNS - FileCommentPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating FileComment object", $e);
@@ -523,8 +596,20 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 			  }
 			}
 
+			// symfony_timestampable behavior
+			if ($this->isModified() && !$this->isColumnModified(FileCommentPeer::UPDATED_AT))
+			{
+			  $this->setUpdatedAt(time());
+			}
+
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
+				// symfony_timestampable behavior
+				if (!$this->isColumnModified(FileCommentPeer::CREATED_AT))
+				{
+				  $this->setCreatedAt(time());
+				}
+
 			} else {
 				$ret = $ret && $this->preUpdate($con);
 			}
@@ -748,7 +833,10 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 				return $this->getValue();
 				break;
 			case 4:
-				return $this->getDate();
+				return $this->getCreatedAt();
+				break;
+			case 5:
+				return $this->getUpdatedAt();
 				break;
 			default:
 				return null;
@@ -778,7 +866,8 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 			$keys[1] => $this->getUserId(),
 			$keys[2] => $this->getFileId(),
 			$keys[3] => $this->getValue(),
-			$keys[4] => $this->getDate(),
+			$keys[4] => $this->getCreatedAt(),
+			$keys[5] => $this->getUpdatedAt(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->asfGuardUser) {
@@ -831,7 +920,10 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 				$this->setValue($value);
 				break;
 			case 4:
-				$this->setDate($value);
+				$this->setCreatedAt($value);
+				break;
+			case 5:
+				$this->setUpdatedAt($value);
 				break;
 		} // switch()
 	}
@@ -861,7 +953,8 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 		if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setFileId($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setValue($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setDate($arr[$keys[4]]);
+		if (array_key_exists($keys[4], $arr)) $this->setCreatedAt($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setUpdatedAt($arr[$keys[5]]);
 	}
 
 	/**
@@ -877,7 +970,8 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(FileCommentPeer::USER_ID)) $criteria->add(FileCommentPeer::USER_ID, $this->user_id);
 		if ($this->isColumnModified(FileCommentPeer::FILE_ID)) $criteria->add(FileCommentPeer::FILE_ID, $this->file_id);
 		if ($this->isColumnModified(FileCommentPeer::VALUE)) $criteria->add(FileCommentPeer::VALUE, $this->value);
-		if ($this->isColumnModified(FileCommentPeer::DATE)) $criteria->add(FileCommentPeer::DATE, $this->date);
+		if ($this->isColumnModified(FileCommentPeer::CREATED_AT)) $criteria->add(FileCommentPeer::CREATED_AT, $this->created_at);
+		if ($this->isColumnModified(FileCommentPeer::UPDATED_AT)) $criteria->add(FileCommentPeer::UPDATED_AT, $this->updated_at);
 
 		return $criteria;
 	}
@@ -942,7 +1036,8 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 		$copyObj->setUserId($this->user_id);
 		$copyObj->setFileId($this->file_id);
 		$copyObj->setValue($this->value);
-		$copyObj->setDate($this->date);
+		$copyObj->setCreatedAt($this->created_at);
+		$copyObj->setUpdatedAt($this->updated_at);
 
 		$copyObj->setNew(true);
 		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
@@ -1093,11 +1188,11 @@ abstract class BaseFileComment extends BaseObject  implements Persistent
 		$this->user_id = null;
 		$this->file_id = null;
 		$this->value = null;
-		$this->date = null;
+		$this->created_at = null;
+		$this->updated_at = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();
-		$this->applyDefaultValues();
 		$this->resetModified();
 		$this->setNew(true);
 		$this->setDeleted(false);

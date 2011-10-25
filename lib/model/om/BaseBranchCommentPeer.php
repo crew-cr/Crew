@@ -26,7 +26,7 @@ abstract class BaseBranchCommentPeer {
 	const TM_CLASS = 'BranchCommentTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 5;
+	const NUM_COLUMNS = 6;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -43,8 +43,11 @@ abstract class BaseBranchCommentPeer {
 	/** the column name for the VALUE field */
 	const VALUE = 'branch_comment.VALUE';
 
-	/** the column name for the DATE field */
-	const DATE = 'branch_comment.DATE';
+	/** the column name for the CREATED_AT field */
+	const CREATED_AT = 'branch_comment.CREATED_AT';
+
+	/** the column name for the UPDATED_AT field */
+	const UPDATED_AT = 'branch_comment.UPDATED_AT';
 
 	/**
 	 * An identiy map to hold any loaded instances of BranchComment objects.
@@ -69,12 +72,12 @@ abstract class BaseBranchCommentPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'BranchId', 'Value', 'Date', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'branchId', 'value', 'date', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::BRANCH_ID, self::VALUE, self::DATE, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'BRANCH_ID', 'VALUE', 'DATE', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'branch_id', 'value', 'date', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'BranchId', 'Value', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'branchId', 'value', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::BRANCH_ID, self::VALUE, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'BRANCH_ID', 'VALUE', 'CREATED_AT', 'UPDATED_AT', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'branch_id', 'value', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -84,12 +87,12 @@ abstract class BaseBranchCommentPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'BranchId' => 2, 'Value' => 3, 'Date' => 4, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'branchId' => 2, 'value' => 3, 'date' => 4, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::BRANCH_ID => 2, self::VALUE => 3, self::DATE => 4, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'BRANCH_ID' => 2, 'VALUE' => 3, 'DATE' => 4, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'branch_id' => 2, 'value' => 3, 'date' => 4, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'BranchId' => 2, 'Value' => 3, 'CreatedAt' => 4, 'UpdatedAt' => 5, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'branchId' => 2, 'value' => 3, 'createdAt' => 4, 'updatedAt' => 5, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::BRANCH_ID => 2, self::VALUE => 3, self::CREATED_AT => 4, self::UPDATED_AT => 5, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'BRANCH_ID' => 2, 'VALUE' => 3, 'CREATED_AT' => 4, 'UPDATED_AT' => 5, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'branch_id' => 2, 'value' => 3, 'created_at' => 4, 'updated_at' => 5, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, )
 	);
 
 	/**
@@ -165,13 +168,15 @@ abstract class BaseBranchCommentPeer {
 			$criteria->addSelectColumn(BranchCommentPeer::USER_ID);
 			$criteria->addSelectColumn(BranchCommentPeer::BRANCH_ID);
 			$criteria->addSelectColumn(BranchCommentPeer::VALUE);
-			$criteria->addSelectColumn(BranchCommentPeer::DATE);
+			$criteria->addSelectColumn(BranchCommentPeer::CREATED_AT);
+			$criteria->addSelectColumn(BranchCommentPeer::UPDATED_AT);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.USER_ID');
 			$criteria->addSelectColumn($alias . '.BRANCH_ID');
 			$criteria->addSelectColumn($alias . '.VALUE');
-			$criteria->addSelectColumn($alias . '.DATE');
+			$criteria->addSelectColumn($alias . '.CREATED_AT');
+			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 		}
 	}
 
