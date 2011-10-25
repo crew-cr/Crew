@@ -58,7 +58,7 @@ table {
 button {
   font-size: 11px;
   font-weight: bold;
-  margin: 6px 0;
+  margin: 6px;
   cursor: pointer;
   position: relative;
   font-family: helvetica,arial,freesans,clean,sans-serif;
@@ -288,7 +288,7 @@ button:hover {
 
 .commentBloc textarea {
   display: block;
-  width: 99%;
+  width: 98%;
   margin: auto;
   border: 1px solid #dedede;
 }
