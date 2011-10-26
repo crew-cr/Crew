@@ -28,13 +28,13 @@ class reviewStatusAction extends sfAction
       }
       else
       {
-        $result['result'] = 4;
+        $result['result'] = -1;
         $result['message'] = sprintf("Last commit %s doesn't match with the commit of last review %s", $commit, $branch->getCommitStatusChanged());
       }
     }
     else
     {
-      $result['result'] = 4;
+      $result['result'] = -1;
       $result['message'] = sprintf("No valid branch '%s' on project (id: %s)", $branchName, $projectId);
     }
 

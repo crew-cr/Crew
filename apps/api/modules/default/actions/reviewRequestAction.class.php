@@ -36,7 +36,7 @@ class reviewRequestAction extends sfAction
           exec($cmd, $cmdReturn);
           if(count($cmdReturn) == 0)
           {
-            $branch->setStatusId(1);
+            $branch->setStatusId(StatusPeer::A_TRAITER);
             $branch->setReviewRequest(1);
             $branch->setCommitStatusChanged($commit);
             $branch->save();

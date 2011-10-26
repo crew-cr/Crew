@@ -19,7 +19,7 @@
  */
 class StatusPeer extends BaseStatusPeer
 {
-  const A_TRAITER = 1;
-  const OK        = 2;
-  const KO        = 3;
+  const A_TRAITER = 0;
+  const OK        = 1;
+  const KO        = 2;
 } // StatusPeer
