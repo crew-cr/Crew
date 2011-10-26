@@ -144,15 +144,10 @@ class GitCommand
         continue;
       }
 
-      $cmd = sprintf('git --git-dir="%s/.git" log HEAD..%s --format="%%P" | tail -1', $gitDir, $result);
+      $cmd = sprintf('git --git-dir="%s/.git" log origin/master..%s --format="%%P" | tail -1', $gitDir, $result);
       exec($cmd, $commitRef);
       $noMerdegBranchesInfos[$result]['commit_reference'] = $commitRef[0];
       unset($commitRef);
-
-      $cmd = sprintf('git --git-dir="%s/.git" log HEAD..%s --format="%%H" | head -1', $gitDir, $result);
-      exec($cmd, $commitStatus);
-      $noMerdegBranchesInfos[$result]['commit_status_changed'] = $commitStatus[0];
-      unset($commitStatus);
     }
 
     return $noMerdegBranchesInfos;
