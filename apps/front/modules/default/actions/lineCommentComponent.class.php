@@ -26,6 +26,8 @@ class lineCommentComponent extends sfComponent
       ->find()
     ;
 
+    $this->userId = $this->getUser()->getGuardUser()->getId();
+
     $this->formVisible = isset($this->form_visible) ? $this->form_visible : true;
   }
 }
