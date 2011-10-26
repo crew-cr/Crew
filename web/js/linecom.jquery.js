@@ -59,6 +59,11 @@
         $('.comment_add', base.bloc).hide();
         $('.comment_form', base.bloc).show();
       });
+
+      $('.delete', base.bloc).bind('click', function(event) {
+        event.preventDefault();
+        base.deleteComment(this);
+      });
     };
 
     base.displayLineCommentForm = function() {
@@ -122,6 +127,22 @@
       }
 
       return false;
+    };
+
+    base.deleteComment = function(element) {
+      $.ajax({
+          type: "POST",
+          url: $(element).attr('data'),
+          success: function(json) {
+            var tmpBaseBloc = base.bloc;
+            base.bloc = $(json.html);
+            tmpBaseBloc.after(base.bloc);
+            tmpBaseBloc.remove();
+            base.commented = true;
+
+            base.bindingBloc();
+          }
+        });
     };
 
     base.closeForm = function() {
