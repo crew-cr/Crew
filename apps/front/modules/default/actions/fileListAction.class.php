@@ -22,7 +22,7 @@ class fileListAction extends sfAction
     $this->forward404Unless($this->repository, "Repository not found");
 
     $files = FileQuery::create()
-      ->where('File.BranchId', $this->branch->getId())
+      ->filterByBranchId($this->branch->getId())
       ->find()
     ;
 

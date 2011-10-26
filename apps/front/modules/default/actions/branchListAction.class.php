@@ -30,7 +30,7 @@ class branchListAction extends sfAction
       FilePeer::synchronize($branch);
 
       $filesCount = FileQuery::create()
-        ->where('File.BranchId', $branch->getId())
+        ->filterByBranchId($branch->getId())
         ->count()
       ;
 

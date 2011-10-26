@@ -29,7 +29,7 @@ class FilePeer extends BaseFilePeer {
     $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(),$branch->getCommitReference(), $branch->getCommitStatusChanged());
 
     $filesModel = FileQuery::create()
-      ->where('File.BranchId', $branch->getId())
+      ->filterByBranchId($branch->getId())
       ->find()
     ;
 
