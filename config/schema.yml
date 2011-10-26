@@ -5,16 +5,15 @@ propel:
   branch:
     _attributes:
     id:                               ~
-    status_id:                        { type: INTEGER, size: '11', required: true, foreignTable: status, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
     repository_id:                    { type: INTEGER, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     name:                             { type: VARCHAR, size: '255', required: true }
     commit_reference:                 { type: VARCHAR, size: '50', required: true }
-    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
-    date_status_changed:              { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
     is_blacklisted:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
     review_request:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    _indexes:                         { branch_FI_1: [status_id], branch_FI_2: [user_status_changed] }
+    status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
+    user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    date_status_changed:              { type: TIMESTAMP, required: false }
   branch_comment:
     _attributes:
     id:                               ~
@@ -28,13 +27,12 @@ propel:
     _attributes:
     id:                               ~
     branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    status_id:                        { type: INTEGER, size: '11', required: true, foreignTable: status, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     state:                            { type: CHAR, size: '1', required: true }
     filename:                         { type: VARCHAR, size: '255', required: true }
-    commit_status_changed:            { type: VARCHAR, size: '50', required: true }
-    user_status_changed:              { type: INTEGER, size: '11', required: true }
-    date_status_changed:              { type: TIMESTAMP, required: true, defaultExpr: CURRENT_TIMESTAMP }
-    _indexes:                         { file_FI_1: [branch_id], file_FI_2: [status_id] }
+    status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
+    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
+    user_status_changed:              { type: INTEGER, size: '11', required: false }
+    date_status_changed:              { type: TIMESTAMP, required: false }
   file_comment:
     _attributes:
     id:                               ~
@@ -62,7 +60,3 @@ propel:
     name:                             { type: VARCHAR, size: '50', required: true }
     value:                            { type: VARCHAR, size: '255', required: true }
     remote:                           { type: VARCHAR, size: '255', required: true }
-  status:
-    _attributes:
-    id:                               ~
-    name:                             { type: VARCHAR, size: '50', required: true }

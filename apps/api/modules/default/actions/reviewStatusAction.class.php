@@ -23,8 +23,8 @@ class reviewStatusAction extends sfAction
     {
       if($branch->getCommitStatusChanged() == $commit)
       {
-        $result['result'] = $branch->getStatusId();
-        $result['message'] = "Status: ".$branch->getStatusId();
+        $result['result'] = $branch->getStatus();
+        $result['message'] = "Status: ".$branch->getStatus();
       }
       else
       {

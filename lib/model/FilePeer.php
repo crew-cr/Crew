@@ -43,7 +43,7 @@ class FilePeer extends BaseFilePeer {
       {
         if ($fileModel->getCommitStatusChanged() != $branch->getCommitStatusChanged())
         {
-          $fileModel->setStatusId(StatusPeer::A_TRAITER);
+          $fileModel->setStatus(BranchPeer::A_TRAITER);
           $fileModel->setState($filesGit[$fileModel->getFilename()]['state']);
         }
         $fileModel->setCommitStatusChanged($branch->getCommitStatusChanged());
@@ -57,11 +57,9 @@ class FilePeer extends BaseFilePeer {
     {
       $file = new File();
       $file->setFilename($fileGit['filename'])
-        ->setStatusId(StatusPeer::A_TRAITER)
+        ->setStatus(BranchPeer::A_TRAITER)
         ->setState($fileGit['state'])
         ->setBranchId($branch->getId())
-        ->setCommitStatusChanged($branch->getCommitStatusChanged())
-        ->setUserStatusChanged(1)
         ->save()
       ;
     }

@@ -7,42 +7,38 @@
  * 
  *
  * @method     BranchQuery orderById($order = Criteria::ASC) Order by the id column
- * @method     BranchQuery orderByStatusId($order = Criteria::ASC) Order by the status_id column
- * @method     BranchQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
  * @method     BranchQuery orderByRepositoryId($order = Criteria::ASC) Order by the repository_id column
  * @method     BranchQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     BranchQuery orderByCommitReference($order = Criteria::ASC) Order by the commit_reference column
- * @method     BranchQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
- * @method     BranchQuery orderByDateStatusChanged($order = Criteria::ASC) Order by the date_status_changed column
  * @method     BranchQuery orderByIsBlacklisted($order = Criteria::ASC) Order by the is_blacklisted column
  * @method     BranchQuery orderByReviewRequest($order = Criteria::ASC) Order by the review_request column
+ * @method     BranchQuery orderByStatus($order = Criteria::ASC) Order by the status column
+ * @method     BranchQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
+ * @method     BranchQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
+ * @method     BranchQuery orderByDateStatusChanged($order = Criteria::ASC) Order by the date_status_changed column
  *
  * @method     BranchQuery groupById() Group by the id column
- * @method     BranchQuery groupByStatusId() Group by the status_id column
- * @method     BranchQuery groupByUserStatusChanged() Group by the user_status_changed column
  * @method     BranchQuery groupByRepositoryId() Group by the repository_id column
  * @method     BranchQuery groupByName() Group by the name column
  * @method     BranchQuery groupByCommitReference() Group by the commit_reference column
- * @method     BranchQuery groupByCommitStatusChanged() Group by the commit_status_changed column
- * @method     BranchQuery groupByDateStatusChanged() Group by the date_status_changed column
  * @method     BranchQuery groupByIsBlacklisted() Group by the is_blacklisted column
  * @method     BranchQuery groupByReviewRequest() Group by the review_request column
+ * @method     BranchQuery groupByStatus() Group by the status column
+ * @method     BranchQuery groupByCommitStatusChanged() Group by the commit_status_changed column
+ * @method     BranchQuery groupByUserStatusChanged() Group by the user_status_changed column
+ * @method     BranchQuery groupByDateStatusChanged() Group by the date_status_changed column
  *
  * @method     BranchQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     BranchQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     BranchQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     BranchQuery leftJoinStatus($relationAlias = null) Adds a LEFT JOIN clause to the query using the Status relation
- * @method     BranchQuery rightJoinStatus($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Status relation
- * @method     BranchQuery innerJoinStatus($relationAlias = null) Adds a INNER JOIN clause to the query using the Status relation
+ * @method     BranchQuery leftJoinRepository($relationAlias = null) Adds a LEFT JOIN clause to the query using the Repository relation
+ * @method     BranchQuery rightJoinRepository($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Repository relation
+ * @method     BranchQuery innerJoinRepository($relationAlias = null) Adds a INNER JOIN clause to the query using the Repository relation
  *
  * @method     BranchQuery leftJoinsfGuardUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the sfGuardUser relation
  * @method     BranchQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
  * @method     BranchQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
- *
- * @method     BranchQuery leftJoinRepository($relationAlias = null) Adds a LEFT JOIN clause to the query using the Repository relation
- * @method     BranchQuery rightJoinRepository($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Repository relation
- * @method     BranchQuery innerJoinRepository($relationAlias = null) Adds a INNER JOIN clause to the query using the Repository relation
  *
  * @method     BranchQuery leftJoinBranchComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the BranchComment relation
  * @method     BranchQuery rightJoinBranchComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the BranchComment relation
@@ -56,26 +52,26 @@
  * @method     Branch findOneOrCreate(PropelPDO $con = null) Return the first Branch matching the query, or a new Branch object populated from the query conditions when no match is found
  *
  * @method     Branch findOneById(int $id) Return the first Branch filtered by the id column
- * @method     Branch findOneByStatusId(int $status_id) Return the first Branch filtered by the status_id column
- * @method     Branch findOneByUserStatusChanged(int $user_status_changed) Return the first Branch filtered by the user_status_changed column
  * @method     Branch findOneByRepositoryId(int $repository_id) Return the first Branch filtered by the repository_id column
  * @method     Branch findOneByName(string $name) Return the first Branch filtered by the name column
  * @method     Branch findOneByCommitReference(string $commit_reference) Return the first Branch filtered by the commit_reference column
- * @method     Branch findOneByCommitStatusChanged(string $commit_status_changed) Return the first Branch filtered by the commit_status_changed column
- * @method     Branch findOneByDateStatusChanged(string $date_status_changed) Return the first Branch filtered by the date_status_changed column
  * @method     Branch findOneByIsBlacklisted(int $is_blacklisted) Return the first Branch filtered by the is_blacklisted column
  * @method     Branch findOneByReviewRequest(int $review_request) Return the first Branch filtered by the review_request column
+ * @method     Branch findOneByStatus(int $status) Return the first Branch filtered by the status column
+ * @method     Branch findOneByCommitStatusChanged(string $commit_status_changed) Return the first Branch filtered by the commit_status_changed column
+ * @method     Branch findOneByUserStatusChanged(int $user_status_changed) Return the first Branch filtered by the user_status_changed column
+ * @method     Branch findOneByDateStatusChanged(string $date_status_changed) Return the first Branch filtered by the date_status_changed column
  *
  * @method     array findById(int $id) Return Branch objects filtered by the id column
- * @method     array findByStatusId(int $status_id) Return Branch objects filtered by the status_id column
- * @method     array findByUserStatusChanged(int $user_status_changed) Return Branch objects filtered by the user_status_changed column
  * @method     array findByRepositoryId(int $repository_id) Return Branch objects filtered by the repository_id column
  * @method     array findByName(string $name) Return Branch objects filtered by the name column
  * @method     array findByCommitReference(string $commit_reference) Return Branch objects filtered by the commit_reference column
- * @method     array findByCommitStatusChanged(string $commit_status_changed) Return Branch objects filtered by the commit_status_changed column
- * @method     array findByDateStatusChanged(string $date_status_changed) Return Branch objects filtered by the date_status_changed column
  * @method     array findByIsBlacklisted(int $is_blacklisted) Return Branch objects filtered by the is_blacklisted column
  * @method     array findByReviewRequest(int $review_request) Return Branch objects filtered by the review_request column
+ * @method     array findByStatus(int $status) Return Branch objects filtered by the status column
+ * @method     array findByCommitStatusChanged(string $commit_status_changed) Return Branch objects filtered by the commit_status_changed column
+ * @method     array findByUserStatusChanged(int $user_status_changed) Return Branch objects filtered by the user_status_changed column
+ * @method     array findByDateStatusChanged(string $date_status_changed) Return Branch objects filtered by the date_status_changed column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -203,68 +199,6 @@ abstract class BaseBranchQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the status_id column
-	 * 
-	 * @param     int|array $statusId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    BranchQuery The current query, for fluid interface
-	 */
-	public function filterByStatusId($statusId = null, $comparison = null)
-	{
-		if (is_array($statusId)) {
-			$useMinMax = false;
-			if (isset($statusId['min'])) {
-				$this->addUsingAlias(BranchPeer::STATUS_ID, $statusId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($statusId['max'])) {
-				$this->addUsingAlias(BranchPeer::STATUS_ID, $statusId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(BranchPeer::STATUS_ID, $statusId, $comparison);
-	}
-
-	/**
-	 * Filter the query on the user_status_changed column
-	 * 
-	 * @param     int|array $userStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    BranchQuery The current query, for fluid interface
-	 */
-	public function filterByUserStatusChanged($userStatusChanged = null, $comparison = null)
-	{
-		if (is_array($userStatusChanged)) {
-			$useMinMax = false;
-			if (isset($userStatusChanged['min'])) {
-				$this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($userStatusChanged['max'])) {
-				$this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged, $comparison);
-	}
-
-	/**
 	 * Filter the query on the repository_id column
 	 * 
 	 * @param     int|array $repositoryId The value to use as filter.
@@ -340,59 +274,6 @@ abstract class BaseBranchQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the commit_status_changed column
-	 * 
-	 * @param     string $commitStatusChanged The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    BranchQuery The current query, for fluid interface
-	 */
-	public function filterByCommitStatusChanged($commitStatusChanged = null, $comparison = null)
-	{
-		if (null === $comparison) {
-			if (is_array($commitStatusChanged)) {
-				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $commitStatusChanged)) {
-				$commitStatusChanged = str_replace('*', '%', $commitStatusChanged);
-				$comparison = Criteria::LIKE;
-			}
-		}
-		return $this->addUsingAlias(BranchPeer::COMMIT_STATUS_CHANGED, $commitStatusChanged, $comparison);
-	}
-
-	/**
-	 * Filter the query on the date_status_changed column
-	 * 
-	 * @param     string|array $dateStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    BranchQuery The current query, for fluid interface
-	 */
-	public function filterByDateStatusChanged($dateStatusChanged = null, $comparison = null)
-	{
-		if (is_array($dateStatusChanged)) {
-			$useMinMax = false;
-			if (isset($dateStatusChanged['min'])) {
-				$this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($dateStatusChanged['max'])) {
-				$this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged, $comparison);
-	}
-
-	/**
 	 * Filter the query on the is_blacklisted column
 	 * 
 	 * @param     int|array $isBlacklisted The value to use as filter.
@@ -455,131 +336,118 @@ abstract class BaseBranchQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query by a related Status object
-	 *
-	 * @param     Status $status  the related object to use as filter
+	 * Filter the query on the status column
+	 * 
+	 * @param     int|array $status The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function filterByStatus($status, $comparison = null)
+	public function filterByStatus($status = null, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::STATUS_ID, $status->getId(), $comparison);
-	}
-
-	/**
-	 * Adds a JOIN clause to the query using the Status relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    BranchQuery The current query, for fluid interface
-	 */
-	public function joinStatus($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('Status');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
+		if (is_array($status)) {
+			$useMinMax = false;
+			if (isset($status['min'])) {
+				$this->addUsingAlias(BranchPeer::STATUS, $status['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($status['max'])) {
+				$this->addUsingAlias(BranchPeer::STATUS, $status['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
 		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'Status');
-		}
-		
-		return $this;
+		return $this->addUsingAlias(BranchPeer::STATUS, $status, $comparison);
 	}
 
 	/**
-	 * Use the Status relation Status object
-	 *
-	 * @see       useQuery()
+	 * Filter the query on the commit_status_changed column
 	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    StatusQuery A secondary query class using the current class as primary query
-	 */
-	public function useStatusQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinStatus($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'Status', 'StatusQuery');
-	}
-
-	/**
-	 * Filter the query by a related sfGuardUser object
-	 *
-	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     string $commitStatusChanged The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
+	public function filterByCommitStatusChanged($commitStatusChanged = null, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $sfGuardUser->getId(), $comparison);
+		if (null === $comparison) {
+			if (is_array($commitStatusChanged)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $commitStatusChanged)) {
+				$commitStatusChanged = str_replace('*', '%', $commitStatusChanged);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::COMMIT_STATUS_CHANGED, $commitStatusChanged, $comparison);
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the sfGuardUser relation
+	 * Filter the query on the user_status_changed column
 	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 * @param     int|array $userStatusChanged The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function joinsfGuardUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function filterByUserStatusChanged($userStatusChanged = null, $comparison = null)
 	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('sfGuardUser');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
+		if (is_array($userStatusChanged)) {
+			$useMinMax = false;
+			if (isset($userStatusChanged['min'])) {
+				$this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($userStatusChanged['max'])) {
+				$this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
 		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'sfGuardUser');
-		}
-		
-		return $this;
+		return $this->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $userStatusChanged, $comparison);
 	}
 
 	/**
-	 * Use the sfGuardUser relation sfGuardUser object
-	 *
-	 * @see       useQuery()
+	 * Filter the query on the date_status_changed column
 	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 * @param     string|array $dateStatusChanged The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
-	 * @return    sfGuardUserQuery A secondary query class using the current class as primary query
+	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function usesfGuardUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function filterByDateStatusChanged($dateStatusChanged = null, $comparison = null)
 	{
-		return $this
-			->joinsfGuardUser($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'sfGuardUser', 'sfGuardUserQuery');
+		if (is_array($dateStatusChanged)) {
+			$useMinMax = false;
+			if (isset($dateStatusChanged['min'])) {
+				$this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($dateStatusChanged['max'])) {
+				$this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged, $comparison);
 	}
 
 	/**
@@ -644,6 +512,70 @@ abstract class BaseBranchQuery extends ModelCriteria
 		return $this
 			->joinRepository($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Repository', 'RepositoryQuery');
+	}
+
+	/**
+	 * Filter the query by a related sfGuardUser object
+	 *
+	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
+	{
+		return $this
+			->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $sfGuardUser->getId(), $comparison);
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the sfGuardUser relation
+	 * 
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function joinsfGuardUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('sfGuardUser');
+		
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+		
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'sfGuardUser');
+		}
+		
+		return $this;
+	}
+
+	/**
+	 * Use the sfGuardUser relation sfGuardUser object
+	 *
+	 * @see       useQuery()
+	 * 
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    sfGuardUserQuery A secondary query class using the current class as primary query
+	 */
+	public function usesfGuardUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		return $this
+			->joinsfGuardUser($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'sfGuardUser', 'sfGuardUserQuery');
 	}
 
 	/**

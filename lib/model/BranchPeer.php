@@ -19,6 +19,10 @@
  */
 class BranchPeer extends BaseBranchPeer {
 
+  const A_TRAITER = 0;
+  const OK        = 1;
+  const KO        = 2;
+  
   /**
    * @static
    * @param Repository $repository
@@ -41,24 +45,17 @@ class BranchPeer extends BaseBranchPeer {
       }
       else
       {
-        if ($branchModel->getCommitStatusChanged() != $branchesGit[$branchModel->getName()]['commit_status_changed'])
-        {
-          $branchModel->setStatusId(StatusPeer::A_TRAITER);
-          $branchModel->save();
-        }
+        unset($branchesGit[$branchModel->getName()]);
       }
-
-      unset($branchesGit[$branchModel->getName()]);
     }
 
     foreach ($branchesGit as $name => $branchGit)
     {
       $branch = new Branch();
       $branch->setName($name)
-        ->setStatusId(StatusPeer::A_TRAITER)
+        ->setStatus(BranchPeer::A_TRAITER)
         ->setRepositoryId($repository->getId())
         ->setCommitReference($branchGit['commit_reference'])
-        ->setUserStatusChanged(1)
         ->save()
       ;
     }

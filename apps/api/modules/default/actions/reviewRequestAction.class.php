@@ -36,19 +36,12 @@ class reviewRequestAction extends sfAction
           exec($cmd, $cmdReturn);
           if(count($cmdReturn) == 0)
           {
-            $branch->setStatusId(StatusPeer::A_TRAITER);
+            $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
+            $branch->setStatus(BranchPeer::A_TRAITER);
             $branch->setReviewRequest(1);
             $branch->setCommitStatusChanged($commit);
             $branch->save();
             $result['result'] = true;
-            if(!$branch->getReviewRequest())
-            {
-              $result['message'] = sprintf("Review has been engaged");
-            }
-            else
-            {
-              $result['message'] = sprintf("Review already engaged");
-            }
           }
           else
           {

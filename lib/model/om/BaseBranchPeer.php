@@ -34,12 +34,6 @@ abstract class BaseBranchPeer {
 	/** the column name for the ID field */
 	const ID = 'branch.ID';
 
-	/** the column name for the STATUS_ID field */
-	const STATUS_ID = 'branch.STATUS_ID';
-
-	/** the column name for the USER_STATUS_CHANGED field */
-	const USER_STATUS_CHANGED = 'branch.USER_STATUS_CHANGED';
-
 	/** the column name for the REPOSITORY_ID field */
 	const REPOSITORY_ID = 'branch.REPOSITORY_ID';
 
@@ -49,17 +43,23 @@ abstract class BaseBranchPeer {
 	/** the column name for the COMMIT_REFERENCE field */
 	const COMMIT_REFERENCE = 'branch.COMMIT_REFERENCE';
 
-	/** the column name for the COMMIT_STATUS_CHANGED field */
-	const COMMIT_STATUS_CHANGED = 'branch.COMMIT_STATUS_CHANGED';
-
-	/** the column name for the DATE_STATUS_CHANGED field */
-	const DATE_STATUS_CHANGED = 'branch.DATE_STATUS_CHANGED';
-
 	/** the column name for the IS_BLACKLISTED field */
 	const IS_BLACKLISTED = 'branch.IS_BLACKLISTED';
 
 	/** the column name for the REVIEW_REQUEST field */
 	const REVIEW_REQUEST = 'branch.REVIEW_REQUEST';
+
+	/** the column name for the STATUS field */
+	const STATUS = 'branch.STATUS';
+
+	/** the column name for the COMMIT_STATUS_CHANGED field */
+	const COMMIT_STATUS_CHANGED = 'branch.COMMIT_STATUS_CHANGED';
+
+	/** the column name for the USER_STATUS_CHANGED field */
+	const USER_STATUS_CHANGED = 'branch.USER_STATUS_CHANGED';
+
+	/** the column name for the DATE_STATUS_CHANGED field */
+	const DATE_STATUS_CHANGED = 'branch.DATE_STATUS_CHANGED';
 
 	/**
 	 * An identiy map to hold any loaded instances of Branch objects.
@@ -84,11 +84,11 @@ abstract class BaseBranchPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'StatusId', 'UserStatusChanged', 'RepositoryId', 'Name', 'CommitReference', 'CommitStatusChanged', 'DateStatusChanged', 'IsBlacklisted', 'ReviewRequest', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'statusId', 'userStatusChanged', 'repositoryId', 'name', 'commitReference', 'commitStatusChanged', 'dateStatusChanged', 'isBlacklisted', 'reviewRequest', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::STATUS_ID, self::USER_STATUS_CHANGED, self::REPOSITORY_ID, self::NAME, self::COMMIT_REFERENCE, self::COMMIT_STATUS_CHANGED, self::DATE_STATUS_CHANGED, self::IS_BLACKLISTED, self::REVIEW_REQUEST, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'STATUS_ID', 'USER_STATUS_CHANGED', 'REPOSITORY_ID', 'NAME', 'COMMIT_REFERENCE', 'COMMIT_STATUS_CHANGED', 'DATE_STATUS_CHANGED', 'IS_BLACKLISTED', 'REVIEW_REQUEST', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'status_id', 'user_status_changed', 'repository_id', 'name', 'commit_reference', 'commit_status_changed', 'date_status_changed', 'is_blacklisted', 'review_request', ),
+		BasePeer::TYPE_PHPNAME => array ('Id', 'RepositoryId', 'Name', 'CommitReference', 'IsBlacklisted', 'ReviewRequest', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'repositoryId', 'name', 'commitReference', 'isBlacklisted', 'reviewRequest', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::REPOSITORY_ID, self::NAME, self::COMMIT_REFERENCE, self::IS_BLACKLISTED, self::REVIEW_REQUEST, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'REPOSITORY_ID', 'NAME', 'COMMIT_REFERENCE', 'IS_BLACKLISTED', 'REVIEW_REQUEST', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'repository_id', 'name', 'commit_reference', 'is_blacklisted', 'review_request', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
@@ -99,11 +99,11 @@ abstract class BaseBranchPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'StatusId' => 1, 'UserStatusChanged' => 2, 'RepositoryId' => 3, 'Name' => 4, 'CommitReference' => 5, 'CommitStatusChanged' => 6, 'DateStatusChanged' => 7, 'IsBlacklisted' => 8, 'ReviewRequest' => 9, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'statusId' => 1, 'userStatusChanged' => 2, 'repositoryId' => 3, 'name' => 4, 'commitReference' => 5, 'commitStatusChanged' => 6, 'dateStatusChanged' => 7, 'isBlacklisted' => 8, 'reviewRequest' => 9, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::STATUS_ID => 1, self::USER_STATUS_CHANGED => 2, self::REPOSITORY_ID => 3, self::NAME => 4, self::COMMIT_REFERENCE => 5, self::COMMIT_STATUS_CHANGED => 6, self::DATE_STATUS_CHANGED => 7, self::IS_BLACKLISTED => 8, self::REVIEW_REQUEST => 9, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'STATUS_ID' => 1, 'USER_STATUS_CHANGED' => 2, 'REPOSITORY_ID' => 3, 'NAME' => 4, 'COMMIT_REFERENCE' => 5, 'COMMIT_STATUS_CHANGED' => 6, 'DATE_STATUS_CHANGED' => 7, 'IS_BLACKLISTED' => 8, 'REVIEW_REQUEST' => 9, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'status_id' => 1, 'user_status_changed' => 2, 'repository_id' => 3, 'name' => 4, 'commit_reference' => 5, 'commit_status_changed' => 6, 'date_status_changed' => 7, 'is_blacklisted' => 8, 'review_request' => 9, ),
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RepositoryId' => 1, 'Name' => 2, 'CommitReference' => 3, 'IsBlacklisted' => 4, 'ReviewRequest' => 5, 'Status' => 6, 'CommitStatusChanged' => 7, 'UserStatusChanged' => 8, 'DateStatusChanged' => 9, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'repositoryId' => 1, 'name' => 2, 'commitReference' => 3, 'isBlacklisted' => 4, 'reviewRequest' => 5, 'status' => 6, 'commitStatusChanged' => 7, 'userStatusChanged' => 8, 'dateStatusChanged' => 9, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::REPOSITORY_ID => 1, self::NAME => 2, self::COMMIT_REFERENCE => 3, self::IS_BLACKLISTED => 4, self::REVIEW_REQUEST => 5, self::STATUS => 6, self::COMMIT_STATUS_CHANGED => 7, self::USER_STATUS_CHANGED => 8, self::DATE_STATUS_CHANGED => 9, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'REPOSITORY_ID' => 1, 'NAME' => 2, 'COMMIT_REFERENCE' => 3, 'IS_BLACKLISTED' => 4, 'REVIEW_REQUEST' => 5, 'STATUS' => 6, 'COMMIT_STATUS_CHANGED' => 7, 'USER_STATUS_CHANGED' => 8, 'DATE_STATUS_CHANGED' => 9, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'repository_id' => 1, 'name' => 2, 'commit_reference' => 3, 'is_blacklisted' => 4, 'review_request' => 5, 'status' => 6, 'commit_status_changed' => 7, 'user_status_changed' => 8, 'date_status_changed' => 9, ),
 		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, )
 	);
 
@@ -177,26 +177,26 @@ abstract class BaseBranchPeer {
 	{
 		if (null === $alias) {
 			$criteria->addSelectColumn(BranchPeer::ID);
-			$criteria->addSelectColumn(BranchPeer::STATUS_ID);
-			$criteria->addSelectColumn(BranchPeer::USER_STATUS_CHANGED);
 			$criteria->addSelectColumn(BranchPeer::REPOSITORY_ID);
 			$criteria->addSelectColumn(BranchPeer::NAME);
 			$criteria->addSelectColumn(BranchPeer::COMMIT_REFERENCE);
-			$criteria->addSelectColumn(BranchPeer::COMMIT_STATUS_CHANGED);
-			$criteria->addSelectColumn(BranchPeer::DATE_STATUS_CHANGED);
 			$criteria->addSelectColumn(BranchPeer::IS_BLACKLISTED);
 			$criteria->addSelectColumn(BranchPeer::REVIEW_REQUEST);
+			$criteria->addSelectColumn(BranchPeer::STATUS);
+			$criteria->addSelectColumn(BranchPeer::COMMIT_STATUS_CHANGED);
+			$criteria->addSelectColumn(BranchPeer::USER_STATUS_CHANGED);
+			$criteria->addSelectColumn(BranchPeer::DATE_STATUS_CHANGED);
 		} else {
 			$criteria->addSelectColumn($alias . '.ID');
-			$criteria->addSelectColumn($alias . '.STATUS_ID');
-			$criteria->addSelectColumn($alias . '.USER_STATUS_CHANGED');
 			$criteria->addSelectColumn($alias . '.REPOSITORY_ID');
 			$criteria->addSelectColumn($alias . '.NAME');
 			$criteria->addSelectColumn($alias . '.COMMIT_REFERENCE');
-			$criteria->addSelectColumn($alias . '.COMMIT_STATUS_CHANGED');
-			$criteria->addSelectColumn($alias . '.DATE_STATUS_CHANGED');
 			$criteria->addSelectColumn($alias . '.IS_BLACKLISTED');
 			$criteria->addSelectColumn($alias . '.REVIEW_REQUEST');
+			$criteria->addSelectColumn($alias . '.STATUS');
+			$criteria->addSelectColumn($alias . '.COMMIT_STATUS_CHANGED');
+			$criteria->addSelectColumn($alias . '.USER_STATUS_CHANGED');
+			$criteria->addSelectColumn($alias . '.DATE_STATUS_CHANGED');
 		}
 	}
 
@@ -501,7 +501,7 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Status table
+	 * Returns the number of rows matching criteria, joining the related Repository table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -509,7 +509,7 @@ abstract class BaseBranchPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinStatus(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinRepository(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -536,7 +536,7 @@ abstract class BaseBranchPeer {
 			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
+		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -613,63 +613,7 @@ abstract class BaseBranchPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Repository table
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     int Number of matching rows.
-	 */
-	public static function doCountJoinRepository(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		// we're going to modify criteria, so copy it first
-		$criteria = clone $criteria;
-
-		// We need to set the primary table name, since in the case that there are no WHERE columns
-		// it will be impossible for the BasePeer::createSelectSql() method to determine which
-		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(BranchPeer::TABLE_NAME);
-
-		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->setDistinct();
-		}
-
-		if (!$criteria->hasSelectClause()) {
-			BranchPeer::addSelectColumns($criteria);
-		}
-		
-		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
-		// Set the correct dbName
-		$criteria->setDbName(self::DATABASE_NAME);
-
-		if ($con === null) {
-			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
-
-		// symfony_behaviors behavior
-		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
-		{
-		  call_user_func($sf_hook, 'BaseBranchPeer', $criteria, $con);
-		}
-
-		$stmt = BasePeer::doCount($criteria, $con);
-
-		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$count = (int) $row[0];
-		} else {
-			$count = 0; // no rows returned; we infer that means 0 matches.
-		}
-		$stmt->closeCursor();
-		return $count;
-	}
-
-
-	/**
-	 * Selects a collection of Branch objects pre-filled with their Status objects.
+	 * Selects a collection of Branch objects pre-filled with their Repository objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
@@ -677,7 +621,7 @@ abstract class BaseBranchPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinStatus(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinRepository(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -688,9 +632,9 @@ abstract class BaseBranchPeer {
 
 		BranchPeer::addSelectColumns($criteria);
 		$startcol = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
-		StatusPeer::addSelectColumns($criteria);
+		RepositoryPeer::addSelectColumns($criteria);
 
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
+		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -716,19 +660,19 @@ abstract class BaseBranchPeer {
 				BranchPeer::addInstanceToPool($obj1, $key1);
 			} // if $obj1 already loaded
 
-			$key2 = StatusPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			$key2 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol);
 			if ($key2 !== null) {
-				$obj2 = StatusPeer::getInstanceFromPool($key2);
+				$obj2 = RepositoryPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = StatusPeer::getOMClass(false);
+					$cls = RepositoryPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol);
-					StatusPeer::addInstanceToPool($obj2, $key2);
+					RepositoryPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 already loaded
 
-				// Add the $obj1 (Branch) to $obj2 (Status)
+				// Add the $obj1 (Branch) to $obj2 (Repository)
 				$obj2->addBranch($obj1);
 
 			} // if joined row was not null
@@ -813,78 +757,6 @@ abstract class BaseBranchPeer {
 
 
 	/**
-	 * Selects a collection of Branch objects pre-filled with their Repository objects.
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Branch objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinRepository(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		BranchPeer::addSelectColumns($criteria);
-		$startcol = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
-		RepositoryPeer::addSelectColumns($criteria);
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
-
-		// symfony_behaviors behavior
-		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
-		{
-		  call_user_func($sf_hook, 'BaseBranchPeer', $criteria, $con);
-		}
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = BranchPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = BranchPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://www.propelorm.org/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-
-				$cls = BranchPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				BranchPeer::addInstanceToPool($obj1, $key1);
-			} // if $obj1 already loaded
-
-			$key2 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol);
-			if ($key2 !== null) {
-				$obj2 = RepositoryPeer::getInstanceFromPool($key2);
-				if (!$obj2) {
-
-					$cls = RepositoryPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol);
-					RepositoryPeer::addInstanceToPool($obj2, $key2);
-				} // if obj2 already loaded
-
-				// Add the $obj1 (Branch) to $obj2 (Repository)
-				$obj2->addBranch($obj1);
-
-			} // if joined row was not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
 	 * @param      Criteria $criteria
@@ -920,11 +792,9 @@ abstract class BaseBranchPeer {
 			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
+		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -965,20 +835,15 @@ abstract class BaseBranchPeer {
 		BranchPeer::addSelectColumns($criteria);
 		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		StatusPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (StatusPeer::NUM_COLUMNS - StatusPeer::NUM_LAZY_LOAD_COLUMNS);
+		RepositoryPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		sfGuardUserPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		RepositoryPeer::addSelectColumns($criteria);
-		$startcol5 = $startcol4 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
+		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1003,21 +868,21 @@ abstract class BaseBranchPeer {
 				BranchPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-			// Add objects for joined Status rows
+			// Add objects for joined Repository rows
 
-			$key2 = StatusPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+			$key2 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol2);
 			if ($key2 !== null) {
-				$obj2 = StatusPeer::getInstanceFromPool($key2);
+				$obj2 = RepositoryPeer::getInstanceFromPool($key2);
 				if (!$obj2) {
 
-					$cls = StatusPeer::getOMClass(false);
+					$cls = RepositoryPeer::getOMClass(false);
 
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					StatusPeer::addInstanceToPool($obj2, $key2);
+					RepositoryPeer::addInstanceToPool($obj2, $key2);
 				} // if obj2 loaded
 
-				// Add the $obj1 (Branch) to the collection in $obj2 (Status)
+				// Add the $obj1 (Branch) to the collection in $obj2 (Repository)
 				$obj2->addBranch($obj1);
 			} // if joined row not null
 
@@ -1039,24 +904,6 @@ abstract class BaseBranchPeer {
 				$obj3->addBranch($obj1);
 			} // if joined row not null
 
-			// Add objects for joined Repository rows
-
-			$key4 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol4);
-			if ($key4 !== null) {
-				$obj4 = RepositoryPeer::getInstanceFromPool($key4);
-				if (!$obj4) {
-
-					$cls = RepositoryPeer::getOMClass(false);
-
-					$obj4 = new $cls();
-					$obj4->hydrate($row, $startcol4);
-					RepositoryPeer::addInstanceToPool($obj4, $key4);
-				} // if obj4 loaded
-
-				// Add the $obj1 (Branch) to the collection in $obj4 (Repository)
-				$obj4->addBranch($obj1);
-			} // if joined row not null
-
 			$results[] = $obj1;
 		}
 		$stmt->closeCursor();
@@ -1065,7 +912,7 @@ abstract class BaseBranchPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Status table
+	 * Returns the number of rows matching criteria, joining the related Repository table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1073,7 +920,7 @@ abstract class BaseBranchPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptStatus(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptRepository(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1101,8 +948,6 @@ abstract class BaseBranchPeer {
 		}
 	
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1158,8 +1003,6 @@ abstract class BaseBranchPeer {
 			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
 		}
 	
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
-
 		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
@@ -1181,65 +1024,7 @@ abstract class BaseBranchPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related Repository table
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     int Number of matching rows.
-	 */
-	public static function doCountJoinAllExceptRepository(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		// we're going to modify criteria, so copy it first
-		$criteria = clone $criteria;
-
-		// We need to set the primary table name, since in the case that there are no WHERE columns
-		// it will be impossible for the BasePeer::createSelectSql() method to determine which
-		// tables go into the FROM clause.
-		$criteria->setPrimaryTableName(BranchPeer::TABLE_NAME);
-		
-		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
-			$criteria->setDistinct();
-		}
-
-		if (!$criteria->hasSelectClause()) {
-			BranchPeer::addSelectColumns($criteria);
-		}
-		
-		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
-		// Set the correct dbName
-		$criteria->setDbName(self::DATABASE_NAME);
-
-		if ($con === null) {
-			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
-		}
-	
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		// symfony_behaviors behavior
-		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
-		{
-		  call_user_func($sf_hook, 'BaseBranchPeer', $criteria, $con);
-		}
-
-		$stmt = BasePeer::doCount($criteria, $con);
-
-		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$count = (int) $row[0];
-		} else {
-			$count = 0; // no rows returned; we infer that means 0 matches.
-		}
-		$stmt->closeCursor();
-		return $count;
-	}
-
-
-	/**
-	 * Selects a collection of Branch objects pre-filled with all related objects except Status.
+	 * Selects a collection of Branch objects pre-filled with all related objects except Repository.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1248,7 +1033,7 @@ abstract class BaseBranchPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptStatus(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptRepository(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1265,12 +1050,7 @@ abstract class BaseBranchPeer {
 		sfGuardUserPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		RepositoryPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
-
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1315,25 +1095,6 @@ abstract class BaseBranchPeer {
 
 			} // if joined row is not null
 
-				// Add objects for joined Repository rows
-
-				$key3 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = RepositoryPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = RepositoryPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					RepositoryPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Branch) to the collection in $obj3 (Repository)
-				$obj3->addBranch($obj1);
-
-			} // if joined row is not null
-
 			$results[] = $obj1;
 		}
 		$stmt->closeCursor();
@@ -1365,13 +1126,8 @@ abstract class BaseBranchPeer {
 		BranchPeer::addSelectColumns($criteria);
 		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
 
-		StatusPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (StatusPeer::NUM_COLUMNS - StatusPeer::NUM_LAZY_LOAD_COLUMNS);
-
 		RepositoryPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
+		$startcol3 = $startcol2 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
 
 		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
@@ -1399,144 +1155,22 @@ abstract class BaseBranchPeer {
 				BranchPeer::addInstanceToPool($obj1, $key1);
 			} // if obj1 already loaded
 
-				// Add objects for joined Status rows
-
-				$key2 = StatusPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = StatusPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = StatusPeer::getOMClass(false);
-
-					$obj2 = new $cls();
-					$obj2->hydrate($row, $startcol2);
-					StatusPeer::addInstanceToPool($obj2, $key2);
-				} // if $obj2 already loaded
-
-				// Add the $obj1 (Branch) to the collection in $obj2 (Status)
-				$obj2->addBranch($obj1);
-
-			} // if joined row is not null
-
 				// Add objects for joined Repository rows
 
-				$key3 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = RepositoryPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
+				$key2 = RepositoryPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = RepositoryPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
 	
 						$cls = RepositoryPeer::getOMClass(false);
 
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					RepositoryPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Branch) to the collection in $obj3 (Repository)
-				$obj3->addBranch($obj1);
-
-			} // if joined row is not null
-
-			$results[] = $obj1;
-		}
-		$stmt->closeCursor();
-		return $results;
-	}
-
-
-	/**
-	 * Selects a collection of Branch objects pre-filled with all related objects except Repository.
-	 *
-	 * @param      Criteria  $criteria
-	 * @param      PropelPDO $con
-	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
-	 * @return     array Array of Branch objects.
-	 * @throws     PropelException Any exceptions caught during processing will be
-	 *		 rethrown wrapped into a PropelException.
-	 */
-	public static function doSelectJoinAllExceptRepository(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$criteria = clone $criteria;
-
-		// Set the correct dbName if it has not been overridden
-		// $criteria->getDbName() will return the same object if not set to another value
-		// so == check is okay and faster
-		if ($criteria->getDbName() == Propel::getDefaultDB()) {
-			$criteria->setDbName(self::DATABASE_NAME);
-		}
-
-		BranchPeer::addSelectColumns($criteria);
-		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		StatusPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (StatusPeer::NUM_COLUMNS - StatusPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		sfGuardUserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
-
-		$criteria->addJoin(BranchPeer::STATUS_ID, StatusPeer::ID, $join_behavior);
-
-		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
-
-		// symfony_behaviors behavior
-		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
-		{
-		  call_user_func($sf_hook, 'BaseBranchPeer', $criteria, $con);
-		}
-
-
-		$stmt = BasePeer::doSelect($criteria, $con);
-		$results = array();
-
-		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
-			$key1 = BranchPeer::getPrimaryKeyHashFromRow($row, 0);
-			if (null !== ($obj1 = BranchPeer::getInstanceFromPool($key1))) {
-				// We no longer rehydrate the object, since this can cause data loss.
-				// See http://www.propelorm.org/ticket/509
-				// $obj1->hydrate($row, 0, true); // rehydrate
-			} else {
-				$cls = BranchPeer::getOMClass(false);
-
-				$obj1 = new $cls();
-				$obj1->hydrate($row);
-				BranchPeer::addInstanceToPool($obj1, $key1);
-			} // if obj1 already loaded
-
-				// Add objects for joined Status rows
-
-				$key2 = StatusPeer::getPrimaryKeyHashFromRow($row, $startcol2);
-				if ($key2 !== null) {
-					$obj2 = StatusPeer::getInstanceFromPool($key2);
-					if (!$obj2) {
-	
-						$cls = StatusPeer::getOMClass(false);
-
 					$obj2 = new $cls();
 					$obj2->hydrate($row, $startcol2);
-					StatusPeer::addInstanceToPool($obj2, $key2);
+					RepositoryPeer::addInstanceToPool($obj2, $key2);
 				} // if $obj2 already loaded
 
-				// Add the $obj1 (Branch) to the collection in $obj2 (Status)
+				// Add the $obj1 (Branch) to the collection in $obj2 (Repository)
 				$obj2->addBranch($obj1);
-
-			} // if joined row is not null
-
-				// Add objects for joined sfGuardUser rows
-
-				$key3 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
-				if ($key3 !== null) {
-					$obj3 = sfGuardUserPeer::getInstanceFromPool($key3);
-					if (!$obj3) {
-	
-						$cls = sfGuardUserPeer::getOMClass(false);
-
-					$obj3 = new $cls();
-					$obj3->hydrate($row, $startcol3);
-					sfGuardUserPeer::addInstanceToPool($obj3, $key3);
-				} // if $obj3 already loaded
-
-				// Add the $obj1 (Branch) to the collection in $obj3 (sfGuardUser)
-				$obj3->addBranch($obj1);
 
 			} // if joined row is not null
 

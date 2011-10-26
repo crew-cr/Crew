@@ -37,12 +37,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	protected $branch_id;
 
 	/**
-	 * The value for the status_id field.
-	 * @var        int
-	 */
-	protected $status_id;
-
-	/**
 	 * The value for the state field.
 	 * @var        string
 	 */
@@ -53,6 +47,13 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 * @var        string
 	 */
 	protected $filename;
+
+	/**
+	 * The value for the status field.
+	 * Note: this column has a database default value of: 0
+	 * @var        int
+	 */
+	protected $status;
 
 	/**
 	 * The value for the commit_status_changed field.
@@ -68,7 +69,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 	/**
 	 * The value for the date_status_changed field.
-	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
 	 * @var        string
 	 */
 	protected $date_status_changed;
@@ -77,11 +77,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 * @var        Branch
 	 */
 	protected $aBranch;
-
-	/**
-	 * @var        Status
-	 */
-	protected $aStatus;
 
 	/**
 	 * @var        array FileComment[] Collection to store aggregation of FileComment objects.
@@ -115,6 +110,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 */
 	public function applyDefaultValues()
 	{
+		$this->status = 0;
 	}
 
 	/**
@@ -148,16 +144,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [status_id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getStatusId()
-	{
-		return $this->status_id;
-	}
-
-	/**
 	 * Get the [state] column value.
 	 * 
 	 * @return     string
@@ -175,6 +161,16 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	public function getFilename()
 	{
 		return $this->filename;
+	}
+
+	/**
+	 * Get the [status] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getStatus()
+	{
+		return $this->status;
 	}
 
 	/**
@@ -280,30 +276,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	} // setBranchId()
 
 	/**
-	 * Set the value of [status_id] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     File The current object (for fluent API support)
-	 */
-	public function setStatusId($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->status_id !== $v) {
-			$this->status_id = $v;
-			$this->modifiedColumns[] = FilePeer::STATUS_ID;
-		}
-
-		if ($this->aStatus !== null && $this->aStatus->getId() !== $v) {
-			$this->aStatus = null;
-		}
-
-		return $this;
-	} // setStatusId()
-
-	/**
 	 * Set the value of [state] column.
 	 * 
 	 * @param      string $v new value
@@ -342,6 +314,26 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 		return $this;
 	} // setFilename()
+
+	/**
+	 * Set the value of [status] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     File The current object (for fluent API support)
+	 */
+	public function setStatus($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->status !== $v || $this->isNew()) {
+			$this->status = $v;
+			$this->modifiedColumns[] = FilePeer::STATUS;
+		}
+
+		return $this;
+	} // setStatus()
 
 	/**
 	 * Set the value of [commit_status_changed] column.
@@ -442,6 +434,10 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 */
 	public function hasOnlyDefaultValues()
 	{
+			if ($this->status !== 0) {
+				return false;
+			}
+
 		// otherwise, everything was equal, so return TRUE
 		return true;
 	} // hasOnlyDefaultValues()
@@ -466,9 +462,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->branch_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->status_id = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->state = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->filename = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->state = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->filename = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->status = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->commit_status_changed = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
 			$this->user_status_changed = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
 			$this->date_status_changed = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
@@ -505,9 +501,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 		if ($this->aBranch !== null && $this->branch_id !== $this->aBranch->getId()) {
 			$this->aBranch = null;
-		}
-		if ($this->aStatus !== null && $this->status_id !== $this->aStatus->getId()) {
-			$this->aStatus = null;
 		}
 	} // ensureConsistency
 
@@ -549,7 +542,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aBranch = null;
-			$this->aStatus = null;
 			$this->collFileComments = null;
 
 			$this->collLineComments = null;
@@ -708,13 +700,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->setBranch($this->aBranch);
 			}
 
-			if ($this->aStatus !== null) {
-				if ($this->aStatus->isModified() || $this->aStatus->isNew()) {
-					$affectedRows += $this->aStatus->save($con);
-				}
-				$this->setStatus($this->aStatus);
-			}
-
 			if ($this->isNew() ) {
 				$this->modifiedColumns[] = FilePeer::ID;
 			}
@@ -831,12 +816,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				}
 			}
 
-			if ($this->aStatus !== null) {
-				if (!$this->aStatus->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aStatus->getValidationFailures());
-				}
-			}
-
 
 			if (($retval = FilePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
@@ -899,13 +878,13 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				return $this->getBranchId();
 				break;
 			case 2:
-				return $this->getStatusId();
-				break;
-			case 3:
 				return $this->getState();
 				break;
-			case 4:
+			case 3:
 				return $this->getFilename();
+				break;
+			case 4:
+				return $this->getStatus();
 				break;
 			case 5:
 				return $this->getCommitStatusChanged();
@@ -942,9 +921,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getBranchId(),
-			$keys[2] => $this->getStatusId(),
-			$keys[3] => $this->getState(),
-			$keys[4] => $this->getFilename(),
+			$keys[2] => $this->getState(),
+			$keys[3] => $this->getFilename(),
+			$keys[4] => $this->getStatus(),
 			$keys[5] => $this->getCommitStatusChanged(),
 			$keys[6] => $this->getUserStatusChanged(),
 			$keys[7] => $this->getDateStatusChanged(),
@@ -952,9 +931,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($includeForeignObjects) {
 			if (null !== $this->aBranch) {
 				$result['Branch'] = $this->aBranch->toArray($keyType, $includeLazyLoadColumns, true);
-			}
-			if (null !== $this->aStatus) {
-				$result['Status'] = $this->aStatus->toArray($keyType, $includeLazyLoadColumns, true);
 			}
 		}
 		return $result;
@@ -994,13 +970,13 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->setBranchId($value);
 				break;
 			case 2:
-				$this->setStatusId($value);
-				break;
-			case 3:
 				$this->setState($value);
 				break;
-			case 4:
+			case 3:
 				$this->setFilename($value);
+				break;
+			case 4:
+				$this->setStatus($value);
 				break;
 			case 5:
 				$this->setCommitStatusChanged($value);
@@ -1037,9 +1013,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setBranchId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setStatusId($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setState($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setFilename($arr[$keys[4]]);
+		if (array_key_exists($keys[2], $arr)) $this->setState($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setFilename($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setStatus($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setCommitStatusChanged($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setUserStatusChanged($arr[$keys[6]]);
 		if (array_key_exists($keys[7], $arr)) $this->setDateStatusChanged($arr[$keys[7]]);
@@ -1056,9 +1032,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 		if ($this->isColumnModified(FilePeer::ID)) $criteria->add(FilePeer::ID, $this->id);
 		if ($this->isColumnModified(FilePeer::BRANCH_ID)) $criteria->add(FilePeer::BRANCH_ID, $this->branch_id);
-		if ($this->isColumnModified(FilePeer::STATUS_ID)) $criteria->add(FilePeer::STATUS_ID, $this->status_id);
 		if ($this->isColumnModified(FilePeer::STATE)) $criteria->add(FilePeer::STATE, $this->state);
 		if ($this->isColumnModified(FilePeer::FILENAME)) $criteria->add(FilePeer::FILENAME, $this->filename);
+		if ($this->isColumnModified(FilePeer::STATUS)) $criteria->add(FilePeer::STATUS, $this->status);
 		if ($this->isColumnModified(FilePeer::COMMIT_STATUS_CHANGED)) $criteria->add(FilePeer::COMMIT_STATUS_CHANGED, $this->commit_status_changed);
 		if ($this->isColumnModified(FilePeer::USER_STATUS_CHANGED)) $criteria->add(FilePeer::USER_STATUS_CHANGED, $this->user_status_changed);
 		if ($this->isColumnModified(FilePeer::DATE_STATUS_CHANGED)) $criteria->add(FilePeer::DATE_STATUS_CHANGED, $this->date_status_changed);
@@ -1124,9 +1100,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 		$copyObj->setBranchId($this->branch_id);
-		$copyObj->setStatusId($this->status_id);
 		$copyObj->setState($this->state);
 		$copyObj->setFilename($this->filename);
+		$copyObj->setStatus($this->status);
 		$copyObj->setCommitStatusChanged($this->commit_status_changed);
 		$copyObj->setUserStatusChanged($this->user_status_changed);
 		$copyObj->setDateStatusChanged($this->date_status_changed);
@@ -1240,55 +1216,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			 */
 		}
 		return $this->aBranch;
-	}
-
-	/**
-	 * Declares an association between this object and a Status object.
-	 *
-	 * @param      Status $v
-	 * @return     File The current object (for fluent API support)
-	 * @throws     PropelException
-	 */
-	public function setStatus(Status $v = null)
-	{
-		if ($v === null) {
-			$this->setStatusId(NULL);
-		} else {
-			$this->setStatusId($v->getId());
-		}
-
-		$this->aStatus = $v;
-
-		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Status object, it will not be re-added.
-		if ($v !== null) {
-			$v->addFile($this);
-		}
-
-		return $this;
-	}
-
-
-	/**
-	 * Get the associated Status object
-	 *
-	 * @param      PropelPDO Optional Connection object.
-	 * @return     Status The associated Status object.
-	 * @throws     PropelException
-	 */
-	public function getStatus(PropelPDO $con = null)
-	{
-		if ($this->aStatus === null && ($this->status_id !== null)) {
-			$this->aStatus = StatusQuery::create()->findPk($this->status_id, $con);
-			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aStatus->addFiles($this);
-			 */
-		}
-		return $this->aStatus;
 	}
 
 	/**
@@ -1566,9 +1493,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	{
 		$this->id = null;
 		$this->branch_id = null;
-		$this->status_id = null;
 		$this->state = null;
 		$this->filename = null;
+		$this->status = null;
 		$this->commit_status_changed = null;
 		$this->user_status_changed = null;
 		$this->date_status_changed = null;
@@ -1608,7 +1535,6 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$this->collFileComments = null;
 		$this->collLineComments = null;
 		$this->aBranch = null;
-		$this->aStatus = null;
 	}
 
 	/**

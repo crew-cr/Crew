@@ -31,18 +31,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $id;
 
 	/**
-	 * The value for the status_id field.
-	 * @var        int
-	 */
-	protected $status_id;
-
-	/**
-	 * The value for the user_status_changed field.
-	 * @var        int
-	 */
-	protected $user_status_changed;
-
-	/**
 	 * The value for the repository_id field.
 	 * @var        int
 	 */
@@ -61,19 +49,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $commit_reference;
 
 	/**
-	 * The value for the commit_status_changed field.
-	 * @var        string
-	 */
-	protected $commit_status_changed;
-
-	/**
-	 * The value for the date_status_changed field.
-	 * Note: this column has a database default value of: (expression) CURRENT_TIMESTAMP
-	 * @var        string
-	 */
-	protected $date_status_changed;
-
-	/**
 	 * The value for the is_blacklisted field.
 	 * Note: this column has a database default value of: 0
 	 * @var        int
@@ -88,19 +63,39 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $review_request;
 
 	/**
-	 * @var        Status
+	 * The value for the status field.
+	 * Note: this column has a database default value of: 0
+	 * @var        int
 	 */
-	protected $aStatus;
+	protected $status;
 
 	/**
-	 * @var        sfGuardUser
+	 * The value for the commit_status_changed field.
+	 * @var        string
 	 */
-	protected $asfGuardUser;
+	protected $commit_status_changed;
+
+	/**
+	 * The value for the user_status_changed field.
+	 * @var        int
+	 */
+	protected $user_status_changed;
+
+	/**
+	 * The value for the date_status_changed field.
+	 * @var        string
+	 */
+	protected $date_status_changed;
 
 	/**
 	 * @var        Repository
 	 */
 	protected $aRepository;
+
+	/**
+	 * @var        sfGuardUser
+	 */
+	protected $asfGuardUser;
 
 	/**
 	 * @var        array BranchComment[] Collection to store aggregation of BranchComment objects.
@@ -136,6 +131,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	{
 		$this->is_blacklisted = 0;
 		$this->review_request = 0;
+		$this->status = 0;
 	}
 
 	/**
@@ -156,26 +152,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	public function getId()
 	{
 		return $this->id;
-	}
-
-	/**
-	 * Get the [status_id] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getStatusId()
-	{
-		return $this->status_id;
-	}
-
-	/**
-	 * Get the [user_status_changed] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getUserStatusChanged()
-	{
-		return $this->user_status_changed;
 	}
 
 	/**
@@ -209,6 +185,36 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [is_blacklisted] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getIsBlacklisted()
+	{
+		return $this->is_blacklisted;
+	}
+
+	/**
+	 * Get the [review_request] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getReviewRequest()
+	{
+		return $this->review_request;
+	}
+
+	/**
+	 * Get the [status] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getStatus()
+	{
+		return $this->status;
+	}
+
+	/**
 	 * Get the [commit_status_changed] column value.
 	 * 
 	 * @return     string
@@ -216,6 +222,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	public function getCommitStatusChanged()
 	{
 		return $this->commit_status_changed;
+	}
+
+	/**
+	 * Get the [user_status_changed] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getUserStatusChanged()
+	{
+		return $this->user_status_changed;
 	}
 
 	/**
@@ -257,26 +273,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [is_blacklisted] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getIsBlacklisted()
-	{
-		return $this->is_blacklisted;
-	}
-
-	/**
-	 * Get the [review_request] column value.
-	 * 
-	 * @return     int
-	 */
-	public function getReviewRequest()
-	{
-		return $this->review_request;
-	}
-
-	/**
 	 * Set the value of [id] column.
 	 * 
 	 * @param      int $v new value
@@ -295,54 +291,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		return $this;
 	} // setId()
-
-	/**
-	 * Set the value of [status_id] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     Branch The current object (for fluent API support)
-	 */
-	public function setStatusId($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->status_id !== $v) {
-			$this->status_id = $v;
-			$this->modifiedColumns[] = BranchPeer::STATUS_ID;
-		}
-
-		if ($this->aStatus !== null && $this->aStatus->getId() !== $v) {
-			$this->aStatus = null;
-		}
-
-		return $this;
-	} // setStatusId()
-
-	/**
-	 * Set the value of [user_status_changed] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     Branch The current object (for fluent API support)
-	 */
-	public function setUserStatusChanged($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->user_status_changed !== $v) {
-			$this->user_status_changed = $v;
-			$this->modifiedColumns[] = BranchPeer::USER_STATUS_CHANGED;
-		}
-
-		if ($this->asfGuardUser !== null && $this->asfGuardUser->getId() !== $v) {
-			$this->asfGuardUser = null;
-		}
-
-		return $this;
-	} // setUserStatusChanged()
 
 	/**
 	 * Set the value of [repository_id] column.
@@ -409,6 +357,66 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	} // setCommitReference()
 
 	/**
+	 * Set the value of [is_blacklisted] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function setIsBlacklisted($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->is_blacklisted !== $v || $this->isNew()) {
+			$this->is_blacklisted = $v;
+			$this->modifiedColumns[] = BranchPeer::IS_BLACKLISTED;
+		}
+
+		return $this;
+	} // setIsBlacklisted()
+
+	/**
+	 * Set the value of [review_request] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function setReviewRequest($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->review_request !== $v || $this->isNew()) {
+			$this->review_request = $v;
+			$this->modifiedColumns[] = BranchPeer::REVIEW_REQUEST;
+		}
+
+		return $this;
+	} // setReviewRequest()
+
+	/**
+	 * Set the value of [status] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function setStatus($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->status !== $v || $this->isNew()) {
+			$this->status = $v;
+			$this->modifiedColumns[] = BranchPeer::STATUS;
+		}
+
+		return $this;
+	} // setStatus()
+
+	/**
 	 * Set the value of [commit_status_changed] column.
 	 * 
 	 * @param      string $v new value
@@ -427,6 +435,30 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		return $this;
 	} // setCommitStatusChanged()
+
+	/**
+	 * Set the value of [user_status_changed] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function setUserStatusChanged($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->user_status_changed !== $v) {
+			$this->user_status_changed = $v;
+			$this->modifiedColumns[] = BranchPeer::USER_STATUS_CHANGED;
+		}
+
+		if ($this->asfGuardUser !== null && $this->asfGuardUser->getId() !== $v) {
+			$this->asfGuardUser = null;
+		}
+
+		return $this;
+	} // setUserStatusChanged()
 
 	/**
 	 * Sets the value of [date_status_changed] column to a normalized version of the date/time value specified.
@@ -478,46 +510,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	} // setDateStatusChanged()
 
 	/**
-	 * Set the value of [is_blacklisted] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     Branch The current object (for fluent API support)
-	 */
-	public function setIsBlacklisted($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->is_blacklisted !== $v || $this->isNew()) {
-			$this->is_blacklisted = $v;
-			$this->modifiedColumns[] = BranchPeer::IS_BLACKLISTED;
-		}
-
-		return $this;
-	} // setIsBlacklisted()
-
-	/**
-	 * Set the value of [review_request] column.
-	 * 
-	 * @param      int $v new value
-	 * @return     Branch The current object (for fluent API support)
-	 */
-	public function setReviewRequest($v)
-	{
-		if ($v !== null) {
-			$v = (int) $v;
-		}
-
-		if ($this->review_request !== $v || $this->isNew()) {
-			$this->review_request = $v;
-			$this->modifiedColumns[] = BranchPeer::REVIEW_REQUEST;
-		}
-
-		return $this;
-	} // setReviewRequest()
-
-	/**
 	 * Indicates whether the columns in this object are only set to default values.
 	 *
 	 * This method can be used in conjunction with isModified() to indicate whether an object is both
@@ -532,6 +524,10 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 
 			if ($this->review_request !== 0) {
+				return false;
+			}
+
+			if ($this->status !== 0) {
 				return false;
 			}
 
@@ -558,15 +554,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		try {
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
-			$this->status_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->user_status_changed = ($row[$startcol + 2] !== null) ? (int) $row[$startcol + 2] : null;
-			$this->repository_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
-			$this->name = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->commit_reference = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->commit_status_changed = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->date_status_changed = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->is_blacklisted = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-			$this->review_request = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->repository_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
+			$this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->commit_reference = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->is_blacklisted = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
+			$this->review_request = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->status = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->commit_status_changed = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->user_status_changed = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->date_status_changed = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -598,14 +594,11 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	public function ensureConsistency()
 	{
 
-		if ($this->aStatus !== null && $this->status_id !== $this->aStatus->getId()) {
-			$this->aStatus = null;
+		if ($this->aRepository !== null && $this->repository_id !== $this->aRepository->getId()) {
+			$this->aRepository = null;
 		}
 		if ($this->asfGuardUser !== null && $this->user_status_changed !== $this->asfGuardUser->getId()) {
 			$this->asfGuardUser = null;
-		}
-		if ($this->aRepository !== null && $this->repository_id !== $this->aRepository->getId()) {
-			$this->aRepository = null;
 		}
 	} // ensureConsistency
 
@@ -646,9 +639,8 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->aStatus = null;
-			$this->asfGuardUser = null;
 			$this->aRepository = null;
+			$this->asfGuardUser = null;
 			$this->collBranchComments = null;
 
 			$this->collFiles = null;
@@ -800,11 +792,11 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aStatus !== null) {
-				if ($this->aStatus->isModified() || $this->aStatus->isNew()) {
-					$affectedRows += $this->aStatus->save($con);
+			if ($this->aRepository !== null) {
+				if ($this->aRepository->isModified() || $this->aRepository->isNew()) {
+					$affectedRows += $this->aRepository->save($con);
 				}
-				$this->setStatus($this->aStatus);
+				$this->setRepository($this->aRepository);
 			}
 
 			if ($this->asfGuardUser !== null) {
@@ -812,13 +804,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 					$affectedRows += $this->asfGuardUser->save($con);
 				}
 				$this->setsfGuardUser($this->asfGuardUser);
-			}
-
-			if ($this->aRepository !== null) {
-				if ($this->aRepository->isModified() || $this->aRepository->isNew()) {
-					$affectedRows += $this->aRepository->save($con);
-				}
-				$this->setRepository($this->aRepository);
 			}
 
 			if ($this->isNew() ) {
@@ -931,21 +916,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->aStatus !== null) {
-				if (!$this->aStatus->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aStatus->getValidationFailures());
+			if ($this->aRepository !== null) {
+				if (!$this->aRepository->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->aRepository->getValidationFailures());
 				}
 			}
 
 			if ($this->asfGuardUser !== null) {
 				if (!$this->asfGuardUser->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->asfGuardUser->getValidationFailures());
-				}
-			}
-
-			if ($this->aRepository !== null) {
-				if (!$this->aRepository->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->aRepository->getValidationFailures());
 				}
 			}
 
@@ -1008,31 +987,31 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				return $this->getId();
 				break;
 			case 1:
-				return $this->getStatusId();
-				break;
-			case 2:
-				return $this->getUserStatusChanged();
-				break;
-			case 3:
 				return $this->getRepositoryId();
 				break;
-			case 4:
+			case 2:
 				return $this->getName();
 				break;
-			case 5:
+			case 3:
 				return $this->getCommitReference();
 				break;
-			case 6:
-				return $this->getCommitStatusChanged();
-				break;
-			case 7:
-				return $this->getDateStatusChanged();
-				break;
-			case 8:
+			case 4:
 				return $this->getIsBlacklisted();
 				break;
-			case 9:
+			case 5:
 				return $this->getReviewRequest();
+				break;
+			case 6:
+				return $this->getStatus();
+				break;
+			case 7:
+				return $this->getCommitStatusChanged();
+				break;
+			case 8:
+				return $this->getUserStatusChanged();
+				break;
+			case 9:
+				return $this->getDateStatusChanged();
 				break;
 			default:
 				return null;
@@ -1059,25 +1038,22 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		$keys = BranchPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
-			$keys[1] => $this->getStatusId(),
-			$keys[2] => $this->getUserStatusChanged(),
-			$keys[3] => $this->getRepositoryId(),
-			$keys[4] => $this->getName(),
-			$keys[5] => $this->getCommitReference(),
-			$keys[6] => $this->getCommitStatusChanged(),
-			$keys[7] => $this->getDateStatusChanged(),
-			$keys[8] => $this->getIsBlacklisted(),
-			$keys[9] => $this->getReviewRequest(),
+			$keys[1] => $this->getRepositoryId(),
+			$keys[2] => $this->getName(),
+			$keys[3] => $this->getCommitReference(),
+			$keys[4] => $this->getIsBlacklisted(),
+			$keys[5] => $this->getReviewRequest(),
+			$keys[6] => $this->getStatus(),
+			$keys[7] => $this->getCommitStatusChanged(),
+			$keys[8] => $this->getUserStatusChanged(),
+			$keys[9] => $this->getDateStatusChanged(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->aStatus) {
-				$result['Status'] = $this->aStatus->toArray($keyType, $includeLazyLoadColumns, true);
+			if (null !== $this->aRepository) {
+				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns, true);
 			}
 			if (null !== $this->asfGuardUser) {
 				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns, true);
-			}
-			if (null !== $this->aRepository) {
-				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns, true);
 			}
 		}
 		return $result;
@@ -1114,31 +1090,31 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				$this->setId($value);
 				break;
 			case 1:
-				$this->setStatusId($value);
-				break;
-			case 2:
-				$this->setUserStatusChanged($value);
-				break;
-			case 3:
 				$this->setRepositoryId($value);
 				break;
-			case 4:
+			case 2:
 				$this->setName($value);
 				break;
-			case 5:
+			case 3:
 				$this->setCommitReference($value);
 				break;
-			case 6:
-				$this->setCommitStatusChanged($value);
-				break;
-			case 7:
-				$this->setDateStatusChanged($value);
-				break;
-			case 8:
+			case 4:
 				$this->setIsBlacklisted($value);
 				break;
-			case 9:
+			case 5:
 				$this->setReviewRequest($value);
+				break;
+			case 6:
+				$this->setStatus($value);
+				break;
+			case 7:
+				$this->setCommitStatusChanged($value);
+				break;
+			case 8:
+				$this->setUserStatusChanged($value);
+				break;
+			case 9:
+				$this->setDateStatusChanged($value);
 				break;
 		} // switch()
 	}
@@ -1165,15 +1141,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		$keys = BranchPeer::getFieldNames($keyType);
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
-		if (array_key_exists($keys[1], $arr)) $this->setStatusId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setUserStatusChanged($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setRepositoryId($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setName($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setCommitReference($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setCommitStatusChanged($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setDateStatusChanged($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setIsBlacklisted($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setReviewRequest($arr[$keys[9]]);
+		if (array_key_exists($keys[1], $arr)) $this->setRepositoryId($arr[$keys[1]]);
+		if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
+		if (array_key_exists($keys[3], $arr)) $this->setCommitReference($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setIsBlacklisted($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setReviewRequest($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setStatus($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setCommitStatusChanged($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setUserStatusChanged($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setDateStatusChanged($arr[$keys[9]]);
 	}
 
 	/**
@@ -1186,15 +1162,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		$criteria = new Criteria(BranchPeer::DATABASE_NAME);
 
 		if ($this->isColumnModified(BranchPeer::ID)) $criteria->add(BranchPeer::ID, $this->id);
-		if ($this->isColumnModified(BranchPeer::STATUS_ID)) $criteria->add(BranchPeer::STATUS_ID, $this->status_id);
-		if ($this->isColumnModified(BranchPeer::USER_STATUS_CHANGED)) $criteria->add(BranchPeer::USER_STATUS_CHANGED, $this->user_status_changed);
 		if ($this->isColumnModified(BranchPeer::REPOSITORY_ID)) $criteria->add(BranchPeer::REPOSITORY_ID, $this->repository_id);
 		if ($this->isColumnModified(BranchPeer::NAME)) $criteria->add(BranchPeer::NAME, $this->name);
 		if ($this->isColumnModified(BranchPeer::COMMIT_REFERENCE)) $criteria->add(BranchPeer::COMMIT_REFERENCE, $this->commit_reference);
-		if ($this->isColumnModified(BranchPeer::COMMIT_STATUS_CHANGED)) $criteria->add(BranchPeer::COMMIT_STATUS_CHANGED, $this->commit_status_changed);
-		if ($this->isColumnModified(BranchPeer::DATE_STATUS_CHANGED)) $criteria->add(BranchPeer::DATE_STATUS_CHANGED, $this->date_status_changed);
 		if ($this->isColumnModified(BranchPeer::IS_BLACKLISTED)) $criteria->add(BranchPeer::IS_BLACKLISTED, $this->is_blacklisted);
 		if ($this->isColumnModified(BranchPeer::REVIEW_REQUEST)) $criteria->add(BranchPeer::REVIEW_REQUEST, $this->review_request);
+		if ($this->isColumnModified(BranchPeer::STATUS)) $criteria->add(BranchPeer::STATUS, $this->status);
+		if ($this->isColumnModified(BranchPeer::COMMIT_STATUS_CHANGED)) $criteria->add(BranchPeer::COMMIT_STATUS_CHANGED, $this->commit_status_changed);
+		if ($this->isColumnModified(BranchPeer::USER_STATUS_CHANGED)) $criteria->add(BranchPeer::USER_STATUS_CHANGED, $this->user_status_changed);
+		if ($this->isColumnModified(BranchPeer::DATE_STATUS_CHANGED)) $criteria->add(BranchPeer::DATE_STATUS_CHANGED, $this->date_status_changed);
 
 		return $criteria;
 	}
@@ -1256,15 +1232,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 */
 	public function copyInto($copyObj, $deepCopy = false)
 	{
-		$copyObj->setStatusId($this->status_id);
-		$copyObj->setUserStatusChanged($this->user_status_changed);
 		$copyObj->setRepositoryId($this->repository_id);
 		$copyObj->setName($this->name);
 		$copyObj->setCommitReference($this->commit_reference);
-		$copyObj->setCommitStatusChanged($this->commit_status_changed);
-		$copyObj->setDateStatusChanged($this->date_status_changed);
 		$copyObj->setIsBlacklisted($this->is_blacklisted);
 		$copyObj->setReviewRequest($this->review_request);
+		$copyObj->setStatus($this->status);
+		$copyObj->setCommitStatusChanged($this->commit_status_changed);
+		$copyObj->setUserStatusChanged($this->user_status_changed);
+		$copyObj->setDateStatusChanged($this->date_status_changed);
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1329,24 +1305,24 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Declares an association between this object and a Status object.
+	 * Declares an association between this object and a Repository object.
 	 *
-	 * @param      Status $v
+	 * @param      Repository $v
 	 * @return     Branch The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setStatus(Status $v = null)
+	public function setRepository(Repository $v = null)
 	{
 		if ($v === null) {
-			$this->setStatusId(NULL);
+			$this->setRepositoryId(NULL);
 		} else {
-			$this->setStatusId($v->getId());
+			$this->setRepositoryId($v->getId());
 		}
 
-		$this->aStatus = $v;
+		$this->aRepository = $v;
 
 		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Status object, it will not be re-added.
+		// If this object has already been added to the Repository object, it will not be re-added.
 		if ($v !== null) {
 			$v->addBranch($this);
 		}
@@ -1356,25 +1332,25 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 
 	/**
-	 * Get the associated Status object
+	 * Get the associated Repository object
 	 *
 	 * @param      PropelPDO Optional Connection object.
-	 * @return     Status The associated Status object.
+	 * @return     Repository The associated Repository object.
 	 * @throws     PropelException
 	 */
-	public function getStatus(PropelPDO $con = null)
+	public function getRepository(PropelPDO $con = null)
 	{
-		if ($this->aStatus === null && ($this->status_id !== null)) {
-			$this->aStatus = StatusQuery::create()->findPk($this->status_id, $con);
+		if ($this->aRepository === null && ($this->repository_id !== null)) {
+			$this->aRepository = RepositoryQuery::create()->findPk($this->repository_id, $con);
 			/* The following can be used additionally to
 				 guarantee the related object contains a reference
 				 to this object.  This level of coupling may, however, be
 				 undesirable since it could result in an only partially populated collection
 				 in the referenced object.
-				 $this->aStatus->addBranchs($this);
+				 $this->aRepository->addBranchs($this);
 			 */
 		}
-		return $this->aStatus;
+		return $this->aRepository;
 	}
 
 	/**
@@ -1424,55 +1400,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			 */
 		}
 		return $this->asfGuardUser;
-	}
-
-	/**
-	 * Declares an association between this object and a Repository object.
-	 *
-	 * @param      Repository $v
-	 * @return     Branch The current object (for fluent API support)
-	 * @throws     PropelException
-	 */
-	public function setRepository(Repository $v = null)
-	{
-		if ($v === null) {
-			$this->setRepositoryId(NULL);
-		} else {
-			$this->setRepositoryId($v->getId());
-		}
-
-		$this->aRepository = $v;
-
-		// Add binding for other direction of this n:n relationship.
-		// If this object has already been added to the Repository object, it will not be re-added.
-		if ($v !== null) {
-			$v->addBranch($this);
-		}
-
-		return $this;
-	}
-
-
-	/**
-	 * Get the associated Repository object
-	 *
-	 * @param      PropelPDO Optional Connection object.
-	 * @return     Repository The associated Repository object.
-	 * @throws     PropelException
-	 */
-	public function getRepository(PropelPDO $con = null)
-	{
-		if ($this->aRepository === null && ($this->repository_id !== null)) {
-			$this->aRepository = RepositoryQuery::create()->findPk($this->repository_id, $con);
-			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aRepository->addBranchs($this);
-			 */
-		}
-		return $this->aRepository;
 	}
 
 	/**
@@ -1718,46 +1645,21 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		}
 	}
 
-
-	/**
-	 * If this collection has already been initialized with
-	 * an identical criteria, it returns the collection.
-	 * Otherwise if this Branch is new, it will return
-	 * an empty collection; or if this Branch has previously
-	 * been saved, it will retrieve related Files from storage.
-	 *
-	 * This method is protected by default in order to keep the public
-	 * api reasonable.  You can provide public methods for those you
-	 * actually need in Branch.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
-	 * @param      PropelPDO $con optional connection object
-	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array File[] List of File objects
-	 */
-	public function getFilesJoinStatus($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$query = FileQuery::create(null, $criteria);
-		$query->joinWith('Status', $join_behavior);
-
-		return $this->getFiles($query, $con);
-	}
-
 	/**
 	 * Clears the current object and sets all attributes to their default values
 	 */
 	public function clear()
 	{
 		$this->id = null;
-		$this->status_id = null;
-		$this->user_status_changed = null;
 		$this->repository_id = null;
 		$this->name = null;
 		$this->commit_reference = null;
-		$this->commit_status_changed = null;
-		$this->date_status_changed = null;
 		$this->is_blacklisted = null;
 		$this->review_request = null;
+		$this->status = null;
+		$this->commit_status_changed = null;
+		$this->user_status_changed = null;
+		$this->date_status_changed = null;
 		$this->alreadyInSave = false;
 		$this->alreadyInValidation = false;
 		$this->clearAllReferences();
@@ -1793,9 +1695,8 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		$this->collBranchComments = null;
 		$this->collFiles = null;
-		$this->aStatus = null;
-		$this->asfGuardUser = null;
 		$this->aRepository = null;
+		$this->asfGuardUser = null;
 	}
 
 	/**

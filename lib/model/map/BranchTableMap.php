@@ -38,15 +38,15 @@ class BranchTableMap extends TableMap {
 		$this->setUseIdGenerator(true);
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
-		$this->addForeignKey('STATUS_ID', 'StatusId', 'INTEGER', 'status', 'ID', true, 11, null);
-		$this->addForeignKey('USER_STATUS_CHANGED', 'UserStatusChanged', 'INTEGER', 'sf_guard_user', 'ID', false, null, null);
 		$this->addForeignKey('REPOSITORY_ID', 'RepositoryId', 'INTEGER', 'repository', 'ID', true, 11, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', true, 255, null);
 		$this->addColumn('COMMIT_REFERENCE', 'CommitReference', 'VARCHAR', true, 50, null);
-		$this->addColumn('COMMIT_STATUS_CHANGED', 'CommitStatusChanged', 'VARCHAR', false, 50, null);
-		$this->addColumn('DATE_STATUS_CHANGED', 'DateStatusChanged', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
 		$this->addColumn('IS_BLACKLISTED', 'IsBlacklisted', 'TINYINT', true, 1, 0);
 		$this->addColumn('REVIEW_REQUEST', 'ReviewRequest', 'TINYINT', true, 1, 0);
+		$this->addColumn('STATUS', 'Status', 'TINYINT', true, 1, 0);
+		$this->addColumn('COMMIT_STATUS_CHANGED', 'CommitStatusChanged', 'VARCHAR', false, 50, null);
+		$this->addForeignKey('USER_STATUS_CHANGED', 'UserStatusChanged', 'INTEGER', 'sf_guard_user', 'ID', false, null, null);
+		$this->addColumn('DATE_STATUS_CHANGED', 'DateStatusChanged', 'TIMESTAMP', false, null, null);
 		// validators
 	} // initialize()
 
@@ -55,9 +55,8 @@ class BranchTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Status', 'Status', RelationMap::MANY_TO_ONE, array('status_id' => 'id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_status_changed' => 'id', ), null, null);
     $this->addRelation('Repository', 'Repository', RelationMap::MANY_TO_ONE, array('repository_id' => 'id', ), 'CASCADE', 'RESTRICT');
+    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_status_changed' => 'id', ), null, null);
     $this->addRelation('BranchComment', 'BranchComment', RelationMap::ONE_TO_MANY, array('id' => 'branch_id', ), 'CASCADE', 'RESTRICT');
     $this->addRelation('File', 'File', RelationMap::ONE_TO_MANY, array('id' => 'branch_id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()

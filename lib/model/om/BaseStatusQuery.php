@@ -191,7 +191,7 @@ abstract class BaseStatusQuery extends ModelCriteria
 	public function filterByBranch($branch, $comparison = null)
 	{
 		return $this
-			->addUsingAlias(StatusPeer::ID, $branch->getStatusId(), $comparison);
+			->addUsingAlias(StatusPeer::ID, $branch->getStatus(), $comparison);
 	}
 
 	/**
@@ -255,7 +255,7 @@ abstract class BaseStatusQuery extends ModelCriteria
 	public function filterByFile($file, $comparison = null)
 	{
 		return $this
-			->addUsingAlias(StatusPeer::ID, $file->getStatusId(), $comparison);
+			->addUsingAlias(StatusPeer::ID, $file->getStatus(), $comparison);
 	}
 
 	/**

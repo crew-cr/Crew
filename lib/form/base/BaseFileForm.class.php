@@ -16,9 +16,9 @@ abstract class BaseFileForm extends BaseFormPropel
     $this->setWidgets(array(
       'id'                    => new sfWidgetFormInputHidden(),
       'branch_id'             => new sfWidgetFormPropelChoice(array('model' => 'Branch', 'add_empty' => false)),
-      'status_id'             => new sfWidgetFormPropelChoice(array('model' => 'Status', 'add_empty' => false)),
       'state'                 => new sfWidgetFormInputText(),
       'filename'              => new sfWidgetFormInputText(),
+      'status'                => new sfWidgetFormInputText(),
       'commit_status_changed' => new sfWidgetFormInputText(),
       'user_status_changed'   => new sfWidgetFormInputText(),
       'date_status_changed'   => new sfWidgetFormDateTime(),
@@ -27,12 +27,12 @@ abstract class BaseFileForm extends BaseFormPropel
     $this->setValidators(array(
       'id'                    => new sfValidatorPropelChoice(array('model' => 'File', 'column' => 'id', 'required' => false)),
       'branch_id'             => new sfValidatorPropelChoice(array('model' => 'Branch', 'column' => 'id')),
-      'status_id'             => new sfValidatorPropelChoice(array('model' => 'Status', 'column' => 'id')),
       'state'                 => new sfValidatorString(array('max_length' => 1)),
       'filename'              => new sfValidatorString(array('max_length' => 255)),
-      'commit_status_changed' => new sfValidatorString(array('max_length' => 50)),
-      'user_status_changed'   => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647)),
-      'date_status_changed'   => new sfValidatorDateTime(),
+      'status'                => new sfValidatorInteger(array('min' => -128, 'max' => 127)),
+      'commit_status_changed' => new sfValidatorString(array('max_length' => 50, 'required' => false)),
+      'user_status_changed'   => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647, 'required' => false)),
+      'date_status_changed'   => new sfValidatorDateTime(array('required' => false)),
     ));
 
     $this->widgetSchema->setNameFormat('file[%s]');

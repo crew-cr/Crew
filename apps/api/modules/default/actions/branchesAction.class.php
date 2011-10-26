@@ -24,7 +24,7 @@ class branchesAction extends sfAction
         $result[] = array(
           'id' => $branch->getId(),
           'name' => $branch->getName(),
-          'status' => $branch->getStatusId,
+          'status' => $branch->getStatus(),
           'projectId' => $branch->getRepositoryId(),
           'commitReference' => $branch->getCommitReference(),
           'commitStatusChanged' => $branch->getCommitStatusChanged(),

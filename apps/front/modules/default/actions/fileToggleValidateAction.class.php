@@ -18,14 +18,14 @@ class fileToggleValidateAction extends sfAction
     $file = FilePeer::retrieveByPK($request->getParameter('file'));
     $this->forward404Unless($file, 'File Not Found');
 
-    if ($file->getStatusId() === StatusPeer::OK)
+    if ($file->getStatus() === BranchPeer::OK)
     {
-      $file->setStatusId(StatusPeer::A_TRAITER);
+      $file->setStatus(BranchPeer::A_TRAITER);
       $render = array('toggleState' => 'disabled');
     }
     else
     {
-      $file->setStatusId(StatusPeer::OK);
+      $file->setStatus(BranchPeer::OK);
       $render = array('toggleState' => 'enabled');
     }
 

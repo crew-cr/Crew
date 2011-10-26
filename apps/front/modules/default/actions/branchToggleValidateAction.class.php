@@ -18,14 +18,14 @@ class branchToggleValidateAction extends sfAction
     $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
     $this->forward404Unless($branch, 'Branch Not Found');
 
-    if ($branch->getStatusId() === StatusPeer::OK)
+    if ($branch->getStatus() === BranchPeer::OK)
     {
-      $branch->setStatusId(StatusPeer::A_TRAITER);
+      $branch->setStatus(BranchPeer::A_TRAITER);
       $render = array('toggleState' => 'disabled');
     }
     else
     {
-      $branch->setStatusId(StatusPeer::OK);
+      $branch->setStatus(BranchPeer::OK);
       $render = array('toggleState' => 'enabled');
     }
 

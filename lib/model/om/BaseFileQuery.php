@@ -8,18 +8,18 @@
  *
  * @method     FileQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     FileQuery orderByBranchId($order = Criteria::ASC) Order by the branch_id column
- * @method     FileQuery orderByStatusId($order = Criteria::ASC) Order by the status_id column
  * @method     FileQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method     FileQuery orderByFilename($order = Criteria::ASC) Order by the filename column
+ * @method     FileQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     FileQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
  * @method     FileQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
  * @method     FileQuery orderByDateStatusChanged($order = Criteria::ASC) Order by the date_status_changed column
  *
  * @method     FileQuery groupById() Group by the id column
  * @method     FileQuery groupByBranchId() Group by the branch_id column
- * @method     FileQuery groupByStatusId() Group by the status_id column
  * @method     FileQuery groupByState() Group by the state column
  * @method     FileQuery groupByFilename() Group by the filename column
+ * @method     FileQuery groupByStatus() Group by the status column
  * @method     FileQuery groupByCommitStatusChanged() Group by the commit_status_changed column
  * @method     FileQuery groupByUserStatusChanged() Group by the user_status_changed column
  * @method     FileQuery groupByDateStatusChanged() Group by the date_status_changed column
@@ -31,10 +31,6 @@
  * @method     FileQuery leftJoinBranch($relationAlias = null) Adds a LEFT JOIN clause to the query using the Branch relation
  * @method     FileQuery rightJoinBranch($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Branch relation
  * @method     FileQuery innerJoinBranch($relationAlias = null) Adds a INNER JOIN clause to the query using the Branch relation
- *
- * @method     FileQuery leftJoinStatus($relationAlias = null) Adds a LEFT JOIN clause to the query using the Status relation
- * @method     FileQuery rightJoinStatus($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Status relation
- * @method     FileQuery innerJoinStatus($relationAlias = null) Adds a INNER JOIN clause to the query using the Status relation
  *
  * @method     FileQuery leftJoinFileComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the FileComment relation
  * @method     FileQuery rightJoinFileComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FileComment relation
@@ -49,18 +45,18 @@
  *
  * @method     File findOneById(int $id) Return the first File filtered by the id column
  * @method     File findOneByBranchId(int $branch_id) Return the first File filtered by the branch_id column
- * @method     File findOneByStatusId(int $status_id) Return the first File filtered by the status_id column
  * @method     File findOneByState(string $state) Return the first File filtered by the state column
  * @method     File findOneByFilename(string $filename) Return the first File filtered by the filename column
+ * @method     File findOneByStatus(int $status) Return the first File filtered by the status column
  * @method     File findOneByCommitStatusChanged(string $commit_status_changed) Return the first File filtered by the commit_status_changed column
  * @method     File findOneByUserStatusChanged(int $user_status_changed) Return the first File filtered by the user_status_changed column
  * @method     File findOneByDateStatusChanged(string $date_status_changed) Return the first File filtered by the date_status_changed column
  *
  * @method     array findById(int $id) Return File objects filtered by the id column
  * @method     array findByBranchId(int $branch_id) Return File objects filtered by the branch_id column
- * @method     array findByStatusId(int $status_id) Return File objects filtered by the status_id column
  * @method     array findByState(string $state) Return File objects filtered by the state column
  * @method     array findByFilename(string $filename) Return File objects filtered by the filename column
+ * @method     array findByStatus(int $status) Return File objects filtered by the status column
  * @method     array findByCommitStatusChanged(string $commit_status_changed) Return File objects filtered by the commit_status_changed column
  * @method     array findByUserStatusChanged(int $user_status_changed) Return File objects filtered by the user_status_changed column
  * @method     array findByDateStatusChanged(string $date_status_changed) Return File objects filtered by the date_status_changed column
@@ -222,37 +218,6 @@ abstract class BaseFileQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the status_id column
-	 * 
-	 * @param     int|array $statusId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function filterByStatusId($statusId = null, $comparison = null)
-	{
-		if (is_array($statusId)) {
-			$useMinMax = false;
-			if (isset($statusId['min'])) {
-				$this->addUsingAlias(FilePeer::STATUS_ID, $statusId['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($statusId['max'])) {
-				$this->addUsingAlias(FilePeer::STATUS_ID, $statusId['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(FilePeer::STATUS_ID, $statusId, $comparison);
-	}
-
-	/**
 	 * Filter the query on the state column
 	 * 
 	 * @param     string $state The value to use as filter.
@@ -294,6 +259,37 @@ abstract class BaseFileQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(FilePeer::FILENAME, $filename, $comparison);
+	}
+
+	/**
+	 * Filter the query on the status column
+	 * 
+	 * @param     int|array $status The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterByStatus($status = null, $comparison = null)
+	{
+		if (is_array($status)) {
+			$useMinMax = false;
+			if (isset($status['min'])) {
+				$this->addUsingAlias(FilePeer::STATUS, $status['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($status['max'])) {
+				$this->addUsingAlias(FilePeer::STATUS, $status['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(FilePeer::STATUS, $status, $comparison);
 	}
 
 	/**
@@ -442,70 +438,6 @@ abstract class BaseFileQuery extends ModelCriteria
 		return $this
 			->joinBranch($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Branch', 'BranchQuery');
-	}
-
-	/**
-	 * Filter the query by a related Status object
-	 *
-	 * @param     Status $status  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function filterByStatus($status, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(FilePeer::STATUS_ID, $status->getId(), $comparison);
-	}
-
-	/**
-	 * Adds a JOIN clause to the query using the Status relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function joinStatus($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('Status');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'Status');
-		}
-		
-		return $this;
-	}
-
-	/**
-	 * Use the Status relation Status object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    StatusQuery A secondary query class using the current class as primary query
-	 */
-	public function useStatusQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinStatus($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'Status', 'StatusQuery');
 	}
 
 	/**

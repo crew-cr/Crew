@@ -39,12 +39,12 @@ class FileTableMap extends TableMap {
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('BRANCH_ID', 'BranchId', 'INTEGER', 'branch', 'ID', true, 11, null);
-		$this->addForeignKey('STATUS_ID', 'StatusId', 'INTEGER', 'status', 'ID', true, 11, null);
 		$this->addColumn('STATE', 'State', 'CHAR', true, 1, null);
 		$this->addColumn('FILENAME', 'Filename', 'VARCHAR', true, 255, null);
-		$this->addColumn('COMMIT_STATUS_CHANGED', 'CommitStatusChanged', 'VARCHAR', true, 50, null);
-		$this->addColumn('USER_STATUS_CHANGED', 'UserStatusChanged', 'INTEGER', true, 11, null);
-		$this->addColumn('DATE_STATUS_CHANGED', 'DateStatusChanged', 'TIMESTAMP', true, null, 'CURRENT_TIMESTAMP');
+		$this->addColumn('STATUS', 'Status', 'TINYINT', true, 1, 0);
+		$this->addColumn('COMMIT_STATUS_CHANGED', 'CommitStatusChanged', 'VARCHAR', false, 50, null);
+		$this->addColumn('USER_STATUS_CHANGED', 'UserStatusChanged', 'INTEGER', false, 11, null);
+		$this->addColumn('DATE_STATUS_CHANGED', 'DateStatusChanged', 'TIMESTAMP', false, null, null);
 		// validators
 	} // initialize()
 
@@ -54,7 +54,6 @@ class FileTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('Status', 'Status', RelationMap::MANY_TO_ONE, array('status_id' => 'id', ), 'CASCADE', 'RESTRICT');
     $this->addRelation('FileComment', 'FileComment', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT');
     $this->addRelation('LineComment', 'LineComment', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()
