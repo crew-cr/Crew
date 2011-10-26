@@ -3,4 +3,4 @@
 
 # default values
 all:
-  projects_repository: '/tmp/'
+  projects_repository: '/tmp/Crew-repositories/'

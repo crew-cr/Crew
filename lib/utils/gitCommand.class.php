@@ -237,4 +237,17 @@ class GitCommand
     }
     return $fileLines;
   }
+
+  /**
+   * @static
+   * @param $repositoryReadOnlyUrl
+   * @param $path
+   * @return int
+   */
+  public static function cloneRepository($repositoryReadOnlyUrl, $path)
+  {
+    $cmd = sprintf('git clone %s %s', $repositoryReadOnlyUrl, $path);
+    exec($cmd, $return, $status);
+    return $status;
+  }
 }
