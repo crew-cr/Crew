@@ -30,36 +30,36 @@ class reviewRequestAction extends sfAction
 
       if($branch)
       {
-        if(!$branch->getReviewRequest())
+        if(strlen($commit) === 40)
         {
-          if(strlen($commit) === 40)
+          $cmd = sprintf('git --git-dir="%s/.git" log %s | grep %s', $repository->getValue(), $branch->getCommitStatusChanged(), $commit);
+          exec($cmd, $cmdReturn);
+          if(count($cmdReturn) == 0)
           {
-            $cmd = sprintf('git --git-dir="%s/.git" log %s | grep %s', $repository->getValue(), $branch->getCommitStatusChanged(), $commit);
-            exec($cmd, $cmdReturn);
-            if(count($cmdReturn) == 0)
+            $branch->setStatusId(1);
+            $branch->setReviewRequest(1);
+            $branch->setCommitStatusChanged($commit);
+            $branch->save();
+            $result['result'] = true;
+            if(!$branch->getReviewRequest())
             {
-              $branch->setStatusId(1);
-              $branch->setReviewRequest(1);
-              $branch->save();
-              $result['result'] = true;
               $result['message'] = sprintf("Review has been engaged");
             }
             else
             {
-              $result['result'] = true;
-              $result['message'] = sprintf("Commit already used : '%s'", $commit);
+              $result['message'] = sprintf("Review already engaged");
             }
           }
           else
           {
-            $result['result'] = false;
-            $result['message'] = sprintf("No valid commit '%s'", $commit);
+            $result['result'] = true;
+            $result['message'] = sprintf("Commit already used : '%s'", $commit);
           }
         }
         else
         {
           $result['result'] = false;
-          $result['message'] = sprintf("Review pending");
+          $result['message'] = sprintf("No valid commit '%s'", $commit);
         }
       }
       else

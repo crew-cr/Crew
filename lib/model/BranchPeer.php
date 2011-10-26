@@ -44,7 +44,6 @@ class BranchPeer extends BaseBranchPeer {
         if ($branchModel->getCommitStatusChanged() != $branchesGit[$branchModel->getName()]['commit_status_changed'])
         {
           $branchModel->setStatusId(StatusPeer::A_TRAITER);
-          $branchModel->setCommitStatusChanged($branchesGit[$branchModel->getName()]['commit_status_changed']);
           $branchModel->save();
         }
       }
@@ -59,7 +58,6 @@ class BranchPeer extends BaseBranchPeer {
         ->setStatusId(StatusPeer::A_TRAITER)
         ->setRepositoryId($repository->getId())
         ->setCommitReference($branchGit['commit_reference'])
-        ->setCommitStatusChanged($branchGit['commit_status_changed'])
         ->setUserStatusChanged(1)
         ->save()
       ;
