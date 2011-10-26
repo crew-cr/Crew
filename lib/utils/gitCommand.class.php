@@ -21,7 +21,7 @@ class GitCommand
    */
   public static function fetch($gitDir)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" fetch -p', $gitDir);
+    $cmd = sprintf('git --git-dir="%s/.git" fetch -p origin', $gitDir);
     exec($cmd, $tata, $retour);
   }
   
