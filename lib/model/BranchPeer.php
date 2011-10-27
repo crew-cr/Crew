@@ -33,7 +33,7 @@ class BranchPeer extends BaseBranchPeer {
     $branchesGit = GitCommand::getNoMergedBranchesInfos($repository->getValue());
 
     $branchesModel = BranchQuery::create()
-      ->where('Branch.RepositoryId', $repository->getId())
+      ->filterByRepositoryId($repository->getId())
       ->find()
     ;
 
