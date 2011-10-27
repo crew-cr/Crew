@@ -18,6 +18,8 @@ class branchListAction extends sfAction
     $repository = RepositoryPeer::retrieveByPK($request->getParameter('repository'));
     $this->forward404Unless($repository, "Repository Not Found");
 
+    BranchPeer::synchronize($repository);
+
     $branches = BranchQuery::create()
       ->filterByIsBlacklisted(false)
       ->filterByRepositoryId($repository->getId())
