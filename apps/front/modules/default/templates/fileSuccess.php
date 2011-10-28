@@ -1,9 +1,7 @@
 <div class="file_bloc">
   <div class="data">
     <div class="data_head">
-      <?php echo link_to(sprintf('%s', $repository->getName()), 'default/branchList', array('query_string' => 'repository='.$repository->getId())) ?>
-      > <?php echo link_to(sprintf('%s', $branch->getName()), 'default/fileList', array('query_string' => 'branch='.$branch->getId())) ?>
-      > <?php echo $file->getFilename() ?>
+      Contenu du fichier
       <div class="right"></div>
     </div>
     <div class="data_body">
