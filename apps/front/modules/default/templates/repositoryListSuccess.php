@@ -23,3 +23,6 @@
 <div class="list">
   <?php include_partial('default/statusAction', array('statusActions' => $statusActions)) ?>
 </div>
+<div class="list">
+  <?php include_partial('default/commentBoard', array('commentBoards' => $commentBoards)) ?>
+</div>
