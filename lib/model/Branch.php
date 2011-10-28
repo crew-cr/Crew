@@ -24,7 +24,7 @@ class Branch extends BaseBranch
    */
   public function __toString()
   {
-    return $this->getName();
+    return stringUtils::displayBranchName($this->getName());
   }
 
   /**

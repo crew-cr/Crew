@@ -72,12 +72,12 @@ class breadcrumbComponent extends sfComponent
 
       $this->links = array(
         array(
-          'label' => $repository->getname(),
+          'label' => $repository->getName(),
           'url' => 'default/branchList?repository=' . $repository->getId(),
           'class' => 'repository'
         ),
         array(
-          'label' => $branch->getname(),
+          'label' => $branch->__toString(),
           'url' => 'default/fileList?branch=' . $branch->getId(),
           'class' => 'branch'
         ),

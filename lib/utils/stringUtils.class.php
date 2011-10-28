@@ -53,4 +53,9 @@ class stringUtils {
       return $string;
     }
   }
+
+  public static function displayBranchName($branch)
+  {
+    return (strpos($branch, 'origin/') === 0) ? substr($branch, 7) : $branch;
+  }
 }

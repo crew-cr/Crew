@@ -9,7 +9,7 @@
         <td>
           <div class="project_infos">
             <h3>
-              <?php echo link_to($branch['Name'], 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
+              <?php echo link_to(stringUtils::displayBranchName($branch['Name']), 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
             </h3>
             <span class="branchs">
               <span class="branch_icon"></span>
