@@ -6,6 +6,11 @@
     <table>
       <?php foreach ($branches as $branch): ?>
       <tr>
+        <td class="review_request">
+        <?php if($branch['ReviewRequest'] === 1) : ?>
+          <span class="review_request_icon"></span>
+        <?php endif; ?>
+        </td>
         <td>
           <div class="project_infos">
             <h3>
@@ -31,4 +36,7 @@
 </div>
 <div class="list">
   <?php include_partial('default/statusAction', array('statusActions' => $statusActions)) ?>
+</div>
+<div class="list">
+  <?php include_partial('default/commentBoard', array('commentBoards' => $commentBoards)) ?>
 </div>
