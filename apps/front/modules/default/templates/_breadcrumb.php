@@ -1,10 +1,10 @@
-<?php if (sizeof($links) > 0) : ?>
+<?php if (sizeof($links) > 0 || $form !== null) : ?>
 <ul id="breadcrumb">
 <?php foreach($links as $link) : ?>
   <li><a href="<?php echo url_for($link['url']) ?>" class="<?php echo $link['class'] ?>"><?php echo $link['label'] ?></a> / </li>
 <?php endforeach; ?>
   <li>
-<?php if ($form !== null && $userIsAuthenticated && $typeContext !== null) : ?>
+<?php if ($form !== null) : ?>
   <?php if ($typeContext === 'Repository') : ?>
     <form id="context" class="repository" name="context" method="get" action="<?php echo url_for('default/branchList') ?>">
   <?php elseif ($typeContext === 'Branch') : ?>

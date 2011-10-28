@@ -11,8 +11,7 @@ class breadcrumbComponent extends sfComponent
     $this->links = array();
     $this->typeContext         = null;
     $this->widgetDefault       = null;
-    $this->form                = new sfForm();
-    $this->userIsAuthenticated = $this->user = $this->getUser()->isAuthenticated();
+    $this->form                = null;
 
     $criteria = null;
 
@@ -90,6 +89,7 @@ class breadcrumbComponent extends sfComponent
 
     if ($this->typeContext !== null)
     {
+      $this->form = new sfForm();
       $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'criteria' => $criteria, 'add_empty' => false, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
     }
   }
