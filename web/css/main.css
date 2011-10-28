@@ -562,6 +562,7 @@ button.safe:hover {
 }
 
 .list_body table tr {
+  vertical-align: middle;
   border-bottom: 1px solid #EBEBEB;
   line-height: 24px;
 }
@@ -586,6 +587,18 @@ button.safe:hover {
   width: 60px;
 }
 
+.list_body table tr td.review_request *
+{
+  vertical-align: middle;
+}
+
+.list_body table tr td.review_request
+{
+  vertical-align: middle;
+  padding: 0;
+  width: 20px;
+}
+
 #file_list table td
 {
   vertical-align: top;
@@ -594,7 +607,7 @@ button.safe:hover {
 
 #project_list table td
 {
-  padding-left: 10px;
+  padding-left: 5px;
 }
 
 a.disabled
