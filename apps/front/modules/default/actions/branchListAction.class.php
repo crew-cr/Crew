@@ -38,5 +38,12 @@ class branchListAction extends sfAction
 
       $this->branches[] = array_merge($branch->toArray(), array('NbFiles' => $filesCount));
     }
+
+    $this->statusActions = StatusActionQuery::create()
+      ->orderByCreatedAt(\Criteria::DESC)
+      ->filterByRepositoryId($repository->getId())
+      ->limit(25)
+      ->find()
+    ;
   }
 }

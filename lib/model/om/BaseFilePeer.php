@@ -398,6 +398,9 @@ abstract class BaseFilePeer {
 		// Invalidate objects in LineCommentPeer instance pool, 
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		LineCommentPeer::clearInstancePool();
+		// Invalidate objects in StatusActionPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		StatusActionPeer::clearInstancePool();
 	}
 
 	/**
@@ -998,6 +1001,12 @@ abstract class BaseFilePeer {
 			
 			$criteria->add(LineCommentPeer::FILE_ID, $obj->getId());
 			$affectedRows += LineCommentPeer::doDelete($criteria, $con);
+
+			// delete related StatusAction objects
+			$criteria = new Criteria(StatusActionPeer::DATABASE_NAME);
+			
+			$criteria->add(StatusActionPeer::FILE_ID, $obj->getId());
+			$affectedRows += StatusActionPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}

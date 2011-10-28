@@ -89,6 +89,11 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	protected $collLineComments;
 
 	/**
+	 * @var        array StatusAction[] Collection to store aggregation of StatusAction objects.
+	 */
+	protected $collStatusActions;
+
+	/**
 	 * Flag to prevent endless save loop, if this object is referenced
 	 * by another object which falls in this transaction.
 	 * @var        boolean
@@ -546,6 +551,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 			$this->collLineComments = null;
 
+			$this->collStatusActions = null;
+
 		} // if (deep)
 	}
 
@@ -739,6 +746,14 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->collStatusActions !== null) {
+				foreach ($this->collStatusActions as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			$this->alreadyInSave = false;
 
 		}
@@ -832,6 +847,14 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 				if ($this->collLineComments !== null) {
 					foreach ($this->collLineComments as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collStatusActions !== null) {
+					foreach ($this->collStatusActions as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1121,6 +1144,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			foreach ($this->getLineComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addLineComment($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getStatusActions() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addStatusAction($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1487,6 +1516,190 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Clears out the collStatusActions collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addStatusActions()
+	 */
+	public function clearStatusActions()
+	{
+		$this->collStatusActions = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collStatusActions collection.
+	 *
+	 * By default this just sets the collStatusActions collection to an empty array (like clearcollStatusActions());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initStatusActions()
+	{
+		$this->collStatusActions = new PropelObjectCollection();
+		$this->collStatusActions->setModel('StatusAction');
+	}
+
+	/**
+	 * Gets an array of StatusAction objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this File is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array StatusAction[] List of StatusAction objects
+	 * @throws     PropelException
+	 */
+	public function getStatusActions($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collStatusActions || null !== $criteria) {
+			if ($this->isNew() && null === $this->collStatusActions) {
+				// return empty collection
+				$this->initStatusActions();
+			} else {
+				$collStatusActions = StatusActionQuery::create(null, $criteria)
+					->filterByFile($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collStatusActions;
+				}
+				$this->collStatusActions = $collStatusActions;
+			}
+		}
+		return $this->collStatusActions;
+	}
+
+	/**
+	 * Returns the number of related StatusAction objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related StatusAction objects.
+	 * @throws     PropelException
+	 */
+	public function countStatusActions(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collStatusActions || null !== $criteria) {
+			if ($this->isNew() && null === $this->collStatusActions) {
+				return 0;
+			} else {
+				$query = StatusActionQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByFile($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collStatusActions);
+		}
+	}
+
+	/**
+	 * Method called to associate a StatusAction object to this object
+	 * through the StatusAction foreign key attribute.
+	 *
+	 * @param      StatusAction $l StatusAction
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addStatusAction(StatusAction $l)
+	{
+		if ($this->collStatusActions === null) {
+			$this->initStatusActions();
+		}
+		if (!$this->collStatusActions->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collStatusActions[]= $l;
+			$l->setFile($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this File is new, it will return
+	 * an empty collection; or if this File has previously
+	 * been saved, it will retrieve related StatusActions from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in File.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array StatusAction[] List of StatusAction objects
+	 */
+	public function getStatusActionsJoinsfGuardUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = StatusActionQuery::create(null, $criteria);
+		$query->joinWith('sfGuardUser', $join_behavior);
+
+		return $this->getStatusActions($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this File is new, it will return
+	 * an empty collection; or if this File has previously
+	 * been saved, it will retrieve related StatusActions from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in File.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array StatusAction[] List of StatusAction objects
+	 */
+	public function getStatusActionsJoinRepository($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = StatusActionQuery::create(null, $criteria);
+		$query->joinWith('Repository', $join_behavior);
+
+		return $this->getStatusActions($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this File is new, it will return
+	 * an empty collection; or if this File has previously
+	 * been saved, it will retrieve related StatusActions from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in File.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array StatusAction[] List of StatusAction objects
+	 */
+	public function getStatusActionsJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = StatusActionQuery::create(null, $criteria);
+		$query->joinWith('Branch', $join_behavior);
+
+		return $this->getStatusActions($query, $con);
+	}
+
+	/**
 	 * Clears the current object and sets all attributes to their default values
 	 */
 	public function clear()
@@ -1530,10 +1743,16 @@ abstract class BaseFile extends BaseObject  implements Persistent
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collStatusActions) {
+				foreach ((array) $this->collStatusActions as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 		} // if ($deep)
 
 		$this->collFileComments = null;
 		$this->collLineComments = null;
+		$this->collStatusActions = null;
 		$this->aBranch = null;
 	}
 

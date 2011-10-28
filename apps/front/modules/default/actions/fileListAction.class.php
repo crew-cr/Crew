@@ -43,5 +43,12 @@ class fileListAction extends sfAction
 
       $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount)));
     }
+
+    $this->statusActions = StatusActionQuery::create()
+      ->orderByCreatedAt(\Criteria::DESC)
+      ->filterByBranchId($this->branch->getId())
+      ->limit(25)
+      ->find()
+    ;
   }
 }

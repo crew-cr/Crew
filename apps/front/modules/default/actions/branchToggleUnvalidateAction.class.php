@@ -15,25 +15,47 @@ class branchToggleUnvalidateAction extends sfAction
    */
   public function execute($request)
   {
-    $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
-    $this->forward404Unless($branch, 'Branch Not Found');
+    $con = Propel::getConnection();
+    $con->beginTransaction();
 
-    if ($branch->getStatus() === BranchPeer::KO)
+    try
     {
-      $branch->setStatus(BranchPeer::A_TRAITER);
-      $render = array('toggleState' => 'disabled');
-    }
-    else
-    {
-      $branch->setStatus(BranchPeer::KO);
-      $render = array('toggleState' => 'enabled');
-    }
+      $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
+      $this->forward404Unless($branch, 'Branch Not Found');
 
-    $branch
-      ->setReviewRequest(false)
-      ->save()
-    ;
-    
+      $oldtStatus = $branch->getStatus();
+
+      if ($branch->getStatus() === BranchPeer::KO)
+      {
+        $branch->setStatus(BranchPeer::A_TRAITER);
+        $render = array('toggleState' => 'disabled');
+      }
+      else
+      {
+        $branch->setStatus(BranchPeer::KO);
+        $render = array('toggleState' => 'enabled');
+      }
+
+      $branch
+        ->setReviewRequest(false)
+        ->save($con)
+      ;
+
+      Branch::saveAction(
+        $this->getUser()->getGuardUser()->getId(),
+        $branch->getRepositoryId(),
+        $branch->getId(),
+        $oldtStatus,
+        $branch->getStatus()
+      );
+
+      $con->commit();
+    }
+    catch (\Exception $e)
+    {
+      $con->rollBack();
+      throw $e;
+    }
     $this->getResponse()->setContentType('application/json');
     return $this->renderText(json_encode($render));
   }

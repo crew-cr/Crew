@@ -11,28 +11,53 @@ class fileToggleUnvalidateAction extends sfAction
 {
   /**
    * @param sfWebRequest $request
-   * @return void
+   * @return mixed
    */
   public function execute($request)
   {
-    $file = FilePeer::retrieveByPK($request->getParameter('file'));
-    $this->forward404Unless($file, 'File Not Found');
+    $con = Propel::getConnection();
+    $con->beginTransaction();
 
-    if ($file->getStatus() === BranchPeer::KO)
+    try
     {
-      $file->setStatus(BranchPeer::A_TRAITER);
-      $render = array('toggleState' => 'disabled');
+      $file = FilePeer::retrieveByPK($request->getParameter('file'));
+      $this->forward404Unless($file, 'File Not Found');
+
+      $oldtStatus = $file->getStatus();
+
+      if ($file->getStatus() === BranchPeer::KO)
+      {
+        $file->setStatus(BranchPeer::A_TRAITER);
+        $render = array('toggleState' => 'disabled');
+      }
+      else
+      {
+        $file->setStatus(BranchPeer::KO);
+        $render = array('toggleState' => 'enabled');
+      }
+
+      $file
+        ->save($con)
+      ;
+
+      // save file status action
+      File::saveAction(
+        $this->getUser()->getGuardUser()->getId(),
+        $file->getBranch($con)->getRepositoryId(),
+        $file->getBranchId(),
+        $file->getId(),
+        $oldtStatus,
+        $file->getStatus()
+      );
+
+      $con->commit();
     }
-    else
+    catch (\Exception $e)
     {
-      $file->setStatus(BranchPeer::KO);
-      $render = array('toggleState' => 'enabled');
+      $con->rollBack();
+      throw $e;
     }
 
-    $file
-      ->save()
-    ;
-    
     $this->getResponse()->setContentType('application/json');
     return $this->renderText(json_encode($render));
   }

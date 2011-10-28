@@ -24,6 +24,10 @@
  * @method     RepositoryQuery rightJoinBranch($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Branch relation
  * @method     RepositoryQuery innerJoinBranch($relationAlias = null) Adds a INNER JOIN clause to the query using the Branch relation
  *
+ * @method     RepositoryQuery leftJoinStatusAction($relationAlias = null) Adds a LEFT JOIN clause to the query using the StatusAction relation
+ * @method     RepositoryQuery rightJoinStatusAction($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StatusAction relation
+ * @method     RepositoryQuery innerJoinStatusAction($relationAlias = null) Adds a INNER JOIN clause to the query using the StatusAction relation
+ *
  * @method     Repository findOne(PropelPDO $con = null) Return the first Repository matching the query
  * @method     Repository findOneOrCreate(PropelPDO $con = null) Return the first Repository matching the query, or a new Repository object populated from the query conditions when no match is found
  *
@@ -290,6 +294,70 @@ abstract class BaseRepositoryQuery extends ModelCriteria
 		return $this
 			->joinBranch($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Branch', 'BranchQuery');
+	}
+
+	/**
+	 * Filter the query by a related StatusAction object
+	 *
+	 * @param     StatusAction $statusAction  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    RepositoryQuery The current query, for fluid interface
+	 */
+	public function filterByStatusAction($statusAction, $comparison = null)
+	{
+		return $this
+			->addUsingAlias(RepositoryPeer::ID, $statusAction->getRepositoryId(), $comparison);
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the StatusAction relation
+	 * 
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    RepositoryQuery The current query, for fluid interface
+	 */
+	public function joinStatusAction($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('StatusAction');
+		
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+		
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'StatusAction');
+		}
+		
+		return $this;
+	}
+
+	/**
+	 * Use the StatusAction relation StatusAction object
+	 *
+	 * @see       useQuery()
+	 * 
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    StatusActionQuery A secondary query class using the current class as primary query
+	 */
+	public function useStatusActionQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		return $this
+			->joinStatusAction($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'StatusAction', 'StatusActionQuery');
 	}
 
 	/**

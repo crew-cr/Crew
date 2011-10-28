@@ -50,6 +50,7 @@ class RepositoryTableMap extends TableMap {
 	public function buildRelations()
 	{
     $this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT');
+    $this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()
 
 	/**

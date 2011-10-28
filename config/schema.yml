@@ -60,3 +60,15 @@ propel:
     name:                             { type: VARCHAR, size: '50', required: true }
     value:                            { type: VARCHAR, size: '255', required: true }
     remote:                           { type: VARCHAR, size: '255', required: true }
+  status_action:
+    _attributes:
+    id:                               ~
+    user_id:                          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }
+    repository_id:                    { type: INTEGER, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    message:                          { type: VARCHAR, size: '255', required: true }
+    old_status:                       { type: INTEGER, size: '11', required: true }
+    new_status:                       { type: INTEGER, size: '11', required: true }
+    created_at:                       { type: timestamp, required: true}
+  

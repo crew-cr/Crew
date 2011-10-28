@@ -34,3 +34,6 @@
     </table>
   </div>
 </div>
+<div class="list">
+  <?php include_partial('default/statusAction', array('statusActions' => $statusActions)) ?>
+</div>

@@ -18,11 +18,21 @@ class branchBlacklistAction extends sfAction
     $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
     $this->forward404Unless($branch, 'Branch Not Found');
 
+    $oldtStatus = $branch->getStatus();
+
     $branch
       ->setIsBlacklisted(true)
       ->setReviewRequest(false)
       ->save()
     ;
+
+    Branch::saveAction(
+      $this->getUser()->getGuardUser()->getId(),
+      $branch->getRepositoryId(),
+      $branch->getId(),
+      $oldtStatus,
+      $branch->getStatus()
+    );
     
     $this->getResponse()->setContentType('application/json');
     return $this->renderText(json_encode(array('toggleState' => 'blacklisted')));

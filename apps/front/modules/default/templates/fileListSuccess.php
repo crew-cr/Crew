@@ -35,3 +35,6 @@
     <?php include_component('default', 'branchComment', array('branch' => $branch)); ?>
   </div>
 </div>
+<div class="list">
+  <?php include_partial('default/statusAction', array('statusActions' => $statusActions)) ?>
+</div>

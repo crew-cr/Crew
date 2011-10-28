@@ -22,6 +22,26 @@ class BranchPeer extends BaseBranchPeer {
   const A_TRAITER = 0;
   const OK        = 1;
   const KO        = 2;
+
+  /**
+   * @static
+   * @param int $statusId
+   * @return string
+   */
+  public static function getLabelStatus($statusId)
+  {
+    switch ($statusId)
+    {
+      case BranchPeer::A_TRAITER:
+        return 'to do';
+      case BranchPeer::OK:
+        return 'ok';
+      case BranchPeer::KO:
+        return 'ko';
+    }
+
+    return '';
+  }
   
   /**
    * @static

@@ -548,8 +548,18 @@ button.safe:hover {
   cursor: default!important;
 }
 
+.scrollable {
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+strong {
+  font-weight: bold;
+}
+
 .list {
   border: 1px solid #d8d8d8;
+  margin-bottom: 20px;
 }
 
 .list_body table {

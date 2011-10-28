@@ -59,6 +59,7 @@ class BranchTableMap extends TableMap {
     $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_status_changed' => 'id', ), null, null);
     $this->addRelation('BranchComment', 'BranchComment', RelationMap::ONE_TO_MANY, array('id' => 'branch_id', ), 'CASCADE', 'RESTRICT');
     $this->addRelation('File', 'File', RelationMap::ONE_TO_MANY, array('id' => 'branch_id', ), 'CASCADE', 'RESTRICT');
+    $this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'branch_id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()
 
 	/**
