@@ -514,6 +514,7 @@ form#globalComment textarea
 
 .list {
   border: 1px solid #d8d8d8;
+  margin-bottom: 20px;
 }
 
 .list_body table {

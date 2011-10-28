@@ -17,9 +17,42 @@
  *
  * @package    propel.generator.lib.model
  */
-class File extends BaseFile {
+class File extends BaseFile
+{
+  /**
+   * @return string
+   */
   public function __toString()
   {
     return $this->getFilename();
+  }
+
+  /**
+   * @static
+   * @param int $userId
+   * @param int $repositoryId
+   * @param int $fileId
+   * @param int $oldStatus
+   * @param int $newStatus
+   * @param string $message
+   * @return int
+   */
+  public static function saveAction($userId, $repositoryId, $fileId, $oldStatus, $newStatus, $message = 'status was changed from %s to %s on the file %')
+  {
+    if ($oldStatus === $newStatus)
+    {
+      return 0;
+    }
+    
+    $statusAction = new StatusAction();
+    return $statusAction
+      ->setUserId($userId)
+      ->setRepositoryId($repositoryId)
+      ->setFileId($fileId)
+      ->setOldStatus($oldStatus)
+      ->setNewStatus($newStatus)
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $fileId))
+      ->save()
+    ;
   }
 } // File

@@ -17,8 +17,42 @@
  *
  * @package    propel.generator.lib.model
  */
-class Branch extends BaseBranch {
-  public function __toString() {
+class Branch extends BaseBranch
+{
+  /**
+   * @return string
+   */
+  public function __toString()
+  {
     return $this->getName();
+  }
+
+  /**
+   * @static
+   * @param int $userId
+   * @param int $repositoryId
+   * @param int $branchId
+   * @param int $oldStatus
+   * @param int $newStatus
+   * @param string $message
+   * @return int
+   */
+  public static function saveAction($userId, $repositoryId, $branchId, $oldStatus, $newStatus, $message = 'status was changed from %s to %s on the branch %')
+  {
+    if ($oldStatus === $newStatus)
+    {
+      return 0;
+    }
+
+    $statusAction = new StatusAction();
+    return $statusAction
+      ->setUserId($userId)
+      ->setRepositoryId($repositoryId)
+      ->setBranchId($branchId)
+      ->setOldStatus($oldStatus)
+      ->setNewStatus($newStatus)
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $branchId))
+      ->save()
+    ;
   }
 } // Branch

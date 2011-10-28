@@ -408,6 +408,9 @@ abstract class BaseBranchPeer {
 		// Invalidate objects in FilePeer instance pool, 
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		FilePeer::clearInstancePool();
+		// Invalidate objects in StatusActionPeer instance pool, 
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		StatusActionPeer::clearInstancePool();
 	}
 
 	/**
@@ -1431,6 +1434,12 @@ abstract class BaseBranchPeer {
 			
 			$criteria->add(FilePeer::BRANCH_ID, $obj->getId());
 			$affectedRows += FilePeer::doDelete($criteria, $con);
+
+			// delete related StatusAction objects
+			$criteria = new Criteria(StatusActionPeer::DATABASE_NAME);
+			
+			$criteria->add(StatusActionPeer::BRANCH_ID, $obj->getId());
+			$affectedRows += StatusActionPeer::doDelete($criteria, $con);
 		}
 		return $affectedRows;
 	}
