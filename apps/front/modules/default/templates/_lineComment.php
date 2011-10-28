@@ -10,7 +10,7 @@
           <?php echo sprintf("<span>commenté le %s par <strong>%s</strong></span>", $comment->getUpdatedAt('d/m/Y à H:i:s'), $comment->getsfGuardUser()) ?>
           <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/lineDeleteComment'), $comment->getId()) : '' ?>
         </div>
-        <div class="comment_body"><?php echo sprintf("%s", $comment->getValue()) ?></div>
+        <div class="comment_body"><?php echo nl2br(sprintf("%s", $comment->getValue())) ?></div>
       </div>
       <?php endforeach; ?>
     </div>

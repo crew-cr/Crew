@@ -9,7 +9,7 @@
             <?php echo sprintf("<span>commenté le %s par <strong>%s</strong></span>", $globalComment->getUpdatedAt('d/m/Y à H:i:s'), $globalComment->getsfGuardUser()) ?>
             <?php echo $userId === $globalComment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/fileDeleteComment'), $globalComment->getId()) : '' ?>
           </div>
-          <div class="comment_body"><?php echo sprintf("%s", $globalComment->getValue()) ?></div>
+          <div class="comment_body"><?php echo nl2br(sprintf("%s", $globalComment->getValue())) ?></div>
         </div>
         <?php endforeach; ?>
       </div>
