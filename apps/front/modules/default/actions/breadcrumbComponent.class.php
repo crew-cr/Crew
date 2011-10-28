@@ -14,6 +14,8 @@ class breadcrumbComponent extends sfComponent
     $this->form                = new sfForm();
     $this->userIsAuthenticated = $this->user = $this->getUser()->isAuthenticated();
 
+    $criteria = null;
+
     if ($widgetDefault = $request->getParameter('repository'))
     {
       $this->typeContext = 'Repository';
@@ -41,6 +43,10 @@ class breadcrumbComponent extends sfComponent
           'class' => 'repository'
         )
       );
+
+      $criteria = BranchQuery::create()
+        ->filterByRepositoryId($repository->getId())
+      ;
     }
     else if($widgetDefault = $request->getParameter('file'))
     {
@@ -76,11 +82,15 @@ class breadcrumbComponent extends sfComponent
           'class' => 'branch'
         ),
       );
+
+      $criteria = FileQuery::create()
+        ->filterByBranchId($branch->getId())
+      ;
     }
 
     if ($this->typeContext !== null)
     {
-      $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'add_empty' => false, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
+      $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'criteria' => $criteria, 'add_empty' => false, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
     }
   }
 }
