@@ -8,7 +8,7 @@
       <div class="commit_comment">
         <div class="comment_user">
           <?php echo sprintf("<span>commenté le %s par <strong>%s</strong></span>", $comment->getUpdatedAt('d/m/Y à H:i:s'), $comment->getsfGuardUser()) ?>
-          <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete\" data=\"%s?id=%s\">Delete</button>", url_for('default/lineDeleteComment'), $comment->getId()) : '' ?>
+          <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/lineDeleteComment'), $comment->getId()) : '' ?>
         </div>
         <div class="comment_body"><?php echo sprintf("%s", $comment->getValue()) ?></div>
       </div>
@@ -18,12 +18,12 @@
       <form name="fileComment" method="post" action="<?php echo url_for('default/lineAddComment') ?>" class="commentBloc">
         <?php echo $form->renderHiddenFields(); ?>
         <?php echo $form['value']->render(); ?>
-        <button class="close" type="button">Fermer le formulaire</button>
-        <button class="right" type="submit">Commenter la ligne</button>
+        <button class="close safe" type="button">Close Form</button>
+        <button class="right good" type="submit">Add Line Note</button>
       </form>
     </div>
     <div class="comment_add <?php echo $formVisible ? 'hidden' : '' ?>">
-      <button class="add_comment">Ajouter un commentaire sur la ligne</button>
+      <button class="add_comment good">Add a line note</button>
     </div>
   </td>
 </tr>
