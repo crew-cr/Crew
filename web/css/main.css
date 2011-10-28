@@ -281,6 +281,30 @@ button:hover {
   background: url('../images/comment_icon.png') 0 50% no-repeat;
 }
 
+.file_bloc #globalCommentComponent
+{
+  border-left: 1px solid #d4d4e3;
+  border-right: 1px solid #d4d4e3;
+}
+
+#globalCommentComponent
+{
+  padding-left: 6px;
+  padding-top: 6px;
+}
+
+form#globalComment *
+{
+  vertical-align: middle;
+}
+
+form#globalComment textarea
+{
+  width: 80%;
+  padding: 5px;
+  margin-bottom: 6px;
+}
+
 .commentBloc
 {
   margin-top: 20px;
@@ -408,7 +432,7 @@ button:hover {
 
 .commit_comment {
   display: block;
-  margin: 6px;
+  margin: 6px 6px 6px 0;
   border: 1px solid #CCC;
   font-size: 80%;
 }
