@@ -42,6 +42,7 @@ class fileToggleValidateAction extends sfAction
       File::saveAction(
         $this->getUser()->getGuardUser()->getId(),
         $file->getBranch($con)->getRepositoryId(),
+        $file->getBranchId(),
         $file->getId(),
         $oldtStatus,
         $file->getStatus()

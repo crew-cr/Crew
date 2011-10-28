@@ -37,7 +37,7 @@ class Branch extends BaseBranch
    * @param string $message
    * @return int
    */
-  public static function saveAction($userId, $repositoryId, $branchId, $oldStatus, $newStatus, $message = 'status was changed from %s to %s on the branch %')
+  public static function saveAction($userId, $repositoryId, $branchId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong> on the branch <strong>%s</strong>')
   {
     if ($oldStatus === $newStatus)
     {

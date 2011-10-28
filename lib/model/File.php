@@ -31,13 +31,14 @@ class File extends BaseFile
    * @static
    * @param int $userId
    * @param int $repositoryId
+   * @param int $branchId
    * @param int $fileId
    * @param int $oldStatus
    * @param int $newStatus
    * @param string $message
    * @return int
    */
-  public static function saveAction($userId, $repositoryId, $fileId, $oldStatus, $newStatus, $message = 'status was changed from %s to %s on the file %')
+  public static function saveAction($userId, $repositoryId, $branchId, $fileId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong> on the file <strong>%s</strong> of branch <strong>%s</strong>')
   {
     if ($oldStatus === $newStatus)
     {
@@ -48,10 +49,11 @@ class File extends BaseFile
     return $statusAction
       ->setUserId($userId)
       ->setRepositoryId($repositoryId)
+      ->setBranchId($branchId)
       ->setFileId($fileId)
       ->setOldStatus($oldStatus)
       ->setNewStatus($newStatus)
-      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $fileId))
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $fileId, $branchId))
       ->save()
     ;
   }

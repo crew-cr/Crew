@@ -27,8 +27,8 @@ class repositoryListAction extends sfAction
     }
 
     $this->statusActions = StatusActionQuery::create()
-      ->orderByCreatedAt(\Criteria::ASC)
-      ->limit(10)
+      ->orderByCreatedAt(\Criteria::DESC)
+      ->limit(25)
       ->find()
     ;
   }

@@ -33,11 +33,11 @@ class BranchPeer extends BaseBranchPeer {
     switch ($statusId)
     {
       case BranchPeer::A_TRAITER:
-        return '`to treat`';
+        return 'to do';
       case BranchPeer::OK:
-        return '`ok`';
+        return 'ok';
       case BranchPeer::KO:
-        return '`ko`';
+        return 'ko';
     }
 
     return '';
