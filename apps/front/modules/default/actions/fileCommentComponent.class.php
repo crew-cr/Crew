@@ -13,6 +13,8 @@ class fileCommentComponent extends sfComponent
       ->find()
     ;
 
+    $this->userId = $this->getUser()->getGuardUser()->getId();
+
     $this->form = new FileCommentForm(null, array('file' => $this->file->getId()));
   }
 }

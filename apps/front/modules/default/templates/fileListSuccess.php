@@ -25,10 +25,10 @@
           </div>
         </td>
         <td class="state">
-          <?php echo link_to('Valider', 'default/fileToggleValidate', array('query_string' => 'file='.$file['Id'], 'class' => 'toggle status-valid '. ($file['StatusId'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
+          <?php echo link_to('Valider', 'default/fileToggleValidate', array('query_string' => 'file='.$file['Id'], 'class' => 'toggle status-valid '. ($file['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
         </td>
         <td class="state">
-          <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('query_string' => 'file='.$file['Id'], 'class' => 'toggle status-invalid '. ($file['StatusId'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
+          <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('query_string' => 'file='.$file['Id'], 'class' => 'toggle status-invalid '. ($file['Status'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
         </td>
       </tr>
       <?php endforeach; ?>
