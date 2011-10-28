@@ -35,8 +35,13 @@ class fileListAction extends sfAction
         ->filterByFileId($file->getId())
         ->count()
       ;
+      
+      $lineCommentsCount = LineCommentQuery::create()
+        ->filterByFileId($file->getId())
+        ->count()
+      ;
 
-      $this->files[] = array_merge($file->toArray(), array('NbFileComments' => $fileCommentsCount));
+      $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount)));
     }
   }
 }
