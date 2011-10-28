@@ -143,6 +143,24 @@ button.safe:hover {
   padding: 0 15px;
 }
 
+#crew_logo {
+  width: 145px;
+  height: 50px;
+  margin-top: 12px;
+  background: url('../images/crew-logo.png') 0 0 no-repeat;
+}
+
+#crew_logo:hover {
+  background-position: 0 -50px;
+}
+
+#crew_logo a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  text-indent: -9999px;
+}
+
 .page {
   display: block;
   position: relative;
@@ -187,6 +205,7 @@ button.safe:hover {
 .header .userbox {
   float: right;
   padding: 0 10px 0 10px;
+  margin-right: 5px;
   font-size: 12px;
   border-top: none;
   -webkit-border-bottom-right-radius: 5px;
@@ -208,6 +227,21 @@ button.safe:hover {
   font-weight: bold;
   color: #4183C4;
   text-shadow: white 1px 1px 0;
+}
+
+.header .userbox li {
+  display: inline;
+  border-right: 1px solid #DDD;
+  padding: 10px;
+}
+
+.header .userbox li.last {
+  border-right: none;
+}
+
+.header .userbox li.username {
+  color: black;
+  font-weight: bold;
 }
 
 #context select {
