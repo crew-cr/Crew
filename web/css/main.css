@@ -251,7 +251,6 @@ button.safe:hover {
 .page_body {
   line-height: 1.4em;
   width: 100%;
-  background: #f8f8f8;
   margin: 15px auto 15px auto;
 }
 
@@ -550,6 +549,14 @@ button.safe:hover {
 }
 
 strong {
+  font-weight: bold;
+}
+
+h2.avatared {
+  font-family: helvetica, arial, freesans, clean, sans-serif;
+  color: #495961;
+  font-size: 30px;
+  line-height: 54px;
   font-weight: bold;
 }
 

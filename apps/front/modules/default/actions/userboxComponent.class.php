@@ -8,6 +8,7 @@ class userboxComponent extends sfComponent
    */
   public function execute($request)
   {
-    $this->user = $this->getUser();
+    $this->isAuthenticated = $this->getUser()->isAuthenticated();
+    $this->user = $this->getUser()->getGuardUser();
   }
 }
