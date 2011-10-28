@@ -6,7 +6,7 @@ $(document).ready(function() {
       type: "POST",
       url: $this.attr('href'),
       success: function(json) {
-        $('.toggle', $this.parent('td').parent('tr'))
+        $('.toggle', $this.parent('.status'))
           .addClass('disabled')
         ;
 
