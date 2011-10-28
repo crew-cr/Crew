@@ -130,7 +130,9 @@
     };
 
     base.deleteComment = function(element) {
-      $.ajax({
+      if (confirm('Are you sure you want to delete this comment ?'))
+      {
+        $.ajax({
           type: "POST",
           url: $(element).attr('data'),
           success: function(json) {
@@ -143,6 +145,7 @@
             base.bindingBloc();
           }
         });
+      }
     };
 
     base.closeForm = function() {

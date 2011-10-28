@@ -11,14 +11,18 @@ $(document).ready(function() {
       }
     });
   });
-  
-  $('#globalCommentComponent').delegate('.delete', 'click', function(element) {
-    $.ajax({
-      type: "POST",
-      url: $(this).attr('data'),
-      success: function(json) {
-        $('#globalCommentComponent').html(json.html);
-      }
-    });
+
+  $('#globalCommentComponent').delegate('.delete', 'click', function(e) {
+    e.preventDefault();
+    if (confirm('Are you sure you want to delete this comment ?'))
+    {
+      $.ajax({
+        type: "POST",
+        url: $(this).attr('data'),
+        success: function(json) {
+          $('#globalCommentComponent').html(json.html);
+        }
+      });
+    }
   });
 });
