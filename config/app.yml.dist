@@ -1,0 +1,2 @@
+all:
+  projects_repository: '/path/to/store/repo/.Crew-repositories/' # Apache must be able to write in

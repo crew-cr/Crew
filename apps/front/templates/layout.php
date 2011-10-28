@@ -13,8 +13,8 @@
     <div class="userbox">
       <?php include_component('default', 'userbox') ?>
     </div>
-    <div class="padding_container">
-      <h2 class="left"><?php echo link_to('Crew, a code review tool for git projects', 'default/repositoryList') ?></h2>
+    <div>
+      <h2 id="crew_logo"><?php echo link_to('Crew, a code review tool for git projects', 'default/repositoryList') ?></h2>
     </div>
   </div>
   <div class="site">
