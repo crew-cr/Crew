@@ -1,7 +1,7 @@
 <div class="file_bloc">
   <div class="data">
     <div class="data_head">
-      Contenu du fichier
+      File content
       <div class="right"></div>
     </div>
     <div class="data_body">

@@ -1,6 +1,6 @@
 <div class="list">
   <div class="list_head">
-    Liste des branches en attente de review
+    Branch list
   </div>
   <div class="list_body" id="project_list">
     <table>

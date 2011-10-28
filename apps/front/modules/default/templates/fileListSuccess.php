@@ -1,6 +1,6 @@
 <div class="list">
   <div class="list_head">
-    Liste des fichiers
+    File list
     <div class="right status">
       <?php echo link_to('Valider', 'default/branchToggleValidate', array('query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-valid '. ($branch->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
       <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-invalid '. ($branch->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>
