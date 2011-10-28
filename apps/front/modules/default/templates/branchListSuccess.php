@@ -6,6 +6,11 @@
     <table>
       <?php foreach ($branches as $branch): ?>
       <tr>
+        <td class="review_request">
+        <?php if($branch['ReviewRequest'] === 1) : ?>
+          <span class="review_request_icon"></span>
+        <?php endif; ?>
+        </td>
         <td>
           <div class="project_infos">
             <h3>
