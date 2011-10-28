@@ -502,6 +502,12 @@ button:hover {
   width: 26px;
 }
 
+.list_body table tr td.status {
+  line-height: 0px;
+  padding-left: 6px;
+  width: 60px;
+}
+
 #file_list table td
 {
   vertical-align: top;

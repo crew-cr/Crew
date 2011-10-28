@@ -17,10 +17,8 @@
             </span>
           </div>
         </td>
-        <td class="state">
+        <td class="status">
           <?php echo link_to('Valider', 'default/branchToggleValidate', array('query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-valid '. ($branch['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
-        </td>
-        <td class="state">
           <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-invalid '. ($branch['Status'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
         </td>
         <td class="state">
