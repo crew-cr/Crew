@@ -1,7 +1,6 @@
 <div class="list">
   <div class="list_head">
-    <?php echo link_to(sprintf('%s', $repository->getName()), 'default/branchList', array('query_string' => 'repository='.$repository->getId())) ?>
-    > <?php echo $branch->getName() ?>
+    Liste des fichiers
     <div class="right status">
       <?php echo link_to('Valider', 'default/branchToggleValidate', array('query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-valid '. ($branch->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
       <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-invalid '. ($branch->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>

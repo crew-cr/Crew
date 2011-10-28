@@ -186,27 +186,6 @@ button:hover {
   text-shadow: white 1px 1px 0;
 }
 
-#context select {
-  position: relative;
-  font-family: helvetica,arial,freesans,clean,sans-serif;
-  display: inline-block;
-  color: #333;
-  text-shadow: 1px 1px 0 white;
-  white-space: nowrap;
-  border: none;
-  overflow: visible;
-  cursor: pointer;
-  border: 1px solid #D4D4D4;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  background: #F4F4F4;
-  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#f4f4f4',endColorstr='#ececec');
-  background: -webkit-gradient(linear,left top,left bottom,from(#F4F4F4),to(#ECECEC));
-  background: -moz-linear-gradient(top,#F4F4F4,#ECECEC);
-  height: 32px;
-}
-
 .header .padding_container {
   padding-right: 0;
 }
@@ -364,6 +343,33 @@ form#globalComment textarea
 
 .data_head {
   border: 1px solid #d8d8d8;
+}
+
+#breadcrumb
+{
+  margin: 5px 0 5px 0;
+  font-size: 20px;
+}
+
+#breadcrumb li
+{
+  display: inline-block;
+  color: black;
+}
+
+#breadcrumb li a
+{
+  color: #4183c4;
+}
+
+#breadcrumb li select
+{
+  color: #4183c4;
+}
+
+#breadcrumb li .repository
+{
+  font-weight: bold;
 }
 
 .data_body {
