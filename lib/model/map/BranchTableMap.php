@@ -41,6 +41,7 @@ class BranchTableMap extends TableMap {
 		$this->addForeignKey('REPOSITORY_ID', 'RepositoryId', 'INTEGER', 'repository', 'ID', true, 11, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', true, 255, null);
 		$this->addColumn('COMMIT_REFERENCE', 'CommitReference', 'VARCHAR', true, 50, null);
+		$this->addColumn('LAST_COMMIT', 'LastCommit', 'VARCHAR', false, 50, null);
 		$this->addColumn('IS_BLACKLISTED', 'IsBlacklisted', 'TINYINT', true, 1, 0);
 		$this->addColumn('REVIEW_REQUEST', 'ReviewRequest', 'TINYINT', true, 1, 0);
 		$this->addColumn('STATUS', 'Status', 'TINYINT', true, 1, 0);

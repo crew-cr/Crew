@@ -10,6 +10,7 @@
  * @method     BranchQuery orderByRepositoryId($order = Criteria::ASC) Order by the repository_id column
  * @method     BranchQuery orderByName($order = Criteria::ASC) Order by the name column
  * @method     BranchQuery orderByCommitReference($order = Criteria::ASC) Order by the commit_reference column
+ * @method     BranchQuery orderByLastCommit($order = Criteria::ASC) Order by the last_commit column
  * @method     BranchQuery orderByIsBlacklisted($order = Criteria::ASC) Order by the is_blacklisted column
  * @method     BranchQuery orderByReviewRequest($order = Criteria::ASC) Order by the review_request column
  * @method     BranchQuery orderByStatus($order = Criteria::ASC) Order by the status column
@@ -21,6 +22,7 @@
  * @method     BranchQuery groupByRepositoryId() Group by the repository_id column
  * @method     BranchQuery groupByName() Group by the name column
  * @method     BranchQuery groupByCommitReference() Group by the commit_reference column
+ * @method     BranchQuery groupByLastCommit() Group by the last_commit column
  * @method     BranchQuery groupByIsBlacklisted() Group by the is_blacklisted column
  * @method     BranchQuery groupByReviewRequest() Group by the review_request column
  * @method     BranchQuery groupByStatus() Group by the status column
@@ -59,6 +61,7 @@
  * @method     Branch findOneByRepositoryId(int $repository_id) Return the first Branch filtered by the repository_id column
  * @method     Branch findOneByName(string $name) Return the first Branch filtered by the name column
  * @method     Branch findOneByCommitReference(string $commit_reference) Return the first Branch filtered by the commit_reference column
+ * @method     Branch findOneByLastCommit(string $last_commit) Return the first Branch filtered by the last_commit column
  * @method     Branch findOneByIsBlacklisted(int $is_blacklisted) Return the first Branch filtered by the is_blacklisted column
  * @method     Branch findOneByReviewRequest(int $review_request) Return the first Branch filtered by the review_request column
  * @method     Branch findOneByStatus(int $status) Return the first Branch filtered by the status column
@@ -70,6 +73,7 @@
  * @method     array findByRepositoryId(int $repository_id) Return Branch objects filtered by the repository_id column
  * @method     array findByName(string $name) Return Branch objects filtered by the name column
  * @method     array findByCommitReference(string $commit_reference) Return Branch objects filtered by the commit_reference column
+ * @method     array findByLastCommit(string $last_commit) Return Branch objects filtered by the last_commit column
  * @method     array findByIsBlacklisted(int $is_blacklisted) Return Branch objects filtered by the is_blacklisted column
  * @method     array findByReviewRequest(int $review_request) Return Branch objects filtered by the review_request column
  * @method     array findByStatus(int $status) Return Branch objects filtered by the status column
@@ -275,6 +279,28 @@ abstract class BaseBranchQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(BranchPeer::COMMIT_REFERENCE, $commitReference, $comparison);
+	}
+
+	/**
+	 * Filter the query on the last_commit column
+	 * 
+	 * @param     string $lastCommit The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterByLastCommit($lastCommit = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($lastCommit)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $lastCommit)) {
+				$lastCommit = str_replace('*', '%', $lastCommit);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::LAST_COMMIT, $lastCommit, $comparison);
 	}
 
 	/**

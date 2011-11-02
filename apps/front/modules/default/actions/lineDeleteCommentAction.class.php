@@ -18,7 +18,7 @@ class lineDeleteCommentAction extends sfAction
       $this->forward404Unless($lineComment, 'LineComment Not Found');
 
       $countLineComment = LineCommentQuery::create()
-        ->filterByCommitReference($lineComment->getCommitReference())
+        ->filterByCommit($lineComment->getCommit())
         ->filterByFileId($lineComment->getFileId())
         ->filterByPosition($lineComment->getPosition())
         ->filterByLine($lineComment->getLine())
@@ -26,7 +26,7 @@ class lineDeleteCommentAction extends sfAction
       ;
 
       $datas = array(
-        'commit_reference' => $lineComment->getCommitReference(),
+        'commit' => $lineComment->getCommit(),
         'file_id' => $lineComment->getFileId(),
         'position' => $lineComment->getPosition(),
         'line' => $lineComment->getLine(),

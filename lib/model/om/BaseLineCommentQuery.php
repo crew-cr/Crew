@@ -8,7 +8,7 @@
  *
  * @method     LineCommentQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     LineCommentQuery orderByUserId($order = Criteria::ASC) Order by the user_id column
- * @method     LineCommentQuery orderByCommitReference($order = Criteria::ASC) Order by the commit_reference column
+ * @method     LineCommentQuery orderByCommit($order = Criteria::ASC) Order by the commit column
  * @method     LineCommentQuery orderByFileId($order = Criteria::ASC) Order by the file_id column
  * @method     LineCommentQuery orderByPosition($order = Criteria::ASC) Order by the position column
  * @method     LineCommentQuery orderByLine($order = Criteria::ASC) Order by the line column
@@ -18,7 +18,7 @@
  *
  * @method     LineCommentQuery groupById() Group by the id column
  * @method     LineCommentQuery groupByUserId() Group by the user_id column
- * @method     LineCommentQuery groupByCommitReference() Group by the commit_reference column
+ * @method     LineCommentQuery groupByCommit() Group by the commit column
  * @method     LineCommentQuery groupByFileId() Group by the file_id column
  * @method     LineCommentQuery groupByPosition() Group by the position column
  * @method     LineCommentQuery groupByLine() Group by the line column
@@ -43,7 +43,7 @@
  *
  * @method     LineComment findOneById(int $id) Return the first LineComment filtered by the id column
  * @method     LineComment findOneByUserId(int $user_id) Return the first LineComment filtered by the user_id column
- * @method     LineComment findOneByCommitReference(string $commit_reference) Return the first LineComment filtered by the commit_reference column
+ * @method     LineComment findOneByCommit(string $commit) Return the first LineComment filtered by the commit column
  * @method     LineComment findOneByFileId(int $file_id) Return the first LineComment filtered by the file_id column
  * @method     LineComment findOneByPosition(int $position) Return the first LineComment filtered by the position column
  * @method     LineComment findOneByLine(int $line) Return the first LineComment filtered by the line column
@@ -53,7 +53,7 @@
  *
  * @method     array findById(int $id) Return LineComment objects filtered by the id column
  * @method     array findByUserId(int $user_id) Return LineComment objects filtered by the user_id column
- * @method     array findByCommitReference(string $commit_reference) Return LineComment objects filtered by the commit_reference column
+ * @method     array findByCommit(string $commit) Return LineComment objects filtered by the commit column
  * @method     array findByFileId(int $file_id) Return LineComment objects filtered by the file_id column
  * @method     array findByPosition(int $position) Return LineComment objects filtered by the position column
  * @method     array findByLine(int $line) Return LineComment objects filtered by the line column
@@ -218,25 +218,25 @@ abstract class BaseLineCommentQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the commit_reference column
+	 * Filter the query on the commit column
 	 * 
-	 * @param     string $commitReference The value to use as filter.
+	 * @param     string $commit The value to use as filter.
 	 *            Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    LineCommentQuery The current query, for fluid interface
 	 */
-	public function filterByCommitReference($commitReference = null, $comparison = null)
+	public function filterByCommit($commit = null, $comparison = null)
 	{
 		if (null === $comparison) {
-			if (is_array($commitReference)) {
+			if (is_array($commit)) {
 				$comparison = Criteria::IN;
-			} elseif (preg_match('/[\%\*]/', $commitReference)) {
-				$commitReference = str_replace('*', '%', $commitReference);
+			} elseif (preg_match('/[\%\*]/', $commit)) {
+				$commit = str_replace('*', '%', $commit);
 				$comparison = Criteria::LIKE;
 			}
 		}
-		return $this->addUsingAlias(LineCommentPeer::COMMIT_REFERENCE, $commitReference, $comparison);
+		return $this->addUsingAlias(LineCommentPeer::COMMIT, $commit, $comparison);
 	}
 
 	/**

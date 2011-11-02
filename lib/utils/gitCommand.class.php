@@ -148,6 +148,11 @@ class GitCommand
       exec($cmd, $commitRef);
       $noMerdegBranchesInfos[$result]['commit_reference'] = $commitRef[0];
       unset($commitRef);
+
+      $cmd = sprintf('git --git-dir="%s/.git" log HEAD..%s --format="%%H" | head -1', $gitDir, $result);
+      exec($cmd, $commitStatus);
+      $noMerdegBranchesInfos[$result]['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
+      unset($commitStatus);
     }
 
     return $noMerdegBranchesInfos;

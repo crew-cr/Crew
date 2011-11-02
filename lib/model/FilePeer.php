@@ -26,7 +26,7 @@ class FilePeer extends BaseFilePeer {
    */
   public static function synchronize(Branch $branch)
   {
-    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(),$branch->getCommitReference(), $branch->getCommitStatusChanged());
+    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(),$branch->getCommitReference(), $branch->getLastCommit());
 
     $filesModel = FileQuery::create()
       ->filterByBranchId($branch->getId())

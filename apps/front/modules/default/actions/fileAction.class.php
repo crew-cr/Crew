@@ -33,7 +33,7 @@ class fileAction extends sfAction
 
     $fileLineCommentsModel = LineCommentQuery::create()
       ->filterByFileId($this->file->getId())
-      ->filterByCommitReference($this->file->getCommitStatusChanged())
+      ->filterByCommit($this->branch->getLastCommit())
       ->find()
     ;
 

@@ -11,7 +11,7 @@ class lineAddCommentAction extends sfAction
     if ($request->getMethod() == \sfWebRequest::GET)
     {
       $datas = array(
-        'commit_reference' => $request->getParameter('commitReference'),
+        'commit' => $request->getParameter('commit'),
         'file_id' => $request->getParameter('fileId'),
         'position' => $request->getParameter('position'),
         'line' => $request->getParameter('line'),
@@ -34,7 +34,7 @@ class lineAddCommentAction extends sfAction
         $lineComment = new LineComment();
         $lineComment
           ->setUserId($this->getUser()->getGuardUser()->getId())
-          ->setCommitReference($datas['commit_reference'])
+          ->setCommit($datas['commit'])
           ->setFileId($datas['file_id'])
           ->setPosition($datas['position'])
           ->setLine($datas['line'])

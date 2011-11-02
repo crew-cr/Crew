@@ -10,7 +10,7 @@ class lineCommentComponent extends sfComponent
   {
     // create lineCommentForm
     $this->form = new LineCommentForm(null, array(
-      'commit_reference' => $this->commit_reference,
+      'commit' => $this->commit,
       'file_id' => $this->file_id,
       'position' => $this->position,
       'line' => $this->line
@@ -18,7 +18,7 @@ class lineCommentComponent extends sfComponent
 
     // retrieves all line comments of this file $fileId
     $this->comments = LineCommentQuery::create()
-      ->filterByCommitReference($this->commit_reference)
+      ->filterByCommit($this->commit)
       ->filterByFileId($this->file_id)
       ->filterByPosition($this->position)
       ->filterByLine($this->line)

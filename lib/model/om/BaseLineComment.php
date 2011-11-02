@@ -37,10 +37,10 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	protected $user_id;
 
 	/**
-	 * The value for the commit_reference field.
+	 * The value for the commit field.
 	 * @var        string
 	 */
-	protected $commit_reference;
+	protected $commit;
 
 	/**
 	 * The value for the file_id field.
@@ -123,13 +123,13 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Get the [commit_reference] column value.
+	 * Get the [commit] column value.
 	 * 
 	 * @return     string
 	 */
-	public function getCommitReference()
+	public function getCommit()
 	{
-		return $this->commit_reference;
+		return $this->commit;
 	}
 
 	/**
@@ -293,24 +293,24 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	} // setUserId()
 
 	/**
-	 * Set the value of [commit_reference] column.
+	 * Set the value of [commit] column.
 	 * 
 	 * @param      string $v new value
 	 * @return     LineComment The current object (for fluent API support)
 	 */
-	public function setCommitReference($v)
+	public function setCommit($v)
 	{
 		if ($v !== null) {
 			$v = (string) $v;
 		}
 
-		if ($this->commit_reference !== $v) {
-			$this->commit_reference = $v;
-			$this->modifiedColumns[] = LineCommentPeer::COMMIT_REFERENCE;
+		if ($this->commit !== $v) {
+			$this->commit = $v;
+			$this->modifiedColumns[] = LineCommentPeer::COMMIT;
 		}
 
 		return $this;
-	} // setCommitReference()
+	} // setCommit()
 
 	/**
 	 * Set the value of [file_id] column.
@@ -528,7 +528,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->user_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
-			$this->commit_reference = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
+			$this->commit = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->file_id = ($row[$startcol + 3] !== null) ? (int) $row[$startcol + 3] : null;
 			$this->position = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->line = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
@@ -938,7 +938,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 				return $this->getUserId();
 				break;
 			case 2:
-				return $this->getCommitReference();
+				return $this->getCommit();
 				break;
 			case 3:
 				return $this->getFileId();
@@ -984,7 +984,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getUserId(),
-			$keys[2] => $this->getCommitReference(),
+			$keys[2] => $this->getCommit(),
 			$keys[3] => $this->getFileId(),
 			$keys[4] => $this->getPosition(),
 			$keys[5] => $this->getLine(),
@@ -1037,7 +1037,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 				$this->setUserId($value);
 				break;
 			case 2:
-				$this->setCommitReference($value);
+				$this->setCommit($value);
 				break;
 			case 3:
 				$this->setFileId($value);
@@ -1083,7 +1083,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setUserId($arr[$keys[1]]);
-		if (array_key_exists($keys[2], $arr)) $this->setCommitReference($arr[$keys[2]]);
+		if (array_key_exists($keys[2], $arr)) $this->setCommit($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setFileId($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setPosition($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setLine($arr[$keys[5]]);
@@ -1103,7 +1103,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 
 		if ($this->isColumnModified(LineCommentPeer::ID)) $criteria->add(LineCommentPeer::ID, $this->id);
 		if ($this->isColumnModified(LineCommentPeer::USER_ID)) $criteria->add(LineCommentPeer::USER_ID, $this->user_id);
-		if ($this->isColumnModified(LineCommentPeer::COMMIT_REFERENCE)) $criteria->add(LineCommentPeer::COMMIT_REFERENCE, $this->commit_reference);
+		if ($this->isColumnModified(LineCommentPeer::COMMIT)) $criteria->add(LineCommentPeer::COMMIT, $this->commit);
 		if ($this->isColumnModified(LineCommentPeer::FILE_ID)) $criteria->add(LineCommentPeer::FILE_ID, $this->file_id);
 		if ($this->isColumnModified(LineCommentPeer::POSITION)) $criteria->add(LineCommentPeer::POSITION, $this->position);
 		if ($this->isColumnModified(LineCommentPeer::LINE)) $criteria->add(LineCommentPeer::LINE, $this->line);
@@ -1172,7 +1172,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	public function copyInto($copyObj, $deepCopy = false)
 	{
 		$copyObj->setUserId($this->user_id);
-		$copyObj->setCommitReference($this->commit_reference);
+		$copyObj->setCommit($this->commit);
 		$copyObj->setFileId($this->file_id);
 		$copyObj->setPosition($this->position);
 		$copyObj->setLine($this->line);
@@ -1327,7 +1327,7 @@ abstract class BaseLineComment extends BaseObject  implements Persistent
 	{
 		$this->id = null;
 		$this->user_id = null;
-		$this->commit_reference = null;
+		$this->commit = null;
 		$this->file_id = null;
 		$this->position = null;
 		$this->line = null;

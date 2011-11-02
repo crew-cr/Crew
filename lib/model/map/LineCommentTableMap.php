@@ -39,7 +39,7 @@ class LineCommentTableMap extends TableMap {
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addForeignKey('USER_ID', 'UserId', 'INTEGER', 'sf_guard_user', 'ID', false, null, null);
-		$this->addColumn('COMMIT_REFERENCE', 'CommitReference', 'VARCHAR', true, 50, null);
+		$this->addColumn('COMMIT', 'Commit', 'VARCHAR', true, 50, null);
 		$this->addForeignKey('FILE_ID', 'FileId', 'INTEGER', 'file', 'ID', true, 11, null);
 		$this->addColumn('POSITION', 'Position', 'INTEGER', true, 11, null);
 		$this->addColumn('LINE', 'Line', 'INTEGER', true, 11, null);

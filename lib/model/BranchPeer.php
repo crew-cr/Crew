@@ -68,6 +68,7 @@ class BranchPeer extends BaseBranchPeer {
         if(!$branchModel->getCommitReference())
         {
           $branchModel->setCommitReference($branchesGit[$branchModel->getName()]['commit_reference']);
+          $branchModel->setLastCommit($branchesGit[$branchModel->getName()]['last_commit']);
           $branchModel->save();
         }
         unset($branchesGit[$branchModel->getName()]);
@@ -81,6 +82,7 @@ class BranchPeer extends BaseBranchPeer {
         ->setStatus(BranchPeer::A_TRAITER)
         ->setRepositoryId($repository->getId())
         ->setCommitReference($branchGit['commit_reference'])
+        ->setLastCommit($branchGit['last_commit'])
         ->save()
       ;
     }

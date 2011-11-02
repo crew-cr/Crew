@@ -12,7 +12,7 @@
       <?php endforeach; ?>
     </div>
     <form name="fileComment" method="post" action="" class="commentBloc">
-      <input type="hidden" name="commit_reference" value="<?php echo $commitReference ?>">
+      <input type="hidden" name="last_commit" value="<?php echo $lastCommit ?>">
       <input type="hidden" name="file" value="<?php echo $file ?>">
       <input type="hidden" name="position" value="<?php echo $position ?>">
       <input type="hidden" name="line" value="<?php echo $line ?>">
