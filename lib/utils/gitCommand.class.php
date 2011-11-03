@@ -28,105 +28,6 @@ class GitCommand
   /**
    * @static
    * @param string $gitDir
-   * @return string
-   */
-  public static function getCurrentBranch($gitDir)
-  {
-    $cmd = sprintf("git --git-dir='%s/.git' branch | grep \* | sed 's/* //g'", $gitDir);
-    exec($cmd, $branch);
-    if(count($branch)==0)
-    {
-      exit('No branch selected in '.$gitDir);
-    }
-    return $branch[0];
-  }
-
-  /**
-   * @static
-   * @param int $nbDays
-   * @param string $gitDir
-   * @return array
-   */
-  public static function getCommits($nbDays, $gitDir)
-  {
-    self::fetch($gitDir);
-    
-    $separator = '°';
-    $from = date('Y-m-d 00:00:00', strtotime(sprintf("-%s days", $nbDays - 1)));
-    $cmd = sprintf('git --git-dir="%s/.git" log --no-merges --ignore-all-space --since="%s" --format="%%ci%s%%ce%s%%cn%s%%h%s%%s" --numstat', $gitDir, $from, $separator, $separator, $separator, $separator);
-    exec($cmd, $results);
-
-    $commits = array();
-    $commit = array();
-    foreach($results as $line)
-    {
-      if(strlen($line) == 0)
-      {
-        continue;
-      }
-      if(strpos($line, $separator) !== false)
-      {
-        if(count($commit) > 0)
-        {
-          $commits[] = $commit;
-        }
-        $commit = self::getCommitFromLine($line, $separator);
-      }
-      else
-      {
-        $elements = preg_split("/[\s]+/", $line, null, PREG_SPLIT_NO_EMPTY);
-        $commit['files'][] = array(
-          'add' => $elements[0],
-          'delete' => $elements[1],
-          'file' => $elements[2],
-        );
-      }
-    }
-
-    if(count($commit) > 0)
-    {
-      $commits[] = $commit;
-    }
-
-    return $commits;
-  }
-
-  /**
-   * @static
-   * @param string $commits
-   * @param string $displayPattern
-   * @param string $pattern
-   * @param string $timeUnit
-   * @param string $iteration
-   * @return array
-   */
-  public static function getBackwardInfos($commits, $displayPattern, $pattern, $timeUnit, $iteration)
-  {
-    $infos = array();
-    $scanIndex = 0;
-    $timeIndex = 0;
-
-    for($i = 0; $i < $iteration; $i++)
-    {
-      $scannedDate = date($pattern, strtotime(sprintf("-%s %s", $i, $timeUnit)));
-      $infos[$timeIndex]['displayDate'] = date($displayPattern, strtotime(sprintf("-%s %s", $i, $timeUnit)));
-      $infos[$timeIndex]['nb-commits'] = 0;
-      $infos[$timeIndex]['nb-files'] = 0;
-      while(isset($commits[$scanIndex]) && strpos($commits[$scanIndex]['date'], $scannedDate) === 0)
-      {
-        $infos[$timeIndex]['nb-commits']++;
-        $infos[$timeIndex]['nb-files'] += count($commits[$scanIndex]['files']);
-        $scanIndex++;
-      }
-      $timeIndex++;
-    }
-
-    return $infos;
-  }
-
-  /**
-   * @static
-   * @param string $gitDir
    * @return array
    */
   public static function getNoMergedBranchesInfos($gitDir)
@@ -156,27 +57,6 @@ class GitCommand
     }
 
     return $noMerdegBranchesInfos;
-  }
-
-  /**
-   * @static
-   * @param $line
-   * @param $separator
-   * @return array
-   */
-  public static function getCommitFromLine($line, $separator)
-  {
-    $elements = explode($separator, $line);
-    $commit = array(
-      'date' => date('Y-m-d H:i:s', strtotime($elements[0])),
-      'email' => $elements[1],
-      'name' => $elements[2],
-      'hash' => $elements[3],
-      'message' => $elements[4],
-      'files' => array()
-    );
-
-    return $commit;
   }
 
   /**
@@ -249,5 +129,12 @@ class GitCommand
     $cmd = sprintf('git clone %s %s', $repositoryReadOnlyUrl, $path);
     exec($cmd, $return, $status);
     return $status;
+  }
+
+  public static function commitIsInHistory($gitDir, $commit, $searchedCommit)
+  {
+    $cmd = sprintf('git --git-dir="%s/.git" log %s | grep %s', $gitDir, $commit, $searchedCommit);
+    exec($cmd, $return);
+    return (count($return) == 0);
   }
 }

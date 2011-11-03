@@ -16,8 +16,6 @@ class repositoryListAction extends sfAction
     $this->repositories = array();
     foreach ($repositories as & $repository)
     {
-      BranchPeer::synchronize($repository);
-      
       $branchesCount = BranchQuery::create()
         ->filterByRepositoryId($repository->getId())
         ->count()

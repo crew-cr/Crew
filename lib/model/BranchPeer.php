@@ -68,9 +68,10 @@ class BranchPeer extends BaseBranchPeer {
         if(!$branchModel->getCommitReference())
         {
           $branchModel->setCommitReference($branchesGit[$branchModel->getName()]['commit_reference']);
-          $branchModel->setLastCommit($branchesGit[$branchModel->getName()]['last_commit']);
-          $branchModel->save();
         }
+        $branchModel->setLastCommit($branchesGit[$branchModel->getName()]['last_commit']);
+        $branchModel->save();
+
         unset($branchesGit[$branchModel->getName()]);
       }
     }
