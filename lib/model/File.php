@@ -44,7 +44,13 @@ class File extends BaseFile
     {
       return 0;
     }
-    
+
+    $file = FileQuery::create()->filterById($fileId)->findOne();
+    if(!$file)
+    {
+      return false;
+    }
+
     $statusAction = new StatusAction();
     return $statusAction
       ->setUserId($userId)
@@ -53,7 +59,7 @@ class File extends BaseFile
       ->setFileId($fileId)
       ->setOldStatus($oldStatus)
       ->setNewStatus($newStatus)
-      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $fileId, $branchId))
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $file->getFilename(), $file->getBranch()->__toString()))
       ->save()
     ;
   }

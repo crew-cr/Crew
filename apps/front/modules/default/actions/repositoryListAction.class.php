@@ -46,7 +46,7 @@ class repositoryListAction extends sfAction
     {
       $commentBoards[$branchComment->getCreatedAt('YmdHisu')] = array(
         'User' => $branchComment->getsfGuardUser(),
-        'Message' => sprintf('%s <strong>on branch %s</strong>', stringUtils::shorten($branchComment->getValue(), 60), $branchComment->getBranchId()),
+        'Message' => sprintf('%s <strong>on branch %s</strong>', stringUtils::shorten($branchComment->getValue(), 60), $branchComment->getBranch()->__toString()),
         'CreatedAt' => $branchComment->getCreatedAt('d/m/Y H:i:s')
       );
     }
@@ -60,7 +60,7 @@ class repositoryListAction extends sfAction
     {
       $commentBoards[$FileComment->getCreatedAt('YmdHisu')] = array(
         'User' => $FileComment->getsfGuardUser(),
-        'Message' => sprintf('%s <strong>on file %s</strong>', stringUtils::shorten($FileComment->getValue(), 60), $FileComment->getFileId()),
+        'Message' => sprintf('%s <strong>on file %s</strong>', stringUtils::shorten($FileComment->getValue(), 60), $FileComment->getFile()->getFilename()),
         'CreatedAt' => $FileComment->getCreatedAt('d/m/Y H:i:s')
       );
     }
@@ -74,7 +74,7 @@ class repositoryListAction extends sfAction
     {
       $commentBoards[$LineComment->getCreatedAt('YmdHisu')] = array(
         'User' => $LineComment->getsfGuardUser(),
-        'Message' => sprintf('%s <strong>on line %s of file %s</strong>', stringUtils::shorten($LineComment->getValue(), 60), $LineComment->getLine(), $LineComment->getFileId()),
+        'Message' => sprintf('%s <strong>on line %s of file %s</strong>', stringUtils::shorten($LineComment->getValue(), 60), $LineComment->getLine(), $LineComment->getFile()->getFilename()),
         'CreatedAt' => $LineComment->getCreatedAt('d/m/Y H:i:s')
       );
     }

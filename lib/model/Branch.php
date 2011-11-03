@@ -44,6 +44,12 @@ class Branch extends BaseBranch
       return 0;
     }
 
+    $branch = BranchQuery::create()->filterById($branchId)->findOne();
+    if(!$branch)
+    {
+      return false;
+    }
+
     $statusAction = new StatusAction();
     return $statusAction
       ->setUserId($userId)
@@ -51,7 +57,7 @@ class Branch extends BaseBranch
       ->setBranchId($branchId)
       ->setOldStatus($oldStatus)
       ->setNewStatus($newStatus)
-      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $branchId))
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $branch->__toString()))
       ->save()
     ;
   }
