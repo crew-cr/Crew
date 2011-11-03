@@ -72,6 +72,8 @@ class BranchPeer extends BaseBranchPeer {
         $branchModel->setLastCommit($branchesGit[$branchModel->getName()]['last_commit']);
         $branchModel->save();
 
+        FilePeer::synchronize($branchModel);
+
         unset($branchesGit[$branchModel->getName()]);
       }
     }
@@ -86,6 +88,7 @@ class BranchPeer extends BaseBranchPeer {
         ->setLastCommit($branchGit['last_commit'])
         ->save()
       ;
+      FilePeer::synchronize($branch);
     }
   }
 } // BranchPeer

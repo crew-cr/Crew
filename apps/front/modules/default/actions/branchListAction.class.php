@@ -27,8 +27,6 @@ class branchListAction extends sfAction
     $this->branches = array();
     foreach ($branches as $branch)
     {
-      FilePeer::synchronize($branch);
-
       $filesCount = FileQuery::create()
         ->filterByBranchId($branch->getId())
         ->count()

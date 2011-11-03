@@ -21,8 +21,6 @@ class fileListAction extends sfAction
     $this->repository = RepositoryPeer::retrieveByPK($this->branch->getRepositoryId());
     $this->forward404Unless($this->repository, "Repository not found");
 
-    FilePeer::synchronize($this->branch);
-
     $files = FileQuery::create()
       ->filterByBranchId($this->branch->getId())
       ->find()
