@@ -630,11 +630,11 @@ a.disabled
 
 .list_head a.status-valid, .data_head a.status-valid
 {
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .list_head a.status-invalid, .data_head a.status-invalid
 {
-  margin-top: 9px;
+  margin-top: 3px;
 }
 .list_head a.status-blacklist
 {
