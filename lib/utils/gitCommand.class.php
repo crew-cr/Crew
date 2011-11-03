@@ -94,11 +94,11 @@ class GitCommand
    * @param string $filename
    * @return string
    */
-  public static function getShowFileFromBranch($gitDir, $currentCommit, $referenceCommit, $filename)
+  public static function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename)
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s/.git" diff -U9999 %s..%s -- %s', $gitDir,  $currentCommit, $referenceCommit, $filename);
+      $cmd = sprintf('git --git-dir="%s/.git" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
     exec($cmd, $currentContentLinesResults);
 
     $patternFinded = false;
