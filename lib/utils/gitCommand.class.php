@@ -98,7 +98,7 @@ class GitCommand
   {
     self::fetch($gitDir);
 
-      $cmd = sprintf('git --git-dir="%s/.git" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
+    $cmd = sprintf('git --git-dir="%s/.git" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
     exec($cmd, $currentContentLinesResults);
 
     $patternFinded = false;
@@ -118,6 +118,13 @@ class GitCommand
     return $fileLines;
   }
 
+  public static function getLastModificationCommit($gitDir, $branch, $filename)
+  {
+    $cmd = sprintf('git --git-dir="%s/.git" log %s --format="%%H" -- %s | head -n1', $gitDir, $branch, $filename);
+    exec($cmd, $return);
+    return (count($return)) ? $return[0] : false;
+  }
+
   /**
    * @static
    * @param $repositoryReadOnlyUrl
@@ -135,6 +142,6 @@ class GitCommand
   {
     $cmd = sprintf('git --git-dir="%s/.git" log %s | grep %s', $gitDir, $commit, $searchedCommit);
     exec($cmd, $return);
-    return (count($return) == 0);
+    return (count($return) > 0);
   }
 }

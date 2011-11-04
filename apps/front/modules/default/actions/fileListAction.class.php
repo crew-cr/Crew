@@ -36,6 +36,7 @@ class fileListAction extends sfAction
       
       $lineCommentsCount = LineCommentQuery::create()
         ->filterByFileId($file->getId())
+        ->filterByCommit($file->getLastChangeCommit())
         ->count()
       ;
 

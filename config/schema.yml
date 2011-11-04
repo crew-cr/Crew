@@ -30,6 +30,7 @@ propel:
     branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     state:                            { type: CHAR, size: '1', required: true }
     filename:                         { type: VARCHAR, size: '255', required: true }
+    last_change_commit:               { type: VARCHAR, size: '50', required: false }
     status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
     commit_status_changed:            { type: VARCHAR, size: '50', required: false }
     user_status_changed:              { type: INTEGER, size: '11', required: false }

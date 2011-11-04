@@ -10,6 +10,7 @@
  * @method     FileQuery orderByBranchId($order = Criteria::ASC) Order by the branch_id column
  * @method     FileQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method     FileQuery orderByFilename($order = Criteria::ASC) Order by the filename column
+ * @method     FileQuery orderByLastChangeCommit($order = Criteria::ASC) Order by the last_change_commit column
  * @method     FileQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     FileQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
  * @method     FileQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
@@ -19,6 +20,7 @@
  * @method     FileQuery groupByBranchId() Group by the branch_id column
  * @method     FileQuery groupByState() Group by the state column
  * @method     FileQuery groupByFilename() Group by the filename column
+ * @method     FileQuery groupByLastChangeCommit() Group by the last_change_commit column
  * @method     FileQuery groupByStatus() Group by the status column
  * @method     FileQuery groupByCommitStatusChanged() Group by the commit_status_changed column
  * @method     FileQuery groupByUserStatusChanged() Group by the user_status_changed column
@@ -51,6 +53,7 @@
  * @method     File findOneByBranchId(int $branch_id) Return the first File filtered by the branch_id column
  * @method     File findOneByState(string $state) Return the first File filtered by the state column
  * @method     File findOneByFilename(string $filename) Return the first File filtered by the filename column
+ * @method     File findOneByLastChangeCommit(string $last_change_commit) Return the first File filtered by the last_change_commit column
  * @method     File findOneByStatus(int $status) Return the first File filtered by the status column
  * @method     File findOneByCommitStatusChanged(string $commit_status_changed) Return the first File filtered by the commit_status_changed column
  * @method     File findOneByUserStatusChanged(int $user_status_changed) Return the first File filtered by the user_status_changed column
@@ -60,6 +63,7 @@
  * @method     array findByBranchId(int $branch_id) Return File objects filtered by the branch_id column
  * @method     array findByState(string $state) Return File objects filtered by the state column
  * @method     array findByFilename(string $filename) Return File objects filtered by the filename column
+ * @method     array findByLastChangeCommit(string $last_change_commit) Return File objects filtered by the last_change_commit column
  * @method     array findByStatus(int $status) Return File objects filtered by the status column
  * @method     array findByCommitStatusChanged(string $commit_status_changed) Return File objects filtered by the commit_status_changed column
  * @method     array findByUserStatusChanged(int $user_status_changed) Return File objects filtered by the user_status_changed column
@@ -263,6 +267,28 @@ abstract class BaseFileQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(FilePeer::FILENAME, $filename, $comparison);
+	}
+
+	/**
+	 * Filter the query on the last_change_commit column
+	 * 
+	 * @param     string $lastChangeCommit The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterByLastChangeCommit($lastChangeCommit = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($lastChangeCommit)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $lastChangeCommit)) {
+				$lastChangeCommit = str_replace('*', '%', $lastChangeCommit);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT, $lastChangeCommit, $comparison);
 	}
 
 	/**
