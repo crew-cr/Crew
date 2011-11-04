@@ -27,6 +27,17 @@ class File extends BaseFile
     return $this->getFilename();
   }
 
+  public function changeStatus($newStatus, $user, $con = null)
+  {
+    $this
+      ->setStatus($newStatus)
+      ->setCommitStatusChanged($this->getLastChangeCommit())
+      ->setUserStatusChanged($user)
+      ->setDateStatusChanged(time())
+      ->save($con)
+    ;
+  }
+
   /**
    * @static
    * @param int $userId

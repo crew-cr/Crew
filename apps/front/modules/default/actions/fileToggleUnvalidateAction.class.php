@@ -27,18 +27,14 @@ class fileToggleUnvalidateAction extends sfAction
 
       if ($file->getStatus() === BranchPeer::KO)
       {
-        $file->setStatus(BranchPeer::A_TRAITER);
+        $file->changeStatus(BranchPeer::A_TRAITER, $this->getUser()->getGuardUser()->getId(), $con);
         $render = array('toggleState' => 'disabled');
       }
       else
       {
-        $file->setStatus(BranchPeer::KO);
+        $file->changeStatus(BranchPeer::KO, $this->getUser()->getGuardUser()->getId(), $con);
         $render = array('toggleState' => 'enabled');
       }
-
-      $file
-        ->save($con)
-      ;
 
       // save file status action
       File::saveAction(

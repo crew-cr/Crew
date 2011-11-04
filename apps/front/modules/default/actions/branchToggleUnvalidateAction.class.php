@@ -27,19 +27,14 @@ class branchToggleUnvalidateAction extends sfAction
 
       if ($branch->getStatus() === BranchPeer::KO)
       {
-        $branch->setStatus(BranchPeer::A_TRAITER);
+        $branch->changeStatus(BranchPeer::A_TRAITER, $this->getUser()->getGuardUser()->getId(), $con);
         $render = array('toggleState' => 'disabled');
       }
       else
       {
-        $branch->setStatus(BranchPeer::KO);
+        $branch->changeStatus(BranchPeer::KO, $this->getUser()->getGuardUser()->getId(), $con);
         $render = array('toggleState' => 'enabled');
       }
-
-      $branch
-        ->setReviewRequest(false)
-        ->save($con)
-      ;
 
       Branch::saveAction(
         $this->getUser()->getGuardUser()->getId(),

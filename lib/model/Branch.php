@@ -27,6 +27,18 @@ class Branch extends BaseBranch
     return stringUtils::displayBranchName($this->getName());
   }
 
+  public function changeStatus($newStatus, $user, $con = null)
+  {
+    $this
+      ->setStatus($newStatus)
+      ->setCommitStatusChanged($this->getLastCommit())
+      ->setUserStatusChanged($user)
+      ->setDateStatusChanged(time())
+      ->setReviewRequest(false)
+      ->save($con)
+    ;
+  }
+
   /**
    * @static
    * @param int $userId
