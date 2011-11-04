@@ -351,11 +351,8 @@ button.safe:hover {
 }
 
 .data {
-  overflow: hidden;
   position: relative;
-  left: -32px;
   width: 100%;
-  padding-left: 32px;
 }
 
 .data, .list {
@@ -416,7 +413,7 @@ button.safe:hover {
 }
 
 .data_body {
-  position: relative;
+  overflow: auto;
   border: 1px solid #d8d8d8;
   border-top:  none;
 }
@@ -444,13 +441,12 @@ button.safe:hover {
   cursor: pointer;
   opacity: 0;
   filter: alpha(opacity=0);
-  -webkit-transition: opacity .1s linear;
+  -webkit-transition: opacity .3s ease-out;
 }
 
 .data_body table tr:hover td .add_bubble {
-  opacity: 1;
-  filter: alpha(opacity=0);
-  -webkit-transition: opacity .1s linear;
+  opacity: 1.0;
+  filter: alpha(opacity=100);
 }
 
 .data_body table tr td.line_numbers {
@@ -477,6 +473,10 @@ button.safe:hover {
   border-left: 1px solid #DDD;
   background: #FAFAFA!important;
   font-family: helvetica,arial,freesans,sans-serif!important;
+}
+
+.data_body table tr td.line_comment .clipper {
+  width: 850px;
 }
 
 .commit_comment {
