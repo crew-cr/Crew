@@ -18,6 +18,7 @@ class repositoryListAction extends sfAction
     {
       $branchesCount = BranchQuery::create()
         ->filterByRepositoryId($repository->getId())
+        ->filterByIsBlacklisted(0)
         ->count()
       ;
       

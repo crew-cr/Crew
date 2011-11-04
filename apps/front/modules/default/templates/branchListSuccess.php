@@ -21,7 +21,7 @@
             </h3>
             <span class="branchs">
               <span class="branch_icon"></span>
-              <?php echo link_to($branch['NbFiles'].' fichier(s)', 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
+              <?php echo link_to($branch['NbFiles'].' file(s)', 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
             </span>
           </div>
         </td>
