@@ -659,6 +659,19 @@ a.status-blacklist {
   background: url('../images/stop.gif') 0 0 no-repeat;
 }
 
+.list_head a.branch-sync
+{
+  margin-top: 3px;
+}
+
+a.branch-sync {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  text-indent: -9999px;
+  background: url('../images/sync.png') 0 0 no-repeat;
+}
+
 .list_body .state_M {
   display: block;
   width: 20px;

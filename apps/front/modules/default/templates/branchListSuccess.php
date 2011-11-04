@@ -1,6 +1,9 @@
 <div class="list">
   <div class="list_head">
     Branch list
+    <div class="right">
+      <?php echo link_to('Synchronize', 'default/branchesSynchronize', array('title' => 'Synchronize branches', 'query_string' => 'repository='.$repository->getId(), 'class' => 'branch-sync')) ?>
+    </div>
   </div>
   <div class="list_body" id="project_list">
     <table>
