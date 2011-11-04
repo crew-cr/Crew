@@ -27,13 +27,13 @@ class fileAction extends sfAction
     $this->fileContentLines = GitCommand::getShowFileFromBranch(
       $this->repository->getValue(),
       $this->branch->getCommitReference(),
-      $this->file->getCommitStatusChanged(),
+      $this->file->getLastChangeCommit(),
       $this->file->getFilename()
     );
 
     $fileLineCommentsModel = LineCommentQuery::create()
       ->filterByFileId($this->file->getId())
-      ->filterByCommit($this->branch->getLastCommit())
+      ->filterByCommit($this->file->getLastChangeCommit())
       ->find()
     ;
 

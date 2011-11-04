@@ -26,7 +26,7 @@ abstract class BaseFilePeer {
 	const TM_CLASS = 'FileTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 8;
+	const NUM_COLUMNS = 9;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -42,6 +42,9 @@ abstract class BaseFilePeer {
 
 	/** the column name for the FILENAME field */
 	const FILENAME = 'file.FILENAME';
+
+	/** the column name for the LAST_CHANGE_COMMIT field */
+	const LAST_CHANGE_COMMIT = 'file.LAST_CHANGE_COMMIT';
 
 	/** the column name for the STATUS field */
 	const STATUS = 'file.STATUS';
@@ -78,12 +81,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'LastChangeCommit', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'lastChangeCommit', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::LAST_CHANGE_COMMIT, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'LAST_CHANGE_COMMIT', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'last_change_commit', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
 	/**
@@ -93,12 +96,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'Status' => 4, 'CommitStatusChanged' => 5, 'UserStatusChanged' => 6, 'DateStatusChanged' => 7, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'status' => 4, 'commitStatusChanged' => 5, 'userStatusChanged' => 6, 'dateStatusChanged' => 7, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::STATUS => 4, self::COMMIT_STATUS_CHANGED => 5, self::USER_STATUS_CHANGED => 6, self::DATE_STATUS_CHANGED => 7, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'STATUS' => 4, 'COMMIT_STATUS_CHANGED' => 5, 'USER_STATUS_CHANGED' => 6, 'DATE_STATUS_CHANGED' => 7, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'status' => 4, 'commit_status_changed' => 5, 'user_status_changed' => 6, 'date_status_changed' => 7, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'LastChangeCommit' => 4, 'Status' => 5, 'CommitStatusChanged' => 6, 'UserStatusChanged' => 7, 'DateStatusChanged' => 8, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'lastChangeCommit' => 4, 'status' => 5, 'commitStatusChanged' => 6, 'userStatusChanged' => 7, 'dateStatusChanged' => 8, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::LAST_CHANGE_COMMIT => 4, self::STATUS => 5, self::COMMIT_STATUS_CHANGED => 6, self::USER_STATUS_CHANGED => 7, self::DATE_STATUS_CHANGED => 8, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'LAST_CHANGE_COMMIT' => 4, 'STATUS' => 5, 'COMMIT_STATUS_CHANGED' => 6, 'USER_STATUS_CHANGED' => 7, 'DATE_STATUS_CHANGED' => 8, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'last_change_commit' => 4, 'status' => 5, 'commit_status_changed' => 6, 'user_status_changed' => 7, 'date_status_changed' => 8, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
 	);
 
 	/**
@@ -174,6 +177,7 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn(FilePeer::BRANCH_ID);
 			$criteria->addSelectColumn(FilePeer::STATE);
 			$criteria->addSelectColumn(FilePeer::FILENAME);
+			$criteria->addSelectColumn(FilePeer::LAST_CHANGE_COMMIT);
 			$criteria->addSelectColumn(FilePeer::STATUS);
 			$criteria->addSelectColumn(FilePeer::COMMIT_STATUS_CHANGED);
 			$criteria->addSelectColumn(FilePeer::USER_STATUS_CHANGED);
@@ -183,6 +187,7 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn($alias . '.BRANCH_ID');
 			$criteria->addSelectColumn($alias . '.STATE');
 			$criteria->addSelectColumn($alias . '.FILENAME');
+			$criteria->addSelectColumn($alias . '.LAST_CHANGE_COMMIT');
 			$criteria->addSelectColumn($alias . '.STATUS');
 			$criteria->addSelectColumn($alias . '.COMMIT_STATUS_CHANGED');
 			$criteria->addSelectColumn($alias . '.USER_STATUS_CHANGED');
