@@ -273,12 +273,12 @@ button.safe:hover {
   float: left;
 }
 
-.project_infos .branchs
+.view_infos
 {
-  margin-left: 20px;
   font-size: 11px;
   font-weight: bold;
   color: #999;
+  text-align: right;
 }
 
 
@@ -304,7 +304,7 @@ button.safe:hover {
   background: url('../images/comment_icon.png') 0 50% no-repeat;
 }
 
-.file_infos .file_comments
+.file_comments
 {
   font-size: 11px;
   font-weight: bold;
@@ -596,48 +596,42 @@ h2.avatared {
 
 .list_body table tr td.status {
   line-height: 0px;
-  padding-left: 6px;
+  padding-left: 10px;
   width: 60px;
 }
 
-.list_body table tr td.review_request *
-{
+.list_body table tr td.review_request {
   vertical-align: middle;
 }
 
-.list_body table tr td.review_request
-{
+.list_body table tr td.review_request {
   vertical-align: middle;
   padding: 0;
   width: 20px;
 }
 
-#file_list table td
-{
+#file_list table td {
   vertical-align: top;
   padding-top: 5px;
 }
 
-#project_list table td
-{
-  padding-left: 5px;
+#project_list table td {
+  padding: 0 5px 0 5px;
 }
 
-a.disabled
-{
+a.disabled {
   opacity: 0.25;
 }
 
-.list_head a.status-valid, .data_head a.status-valid
-{
+.list_head a.status-valid, .data_head a.status-valid {
   margin-top: 3px;
 }
-.list_head a.status-invalid, .data_head a.status-invalid
-{
+
+.list_head a.status-invalid, .data_head a.status-invalid {
   margin-top: 3px;
 }
-.list_head a.status-blacklist
-{
+
+.list_head a.status-blacklist {
   margin-top: 9px;
 }
 
