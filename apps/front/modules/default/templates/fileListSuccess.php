@@ -11,17 +11,13 @@
       <?php foreach ($files as $file): ?>
       <tr>
         <td class="state">
-          <span class="state_<?php echo $file['State'] ?>"><?php echo $file['State'] ?></span>
+          <span class="state_<?php echo $file['State'] ?>" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>"><?php echo $file['State'] ?></span>
         </td>
         <td>
-          <div class="file_infos">
-            <h3>
-              <?php echo link_to(stringUtils::lshorten($file['Filename']), 'default/file', array('title' => $file['Filename'], 'query_string' => 'file='.$file['Id'])) ?>
-            </h3>
-            <span class="file_comments">
-              <?php echo link_to($file['NbFileComments'].' commentaire(s)', 'default/file', array('query_string' => 'file='.$file['Id'])) ?>
-            </span>
-          </div>
+          <h3><?php echo link_to(stringUtils::lshorten($file['Filename']), 'default/file', array('title' => $file['Filename'], 'query_string' => 'file='.$file['Id'])) ?></h3>
+        </td>
+        <td class="view_infos">
+            <span class="file_comments"><?php echo link_to($file['NbFileComments'].' comment(s)', 'default/file', array('query_string' => 'file='.$file['Id'])) ?></span>
         </td>
         <td class="status">
           <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle status-valid '. ($file['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>

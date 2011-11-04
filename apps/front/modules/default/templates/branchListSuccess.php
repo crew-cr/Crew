@@ -12,15 +12,11 @@
         <?php endif; ?>
         </td>
         <td>
-          <div class="project_infos">
-            <h3>
-              <?php echo link_to(stringUtils::displayBranchName($branch['Name']), 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
-            </h3>
-            <span class="branchs">
-              <span class="branch_icon"></span>
-              <?php echo link_to($branch['NbFiles'].' file(s)', 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
-            </span>
-          </div>
+          <h3><?php echo link_to(stringUtils::displayBranchName($branch['Name']), 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?></h3>
+        </td>
+        <td class="view_infos">
+          <span class="branch_icon"></span>
+          <?php echo link_to($branch['NbFiles'].' file(s)', 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?>
         </td>
         <td class="status">
           <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-valid '. ($branch['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
