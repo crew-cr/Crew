@@ -20,7 +20,7 @@ class reviewRequestAction extends sfAction
     $result = array();
     if($repository)
     {
-      BranchPeer::synchronize($repository);
+      BranchPeer::synchronize($repository, $branchName);
 
       $branch = BranchQuery::create()
         ->filterByName($branchName)

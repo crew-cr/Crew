@@ -30,14 +30,22 @@ class GitCommand
    * @param string $gitDir
    * @return array
    */
-  public static function getNoMergedBranchesInfos($gitDir)
+  public static function getNoMergedBranchesInfos($gitDir, $branch = null)
   {
     self::fetch($gitDir);
 
     $noMerdegBranchesInfos = array();
 
-    $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep -v "*" | sed "s/ //g"', $gitDir);
+    if(is_null($branch))
+    {
+      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep -v "*" | sed "s/ //g"', $gitDir);
+    }
+    else
+    {
+      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep %s', $gitDir, $branch);
+    }
     exec($cmd, $results);
+
     foreach($results as $result)
     {
       if(strpos($result, '->') !== false)

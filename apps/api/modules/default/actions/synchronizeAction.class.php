@@ -44,7 +44,7 @@ class synchronizeAction extends sfAction
           $result['result'] = false;
           $result['message'] = sprintf("No valid commit '%s'", $commit);
         }
-        BranchPeer::synchronize($repository);
+        BranchPeer::synchronize($repository, $branch);
       }
       else
       {
