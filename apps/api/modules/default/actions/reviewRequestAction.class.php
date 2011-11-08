@@ -9,6 +9,7 @@ class reviewRequestAction extends sfAction
   public function execute($request)
   {
     $projectId = $request->getParameter('project');
+    $baseBranchName = 'origin/'.$request->getParameter('base-branch', 'master');
     $branchName = 'origin/'.$request->getParameter('branch');
     $commit = (string)$request->getParameter('commit'); //Dernier commit
 
@@ -20,7 +21,7 @@ class reviewRequestAction extends sfAction
     $result = array();
     if($repository)
     {
-      BranchPeer::synchronize($repository, $branchName);
+      BranchPeer::synchronize($repository, $baseBranchName, $branchName);
 
       $branch = BranchQuery::create()
         ->filterByName($branchName)

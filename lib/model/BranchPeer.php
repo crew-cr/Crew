@@ -48,9 +48,9 @@ class BranchPeer extends BaseBranchPeer {
    * @param Repository $repository
    * @return void
    */
-  public static function synchronize(Repository $repository, $branch = null)
+  public static function synchronize(Repository $repository, $baseBranchName = 'origin/master', $branch = null)
   {
-    $branchesGit = GitCommand::getNoMergedBranchesInfos($repository->getValue(), $branch);
+    $branchesGit = GitCommand::getNoMergedBranchesInfos($repository->getValue(), $baseBranchName, $branch);
 
     $branchesModelQuery = BranchQuery::create()->filterByRepositoryId($repository->getId());
     if(!is_null($branch))

@@ -30,7 +30,7 @@ class GitCommand
    * @param string $gitDir
    * @return array
    */
-  public static function getNoMergedBranchesInfos($gitDir, $branch = null)
+  public static function getNoMergedBranchesInfos($gitDir, $baseBranchName = 'origin/master', $branch = null)
   {
     self::fetch($gitDir);
 
@@ -53,9 +53,9 @@ class GitCommand
         continue;
       }
 
-      $cmd = sprintf('git --git-dir="%s/.git" log origin/master..%s --format="%%P" | tail -1', $gitDir, $result);
+      $cmd = sprintf('git --git-dir="%s/.git" log %s..%s --format="%%P" | tail -1', $gitDir, $baseBranchName, $result);
       exec($cmd, $commitRef);
-      $noMerdegBranchesInfos[$result]['commit_reference'] = $commitRef[0];
+      $noMerdegBranchesInfos[$result]['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
       unset($commitRef);
 
       $cmd = sprintf('git --git-dir="%s/.git" log HEAD..%s --format="%%H" | head -1', $gitDir, $result);

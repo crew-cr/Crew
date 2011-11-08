@@ -9,8 +9,8 @@ class synchronizeAction extends sfAction
   public function execute($request)
   {
     $projectId = $request->getParameter('project');
+    $baseBranchName = 'origin/'.$request->getParameter('base-branch', 'master');
     $branchName = 'origin/'.$request->getParameter('branch');
-    $commit = $request->getParameter('commit'); // Dernier commit rapporté suite à un merge du master sur la branche
 
     $repository = RepositoryQuery::create()
       ->filterById($projectId)
@@ -27,24 +27,9 @@ class synchronizeAction extends sfAction
       $result = array();
       if($branch)
       {
-        if(strlen($commit) === 40)
-        {
-          $branch->setCommitReference($commit);
-          $branch->save();
-          $result['result'] = true;
-          $result['message'] = sprintf("Synchronization OK with new reference commit %s ", $commit);
-        }
-        else if(strlen($commit) == 0)
-        {
-          $result['result'] = true;
-          $result['message'] = sprintf("Synchronization OK without new reference commit");
-        }
-        else
-        {
-          $result['result'] = false;
-          $result['message'] = sprintf("No valid commit '%s'", $commit);
-        }
-        BranchPeer::synchronize($repository, $branch);
+        BranchPeer::synchronize($repository, $baseBranchName, $branch);
+        $result['result'] = true;
+        $result['message'] = sprintf("Synchronization OK [branch %s]", $branch);
       }
       else
       {
