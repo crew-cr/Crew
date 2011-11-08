@@ -8,9 +8,9 @@ class reviewStatusAction extends sfAction
    */
   public function execute($request)
   {
-    $projectId = $request->getParameter('project');
+    $projectId  = $request->getParameter('project-id');
     $branchName = 'origin/'.$request->getParameter('branch');
-    $commit = $request->getParameter('commit'); // Dernier commit effectué en local
+    $commit     = $request->getParameter('commit'); // Dernier commit effectué en local
 
     $branch = BranchQuery::create()
       ->filterByName($branchName)
