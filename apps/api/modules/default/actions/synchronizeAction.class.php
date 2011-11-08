@@ -19,22 +19,31 @@ class synchronizeAction extends sfAction
 
     if($repository)
     {
-      $branch = BranchQuery::create()
-        ->filterByName($branchName)
-        ->filterByRepositoryId($projectId)
-        ->findOne()
-      ;
-      $result = array();
-      if($branch)
+      if(is_null($branchName))
       {
-        BranchPeer::synchronize($repository, $baseBranchName, $branch);
+        BranchPeer::synchronize($repository);
         $result['result'] = true;
-        $result['message'] = sprintf("Synchronization OK [branch %s]", $branch);
+        $result['message'] = sprintf("Synchronization OK [all branches]");
       }
       else
       {
+        $branch = BranchQuery::create()
+          ->filterByName($branchName)
+          ->filterByRepositoryId($projectId)
+          ->findOne()
+        ;
+        $result = array();
+        if($branch)
+        {
+          BranchPeer::synchronize($repository, $baseBranchName, $branch);
+          $result['result'] = true;
+          $result['message'] = sprintf("Synchronization OK [branch %s]", $branch);
+        }
+        else
+        {
           $result['result'] = false;
           $result['message'] = sprintf("No valid Branch '%s' on project (id: %s)", $branchName, $projectId);
+        }
       }
     }
     else
