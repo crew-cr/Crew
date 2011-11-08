@@ -53,7 +53,7 @@ class GitCommand
         continue;
       }
 
-      $cmd = sprintf('git --git-dir="%s/.git" log %s..%s --format="%%P" | tail -1', $gitDir, $baseBranchName, $result);
+      $cmd = sprintf('git --git-dir="%s/.git" merge-base %s %s | head -1', $gitDir, $baseBranchName, $result);
       exec($cmd, $commitRef);
       $noMerdegBranchesInfos[$result]['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
       unset($commitRef);
