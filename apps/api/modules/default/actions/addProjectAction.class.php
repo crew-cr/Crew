@@ -8,9 +8,9 @@ class addProjectAction extends sfAction
    */
   public function execute($request)
   {
-    $result = array();
+    $result      = array();
     $projectName = $request->getParameter('name');
-    $remote = $request->getParameter('remote');
+    $remote      = $request->getParameter('remote');
     
     if($projectName && $remote)
     {

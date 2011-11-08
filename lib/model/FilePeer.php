@@ -35,6 +35,7 @@ class FilePeer extends BaseFilePeer {
 
     foreach ($filesModel as $fileModel)
     {
+      /** @var $fileModel File */
       if (!array_key_exists($fileModel->getFilename(), $filesGit))
       {
         $fileModel->delete();

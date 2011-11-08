@@ -8,9 +8,9 @@ class synchronizeAction extends sfAction
    */
   public function execute($request)
   {
-    $projectId = $request->getParameter('project');
+    $projectId      = $request->getParameter('project');
     $baseBranchName = 'origin/'.$request->getParameter('base-branch', 'master');
-    $branchName = 'origin/'.$request->getParameter('branch');
+    $branchName     = 'origin/'.$request->getParameter('branch');
 
     $repository = RepositoryQuery::create()
       ->filterById($projectId)
