@@ -42,7 +42,7 @@ class GitCommand
     }
     else
     {
-      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep %s', $gitDir, $branch);
+      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep %s | sed "s/ //g"', $gitDir, $branch);
     }
     exec($cmd, $results);
 

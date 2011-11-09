@@ -8,10 +8,10 @@ class reviewRequestAction extends sfAction
    */
   public function execute($request)
   {
-    $projectId = $request->getParameter('project');
+    $projectId      = $request->getParameter('project-id');
     $baseBranchName = 'origin/'.$request->getParameter('base-branch', 'master');
-    $branchName = 'origin/'.$request->getParameter('branch');
-    $commit = (string)$request->getParameter('commit'); //Dernier commit
+    $branchName     = 'origin/'.$request->getParameter('branch');
+    $commit         = (string)$request->getParameter('commit'); //Dernier commit
 
     $repository = RepositoryQuery::create()
       ->filterById($projectId)

@@ -15,6 +15,7 @@ class projectsAction extends sfAction
     $result = array();
     foreach($repositories as $repository)
     {
+      /** @var $repository Repository */
       $result[] = array(
         'id'         => $repository->getId(),
         'name'       => $repository->getName(),

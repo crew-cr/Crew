@@ -61,6 +61,7 @@ class BranchPeer extends BaseBranchPeer {
 
     foreach ($branchesModel as $branchModel)
     {
+      /** @var $branchModel Branch */
       if (!array_key_exists($branchModel->getName(), $branchesGit))
       {
         $branchModel->delete();
