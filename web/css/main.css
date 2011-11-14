@@ -281,6 +281,24 @@ button.safe:hover {
   text-align: right;
 }
 
+.view_infos span {
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 5px;
+  font-family: 'Droid sans', Arial, Helvetica, sans-serif;
+}
+
+.view_infos span.added {
+  color: #8d8;
+}
+
+.view_infos span.modified {
+  color: #aaa;
+}
+
+.view_infos span.deleted {
+  color: #d88;
+}
 
 .branch_infos
 {

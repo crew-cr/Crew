@@ -27,12 +27,16 @@ class branchListAction extends sfAction
     $this->branches = array();
     foreach ($branches as $branch)
     {
-      $filesCount = FileQuery::create()
-        ->filterByBranchId($branch->getId())
-        ->count()
-      ;
+      $addedFilesCount = FileQuery::create()->filterByBranchId($branch->getId())->filterByState(FilePeer::ADDED)->count();
+      $modifiedFilesCount = FileQuery::create()->filterByBranchId($branch->getId())->filterByState(FilePeer::MODIFIED)->count();
+      $deletedFilesCount = FileQuery::create()->filterByBranchId($branch->getId())->filterByState(FilePeer::DELETED)->count();
 
-      $this->branches[] = array_merge($branch->toArray(), array('NbFiles' => $filesCount));
+      $this->branches[] = array_merge($branch->toArray(), array(
+        'total' => $addedFilesCount + $modifiedFilesCount + $deletedFilesCount,
+        'added' => $addedFilesCount,
+        'modified' => $modifiedFilesCount,
+        'deleted' => $deletedFilesCount
+      ));
     }
 
     $this->statusActions = StatusActionQuery::create()

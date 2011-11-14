@@ -19,6 +19,10 @@
  */
 class FilePeer extends BaseFilePeer {
 
+  const ADDED    = 'A';
+  const MODIFIED = 'M';
+  const DELETED  = 'D';
+
   /**
    * @static
    * @param Branch $branch
