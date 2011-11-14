@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#globalCommentComponent').delegate('#globalComment', 'submit', function(e) {
+  $('#comment_component').delegate('#globalComment', 'submit', function(e) {
     e.preventDefault();
     var $this = $(this);
     $.ajax({
@@ -7,12 +7,12 @@ $(document).ready(function() {
       url: $this.attr('action'),
       data:$this.serialize(),
       success: function(json) {
-        $('#globalCommentComponent').html(json.html);
+        $('#comment_component').html(json.html);
       }
     });
   });
 
-  $('#globalCommentComponent').delegate('.delete', 'click', function(e) {
+  $('#comment_component').delegate('.delete', 'click', function(e) {
     e.preventDefault();
     if (confirm('Are you sure you want to delete this comment ?'))
     {
@@ -20,7 +20,7 @@ $(document).ready(function() {
         type: "POST",
         url: $(this).attr('data'),
         success: function(json) {
-          $('#globalCommentComponent').html(json.html);
+          $('#comment_component').html(json.html);
         }
       });
     }

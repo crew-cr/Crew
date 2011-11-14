@@ -27,7 +27,7 @@
       <?php endforeach; ?>
     </table>
   </div>
-  <div id="globalCommentComponent">
+  <div id="comment_component" class="comments_holder">
     <?php include_component('default', 'branchComment', array('branch' => $branch)); ?>
   </div>
 </div>

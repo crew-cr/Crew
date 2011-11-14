@@ -39,7 +39,7 @@
       </table>
     </div>
   </div>
-  <div id="globalCommentComponent">
+  <div id="comment_component" class="comments_holder">
     <?php include_component('default', 'fileComment', array('file' => $file)); ?>
   </div>
 </div>
