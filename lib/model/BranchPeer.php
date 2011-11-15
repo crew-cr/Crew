@@ -54,7 +54,6 @@ class BranchPeer extends BaseBranchPeer {
 
     $branchesModelQuery = BranchQuery::create()
       ->filterByRepositoryId($repository->getId())
-      ->filterByIsBlacklisted(0)
     ;
     if(!is_null($branch))
     {
@@ -68,6 +67,10 @@ class BranchPeer extends BaseBranchPeer {
       if (!array_key_exists($branchModel->getName(), $branchesGit))
       {
         $branchModel->delete();
+      }
+      elseif($branchModel->getIsBlacklisted())
+      {
+        unset($branchesGit[$branchModel->getName()]);
       }
       else
       {
