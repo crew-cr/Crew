@@ -23,7 +23,7 @@ class branchAddCommentAction extends sfAction
 
     $branchComment = new BranchComment();
     $branchComment
-      ->setUserId(1)
+      ->setUserId($this->getUser()->getGuardUser()->getId())
       ->setBranchId($branch->getId())
       ->setValue($comment['value'])
       ->save()
