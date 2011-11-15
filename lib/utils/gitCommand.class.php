@@ -38,11 +38,11 @@ class GitCommand
 
     if(is_null($branch))
     {
-      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep -v "*" | sed "s/ //g"', $gitDir);
+      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep -v "*" | sed "s/ //g"', $gitDir, $baseBranchName);
     }
     else
     {
-      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged | grep %s | sed "s/ //g"', $gitDir, $branch);
+      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep %s | sed "s/ //g"', $gitDir, $baseBranchName, $branch);
     }
     exec($cmd, $results);
 
