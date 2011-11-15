@@ -33,7 +33,7 @@ class reviewRequestAction extends sfAction
       {
         if(strlen($commit) === 40)
         {
-          if(!gitCommand::commitIsInHistory($repository->getValue(), $commit, $branch->getCommitStatusChanged()))
+          if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
           {
             $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
             $branch->setReviewRequest(1);
