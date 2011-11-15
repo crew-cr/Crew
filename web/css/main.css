@@ -374,6 +374,7 @@ button.safe:hover {
 }
 
 .data_head, .list_head {
+  border-bottom: 1px solid #CCC;
   padding: 0 5px;
   height: 28px;
   line-height: 30px;
@@ -416,7 +417,6 @@ button.safe:hover {
 }
 
 .data_body {
-  border-top: 1px solid #CCC;
   border-bottom: 1px solid #CCC;
   overflow: auto;
 }
