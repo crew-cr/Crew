@@ -45,6 +45,7 @@ class breadcrumbComponent extends sfComponent
 
       $criteria = BranchQuery::create()
         ->filterByRepositoryId($repository->getId())
+        ->filterByIsBlacklisted(0)
       ;
     }
     else if($widgetDefault = $request->getParameter('file'))
@@ -71,7 +72,7 @@ class breadcrumbComponent extends sfComponent
 
       $this->links = array(
         array(
-          'label' => $repository->getName(),
+          'label' => $repository->__toString(),
           'url' => 'default/branchList?repository=' . $repository->getId(),
           'class' => 'repository'
         ),
