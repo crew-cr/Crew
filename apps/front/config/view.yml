@@ -17,6 +17,7 @@ default:
 
   javascripts:
     - vendor/jquery/jquery-1.6.4.min.js
+    - vendor/jquery.fracs.js
     - toggleState.js
     - context.js
     - globalComment.js

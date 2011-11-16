@@ -1,3 +1,4 @@
+<canvas id="outline" width="50" height="700" style="position: fixed;"></canvas>
 <div class="file_bloc">
   <div class="data">
     <div class="data_head">
