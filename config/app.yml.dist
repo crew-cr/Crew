@@ -1,2 +1,5 @@
 all:
   projects_repository: '/path/to/store/repo/.Crew-repositories/' # Apache must be able to write in
+  sf_guard_plugin:
+    profile_class:      profile
+    profile_field_name: sf_guard_user_id

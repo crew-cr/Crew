@@ -6,7 +6,7 @@
           <?php foreach ($globalComments as $globalComment) : ?>
           <div class="comment">
             <div class="comment_user">
-              <?php echo sprintf("<span><strong>%s</strong> %s</span>", $globalComment->getsfGuardUser(), $globalComment->getUpdatedAt('d/m/Y H\hi')) ?>
+              <?php echo sprintf("<span><strong>%s</strong> %s</span>", $globalComment->getAuthorName(), $globalComment->getUpdatedAt('d/m/Y H\hi')) ?>
               <?php echo $userId === $globalComment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/fileDeleteComment'), $globalComment->getId()) : '' ?>
             </div>
             <div class="comment_body"><?php echo nl2br(sprintf("%s", $globalComment->getValue())) ?></div>

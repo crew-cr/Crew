@@ -102,6 +102,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	protected $collLineComments;
 
 	/**
+	 * @var        array Profile[] Collection to store aggregation of Profile objects.
+	 */
+	protected $collProfiles;
+
+	/**
 	 * @var        array StatusAction[] Collection to store aggregation of StatusAction objects.
 	 */
 	protected $collStatusActions;
@@ -673,6 +678,8 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 			$this->collLineComments = null;
 
+			$this->collProfiles = null;
+
 			$this->collStatusActions = null;
 
 			$this->collsfGuardUserPermissions = null;
@@ -886,6 +893,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->collProfiles !== null) {
+				foreach ($this->collProfiles as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collStatusActions !== null) {
 				foreach ($this->collStatusActions as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -1015,6 +1030,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 				if ($this->collLineComments !== null) {
 					foreach ($this->collLineComments as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collProfiles !== null) {
+					foreach ($this->collProfiles as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1352,6 +1375,12 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			foreach ($this->getLineComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addLineComment($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getProfiles() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addProfile($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1958,6 +1987,115 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		$query->joinWith('File', $join_behavior);
 
 		return $this->getLineComments($query, $con);
+	}
+
+	/**
+	 * Clears out the collProfiles collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addProfiles()
+	 */
+	public function clearProfiles()
+	{
+		$this->collProfiles = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collProfiles collection.
+	 *
+	 * By default this just sets the collProfiles collection to an empty array (like clearcollProfiles());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initProfiles()
+	{
+		$this->collProfiles = new PropelObjectCollection();
+		$this->collProfiles->setModel('Profile');
+	}
+
+	/**
+	 * Gets an array of Profile objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this sfGuardUser is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array Profile[] List of Profile objects
+	 * @throws     PropelException
+	 */
+	public function getProfiles($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collProfiles || null !== $criteria) {
+			if ($this->isNew() && null === $this->collProfiles) {
+				// return empty collection
+				$this->initProfiles();
+			} else {
+				$collProfiles = ProfileQuery::create(null, $criteria)
+					->filterBysfGuardUser($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collProfiles;
+				}
+				$this->collProfiles = $collProfiles;
+			}
+		}
+		return $this->collProfiles;
+	}
+
+	/**
+	 * Returns the number of related Profile objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Profile objects.
+	 * @throws     PropelException
+	 */
+	public function countProfiles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collProfiles || null !== $criteria) {
+			if ($this->isNew() && null === $this->collProfiles) {
+				return 0;
+			} else {
+				$query = ProfileQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterBysfGuardUser($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collProfiles);
+		}
+	}
+
+	/**
+	 * Method called to associate a Profile object to this object
+	 * through the Profile foreign key attribute.
+	 *
+	 * @param      Profile $l Profile
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addProfile(Profile $l)
+	{
+		if ($this->collProfiles === null) {
+			$this->initProfiles();
+		}
+		if (!$this->collProfiles->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collProfiles[]= $l;
+			$l->setsfGuardUser($this);
+		}
 	}
 
 	/**
@@ -2576,6 +2714,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collProfiles) {
+				foreach ((array) $this->collProfiles as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collStatusActions) {
 				foreach ((array) $this->collStatusActions as $o) {
 					$o->clearAllReferences($deep);
@@ -2602,6 +2745,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		$this->collBranchComments = null;
 		$this->collFileComments = null;
 		$this->collLineComments = null;
+		$this->collProfiles = null;
 		$this->collStatusActions = null;
 		$this->collsfGuardUserPermissions = null;
 		$this->collsfGuardUserGroups = null;

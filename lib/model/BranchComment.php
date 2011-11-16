@@ -18,5 +18,8 @@
  * @package    propel.generator.lib.model
  */
 class BranchComment extends BaseBranchComment {
-
+  public function getAuthorName()
+  {
+    return $this->getsfGuardUser()->getProfile()->__toString();
+  }
 } // BranchComment

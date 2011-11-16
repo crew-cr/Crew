@@ -23,7 +23,7 @@ class fileAddCommentAction extends sfAction
 
     $branchComment = new FileComment();
     $branchComment
-      ->setUserId($this->getUser()->getGuardUser()->getId())
+      ->setUserId($this->getUser()->getId())
       ->setFileId($file->getId())
       ->setValue($comment['value'])
       ->save()

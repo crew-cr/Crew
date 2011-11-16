@@ -27,7 +27,7 @@ class branchBlacklistAction extends sfAction
     ;
 
     Branch::saveAction(
-      $this->getUser()->getGuardUser()->getId(),
+      $this->getUser()->getId(),
       $branch->getRepositoryId(),
       $branch->getId(),
       $oldtStatus,

@@ -18,5 +18,8 @@
  * @package    propel.generator.lib.model
  */
 class FileComment extends BaseFileComment {
-
+  public function getAuthorName()
+  {
+    return $this->getsfGuardUser()->getProfile()->__toString();
+  }
 } // FileComment

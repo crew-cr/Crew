@@ -57,6 +57,12 @@ propel:
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { line_comment_FI_1: [user_id], line_comment_FI_2: [file_id] }
+  profile:
+    _attributes:
+    id:                               ~
+    nickname:                         { type: VARCHAR, size: '255' }
+    email:                            { type: VARCHAR, size: '255' }
+    sf_guard_user_id:                 { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
   repository:
     _attributes:
     id:                               ~

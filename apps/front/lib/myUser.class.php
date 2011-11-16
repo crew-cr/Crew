@@ -4,6 +4,11 @@ class myUser extends sfGuardSecurityUser
 {
   public function __toString()
   {
-    return $this->getUsername();
+    return $this->getProfile()->__toString();
+  }
+
+  public function getId()
+  {
+    return $this->getGuardUser()->getId();
   }
 }

@@ -3,7 +3,7 @@
 
 
 /**
- * Skeleton subclass for representing a row from the 'status_action' table.
+ * Skeleton subclass for representing a row from the 'profile' table.
  *
  * 
  *
@@ -13,9 +13,9 @@
  *
  * @package    propel.generator.lib.model
  */
-class StatusAction extends BaseStatusAction {
-  public function getAuthorName()
+class Profile extends BaseProfile {
+  public function __toString()
   {
-    return $this->getsfGuardUser()->getProfile()->__toString();
+    return ($this->getNickname() != '') ? $this->getNickname() : $this->getsfGuardUser()->getUsername();
   }
-} // StatusAction
+} // Profile

@@ -13,7 +13,7 @@ class branchCommentComponent extends sfComponent
       ->find()
     ;
 
-    $this->userId = $this->getUser()->getGuardUser()->getId();
+    $this->userId = $this->getUser()->getId();
 
     $this->form = new BranchCommentForm(null, array('branch' => $this->branch->getId()));
   }

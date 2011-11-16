@@ -18,5 +18,8 @@
  * @package    propel.generator.lib.model
  */
 class LineComment extends BaseLineComment {
-
+  public function getAuthorName()
+  {
+    return $this->getsfGuardUser()->getProfile()->__toString();
+  }
 } // LineComment

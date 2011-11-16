@@ -33,7 +33,7 @@ class lineAddCommentAction extends sfAction
         // new lineComment object
         $lineComment = new LineComment();
         $lineComment
-          ->setUserId($this->getUser()->getGuardUser()->getId())
+          ->setUserId($this->getUser()->getId())
           ->setCommit($datas['commit'])
           ->setFileId($datas['file_id'])
           ->setPosition($datas['position'])
