@@ -32,6 +32,8 @@ propel:
     state:                            { type: CHAR, size: '1', required: true }
     filename:                         { type: VARCHAR, size: '255', required: true }
     last_change_commit:               { type: VARCHAR, size: '50', required: false }
+    last_change_commit_desc:          { type: VARCHAR, size: '255', required: false }
+    last_change_commit_user:          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }
     status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
     commit_status_changed:            { type: VARCHAR, size: '50', required: false }
     user_status_changed:              { type: INTEGER, size: '11', required: false }

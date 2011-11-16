@@ -92,6 +92,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	protected $collBranchComments;
 
 	/**
+	 * @var        array File[] Collection to store aggregation of File objects.
+	 */
+	protected $collFiles;
+
+	/**
 	 * @var        array FileComment[] Collection to store aggregation of FileComment objects.
 	 */
 	protected $collFileComments;
@@ -674,6 +679,8 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 			$this->collBranchComments = null;
 
+			$this->collFiles = null;
+
 			$this->collFileComments = null;
 
 			$this->collLineComments = null;
@@ -877,6 +884,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->collFiles !== null) {
+				foreach ($this->collFiles as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
 			if ($this->collFileComments !== null) {
 				foreach ($this->collFileComments as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
@@ -1014,6 +1029,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 				if ($this->collBranchComments !== null) {
 					foreach ($this->collBranchComments as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collFiles !== null) {
+					foreach ($this->collFiles as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1363,6 +1386,12 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			foreach ($this->getBranchComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addBranchComment($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getFiles() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addFile($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1719,6 +1748,140 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		$query->joinWith('Branch', $join_behavior);
 
 		return $this->getBranchComments($query, $con);
+	}
+
+	/**
+	 * Clears out the collFiles collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addFiles()
+	 */
+	public function clearFiles()
+	{
+		$this->collFiles = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collFiles collection.
+	 *
+	 * By default this just sets the collFiles collection to an empty array (like clearcollFiles());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @return     void
+	 */
+	public function initFiles()
+	{
+		$this->collFiles = new PropelObjectCollection();
+		$this->collFiles->setModel('File');
+	}
+
+	/**
+	 * Gets an array of File objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this sfGuardUser is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array File[] List of File objects
+	 * @throws     PropelException
+	 */
+	public function getFiles($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collFiles || null !== $criteria) {
+			if ($this->isNew() && null === $this->collFiles) {
+				// return empty collection
+				$this->initFiles();
+			} else {
+				$collFiles = FileQuery::create(null, $criteria)
+					->filterBysfGuardUser($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collFiles;
+				}
+				$this->collFiles = $collFiles;
+			}
+		}
+		return $this->collFiles;
+	}
+
+	/**
+	 * Returns the number of related File objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related File objects.
+	 * @throws     PropelException
+	 */
+	public function countFiles(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collFiles || null !== $criteria) {
+			if ($this->isNew() && null === $this->collFiles) {
+				return 0;
+			} else {
+				$query = FileQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterBysfGuardUser($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collFiles);
+		}
+	}
+
+	/**
+	 * Method called to associate a File object to this object
+	 * through the File foreign key attribute.
+	 *
+	 * @param      File $l File
+	 * @return     void
+	 * @throws     PropelException
+	 */
+	public function addFile(File $l)
+	{
+		if ($this->collFiles === null) {
+			$this->initFiles();
+		}
+		if (!$this->collFiles->contains($l)) { // only add it if the **same** object is not already associated
+			$this->collFiles[]= $l;
+			$l->setsfGuardUser($this);
+		}
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfGuardUser is new, it will return
+	 * an empty collection; or if this sfGuardUser has previously
+	 * been saved, it will retrieve related Files from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfGuardUser.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array File[] List of File objects
+	 */
+	public function getFilesJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = FileQuery::create(null, $criteria);
+		$query->joinWith('Branch', $join_behavior);
+
+		return $this->getFiles($query, $con);
 	}
 
 	/**
@@ -2704,6 +2867,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					$o->clearAllReferences($deep);
 				}
 			}
+			if ($this->collFiles) {
+				foreach ((array) $this->collFiles as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collFileComments) {
 				foreach ((array) $this->collFileComments as $o) {
 					$o->clearAllReferences($deep);
@@ -2743,6 +2911,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 		$this->collBranchs = null;
 		$this->collBranchComments = null;
+		$this->collFiles = null;
 		$this->collFileComments = null;
 		$this->collLineComments = null;
 		$this->collProfiles = null;

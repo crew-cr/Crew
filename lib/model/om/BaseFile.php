@@ -55,6 +55,18 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	protected $last_change_commit;
 
 	/**
+	 * The value for the last_change_commit_desc field.
+	 * @var        string
+	 */
+	protected $last_change_commit_desc;
+
+	/**
+	 * The value for the last_change_commit_user field.
+	 * @var        int
+	 */
+	protected $last_change_commit_user;
+
+	/**
 	 * The value for the status field.
 	 * Note: this column has a database default value of: 0
 	 * @var        int
@@ -83,6 +95,11 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 * @var        Branch
 	 */
 	protected $aBranch;
+
+	/**
+	 * @var        sfGuardUser
+	 */
+	protected $asfGuardUser;
 
 	/**
 	 * @var        array FileComment[] Collection to store aggregation of FileComment objects.
@@ -182,6 +199,26 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	public function getLastChangeCommit()
 	{
 		return $this->last_change_commit;
+	}
+
+	/**
+	 * Get the [last_change_commit_desc] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getLastChangeCommitDesc()
+	{
+		return $this->last_change_commit_desc;
+	}
+
+	/**
+	 * Get the [last_change_commit_user] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getLastChangeCommitUser()
+	{
+		return $this->last_change_commit_user;
 	}
 
 	/**
@@ -357,6 +394,50 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	} // setLastChangeCommit()
 
 	/**
+	 * Set the value of [last_change_commit_desc] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     File The current object (for fluent API support)
+	 */
+	public function setLastChangeCommitDesc($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->last_change_commit_desc !== $v) {
+			$this->last_change_commit_desc = $v;
+			$this->modifiedColumns[] = FilePeer::LAST_CHANGE_COMMIT_DESC;
+		}
+
+		return $this;
+	} // setLastChangeCommitDesc()
+
+	/**
+	 * Set the value of [last_change_commit_user] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     File The current object (for fluent API support)
+	 */
+	public function setLastChangeCommitUser($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->last_change_commit_user !== $v) {
+			$this->last_change_commit_user = $v;
+			$this->modifiedColumns[] = FilePeer::LAST_CHANGE_COMMIT_USER;
+		}
+
+		if ($this->asfGuardUser !== null && $this->asfGuardUser->getId() !== $v) {
+			$this->asfGuardUser = null;
+		}
+
+		return $this;
+	} // setLastChangeCommitUser()
+
+	/**
 	 * Set the value of [status] column.
 	 * 
 	 * @param      int $v new value
@@ -506,10 +587,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			$this->state = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->filename = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
 			$this->last_change_commit = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->status = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->commit_status_changed = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->user_status_changed = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->date_status_changed = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->last_change_commit_desc = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->last_change_commit_user = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->status = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+			$this->commit_status_changed = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->user_status_changed = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->date_status_changed = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -518,7 +601,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = FilePeer::NUM_COLUMNS - FilePeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 11; // 11 = FilePeer::NUM_COLUMNS - FilePeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating File object", $e);
@@ -543,6 +626,9 @@ abstract class BaseFile extends BaseObject  implements Persistent
 
 		if ($this->aBranch !== null && $this->branch_id !== $this->aBranch->getId()) {
 			$this->aBranch = null;
+		}
+		if ($this->asfGuardUser !== null && $this->last_change_commit_user !== $this->asfGuardUser->getId()) {
+			$this->asfGuardUser = null;
 		}
 	} // ensureConsistency
 
@@ -584,6 +670,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($deep) {  // also de-associate any related objects?
 
 			$this->aBranch = null;
+			$this->asfGuardUser = null;
 			$this->collFileComments = null;
 
 			$this->collLineComments = null;
@@ -744,6 +831,13 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->setBranch($this->aBranch);
 			}
 
+			if ($this->asfGuardUser !== null) {
+				if ($this->asfGuardUser->isModified() || $this->asfGuardUser->isNew()) {
+					$affectedRows += $this->asfGuardUser->save($con);
+				}
+				$this->setsfGuardUser($this->asfGuardUser);
+			}
+
 			if ($this->isNew() ) {
 				$this->modifiedColumns[] = FilePeer::ID;
 			}
@@ -868,6 +962,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->asfGuardUser !== null) {
+				if (!$this->asfGuardUser->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->asfGuardUser->getValidationFailures());
+				}
+			}
+
 
 			if (($retval = FilePeer::doValidate($this, $columns)) !== true) {
 				$failureMap = array_merge($failureMap, $retval);
@@ -947,15 +1047,21 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				return $this->getLastChangeCommit();
 				break;
 			case 5:
-				return $this->getStatus();
+				return $this->getLastChangeCommitDesc();
 				break;
 			case 6:
-				return $this->getCommitStatusChanged();
+				return $this->getLastChangeCommitUser();
 				break;
 			case 7:
-				return $this->getUserStatusChanged();
+				return $this->getStatus();
 				break;
 			case 8:
+				return $this->getCommitStatusChanged();
+				break;
+			case 9:
+				return $this->getUserStatusChanged();
+				break;
+			case 10:
 				return $this->getDateStatusChanged();
 				break;
 			default:
@@ -987,14 +1093,19 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			$keys[2] => $this->getState(),
 			$keys[3] => $this->getFilename(),
 			$keys[4] => $this->getLastChangeCommit(),
-			$keys[5] => $this->getStatus(),
-			$keys[6] => $this->getCommitStatusChanged(),
-			$keys[7] => $this->getUserStatusChanged(),
-			$keys[8] => $this->getDateStatusChanged(),
+			$keys[5] => $this->getLastChangeCommitDesc(),
+			$keys[6] => $this->getLastChangeCommitUser(),
+			$keys[7] => $this->getStatus(),
+			$keys[8] => $this->getCommitStatusChanged(),
+			$keys[9] => $this->getUserStatusChanged(),
+			$keys[10] => $this->getDateStatusChanged(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aBranch) {
 				$result['Branch'] = $this->aBranch->toArray($keyType, $includeLazyLoadColumns, true);
+			}
+			if (null !== $this->asfGuardUser) {
+				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns, true);
 			}
 		}
 		return $result;
@@ -1043,15 +1154,21 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->setLastChangeCommit($value);
 				break;
 			case 5:
-				$this->setStatus($value);
+				$this->setLastChangeCommitDesc($value);
 				break;
 			case 6:
-				$this->setCommitStatusChanged($value);
+				$this->setLastChangeCommitUser($value);
 				break;
 			case 7:
-				$this->setUserStatusChanged($value);
+				$this->setStatus($value);
 				break;
 			case 8:
+				$this->setCommitStatusChanged($value);
+				break;
+			case 9:
+				$this->setUserStatusChanged($value);
+				break;
+			case 10:
 				$this->setDateStatusChanged($value);
 				break;
 		} // switch()
@@ -1083,10 +1200,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if (array_key_exists($keys[2], $arr)) $this->setState($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setFilename($arr[$keys[3]]);
 		if (array_key_exists($keys[4], $arr)) $this->setLastChangeCommit($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setStatus($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setCommitStatusChanged($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setUserStatusChanged($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setDateStatusChanged($arr[$keys[8]]);
+		if (array_key_exists($keys[5], $arr)) $this->setLastChangeCommitDesc($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setLastChangeCommitUser($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setStatus($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setCommitStatusChanged($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setUserStatusChanged($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setDateStatusChanged($arr[$keys[10]]);
 	}
 
 	/**
@@ -1103,6 +1222,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($this->isColumnModified(FilePeer::STATE)) $criteria->add(FilePeer::STATE, $this->state);
 		if ($this->isColumnModified(FilePeer::FILENAME)) $criteria->add(FilePeer::FILENAME, $this->filename);
 		if ($this->isColumnModified(FilePeer::LAST_CHANGE_COMMIT)) $criteria->add(FilePeer::LAST_CHANGE_COMMIT, $this->last_change_commit);
+		if ($this->isColumnModified(FilePeer::LAST_CHANGE_COMMIT_DESC)) $criteria->add(FilePeer::LAST_CHANGE_COMMIT_DESC, $this->last_change_commit_desc);
+		if ($this->isColumnModified(FilePeer::LAST_CHANGE_COMMIT_USER)) $criteria->add(FilePeer::LAST_CHANGE_COMMIT_USER, $this->last_change_commit_user);
 		if ($this->isColumnModified(FilePeer::STATUS)) $criteria->add(FilePeer::STATUS, $this->status);
 		if ($this->isColumnModified(FilePeer::COMMIT_STATUS_CHANGED)) $criteria->add(FilePeer::COMMIT_STATUS_CHANGED, $this->commit_status_changed);
 		if ($this->isColumnModified(FilePeer::USER_STATUS_CHANGED)) $criteria->add(FilePeer::USER_STATUS_CHANGED, $this->user_status_changed);
@@ -1172,6 +1293,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$copyObj->setState($this->state);
 		$copyObj->setFilename($this->filename);
 		$copyObj->setLastChangeCommit($this->last_change_commit);
+		$copyObj->setLastChangeCommitDesc($this->last_change_commit_desc);
+		$copyObj->setLastChangeCommitUser($this->last_change_commit_user);
 		$copyObj->setStatus($this->status);
 		$copyObj->setCommitStatusChanged($this->commit_status_changed);
 		$copyObj->setUserStatusChanged($this->user_status_changed);
@@ -1292,6 +1415,55 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			 */
 		}
 		return $this->aBranch;
+	}
+
+	/**
+	 * Declares an association between this object and a sfGuardUser object.
+	 *
+	 * @param      sfGuardUser $v
+	 * @return     File The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setsfGuardUser(sfGuardUser $v = null)
+	{
+		if ($v === null) {
+			$this->setLastChangeCommitUser(NULL);
+		} else {
+			$this->setLastChangeCommitUser($v->getId());
+		}
+
+		$this->asfGuardUser = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the sfGuardUser object, it will not be re-added.
+		if ($v !== null) {
+			$v->addFile($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated sfGuardUser object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     sfGuardUser The associated sfGuardUser object.
+	 * @throws     PropelException
+	 */
+	public function getsfGuardUser(PropelPDO $con = null)
+	{
+		if ($this->asfGuardUser === null && ($this->last_change_commit_user !== null)) {
+			$this->asfGuardUser = sfGuardUserQuery::create()->findPk($this->last_change_commit_user, $con);
+			/* The following can be used additionally to
+				 guarantee the related object contains a reference
+				 to this object.  This level of coupling may, however, be
+				 undesirable since it could result in an only partially populated collection
+				 in the referenced object.
+				 $this->asfGuardUser->addFiles($this);
+			 */
+		}
+		return $this->asfGuardUser;
 	}
 
 	/**
@@ -1756,6 +1928,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$this->state = null;
 		$this->filename = null;
 		$this->last_change_commit = null;
+		$this->last_change_commit_desc = null;
+		$this->last_change_commit_user = null;
 		$this->status = null;
 		$this->commit_status_changed = null;
 		$this->user_status_changed = null;
@@ -1802,6 +1976,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$this->collLineComments = null;
 		$this->collStatusActions = null;
 		$this->aBranch = null;
+		$this->asfGuardUser = null;
 	}
 
 	/**

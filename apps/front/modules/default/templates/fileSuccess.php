@@ -2,7 +2,10 @@
 <div class="file_bloc">
   <div class="data">
     <div class="data_head">
-      File content
+      <span title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
+        <?php if($file->getsfGuardUser()):?><strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : <?php endif; ?>
+        <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
+      </span>
       <div class="right status">
             <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-valid '. ($file->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
             <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-invalid '. ($file->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>

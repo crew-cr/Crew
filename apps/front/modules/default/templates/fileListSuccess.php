@@ -14,7 +14,7 @@
           <span class="state_<?php echo $file['State'] ?>" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>"><?php echo $file['State'] ?></span>
         </td>
         <td>
-          <h3><?php echo link_to(stringUtils::lshorten($file['Filename']), 'default/file', array('title' => $file['Filename'], 'query_string' => 'file='.$file['Id'])) ?></h3>
+          <h3><?php echo link_to(stringUtils::lshorten($file['Filename']), 'default/file', array('title' => stringUtils::trimTicketInfos($file['LastChangeCommitDesc']), 'query_string' => 'file='.$file['Id'])) ?></h3>
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>

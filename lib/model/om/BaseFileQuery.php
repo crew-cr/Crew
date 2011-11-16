@@ -11,6 +11,8 @@
  * @method     FileQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method     FileQuery orderByFilename($order = Criteria::ASC) Order by the filename column
  * @method     FileQuery orderByLastChangeCommit($order = Criteria::ASC) Order by the last_change_commit column
+ * @method     FileQuery orderByLastChangeCommitDesc($order = Criteria::ASC) Order by the last_change_commit_desc column
+ * @method     FileQuery orderByLastChangeCommitUser($order = Criteria::ASC) Order by the last_change_commit_user column
  * @method     FileQuery orderByStatus($order = Criteria::ASC) Order by the status column
  * @method     FileQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
  * @method     FileQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
@@ -21,6 +23,8 @@
  * @method     FileQuery groupByState() Group by the state column
  * @method     FileQuery groupByFilename() Group by the filename column
  * @method     FileQuery groupByLastChangeCommit() Group by the last_change_commit column
+ * @method     FileQuery groupByLastChangeCommitDesc() Group by the last_change_commit_desc column
+ * @method     FileQuery groupByLastChangeCommitUser() Group by the last_change_commit_user column
  * @method     FileQuery groupByStatus() Group by the status column
  * @method     FileQuery groupByCommitStatusChanged() Group by the commit_status_changed column
  * @method     FileQuery groupByUserStatusChanged() Group by the user_status_changed column
@@ -33,6 +37,10 @@
  * @method     FileQuery leftJoinBranch($relationAlias = null) Adds a LEFT JOIN clause to the query using the Branch relation
  * @method     FileQuery rightJoinBranch($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Branch relation
  * @method     FileQuery innerJoinBranch($relationAlias = null) Adds a INNER JOIN clause to the query using the Branch relation
+ *
+ * @method     FileQuery leftJoinsfGuardUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the sfGuardUser relation
+ * @method     FileQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
+ * @method     FileQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
  *
  * @method     FileQuery leftJoinFileComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the FileComment relation
  * @method     FileQuery rightJoinFileComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FileComment relation
@@ -54,6 +62,8 @@
  * @method     File findOneByState(string $state) Return the first File filtered by the state column
  * @method     File findOneByFilename(string $filename) Return the first File filtered by the filename column
  * @method     File findOneByLastChangeCommit(string $last_change_commit) Return the first File filtered by the last_change_commit column
+ * @method     File findOneByLastChangeCommitDesc(string $last_change_commit_desc) Return the first File filtered by the last_change_commit_desc column
+ * @method     File findOneByLastChangeCommitUser(int $last_change_commit_user) Return the first File filtered by the last_change_commit_user column
  * @method     File findOneByStatus(int $status) Return the first File filtered by the status column
  * @method     File findOneByCommitStatusChanged(string $commit_status_changed) Return the first File filtered by the commit_status_changed column
  * @method     File findOneByUserStatusChanged(int $user_status_changed) Return the first File filtered by the user_status_changed column
@@ -64,6 +74,8 @@
  * @method     array findByState(string $state) Return File objects filtered by the state column
  * @method     array findByFilename(string $filename) Return File objects filtered by the filename column
  * @method     array findByLastChangeCommit(string $last_change_commit) Return File objects filtered by the last_change_commit column
+ * @method     array findByLastChangeCommitDesc(string $last_change_commit_desc) Return File objects filtered by the last_change_commit_desc column
+ * @method     array findByLastChangeCommitUser(int $last_change_commit_user) Return File objects filtered by the last_change_commit_user column
  * @method     array findByStatus(int $status) Return File objects filtered by the status column
  * @method     array findByCommitStatusChanged(string $commit_status_changed) Return File objects filtered by the commit_status_changed column
  * @method     array findByUserStatusChanged(int $user_status_changed) Return File objects filtered by the user_status_changed column
@@ -292,6 +304,59 @@ abstract class BaseFileQuery extends ModelCriteria
 	}
 
 	/**
+	 * Filter the query on the last_change_commit_desc column
+	 * 
+	 * @param     string $lastChangeCommitDesc The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterByLastChangeCommitDesc($lastChangeCommitDesc = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($lastChangeCommitDesc)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $lastChangeCommitDesc)) {
+				$lastChangeCommitDesc = str_replace('*', '%', $lastChangeCommitDesc);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_DESC, $lastChangeCommitDesc, $comparison);
+	}
+
+	/**
+	 * Filter the query on the last_change_commit_user column
+	 * 
+	 * @param     int|array $lastChangeCommitUser The value to use as filter.
+	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterByLastChangeCommitUser($lastChangeCommitUser = null, $comparison = null)
+	{
+		if (is_array($lastChangeCommitUser)) {
+			$useMinMax = false;
+			if (isset($lastChangeCommitUser['min'])) {
+				$this->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $lastChangeCommitUser['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($lastChangeCommitUser['max'])) {
+				$this->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $lastChangeCommitUser['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $lastChangeCommitUser, $comparison);
+	}
+
+	/**
 	 * Filter the query on the status column
 	 * 
 	 * @param     int|array $status The value to use as filter.
@@ -468,6 +533,70 @@ abstract class BaseFileQuery extends ModelCriteria
 		return $this
 			->joinBranch($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'Branch', 'BranchQuery');
+	}
+
+	/**
+	 * Filter the query by a related sfGuardUser object
+	 *
+	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
+	{
+		return $this
+			->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $sfGuardUser->getId(), $comparison);
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the sfGuardUser relation
+	 * 
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function joinsfGuardUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('sfGuardUser');
+		
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+		
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'sfGuardUser');
+		}
+		
+		return $this;
+	}
+
+	/**
+	 * Use the sfGuardUser relation sfGuardUser object
+	 *
+	 * @see       useQuery()
+	 * 
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    sfGuardUserQuery A secondary query class using the current class as primary query
+	 */
+	public function usesfGuardUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		return $this
+			->joinsfGuardUser($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'sfGuardUser', 'sfGuardUserQuery');
 	}
 
 	/**

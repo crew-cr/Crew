@@ -74,4 +74,19 @@ class File extends BaseFile
       ->save()
     ;
   }
+
+  public function setCommitInfos($commitInfos)
+  {
+    $explodedInfos = (strlen($commitInfos) > 0) ? explode(' ', $commitInfos, 2) : array();
+    if(count($explodedInfos) == 2)
+    {
+      $this->setLastChangeCommitDesc($explodedInfos[1]);
+      $profile = ProfilePeer::getProfileByEmail($explodedInfos[0]);
+      if($profile)
+      {
+        $this->setLastChangeCommitUser($profile->getSfGuardUserId());
+      }
+    }
+    return $this;
+  }
 } // File

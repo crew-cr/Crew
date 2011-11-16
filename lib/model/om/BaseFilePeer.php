@@ -26,7 +26,7 @@ abstract class BaseFilePeer {
 	const TM_CLASS = 'FileTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 9;
+	const NUM_COLUMNS = 11;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -45,6 +45,12 @@ abstract class BaseFilePeer {
 
 	/** the column name for the LAST_CHANGE_COMMIT field */
 	const LAST_CHANGE_COMMIT = 'file.LAST_CHANGE_COMMIT';
+
+	/** the column name for the LAST_CHANGE_COMMIT_DESC field */
+	const LAST_CHANGE_COMMIT_DESC = 'file.LAST_CHANGE_COMMIT_DESC';
+
+	/** the column name for the LAST_CHANGE_COMMIT_USER field */
+	const LAST_CHANGE_COMMIT_USER = 'file.LAST_CHANGE_COMMIT_USER';
 
 	/** the column name for the STATUS field */
 	const STATUS = 'file.STATUS';
@@ -81,12 +87,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'LastChangeCommit', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'lastChangeCommit', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::LAST_CHANGE_COMMIT, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'LAST_CHANGE_COMMIT', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'last_change_commit', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'LastChangeCommit', 'LastChangeCommitDesc', 'LastChangeCommitUser', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'lastChangeCommit', 'lastChangeCommitDesc', 'lastChangeCommitUser', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::LAST_CHANGE_COMMIT, self::LAST_CHANGE_COMMIT_DESC, self::LAST_CHANGE_COMMIT_USER, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'LAST_CHANGE_COMMIT', 'LAST_CHANGE_COMMIT_DESC', 'LAST_CHANGE_COMMIT_USER', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'last_change_commit', 'last_change_commit_desc', 'last_change_commit_user', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
 	/**
@@ -96,12 +102,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'LastChangeCommit' => 4, 'Status' => 5, 'CommitStatusChanged' => 6, 'UserStatusChanged' => 7, 'DateStatusChanged' => 8, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'lastChangeCommit' => 4, 'status' => 5, 'commitStatusChanged' => 6, 'userStatusChanged' => 7, 'dateStatusChanged' => 8, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::LAST_CHANGE_COMMIT => 4, self::STATUS => 5, self::COMMIT_STATUS_CHANGED => 6, self::USER_STATUS_CHANGED => 7, self::DATE_STATUS_CHANGED => 8, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'LAST_CHANGE_COMMIT' => 4, 'STATUS' => 5, 'COMMIT_STATUS_CHANGED' => 6, 'USER_STATUS_CHANGED' => 7, 'DATE_STATUS_CHANGED' => 8, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'last_change_commit' => 4, 'status' => 5, 'commit_status_changed' => 6, 'user_status_changed' => 7, 'date_status_changed' => 8, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'LastChangeCommit' => 4, 'LastChangeCommitDesc' => 5, 'LastChangeCommitUser' => 6, 'Status' => 7, 'CommitStatusChanged' => 8, 'UserStatusChanged' => 9, 'DateStatusChanged' => 10, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'lastChangeCommit' => 4, 'lastChangeCommitDesc' => 5, 'lastChangeCommitUser' => 6, 'status' => 7, 'commitStatusChanged' => 8, 'userStatusChanged' => 9, 'dateStatusChanged' => 10, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::LAST_CHANGE_COMMIT => 4, self::LAST_CHANGE_COMMIT_DESC => 5, self::LAST_CHANGE_COMMIT_USER => 6, self::STATUS => 7, self::COMMIT_STATUS_CHANGED => 8, self::USER_STATUS_CHANGED => 9, self::DATE_STATUS_CHANGED => 10, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'LAST_CHANGE_COMMIT' => 4, 'LAST_CHANGE_COMMIT_DESC' => 5, 'LAST_CHANGE_COMMIT_USER' => 6, 'STATUS' => 7, 'COMMIT_STATUS_CHANGED' => 8, 'USER_STATUS_CHANGED' => 9, 'DATE_STATUS_CHANGED' => 10, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'last_change_commit' => 4, 'last_change_commit_desc' => 5, 'last_change_commit_user' => 6, 'status' => 7, 'commit_status_changed' => 8, 'user_status_changed' => 9, 'date_status_changed' => 10, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, )
 	);
 
 	/**
@@ -178,6 +184,8 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn(FilePeer::STATE);
 			$criteria->addSelectColumn(FilePeer::FILENAME);
 			$criteria->addSelectColumn(FilePeer::LAST_CHANGE_COMMIT);
+			$criteria->addSelectColumn(FilePeer::LAST_CHANGE_COMMIT_DESC);
+			$criteria->addSelectColumn(FilePeer::LAST_CHANGE_COMMIT_USER);
 			$criteria->addSelectColumn(FilePeer::STATUS);
 			$criteria->addSelectColumn(FilePeer::COMMIT_STATUS_CHANGED);
 			$criteria->addSelectColumn(FilePeer::USER_STATUS_CHANGED);
@@ -188,6 +196,8 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn($alias . '.STATE');
 			$criteria->addSelectColumn($alias . '.FILENAME');
 			$criteria->addSelectColumn($alias . '.LAST_CHANGE_COMMIT');
+			$criteria->addSelectColumn($alias . '.LAST_CHANGE_COMMIT_DESC');
+			$criteria->addSelectColumn($alias . '.LAST_CHANGE_COMMIT_USER');
 			$criteria->addSelectColumn($alias . '.STATUS');
 			$criteria->addSelectColumn($alias . '.COMMIT_STATUS_CHANGED');
 			$criteria->addSelectColumn($alias . '.USER_STATUS_CHANGED');
@@ -555,6 +565,62 @@ abstract class BaseFilePeer {
 
 
 	/**
+	 * Returns the number of rows matching criteria, joining the related sfGuardUser table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinsfGuardUser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(FilePeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			FilePeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(FilePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
 	 * Selects a collection of File objects pre-filled with their Branch objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -627,6 +693,78 @@ abstract class BaseFilePeer {
 
 
 	/**
+	 * Selects a collection of File objects pre-filled with their sfGuardUser objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of File objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinsfGuardUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		FilePeer::addSelectColumns($criteria);
+		$startcol = (FilePeer::NUM_COLUMNS - FilePeer::NUM_LAZY_LOAD_COLUMNS);
+		sfGuardUserPeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = FilePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = FilePeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = FilePeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				FilePeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = sfGuardUserPeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					sfGuardUserPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+
+				// Add the $obj1 (File) to $obj2 (sfGuardUser)
+				$obj2->addFile($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
 	 * @param      Criteria $criteria
@@ -663,6 +801,8 @@ abstract class BaseFilePeer {
 		}
 
 		$criteria->addJoin(FilePeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -706,7 +846,12 @@ abstract class BaseFilePeer {
 		BranchPeer::addSelectColumns($criteria);
 		$startcol3 = $startcol2 + (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
 
+		sfGuardUserPeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
+
 		$criteria->addJoin(FilePeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -748,6 +893,294 @@ abstract class BaseFilePeer {
 				// Add the $obj1 (File) to the collection in $obj2 (Branch)
 				$obj2->addFile($obj1);
 			} // if joined row not null
+
+			// Add objects for joined sfGuardUser rows
+
+			$key3 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol3);
+			if ($key3 !== null) {
+				$obj3 = sfGuardUserPeer::getInstanceFromPool($key3);
+				if (!$obj3) {
+
+					$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					sfGuardUserPeer::addInstanceToPool($obj3, $key3);
+				} // if obj3 loaded
+
+				// Add the $obj1 (File) to the collection in $obj3 (sfGuardUser)
+				$obj3->addFile($obj1);
+			} // if joined row not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related Branch table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptBranch(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(FilePeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			FilePeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(FilePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Returns the number of rows matching criteria, joining the related sfGuardUser table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptsfGuardUser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(FilePeer::TABLE_NAME);
+		
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			FilePeer::addSelectColumns($criteria);
+		}
+		
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+		
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(FilePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(FilePeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of File objects pre-filled with all related objects except Branch.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of File objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptBranch(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		FilePeer::addSelectColumns($criteria);
+		$startcol2 = (FilePeer::NUM_COLUMNS - FilePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		sfGuardUserPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(FilePeer::LAST_CHANGE_COMMIT_USER, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = FilePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = FilePeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = FilePeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				FilePeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined sfGuardUser rows
+
+				$key2 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = sfGuardUserPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					sfGuardUserPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (File) to the collection in $obj2 (sfGuardUser)
+				$obj2->addFile($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of File objects pre-filled with all related objects except sfGuardUser.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of File objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptsfGuardUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		FilePeer::addSelectColumns($criteria);
+		$startcol2 = (FilePeer::NUM_COLUMNS - FilePeer::NUM_LAZY_LOAD_COLUMNS);
+
+		BranchPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+
+		$criteria->addJoin(FilePeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseFilePeer', $criteria, $con);
+		}
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = FilePeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = FilePeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = FilePeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				FilePeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Branch rows
+
+				$key2 = BranchPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = BranchPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = BranchPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					BranchPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (File) to the collection in $obj2 (Branch)
+				$obj2->addFile($obj1);
+
+			} // if joined row is not null
 
 			$results[] = $obj1;
 		}

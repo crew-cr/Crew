@@ -63,7 +63,7 @@ class GitCommand
       $noMerdegBranchesInfos[$result]['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
       unset($commitStatus);
 
-      $noMerdegBranchesInfos[$result]['last_commit_desc'] = self::getLastCommitInfos($gitDir, $result, '%s');
+      $noMerdegBranchesInfos[$result]['last_commit_desc'] = self::getCommitInfos($gitDir, $result, '%s');
     }
 
     return $noMerdegBranchesInfos;
@@ -155,9 +155,9 @@ class GitCommand
     return (count($return) > 0);
   }
 
-  public static function getLastCommitInfos($gitDir, $branch, $format)
+  public static function getCommitInfos($gitDir, $commit, $format)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" log %s --format="%s" -n1', $gitDir, $branch, $format);
+    $cmd = sprintf('git --git-dir="%s/.git" log %s --format="%s" -n1', $gitDir, $commit, $format);
     exec($cmd, $return);
     return (count($return)) ? $return[0] : '';
   }

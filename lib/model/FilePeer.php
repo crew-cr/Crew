@@ -49,9 +49,10 @@ class FilePeer extends BaseFilePeer {
         $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getValue(), $branch->getName(), $fileModel->getFilename());
         if($lastChangeCommit != $fileModel->getLastChangeCommit())
         {
-          $fileModel->setStatus(BranchPeer::A_TRAITER);
-          $fileModel->setLastChangeCommit($lastChangeCommit);
-          $fileModel->setCommitStatusChanged($lastChangeCommit);
+          $fileModel->setStatus(BranchPeer::A_TRAITER)
+            ->setLastChangeCommit($lastChangeCommit)
+            ->setCommitStatusChanged($lastChangeCommit)
+            ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"));
         }
         $fileModel->save();
       }
@@ -61,12 +62,14 @@ class FilePeer extends BaseFilePeer {
 
     foreach ($filesGit as $fileGit)
     {
+      $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getValue(), $branch->getName(), $fileGit['filename']);
       $file = new File();
       $file->setFilename($fileGit['filename'])
         ->setStatus(BranchPeer::A_TRAITER)
         ->setState($fileGit['state'])
         ->setBranchId($branch->getId())
-        ->setLastChangeCommit(GitCommand::getLastModificationCommit($branch->getRepository()->getValue(), $branch->getName(), $fileGit['filename']))
+        ->setLastChangeCommit($lastChangeCommit)
+        ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
         ->save()
       ;
     }

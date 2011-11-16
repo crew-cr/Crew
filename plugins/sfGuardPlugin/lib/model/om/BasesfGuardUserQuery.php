@@ -38,6 +38,10 @@
  * @method     sfGuardUserQuery rightJoinBranchComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the BranchComment relation
  * @method     sfGuardUserQuery innerJoinBranchComment($relationAlias = null) Adds a INNER JOIN clause to the query using the BranchComment relation
  *
+ * @method     sfGuardUserQuery leftJoinFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the File relation
+ * @method     sfGuardUserQuery rightJoinFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the File relation
+ * @method     sfGuardUserQuery innerJoinFile($relationAlias = null) Adds a INNER JOIN clause to the query using the File relation
+ *
  * @method     sfGuardUserQuery leftJoinFileComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the FileComment relation
  * @method     sfGuardUserQuery rightJoinFileComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FileComment relation
  * @method     sfGuardUserQuery innerJoinFileComment($relationAlias = null) Adds a INNER JOIN clause to the query using the FileComment relation
@@ -524,6 +528,70 @@ abstract class BasesfGuardUserQuery extends ModelCriteria
 		return $this
 			->joinBranchComment($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'BranchComment', 'BranchCommentQuery');
+	}
+
+	/**
+	 * Filter the query by a related File object
+	 *
+	 * @param     File $file  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    sfGuardUserQuery The current query, for fluid interface
+	 */
+	public function filterByFile($file, $comparison = null)
+	{
+		return $this
+			->addUsingAlias(sfGuardUserPeer::ID, $file->getLastChangeCommitUser(), $comparison);
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the File relation
+	 * 
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    sfGuardUserQuery The current query, for fluid interface
+	 */
+	public function joinFile($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('File');
+		
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+		
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'File');
+		}
+		
+		return $this;
+	}
+
+	/**
+	 * Use the File relation File object
+	 *
+	 * @see       useQuery()
+	 * 
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    FileQuery A secondary query class using the current class as primary query
+	 */
+	public function useFileQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		return $this
+			->joinFile($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'File', 'FileQuery');
 	}
 
 	/**

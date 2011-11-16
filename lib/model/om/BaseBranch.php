@@ -1768,6 +1768,31 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		}
 	}
 
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Branch is new, it will return
+	 * an empty collection; or if this Branch has previously
+	 * been saved, it will retrieve related Files from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Branch.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array File[] List of File objects
+	 */
+	public function getFilesJoinsfGuardUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = FileQuery::create(null, $criteria);
+		$query->joinWith('sfGuardUser', $join_behavior);
+
+		return $this->getFiles($query, $con);
+	}
+
 	/**
 	 * Clears out the collStatusActions collection
 	 *

@@ -14,5 +14,11 @@
  * @package    propel.generator.lib.model
  */
 class ProfilePeer extends BaseProfilePeer {
-
+  public static function getProfileByEmail($email)
+  {
+    return ProfileQuery::create()
+      ->filterByEmail($email)
+      ->findOne();
+    ;
+  }
 } // ProfilePeer
