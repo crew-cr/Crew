@@ -14,14 +14,15 @@
           <span class="review_request_icon"></span>
         <?php endif; ?>
         </td>
-        <td>
+        <td class="branch_name">
           <h3><?php echo link_to(stringUtils::displayBranchName($branch['Name']), 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?></h3>
         </td>
-        <td class="view_infos">
-          <?php echo $branch['total'].' files : ' ?>
+        <td class="commit_desc">
+          <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['LastCommitDesc']), 100) ?>
         </td>
-        <td class="view_infos left">
-          <span class="added"><?php echo $branch['added'] ?></span> <span class="modified"><?php echo $branch['modified'] ?></span> <span class="deleted"><?php echo $branch['deleted'] ?></span>
+        <td class="file_infos">
+          <?php echo $branch['total'].' files' ?><br />
+          <span class="added"><?php if($branch['added']) echo $branch['added'].'+ '; ?></span><span class="modified"><?php if($branch['modified']) echo $branch['modified'].'* '; ?></span><span class="deleted"><?php if($branch['deleted']) echo $branch['deleted'].'- '; ?></span>
         </td>
         <td class="status">
           <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-valid '. ($branch['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>

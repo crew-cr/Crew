@@ -9,6 +9,7 @@ propel:
     name:                             { type: VARCHAR, size: '255', required: true }
     commit_reference:                 { type: VARCHAR, size: '50', required: true }
     last_commit:                      { type: VARCHAR, size: '50', required: false }
+    last_commit_desc:                 { type: VARCHAR, size: '255', required: false }
     is_blacklisted:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
     review_request:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
     status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }

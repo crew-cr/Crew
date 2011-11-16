@@ -281,25 +281,6 @@ button.safe:hover {
   text-align: right;
 }
 
-.view_infos span {
-  font-size: 10px;
-  font-weight: bold;
-  margin-right: 5px;
-  font-family: 'Droid sans', Arial, Helvetica, sans-serif;
-}
-
-.view_infos span.added {
-  color: #8d8;
-}
-
-.view_infos span.modified {
-  color: #aaa;
-}
-
-.view_infos span.deleted {
-  color: #d88;
-}
-
 .branch_infos
 {
   color: #888;
@@ -629,6 +610,37 @@ h2.avatared {
   vertical-align: middle;
   padding: 0;
   width: 20px;
+}
+
+.list_body table tr td.branch_name {
+  white-space:nowrap;
+}
+
+.list_body table tr td.commit_desc {
+  color: #999;
+  text-align: left;
+  font-size: 11px;
+  font-weight: normal;
+}
+
+.list_body table tr td.file_infos {
+  color: #777;
+  text-align: center;
+  font-size: 11px;
+  width: 100px;
+  background-color: #f5f5f5;
+}
+
+.list_body table tr td.file_infos span.added {
+  color: #8d8;
+}
+
+.list_body table tr td.file_infos span.modified {
+  color: #aaa;
+}
+
+.list_body table tr td.file_infos span.deleted {
+  color: #d88;
 }
 
 #file_list table td {

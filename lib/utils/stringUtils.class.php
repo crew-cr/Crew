@@ -58,4 +58,9 @@ class stringUtils {
   {
     return (strpos($branch, 'origin/') === 0) ? substr($branch, 7) : $branch;
   }
+
+  public static function trimTicketInfos($str)
+  {
+    return preg_replace('/^refs #(\d)+ /i', '', $str);
+  }
 }
