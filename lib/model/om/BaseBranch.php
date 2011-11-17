@@ -43,6 +43,12 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $name;
 
 	/**
+	 * The value for the base_branch_name field.
+	 * @var        string
+	 */
+	protected $base_branch_name;
+
+	/**
 	 * The value for the commit_reference field.
 	 * @var        string
 	 */
@@ -189,6 +195,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	public function getName()
 	{
 		return $this->name;
+	}
+
+	/**
+	 * Get the [base_branch_name] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getBaseBranchName()
+	{
+		return $this->base_branch_name;
 	}
 
 	/**
@@ -372,6 +388,26 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		return $this;
 	} // setName()
+
+	/**
+	 * Set the value of [base_branch_name] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function setBaseBranchName($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->base_branch_name !== $v) {
+			$this->base_branch_name = $v;
+			$this->modifiedColumns[] = BranchPeer::BASE_BRANCH_NAME;
+		}
+
+		return $this;
+	} // setBaseBranchName()
 
 	/**
 	 * Set the value of [commit_reference] column.
@@ -633,15 +669,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$this->id = ($row[$startcol + 0] !== null) ? (int) $row[$startcol + 0] : null;
 			$this->repository_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->name = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
-			$this->commit_reference = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->last_commit = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
-			$this->last_commit_desc = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
-			$this->is_blacklisted = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-			$this->review_request = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
-			$this->status = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-			$this->commit_status_changed = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
-			$this->user_status_changed = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
-			$this->date_status_changed = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->base_branch_name = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
+			$this->commit_reference = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->last_commit = ($row[$startcol + 5] !== null) ? (string) $row[$startcol + 5] : null;
+			$this->last_commit_desc = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
+			$this->is_blacklisted = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+			$this->review_request = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
+			$this->status = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
+			$this->commit_status_changed = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
+			$this->user_status_changed = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+			$this->date_status_changed = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -650,7 +687,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 12; // 12 = BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 13; // 13 = BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS).
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Branch object", $e);
@@ -1090,30 +1127,33 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				return $this->getName();
 				break;
 			case 3:
-				return $this->getCommitReference();
+				return $this->getBaseBranchName();
 				break;
 			case 4:
-				return $this->getLastCommit();
+				return $this->getCommitReference();
 				break;
 			case 5:
-				return $this->getLastCommitDesc();
+				return $this->getLastCommit();
 				break;
 			case 6:
-				return $this->getIsBlacklisted();
+				return $this->getLastCommitDesc();
 				break;
 			case 7:
-				return $this->getReviewRequest();
+				return $this->getIsBlacklisted();
 				break;
 			case 8:
-				return $this->getStatus();
+				return $this->getReviewRequest();
 				break;
 			case 9:
-				return $this->getCommitStatusChanged();
+				return $this->getStatus();
 				break;
 			case 10:
-				return $this->getUserStatusChanged();
+				return $this->getCommitStatusChanged();
 				break;
 			case 11:
+				return $this->getUserStatusChanged();
+				break;
+			case 12:
 				return $this->getDateStatusChanged();
 				break;
 			default:
@@ -1143,15 +1183,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getRepositoryId(),
 			$keys[2] => $this->getName(),
-			$keys[3] => $this->getCommitReference(),
-			$keys[4] => $this->getLastCommit(),
-			$keys[5] => $this->getLastCommitDesc(),
-			$keys[6] => $this->getIsBlacklisted(),
-			$keys[7] => $this->getReviewRequest(),
-			$keys[8] => $this->getStatus(),
-			$keys[9] => $this->getCommitStatusChanged(),
-			$keys[10] => $this->getUserStatusChanged(),
-			$keys[11] => $this->getDateStatusChanged(),
+			$keys[3] => $this->getBaseBranchName(),
+			$keys[4] => $this->getCommitReference(),
+			$keys[5] => $this->getLastCommit(),
+			$keys[6] => $this->getLastCommitDesc(),
+			$keys[7] => $this->getIsBlacklisted(),
+			$keys[8] => $this->getReviewRequest(),
+			$keys[9] => $this->getStatus(),
+			$keys[10] => $this->getCommitStatusChanged(),
+			$keys[11] => $this->getUserStatusChanged(),
+			$keys[12] => $this->getDateStatusChanged(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aRepository) {
@@ -1201,30 +1242,33 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				$this->setName($value);
 				break;
 			case 3:
-				$this->setCommitReference($value);
+				$this->setBaseBranchName($value);
 				break;
 			case 4:
-				$this->setLastCommit($value);
+				$this->setCommitReference($value);
 				break;
 			case 5:
-				$this->setLastCommitDesc($value);
+				$this->setLastCommit($value);
 				break;
 			case 6:
-				$this->setIsBlacklisted($value);
+				$this->setLastCommitDesc($value);
 				break;
 			case 7:
-				$this->setReviewRequest($value);
+				$this->setIsBlacklisted($value);
 				break;
 			case 8:
-				$this->setStatus($value);
+				$this->setReviewRequest($value);
 				break;
 			case 9:
-				$this->setCommitStatusChanged($value);
+				$this->setStatus($value);
 				break;
 			case 10:
-				$this->setUserStatusChanged($value);
+				$this->setCommitStatusChanged($value);
 				break;
 			case 11:
+				$this->setUserStatusChanged($value);
+				break;
+			case 12:
 				$this->setDateStatusChanged($value);
 				break;
 		} // switch()
@@ -1254,15 +1298,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		if (array_key_exists($keys[0], $arr)) $this->setId($arr[$keys[0]]);
 		if (array_key_exists($keys[1], $arr)) $this->setRepositoryId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setName($arr[$keys[2]]);
-		if (array_key_exists($keys[3], $arr)) $this->setCommitReference($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setLastCommit($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setLastCommitDesc($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setIsBlacklisted($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setReviewRequest($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setStatus($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setCommitStatusChanged($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setUserStatusChanged($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setDateStatusChanged($arr[$keys[11]]);
+		if (array_key_exists($keys[3], $arr)) $this->setBaseBranchName($arr[$keys[3]]);
+		if (array_key_exists($keys[4], $arr)) $this->setCommitReference($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setLastCommit($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setLastCommitDesc($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setIsBlacklisted($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setReviewRequest($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setStatus($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setCommitStatusChanged($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setUserStatusChanged($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setDateStatusChanged($arr[$keys[12]]);
 	}
 
 	/**
@@ -1277,6 +1322,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		if ($this->isColumnModified(BranchPeer::ID)) $criteria->add(BranchPeer::ID, $this->id);
 		if ($this->isColumnModified(BranchPeer::REPOSITORY_ID)) $criteria->add(BranchPeer::REPOSITORY_ID, $this->repository_id);
 		if ($this->isColumnModified(BranchPeer::NAME)) $criteria->add(BranchPeer::NAME, $this->name);
+		if ($this->isColumnModified(BranchPeer::BASE_BRANCH_NAME)) $criteria->add(BranchPeer::BASE_BRANCH_NAME, $this->base_branch_name);
 		if ($this->isColumnModified(BranchPeer::COMMIT_REFERENCE)) $criteria->add(BranchPeer::COMMIT_REFERENCE, $this->commit_reference);
 		if ($this->isColumnModified(BranchPeer::LAST_COMMIT)) $criteria->add(BranchPeer::LAST_COMMIT, $this->last_commit);
 		if ($this->isColumnModified(BranchPeer::LAST_COMMIT_DESC)) $criteria->add(BranchPeer::LAST_COMMIT_DESC, $this->last_commit_desc);
@@ -1349,6 +1395,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	{
 		$copyObj->setRepositoryId($this->repository_id);
 		$copyObj->setName($this->name);
+		$copyObj->setBaseBranchName($this->base_branch_name);
 		$copyObj->setCommitReference($this->commit_reference);
 		$copyObj->setLastCommit($this->last_commit);
 		$copyObj->setLastCommitDesc($this->last_commit_desc);
@@ -1985,6 +2032,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		$this->id = null;
 		$this->repository_id = null;
 		$this->name = null;
+		$this->base_branch_name = null;
 		$this->commit_reference = null;
 		$this->last_commit = null;
 		$this->last_commit_desc = null;

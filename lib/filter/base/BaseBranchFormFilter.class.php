@@ -14,6 +14,7 @@ abstract class BaseBranchFormFilter extends BaseFormFilterPropel
     $this->setWidgets(array(
       'repository_id'         => new sfWidgetFormPropelChoice(array('model' => 'Repository', 'add_empty' => true)),
       'name'                  => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'base_branch_name'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'commit_reference'      => new sfWidgetFormFilterInput(array('with_empty' => false)),
       'last_commit'           => new sfWidgetFormFilterInput(),
       'last_commit_desc'      => new sfWidgetFormFilterInput(),
@@ -28,6 +29,7 @@ abstract class BaseBranchFormFilter extends BaseFormFilterPropel
     $this->setValidators(array(
       'repository_id'         => new sfValidatorPropelChoice(array('required' => false, 'model' => 'Repository', 'column' => 'id')),
       'name'                  => new sfValidatorPass(array('required' => false)),
+      'base_branch_name'      => new sfValidatorPass(array('required' => false)),
       'commit_reference'      => new sfValidatorPass(array('required' => false)),
       'last_commit'           => new sfValidatorPass(array('required' => false)),
       'last_commit_desc'      => new sfValidatorPass(array('required' => false)),
@@ -57,6 +59,7 @@ abstract class BaseBranchFormFilter extends BaseFormFilterPropel
       'id'                    => 'Number',
       'repository_id'         => 'ForeignKey',
       'name'                  => 'Text',
+      'base_branch_name'      => 'Text',
       'commit_reference'      => 'Text',
       'last_commit'           => 'Text',
       'last_commit_desc'      => 'Text',

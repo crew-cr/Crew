@@ -30,43 +30,30 @@ class GitCommand
    * @param string $gitDir
    * @return array
    */
-  public static function getNoMergedBranchesInfos($gitDir, $baseBranchName = 'origin/master', $branch = null)
+  public static function getNoMergedBranchInfos($gitDir, $baseBranch, $branch)
   {
     self::fetch($gitDir);
 
-    $noMerdegBranchesInfos = array();
-
-    if(is_null($branch))
+    $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep %s | sed "s/ //g"', $gitDir, $baseBranch, $branch);
+    exec($cmd, $result);
+    if(count($result) == 0 || strpos($result[0], '->') !== false || $result[0] != $branch)
     {
-      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep -v "*" | sed "s/ //g"', $gitDir, $baseBranchName);
-    }
-    else
-    {
-      $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep %s | sed "s/ //g"', $gitDir, $baseBranchName, $branch);
-    }
-    exec($cmd, $results);
-
-    foreach($results as $result)
-    {
-      if(strpos($result, '->') !== false)
-      {
-        continue;
-      }
-
-      $cmd = sprintf('git --git-dir="%s/.git" merge-base %s %s | head -1', $gitDir, $baseBranchName, $result);
-      exec($cmd, $commitRef);
-      $noMerdegBranchesInfos[$result]['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
-      unset($commitRef);
-
-      $cmd = sprintf('git --git-dir="%s/.git" rev-parse --verify %s', $gitDir, $result);
-      exec($cmd, $commitStatus);
-      $noMerdegBranchesInfos[$result]['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
-      unset($commitStatus);
-
-      $noMerdegBranchesInfos[$result]['last_commit_desc'] = self::getCommitInfos($gitDir, $result, '%s');
+      return null;
     }
 
-    return $noMerdegBranchesInfos;
+    $noMergedBranchInfos = array();
+
+    $cmd = sprintf('git --git-dir="%s/.git" merge-base %s %s | head -1', $gitDir, $baseBranch, $branch);
+    exec($cmd, $commitRef);
+    $noMergedBranchInfos['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
+
+    $cmd = sprintf('git --git-dir="%s/.git" rev-parse --verify %s', $gitDir, $branch);
+    exec($cmd, $commitStatus);
+    $noMergedBranchInfos['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
+
+    $noMergedBranchInfos['last_commit_desc'] = self::getCommitInfos($gitDir, $branch, '%s');
+
+    return $noMergedBranchInfos;
   }
 
   /**

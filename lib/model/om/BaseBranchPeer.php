@@ -26,7 +26,7 @@ abstract class BaseBranchPeer {
 	const TM_CLASS = 'BranchTableMap';
 	
 	/** The total number of columns. */
-	const NUM_COLUMNS = 12;
+	const NUM_COLUMNS = 13;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
@@ -39,6 +39,9 @@ abstract class BaseBranchPeer {
 
 	/** the column name for the NAME field */
 	const NAME = 'branch.NAME';
+
+	/** the column name for the BASE_BRANCH_NAME field */
+	const BASE_BRANCH_NAME = 'branch.BASE_BRANCH_NAME';
 
 	/** the column name for the COMMIT_REFERENCE field */
 	const COMMIT_REFERENCE = 'branch.COMMIT_REFERENCE';
@@ -90,12 +93,12 @@ abstract class BaseBranchPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	private static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'RepositoryId', 'Name', 'CommitReference', 'LastCommit', 'LastCommitDesc', 'IsBlacklisted', 'ReviewRequest', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'repositoryId', 'name', 'commitReference', 'lastCommit', 'lastCommitDesc', 'isBlacklisted', 'reviewRequest', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::REPOSITORY_ID, self::NAME, self::COMMIT_REFERENCE, self::LAST_COMMIT, self::LAST_COMMIT_DESC, self::IS_BLACKLISTED, self::REVIEW_REQUEST, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'REPOSITORY_ID', 'NAME', 'COMMIT_REFERENCE', 'LAST_COMMIT', 'LAST_COMMIT_DESC', 'IS_BLACKLISTED', 'REVIEW_REQUEST', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'repository_id', 'name', 'commit_reference', 'last_commit', 'last_commit_desc', 'is_blacklisted', 'review_request', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'RepositoryId', 'Name', 'BaseBranchName', 'CommitReference', 'LastCommit', 'LastCommitDesc', 'IsBlacklisted', 'ReviewRequest', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'repositoryId', 'name', 'baseBranchName', 'commitReference', 'lastCommit', 'lastCommitDesc', 'isBlacklisted', 'reviewRequest', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::REPOSITORY_ID, self::NAME, self::BASE_BRANCH_NAME, self::COMMIT_REFERENCE, self::LAST_COMMIT, self::LAST_COMMIT_DESC, self::IS_BLACKLISTED, self::REVIEW_REQUEST, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'REPOSITORY_ID', 'NAME', 'BASE_BRANCH_NAME', 'COMMIT_REFERENCE', 'LAST_COMMIT', 'LAST_COMMIT_DESC', 'IS_BLACKLISTED', 'REVIEW_REQUEST', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'repository_id', 'name', 'base_branch_name', 'commit_reference', 'last_commit', 'last_commit_desc', 'is_blacklisted', 'review_request', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
 	);
 
 	/**
@@ -105,12 +108,12 @@ abstract class BaseBranchPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	private static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RepositoryId' => 1, 'Name' => 2, 'CommitReference' => 3, 'LastCommit' => 4, 'LastCommitDesc' => 5, 'IsBlacklisted' => 6, 'ReviewRequest' => 7, 'Status' => 8, 'CommitStatusChanged' => 9, 'UserStatusChanged' => 10, 'DateStatusChanged' => 11, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'repositoryId' => 1, 'name' => 2, 'commitReference' => 3, 'lastCommit' => 4, 'lastCommitDesc' => 5, 'isBlacklisted' => 6, 'reviewRequest' => 7, 'status' => 8, 'commitStatusChanged' => 9, 'userStatusChanged' => 10, 'dateStatusChanged' => 11, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::REPOSITORY_ID => 1, self::NAME => 2, self::COMMIT_REFERENCE => 3, self::LAST_COMMIT => 4, self::LAST_COMMIT_DESC => 5, self::IS_BLACKLISTED => 6, self::REVIEW_REQUEST => 7, self::STATUS => 8, self::COMMIT_STATUS_CHANGED => 9, self::USER_STATUS_CHANGED => 10, self::DATE_STATUS_CHANGED => 11, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'REPOSITORY_ID' => 1, 'NAME' => 2, 'COMMIT_REFERENCE' => 3, 'LAST_COMMIT' => 4, 'LAST_COMMIT_DESC' => 5, 'IS_BLACKLISTED' => 6, 'REVIEW_REQUEST' => 7, 'STATUS' => 8, 'COMMIT_STATUS_CHANGED' => 9, 'USER_STATUS_CHANGED' => 10, 'DATE_STATUS_CHANGED' => 11, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'repository_id' => 1, 'name' => 2, 'commit_reference' => 3, 'last_commit' => 4, 'last_commit_desc' => 5, 'is_blacklisted' => 6, 'review_request' => 7, 'status' => 8, 'commit_status_changed' => 9, 'user_status_changed' => 10, 'date_status_changed' => 11, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RepositoryId' => 1, 'Name' => 2, 'BaseBranchName' => 3, 'CommitReference' => 4, 'LastCommit' => 5, 'LastCommitDesc' => 6, 'IsBlacklisted' => 7, 'ReviewRequest' => 8, 'Status' => 9, 'CommitStatusChanged' => 10, 'UserStatusChanged' => 11, 'DateStatusChanged' => 12, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'repositoryId' => 1, 'name' => 2, 'baseBranchName' => 3, 'commitReference' => 4, 'lastCommit' => 5, 'lastCommitDesc' => 6, 'isBlacklisted' => 7, 'reviewRequest' => 8, 'status' => 9, 'commitStatusChanged' => 10, 'userStatusChanged' => 11, 'dateStatusChanged' => 12, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::REPOSITORY_ID => 1, self::NAME => 2, self::BASE_BRANCH_NAME => 3, self::COMMIT_REFERENCE => 4, self::LAST_COMMIT => 5, self::LAST_COMMIT_DESC => 6, self::IS_BLACKLISTED => 7, self::REVIEW_REQUEST => 8, self::STATUS => 9, self::COMMIT_STATUS_CHANGED => 10, self::USER_STATUS_CHANGED => 11, self::DATE_STATUS_CHANGED => 12, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'REPOSITORY_ID' => 1, 'NAME' => 2, 'BASE_BRANCH_NAME' => 3, 'COMMIT_REFERENCE' => 4, 'LAST_COMMIT' => 5, 'LAST_COMMIT_DESC' => 6, 'IS_BLACKLISTED' => 7, 'REVIEW_REQUEST' => 8, 'STATUS' => 9, 'COMMIT_STATUS_CHANGED' => 10, 'USER_STATUS_CHANGED' => 11, 'DATE_STATUS_CHANGED' => 12, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'repository_id' => 1, 'name' => 2, 'base_branch_name' => 3, 'commit_reference' => 4, 'last_commit' => 5, 'last_commit_desc' => 6, 'is_blacklisted' => 7, 'review_request' => 8, 'status' => 9, 'commit_status_changed' => 10, 'user_status_changed' => 11, 'date_status_changed' => 12, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, )
 	);
 
 	/**
@@ -185,6 +188,7 @@ abstract class BaseBranchPeer {
 			$criteria->addSelectColumn(BranchPeer::ID);
 			$criteria->addSelectColumn(BranchPeer::REPOSITORY_ID);
 			$criteria->addSelectColumn(BranchPeer::NAME);
+			$criteria->addSelectColumn(BranchPeer::BASE_BRANCH_NAME);
 			$criteria->addSelectColumn(BranchPeer::COMMIT_REFERENCE);
 			$criteria->addSelectColumn(BranchPeer::LAST_COMMIT);
 			$criteria->addSelectColumn(BranchPeer::LAST_COMMIT_DESC);
@@ -198,6 +202,7 @@ abstract class BaseBranchPeer {
 			$criteria->addSelectColumn($alias . '.ID');
 			$criteria->addSelectColumn($alias . '.REPOSITORY_ID');
 			$criteria->addSelectColumn($alias . '.NAME');
+			$criteria->addSelectColumn($alias . '.BASE_BRANCH_NAME');
 			$criteria->addSelectColumn($alias . '.COMMIT_REFERENCE');
 			$criteria->addSelectColumn($alias . '.LAST_COMMIT');
 			$criteria->addSelectColumn($alias . '.LAST_COMMIT_DESC');

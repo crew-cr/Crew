@@ -42,61 +42,38 @@ class BranchPeer extends BaseBranchPeer {
 
     return '';
   }
-  
+
   /**
    * @static
    * @param Repository $repository
+   * @param $branch
    * @return void
    */
-  public static function synchronize(Repository $repository, $baseBranchName = 'origin/master', $branch = null)
+  public static function synchronize(Repository $repository, Branch $branch)
   {
-    $branchesGit = GitCommand::getNoMergedBranchesInfos($repository->getValue(), $baseBranchName, $branch);
+    $branchGit = GitCommand::getNoMergedBranchInfos($repository->getValue(), $branch->getBaseBranchName(), $branch->getName());
 
-    $branchesModelQuery = BranchQuery::create()
+    $branchModel = BranchQuery::create()
       ->filterByRepositoryId($repository->getId())
+      ->filterByName($branch->getName())
+      ->findOne()
     ;
-    if(!is_null($branch))
-    {
-      $branchesModelQuery = $branchesModelQuery->filterByName($branch);
-    }
-    $branchesModel = $branchesModelQuery->find();
 
-    foreach ($branchesModel as $branchModel)
+    if($branchModel)
     {
-      /** @var $branchModel Branch */
-      if (!array_key_exists($branchModel->getName(), $branchesGit))
+      if (is_null($branchGit))
       {
         $branchModel->delete();
       }
-      elseif($branchModel->getIsBlacklisted())
+      elseif(!$branchModel->getIsBlacklisted())
       {
-        unset($branchesGit[$branchModel->getName()]);
-      }
-      else
-      {
-        $branchModel->setCommitReference($branchesGit[$branchModel->getName()]['commit_reference']);
-        $branchModel->setLastCommit($branchesGit[$branchModel->getName()]['last_commit']);
-        $branchModel->setLastCommitDesc($branchesGit[$branchModel->getName()]['last_commit_desc']);
+        $branchModel->setCommitReference($branchGit['commit_reference']);
+        $branchModel->setLastCommit($branchGit['last_commit']);
+        $branchModel->setLastCommitDesc($branchGit['last_commit_desc']);
         $branchModel->save();
 
         FilePeer::synchronize($branchModel);
-
-        unset($branchesGit[$branchModel->getName()]);
       }
-    }
-
-    foreach ($branchesGit as $name => $branchGit)
-    {
-      $branch = new Branch();
-      $branch->setName($name)
-        ->setStatus(BranchPeer::A_TRAITER)
-        ->setRepositoryId($repository->getId())
-        ->setCommitReference($branchGit['commit_reference'])
-        ->setLastCommit($branchGit['last_commit'])
-        ->setLastCommitDesc($branchGit['last_commit_desc'])
-        ->save()
-      ;
-      FilePeer::synchronize($branch);
     }
   }
 } // BranchPeer

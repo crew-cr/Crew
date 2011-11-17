@@ -9,6 +9,7 @@
  * @method     BranchQuery orderById($order = Criteria::ASC) Order by the id column
  * @method     BranchQuery orderByRepositoryId($order = Criteria::ASC) Order by the repository_id column
  * @method     BranchQuery orderByName($order = Criteria::ASC) Order by the name column
+ * @method     BranchQuery orderByBaseBranchName($order = Criteria::ASC) Order by the base_branch_name column
  * @method     BranchQuery orderByCommitReference($order = Criteria::ASC) Order by the commit_reference column
  * @method     BranchQuery orderByLastCommit($order = Criteria::ASC) Order by the last_commit column
  * @method     BranchQuery orderByLastCommitDesc($order = Criteria::ASC) Order by the last_commit_desc column
@@ -22,6 +23,7 @@
  * @method     BranchQuery groupById() Group by the id column
  * @method     BranchQuery groupByRepositoryId() Group by the repository_id column
  * @method     BranchQuery groupByName() Group by the name column
+ * @method     BranchQuery groupByBaseBranchName() Group by the base_branch_name column
  * @method     BranchQuery groupByCommitReference() Group by the commit_reference column
  * @method     BranchQuery groupByLastCommit() Group by the last_commit column
  * @method     BranchQuery groupByLastCommitDesc() Group by the last_commit_desc column
@@ -62,6 +64,7 @@
  * @method     Branch findOneById(int $id) Return the first Branch filtered by the id column
  * @method     Branch findOneByRepositoryId(int $repository_id) Return the first Branch filtered by the repository_id column
  * @method     Branch findOneByName(string $name) Return the first Branch filtered by the name column
+ * @method     Branch findOneByBaseBranchName(string $base_branch_name) Return the first Branch filtered by the base_branch_name column
  * @method     Branch findOneByCommitReference(string $commit_reference) Return the first Branch filtered by the commit_reference column
  * @method     Branch findOneByLastCommit(string $last_commit) Return the first Branch filtered by the last_commit column
  * @method     Branch findOneByLastCommitDesc(string $last_commit_desc) Return the first Branch filtered by the last_commit_desc column
@@ -75,6 +78,7 @@
  * @method     array findById(int $id) Return Branch objects filtered by the id column
  * @method     array findByRepositoryId(int $repository_id) Return Branch objects filtered by the repository_id column
  * @method     array findByName(string $name) Return Branch objects filtered by the name column
+ * @method     array findByBaseBranchName(string $base_branch_name) Return Branch objects filtered by the base_branch_name column
  * @method     array findByCommitReference(string $commit_reference) Return Branch objects filtered by the commit_reference column
  * @method     array findByLastCommit(string $last_commit) Return Branch objects filtered by the last_commit column
  * @method     array findByLastCommitDesc(string $last_commit_desc) Return Branch objects filtered by the last_commit_desc column
@@ -261,6 +265,28 @@ abstract class BaseBranchQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(BranchPeer::NAME, $name, $comparison);
+	}
+
+	/**
+	 * Filter the query on the base_branch_name column
+	 * 
+	 * @param     string $baseBranchName The value to use as filter.
+	 *            Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterByBaseBranchName($baseBranchName = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($baseBranchName)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $baseBranchName)) {
+				$baseBranchName = str_replace('*', '%', $baseBranchName);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::BASE_BRANCH_NAME, $baseBranchName, $comparison);
 	}
 
 	/**

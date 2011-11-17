@@ -9,7 +9,7 @@ class reviewRequestAction extends sfAction
   public function execute($request)
   {
     $projectId      = $request->getParameter('project-id');
-    $baseBranchName = 'origin/'.$request->getParameter('base-branch', 'master');
+    $baseBranchName = 'origin/'.$request->getParameter('base-branch');
     $branchName     = 'origin/'.$request->getParameter('branch');
     $commit         = (string)$request->getParameter('commit'); //Dernier commit
 
@@ -21,42 +21,46 @@ class reviewRequestAction extends sfAction
     $result = array();
     if($repository)
     {
-      BranchPeer::synchronize($repository, $baseBranchName, $branchName);
-
       $branch = BranchQuery::create()
-        ->filterByName($branchName)
         ->filterByRepositoryId($repository->getId())
+        ->filterByName($branchName)
         ->findOne()
       ;
 
-      if($branch)
+      if(!$branch)
       {
-        if(strlen($commit) === 40)
+        $branch = new Branch();
+        $branch->setName($branchName)
+          ->setRepositoryId($repository->getId())
+          ->setBaseBranchName($baseBranchName)
+          ->save()
+        ;
+      }
+
+      BranchPeer::synchronize($repository, $branch);
+
+      if(strlen($commit) === 40)
+      {
+        if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
         {
-          if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
-          {
-            $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
-            $branch->setReviewRequest(1);
-            $branch->setStatus(BranchPeer::A_TRAITER);
-            $branch->save();
-            $result['result'] = true;
-          }
-          else
-          {
-            $result['result'] = true;
-            $result['message'] = sprintf("Commit already used : '%s'", $commit);
-          }
+          $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
+          $branch->setReviewRequest(1)
+            ->setStatus(BranchPeer::A_TRAITER)
+            ->setIsBlacklisted(0)
+            ->save()
+          ;
+          $result['result'] = true;
         }
         else
         {
-          $result['result'] = false;
-          $result['message'] = sprintf("No valid commit '%s'", $commit);
+          $result['result'] = true;
+          $result['message'] = sprintf("Commit already used : '%s'", $commit);
         }
       }
       else
       {
         $result['result'] = false;
-        $result['message'] = sprintf("No valid Branch '%s'", $branchName);
+        $result['message'] = sprintf("No valid commit '%s'", $commit);
       }
     }
     else
