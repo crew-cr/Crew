@@ -14,8 +14,16 @@
  * @package    propel.generator.lib.model
  */
 class Profile extends BaseProfile {
+
+  const DEFAULT_AVATAR_URL = "https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png";
+
   public function __toString()
   {
     return ($this->getNickname() != '') ? $this->getNickname() : $this->getsfGuardUser()->getUsername();
+  }
+
+  public function getAvatarUrl($size = 24)
+  {
+    return sprintf("http://www.gravatar.com/avatar/%s?d=%s&s=%s", md5(strtolower(trim($this->getEmail()))), urlencode(self::DEFAULT_AVATAR_URL), $size);
   }
 } // Profile

@@ -137,6 +137,14 @@ button.safe:hover {
   padding: 0 5px;
 }
 
+img.avatar {
+  height: 24px;
+  vertical-align: middle;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
 .site {
   margin: 0 auto;
   width: 945px;
@@ -204,7 +212,7 @@ button.safe:hover {
 
 .header .userbox {
   float: right;
-  padding: 0 10px 0 10px;
+  padding: 0 5px 0 5px;
   margin-right: 5px;
   font-size: 12px;
   border-top: none;
@@ -237,6 +245,12 @@ button.safe:hover {
 
 .header .userbox li.last {
   border-right: none;
+}
+
+.header .userbox li.username img.avatar {
+  height: 20px;
+  margin-right: 3px;
+  border: 1px solid white;
 }
 
 .header .userbox li.username {
@@ -357,7 +371,7 @@ button.safe:hover {
 .data_head, .list_head {
   border-bottom: 1px solid #CCC;
   padding: 0 5px;
-  height: 28px;
+  height: 30px;
   line-height: 30px;
   font-size: 12px;
   color: #333;
@@ -732,6 +746,7 @@ a.branch-sync {
 .review_request_icon
 {
   display: inline-block;
+  vertical-align: middle;
   width: 20px;
   height: 19px;
   text-indent: -9999px;

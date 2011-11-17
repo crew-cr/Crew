@@ -3,6 +3,7 @@
   <div class="data">
     <div class="data_head">
       <span title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
+        <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
         <?php if($file->getsfGuardUser()):?><strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : <?php endif; ?>
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
       </span>
