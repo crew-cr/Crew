@@ -4,7 +4,8 @@
 rendering: ~
 security:  ~
 
-# insert your own filters here
+notifiers:
+  class: registerNotifiersFilter
 
 cache:     ~
 execution: ~

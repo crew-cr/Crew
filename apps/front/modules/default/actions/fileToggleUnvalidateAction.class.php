@@ -23,7 +23,7 @@ class fileToggleUnvalidateAction extends sfAction
       $file = FilePeer::retrieveByPK($request->getParameter('file'));
       $this->forward404Unless($file, 'File Not Found');
 
-      $oldtStatus = $file->getStatus();
+      $oldStatus = $file->getStatus();
 
       if ($file->getStatus() === BranchPeer::KO)
       {
@@ -36,17 +36,9 @@ class fileToggleUnvalidateAction extends sfAction
         $render = array('toggleState' => 'enabled');
       }
 
-      // save file status action
-      File::saveAction(
-        $this->getUser()->getId(),
-        $file->getBranch($con)->getRepositoryId(),
-        $file->getBranchId(),
-        $file->getId(),
-        $oldtStatus,
-        $file->getStatus()
-      );
-
       $con->commit();
+
+      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('type' => 'file', 'object' => $file, 'old' => $oldStatus)));
     }
     catch (\Exception $e)
     {

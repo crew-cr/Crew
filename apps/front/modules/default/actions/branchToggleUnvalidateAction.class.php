@@ -23,7 +23,7 @@ class branchToggleUnvalidateAction extends sfAction
       $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
       $this->forward404Unless($branch, 'Branch Not Found');
 
-      $oldtStatus = $branch->getStatus();
+      $oldStatus = $branch->getStatus();
 
       if ($branch->getStatus() === BranchPeer::KO)
       {
@@ -36,13 +36,7 @@ class branchToggleUnvalidateAction extends sfAction
         $render = array('toggleState' => 'enabled');
       }
 
-      Branch::saveAction(
-        $this->getUser()->getId(),
-        $branch->getRepositoryId(),
-        $branch->getId(),
-        $oldtStatus,
-        $branch->getStatus()
-      );
+      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('type' => 'branch', 'object' => $branch, 'old' => $oldStatus)));
 
       $con->commit();
     }
