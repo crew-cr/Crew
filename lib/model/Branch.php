@@ -49,7 +49,7 @@ class Branch extends BaseBranch
    * @param string $message
    * @return int
    */
-  public static function saveAction($userId, $repositoryId, $branchId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong> on the branch <strong>%s</strong>')
+  public static function saveAction($userId, $repositoryId, $branchId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong>')
   {
     if ($oldStatus === $newStatus)
     {
@@ -69,7 +69,7 @@ class Branch extends BaseBranch
       ->setBranchId($branchId)
       ->setOldStatus($oldStatus)
       ->setNewStatus($newStatus)
-      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus), $branch->__toString()))
+      ->setMessage(sprintf($message, BranchPeer::getLabelStatus($oldStatus), BranchPeer::getLabelStatus($newStatus)))
       ->save()
     ;
   }

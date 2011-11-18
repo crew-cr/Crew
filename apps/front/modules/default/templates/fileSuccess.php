@@ -3,8 +3,10 @@
   <div class="data">
     <div class="data_head">
       <span title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
-        <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
-        <?php if($file->getsfGuardUser()):?><strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : <?php endif; ?>
+        <?php if($file->getsfGuardUser()):?>
+          <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
+          <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : 
+        <?php endif; ?>
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
       </span>
       <div class="right status">
@@ -22,7 +24,7 @@
           <?php $position++; ?>
           <?php $deleledLinesCounter += substr($fileContentLine, 0, 1) == '+' ? 0 : 1; ?>
           <?php $addedLinesCounter += substr($fileContentLine, 0, 1) == '-' ? 0 : 1; ?>
-          <tr>
+          <tr id="position_<?php echo $position ?>">
             <td class="line_numbers"><?php echo substr($fileContentLine, 0, 1) == '+' ? '' : $deleledLinesCounter; ?></td>
             <td class="line_numbers"><?php echo substr($fileContentLine, 0, 1) == '-' ? '' : $addedLinesCounter; ?></td>
             <td style="width: 100%" class="line <?php echo substr($fileContentLine, 0, 1) == '-' ? 'deleted' : (substr($fileContentLine, 0, 1) == '+' ? 'added' : '') ?>">

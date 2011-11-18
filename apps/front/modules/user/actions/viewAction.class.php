@@ -40,9 +40,14 @@ class viewAction extends sfAction
     foreach ($branchComments as $branchComment)
     {
       $commentBoards[$branchComment->getCreatedAt('YmdHisu')] = array(
-        'User' => $branchComment->getAuthorName(),
-        'Message' => sprintf('%s <strong>on branch %s</strong>', stringUtils::shorten($branchComment->getValue(), 60), $branchComment->getBranch()->__toString()),
-        'CreatedAt' => $branchComment->getCreatedAt('d/m/Y H:i:s')
+        'ProjectName' => $branchComment->getBranch()->getRepository(),
+        'ProjectId'   => $branchComment->getBranch()->getRepositoryId(),
+        'UserName'    => $branchComment->getAuthorName(),
+        'UserId'      => $branchComment->getUserId(),
+        'BranchName'  => $branchComment->getBranch(),
+        'BranchId'    => $branchComment->getBranchId(),
+        'Message'     => stringUtils::shorten($branchComment->getValue(), 60),
+        'CreatedAt'   => $branchComment->getCreatedAt('d/m/Y H:i:s')
       );
     }
 
@@ -55,9 +60,16 @@ class viewAction extends sfAction
     foreach ($FileComments as $FileComment)
     {
       $commentBoards[$FileComment->getCreatedAt('YmdHisu')] = array(
-        'User' => $FileComment->getAuthorName(),
-        'Message' => sprintf('%s <strong>on file %s</strong>', stringUtils::shorten($FileComment->getValue(), 60), $FileComment->getFile()->getFilename()),
-        'CreatedAt' => $FileComment->getCreatedAt('d/m/Y H:i:s')
+        'ProjectName' => $FileComment->getFile()->getBranch()->getRepository(),
+        'ProjectId'   => $FileComment->getFile()->getBranch()->getRepositoryId(),
+        'UserName'    => $FileComment->getAuthorName(),
+        'UserId'      => $FileComment->getUserId(),
+        'BranchName'  => $FileComment->getFile()->getBranch(),
+        'BranchId'    => $FileComment->getFile()->getBranchId(),
+        'FileName'    => $FileComment->getFile(),
+        'FileId'      => $FileComment->getFileId(),
+        'Message'     => stringUtils::shorten($FileComment->getValue(), 60),
+        'CreatedAt'   => $FileComment->getCreatedAt('d/m/Y H:i:s')
       );
     }
 
@@ -70,9 +82,18 @@ class viewAction extends sfAction
     foreach ($LineComments as $LineComment)
     {
       $commentBoards[$LineComment->getCreatedAt('YmdHisu')] = array(
-        'User' => $LineComment->getAuthorName(),
-        'Message' => sprintf('%s <strong>on line %s of file %s</strong>', stringUtils::shorten($LineComment->getValue(), 60), $LineComment->getLine(), $LineComment->getFile()->getFilename()),
-        'CreatedAt' => $LineComment->getCreatedAt('d/m/Y H:i:s')
+        'ProjectName' => $LineComment->getFile()->getBranch()->getRepository(),
+        'ProjectId'   => $LineComment->getFile()->getBranch()->getRepositoryId(),
+        'UserName'    => $LineComment->getAuthorName(),
+        'UserId'      => $LineComment->getUserId(),
+        'BranchName'  => $LineComment->getFile()->getBranch(),
+        'BranchId'    => $LineComment->getFile()->getBranchId(),
+        'FileName'    => $LineComment->getFile(),
+        'FileId'      => $LineComment->getFileId(),
+        'Position'    => $LineComment->getPosition(),
+        'Line'        => $LineComment->getLine(),
+        'Message'     => stringUtils::shorten($LineComment->getValue(), 60),
+        'CreatedAt'   => $LineComment->getCreatedAt('d/m/Y H:i:s')
       );
     }
 

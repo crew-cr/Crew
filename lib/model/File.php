@@ -49,7 +49,7 @@ class File extends BaseFile
    * @param string $message
    * @return int
    */
-  public static function saveAction($userId, $repositoryId, $branchId, $fileId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong> on the file <strong>%s</strong> of branch <strong>%s</strong>')
+  public static function saveAction($userId, $repositoryId, $branchId, $fileId, $oldStatus, $newStatus, $message = 'status was changed from <strong>%s</strong> to <strong>%s</strong>')
   {
     if ($oldStatus === $newStatus)
     {

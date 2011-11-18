@@ -10,3 +10,14 @@ all:
           enabled: 1
         comment:
           enabled: 0
+      CampfireNotifier:
+        base-url: campfire-url
+        api-token: campfire-api-token
+        room-id: room-id
+        status:
+          enabled: 1
+          file_message: "[Crew] message with %file% %branch% %old-status% %status% %author% %date%"
+          branch_message: "[Crew] message with %branch% %old-status% %status% %author% %date%"
+          add-links: 1
+        comment:
+          enabled: 0
