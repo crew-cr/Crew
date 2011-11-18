@@ -1,4 +1,4 @@
-<?
+<?php
 
 abstract class BaseNotifier
 {
