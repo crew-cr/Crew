@@ -35,9 +35,4 @@ class DatabaseNotifier extends BaseNotifier
     }
     return true;
   }
-
-  public function notifyComment(sfEvent $event)
-  {
-    return true;
-  }
 }
