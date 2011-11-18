@@ -596,6 +596,10 @@ h2.avatared {
   line-height: 24px;
 }
 
+.list_body table tr.no-border {
+  border: none;
+}
+
 .list_body table tr:nth-child(odd) {
   background-color: #FFF;
 }
@@ -743,6 +747,20 @@ a.branch-sync {
   background: url('../images/file_modes.png') 0 -100px no-repeat;
 }
 
+.list_body span.date {
+  font-size: 11px;
+  color: #999;
+}
+
+.list_body td.status_info {
+  background-color: whiteSmoke;
+  border-right: 1px solid #EEE;
+}
+
+.list_body td div.message {
+  color: #777;
+}
+
 .review_request_icon
 {
   display: inline-block;
@@ -759,6 +777,20 @@ a.branch-sync {
   width: 11px;
   height: 17px;
   background: url('../images/minibutton_icons.png') -80px 0 no-repeat;
+}
+
+.status_actions_icon {
+  background-image: url('../images/icons.png');
+  background-repeat: no-repeat;
+  background-position: 6px -294px;
+  padding-left: 30px;
+}
+
+.comment_board_icon {
+  background-image: url('../images/icons.png');
+  background-repeat: no-repeat;
+  background-position: 6px 6px;
+  padding-left: 30px;
 }
 
 /* Filtre du context */
