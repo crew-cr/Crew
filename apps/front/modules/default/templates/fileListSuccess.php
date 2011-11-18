@@ -1,6 +1,12 @@
 <div class="list">
   <div class="list_head">
     File list
+    <span class="view_files_info">
+       :
+      added <input type="checkbox" checked id="view_files_A" name="view_files_A">,
+      modified <input type="checkbox" checked id="view_files_M" name="view_files_M">,
+      deleted <input type="checkbox" checked id="view_files_D" name="view_files_D">
+    </span>
     <div class="right status">
       <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-valid '. ($branch->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
       <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle status-invalid '. ($branch->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>

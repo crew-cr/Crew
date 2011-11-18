@@ -1,4 +1,4 @@
-<?php if (sizeof($links) > 0 || $form !== null) : ?>
+<?php if ((sizeof($links) > 0 || $form !== null) && $userIsAuthenticated) : ?>
 <ul id="breadcrumb">
 <?php foreach($links as $link) : ?>
   <li><a href="<?php echo url_for($link['url']) ?>" class="<?php echo $link['class'] ?>"><?php echo $link['label'] ?></a> / </li>

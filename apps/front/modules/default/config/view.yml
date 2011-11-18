@@ -1,3 +1,6 @@
 fileSuccess:
   javascripts:
     - linecom.jquery.js
+fileListSuccess:
+  javascripts:
+    - viewFilesInfo.js

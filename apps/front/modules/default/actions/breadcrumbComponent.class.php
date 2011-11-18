@@ -8,10 +8,11 @@ class breadcrumbComponent extends sfComponent
    */
   public function execute($request)
   {
-    $this->links = array();
+    $this->links               = array();
     $this->typeContext         = null;
     $this->widgetDefault       = null;
     $this->form                = null;
+    $this->userIsAuthenticated = $this->getUser()->isAuthenticated();
 
     $criteria = null;
 
