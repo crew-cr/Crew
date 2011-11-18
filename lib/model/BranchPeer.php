@@ -43,6 +43,21 @@ class BranchPeer extends BaseBranchPeer {
     return '';
   }
 
+  public static function getBasecampLabelStatus($statusId)
+  {
+    switch ($statusId)
+    {
+      case BranchPeer::A_TRAITER:
+        return ':zzz:';
+      case BranchPeer::OK:
+        return ':thumbsup:';
+      case BranchPeer::KO:
+        return ':thumbsdown:';
+    }
+
+    return '';
+  }
+
   /**
    * @static
    * @param Repository $repository
