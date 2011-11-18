@@ -815,12 +815,13 @@ a.branch-sync {
   color: #4183C4;
 }
 
-.footer .logoTF {
+.footer .logoCrew {
+  color: #888;
   width: auto;
   height: 90px;
   margin: 0 0 0 15px;
   float: left;
-  padding-left: 200px;
+  padding-left: 170px;
   line-height: 95px;
   background: url('../images/logoFooter.png') 0 22px no-repeat;
 }

@@ -30,9 +30,7 @@
   </div>
   <div class="footer">
       <div class="site">
-        <div class="logoTF">
-          Developed by <a href="team-fusion.pmsipilot.com" title="Team Fusion">Team Fusion</a>, the third technical team of <a href="http://www.pmsipilot.com/" title="PMSIpilot">PMSIpilot</a>.
-        </div>
+        <div class="logoCrew">by <a href="http://team-fusion.pmsipilot.com" title="Team Fusion">Team Fusion</a> from <a href="http://www.pmsipilot.com/" title="PMSIpilot">PMSIpilot</a>.</div>
       </div>
     </div>
   </div>
