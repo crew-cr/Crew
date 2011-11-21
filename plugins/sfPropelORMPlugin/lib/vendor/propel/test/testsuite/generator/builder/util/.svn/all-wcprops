@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util
+END
+testSchema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/testSchema.xml
+END
+template.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/template.php
+END
+PropelTemplateTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/PropelTemplateTest.php
+END
+XmlToAppDataTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/XmlToAppDataTest.php
+END
+StandardEnglishPluralizerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/StandardEnglishPluralizerTest.php
+END
+innerSchema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/innerSchema.xml
+END
+DefaultEnglishPluralizerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/DefaultEnglishPluralizerTest.php
+END
+outerSchema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/util/outerSchema.xml
+END

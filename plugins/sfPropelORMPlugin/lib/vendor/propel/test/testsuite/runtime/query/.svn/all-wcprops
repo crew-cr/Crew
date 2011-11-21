@@ -1,0 +1,95 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query
+END
+ModelWithTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelWithTest.php
+END
+ModelCriteriaWithNamespaceTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelCriteriaWithNamespaceTest.php
+END
+CriteriaFluidConditionTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/CriteriaFluidConditionTest.php
+END
+JoinTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/JoinTest.php
+END
+CriteriaCombineTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/CriteriaCombineTest.php
+END
+ModelCriteriaWithSchemaTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelCriteriaWithSchemaTest.php
+END
+CriteriaTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/CriteriaTest.php
+END
+CriteriaFluidOperatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/CriteriaFluidOperatorTest.php
+END
+SubQueryTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/SubQueryTest.php
+END
+ModelJoinTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelJoinTest.php
+END
+CriteriaMergeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/CriteriaMergeTest.php
+END
+ModelCriteriaTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelCriteriaTest.php
+END
+ModelCriteriaSelectTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelCriteriaSelectTest.php
+END
+PropelQueryTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/PropelQueryTest.php
+END
+ModelCriteriaHooksTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/query/ModelCriteriaHooksTest.php
+END

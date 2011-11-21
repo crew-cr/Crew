@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io
+END
+StringReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/StringReader.php
+END
+InputStreamReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/InputStreamReader.php
+END
+Reader.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/Reader.php
+END
+FileReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FileReader.php
+END
+WinNTFileSystem.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/WinNTFileSystem.php
+END
+PhingFile.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/PhingFile.php
+END
+BufferedReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/BufferedReader.php
+END
+Win32FileSystem.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/Win32FileSystem.php
+END
+FilterReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FilterReader.php
+END
+OutputStreamWriter.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/OutputStreamWriter.php
+END
+InputStream.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/InputStream.php
+END
+FileInputStream.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FileInputStream.php
+END
+OutputStream.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/OutputStream.php
+END
+FileWriter.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FileWriter.php
+END
+FileOutputStream.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FileOutputStream.php
+END
+Writer.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/Writer.php
+END
+BufferedWriter.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/BufferedWriter.php
+END
+FileSystem.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/FileSystem.php
+END
+ConsoleReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/ConsoleReader.php
+END
+IOException.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/IOException.php
+END
+UnixFileSystem.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/system/io/UnixFileSystem.php
+END

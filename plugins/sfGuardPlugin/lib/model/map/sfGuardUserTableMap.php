@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.plugins.sfGuardPlugin.lib.model.map
  */
-class sfGuardUserTableMap extends TableMap {
+class sfGuardUserTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class sfGuardUserTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('sf_guard_user');
 		$this->setPhpName('sfGuardUser');
 		$this->setClassname('sfGuardUser');
@@ -44,8 +45,8 @@ class sfGuardUserTableMap extends TableMap {
 		$this->addColumn('PASSWORD', 'Password', 'VARCHAR', true, 128, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', false, null, null);
 		$this->addColumn('LAST_LOGIN', 'LastLogin', 'TIMESTAMP', false, null, null);
-		$this->addColumn('IS_ACTIVE', 'IsActive', 'BOOLEAN', true, null, true);
-		$this->addColumn('IS_SUPER_ADMIN', 'IsSuperAdmin', 'BOOLEAN', true, null, false);
+		$this->addColumn('IS_ACTIVE', 'IsActive', 'BOOLEAN', true, 1, true);
+		$this->addColumn('IS_SUPER_ADMIN', 'IsSuperAdmin', 'BOOLEAN', true, 1, false);
 		// validators
 	} // initialize()
 
@@ -54,22 +55,20 @@ class sfGuardUserTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'user_status_changed', ), null, null);
-    $this->addRelation('BranchComment', 'BranchComment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null);
-    $this->addRelation('File', 'File', RelationMap::ONE_TO_MANY, array('id' => 'last_change_commit_user', ), null, null);
-    $this->addRelation('FileComment', 'FileComment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null);
-    $this->addRelation('LineComment', 'LineComment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null);
-    $this->addRelation('Profile', 'Profile', RelationMap::ONE_TO_MANY, array('id' => 'sf_guard_user_id', ), 'CASCADE', null);
-    $this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null);
-    $this->addRelation('sfGuardUserPermission', 'sfGuardUserPermission', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null);
-    $this->addRelation('sfGuardUserGroup', 'sfGuardUserGroup', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null);
-    $this->addRelation('sfGuardRememberKey', 'sfGuardRememberKey', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null);
+		$this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'user_status_changed', ), null, null, 'Branchs');
+		$this->addRelation('Comment', 'Comment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'Comments');
+		$this->addRelation('File', 'File', RelationMap::ONE_TO_MANY, array('id' => 'last_change_commit_user', ), null, null, 'Files');
+		$this->addRelation('Profile', 'Profile', RelationMap::ONE_TO_MANY, array('id' => 'sf_guard_user_id', ), 'CASCADE', null, 'Profiles');
+		$this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'StatusActions');
+		$this->addRelation('sfGuardUserPermission', 'sfGuardUserPermission', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'sfGuardUserPermissions');
+		$this->addRelation('sfGuardUserGroup', 'sfGuardUserGroup', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'sfGuardUserGroups');
+		$this->addRelation('sfGuardRememberKey', 'sfGuardRememberKey', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), 'CASCADE', null, 'sfGuardRememberKeys');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

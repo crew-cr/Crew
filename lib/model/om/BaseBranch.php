@@ -116,9 +116,9 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $asfGuardUser;
 
 	/**
-	 * @var        array BranchComment[] Collection to store aggregation of BranchComment objects.
+	 * @var        array Comment[] Collection to store aggregation of Comment objects.
 	 */
-	protected $collBranchComments;
+	protected $collComments;
 
 	/**
 	 * @var        array File[] Collection to store aggregation of File objects.
@@ -143,6 +143,24 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $commentsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $filesScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $statusActionsScheduledForDeletion = null;
 
 	/**
 	 * Applies default values to this object.
@@ -481,7 +499,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$v = (int) $v;
 		}
 
-		if ($this->is_blacklisted !== $v || $this->isNew()) {
+		if ($this->is_blacklisted !== $v) {
 			$this->is_blacklisted = $v;
 			$this->modifiedColumns[] = BranchPeer::IS_BLACKLISTED;
 		}
@@ -501,7 +519,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$v = (int) $v;
 		}
 
-		if ($this->review_request !== $v || $this->isNew()) {
+		if ($this->review_request !== $v) {
 			$this->review_request = $v;
 			$this->modifiedColumns[] = BranchPeer::REVIEW_REQUEST;
 		}
@@ -521,7 +539,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$v = (int) $v;
 		}
 
-		if ($this->status !== $v || $this->isNew()) {
+		if ($this->status !== $v) {
 			$this->status = $v;
 			$this->modifiedColumns[] = BranchPeer::STATUS;
 		}
@@ -576,45 +594,18 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [date_status_changed] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     Branch The current object (for fluent API support)
 	 */
 	public function setDateStatusChanged($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->date_status_changed !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->date_status_changed !== null && $tmpDt = new DateTime($this->date_status_changed)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->date_status_changed = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->date_status_changed !== null || $dt !== null) {
+			$currentDateAsString = ($this->date_status_changed !== null && $tmpDt = new DateTime($this->date_status_changed)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->date_status_changed = $newDateAsString;
 				$this->modifiedColumns[] = BranchPeer::DATE_STATUS_CHANGED;
 			}
 		} // if either are not null
@@ -687,7 +678,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 13; // 13 = BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 13; // 13 = BranchPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Branch object", $e);
@@ -757,7 +748,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 			$this->aRepository = null;
 			$this->asfGuardUser = null;
-			$this->collBranchComments = null;
+			$this->collComments = null;
 
 			$this->collFiles = null;
 
@@ -787,6 +778,8 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = BranchQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BaseBranch:delete:pre') as $callable)
@@ -799,9 +792,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				BranchQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BaseBranch:delete:post') as $callable)
@@ -814,7 +805,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -882,7 +873,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -924,34 +915,40 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				$this->setsfGuardUser($this->asfGuardUser);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = BranchPeer::ID;
-			}
-
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
 				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(BranchPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.BranchPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
+					$this->doInsert($con);
 				} else {
-					$affectedRows += BranchPeer::doUpdate($this, $con);
+					$this->doUpdate($con);
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			if ($this->collBranchComments !== null) {
-				foreach ($this->collBranchComments as $referrerFK) {
+			if ($this->commentsScheduledForDeletion !== null) {
+				if (!$this->commentsScheduledForDeletion->isEmpty()) {
+					CommentQuery::create()
+						->filterByPrimaryKeys($this->commentsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->commentsScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collComments !== null) {
+				foreach ($this->collComments as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->filesScheduledForDeletion !== null) {
+				if (!$this->filesScheduledForDeletion->isEmpty()) {
+					FileQuery::create()
+						->filterByPrimaryKeys($this->filesScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->filesScheduledForDeletion = null;
 				}
 			}
 
@@ -960,6 +957,15 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->statusActionsScheduledForDeletion !== null) {
+				if (!$this->statusActionsScheduledForDeletion->isEmpty()) {
+					StatusActionQuery::create()
+						->filterByPrimaryKeys($this->statusActionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->statusActionsScheduledForDeletion = null;
 				}
 			}
 
@@ -976,6 +982,146 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = BranchPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . BranchPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(BranchPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(BranchPeer::REPOSITORY_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`REPOSITORY_ID`';
+		}
+		if ($this->isColumnModified(BranchPeer::NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`NAME`';
+		}
+		if ($this->isColumnModified(BranchPeer::BASE_BRANCH_NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`BASE_BRANCH_NAME`';
+		}
+		if ($this->isColumnModified(BranchPeer::COMMIT_REFERENCE)) {
+			$modifiedColumns[':p' . $index++]  = '`COMMIT_REFERENCE`';
+		}
+		if ($this->isColumnModified(BranchPeer::LAST_COMMIT)) {
+			$modifiedColumns[':p' . $index++]  = '`LAST_COMMIT`';
+		}
+		if ($this->isColumnModified(BranchPeer::LAST_COMMIT_DESC)) {
+			$modifiedColumns[':p' . $index++]  = '`LAST_COMMIT_DESC`';
+		}
+		if ($this->isColumnModified(BranchPeer::IS_BLACKLISTED)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_BLACKLISTED`';
+		}
+		if ($this->isColumnModified(BranchPeer::REVIEW_REQUEST)) {
+			$modifiedColumns[':p' . $index++]  = '`REVIEW_REQUEST`';
+		}
+		if ($this->isColumnModified(BranchPeer::STATUS)) {
+			$modifiedColumns[':p' . $index++]  = '`STATUS`';
+		}
+		if ($this->isColumnModified(BranchPeer::COMMIT_STATUS_CHANGED)) {
+			$modifiedColumns[':p' . $index++]  = '`COMMIT_STATUS_CHANGED`';
+		}
+		if ($this->isColumnModified(BranchPeer::USER_STATUS_CHANGED)) {
+			$modifiedColumns[':p' . $index++]  = '`USER_STATUS_CHANGED`';
+		}
+		if ($this->isColumnModified(BranchPeer::DATE_STATUS_CHANGED)) {
+			$modifiedColumns[':p' . $index++]  = '`DATE_STATUS_CHANGED`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `branch` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`REPOSITORY_ID`':
+						$stmt->bindValue($identifier, $this->repository_id, PDO::PARAM_INT);
+						break;
+					case '`NAME`':
+						$stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+						break;
+					case '`BASE_BRANCH_NAME`':
+						$stmt->bindValue($identifier, $this->base_branch_name, PDO::PARAM_STR);
+						break;
+					case '`COMMIT_REFERENCE`':
+						$stmt->bindValue($identifier, $this->commit_reference, PDO::PARAM_STR);
+						break;
+					case '`LAST_COMMIT`':
+						$stmt->bindValue($identifier, $this->last_commit, PDO::PARAM_STR);
+						break;
+					case '`LAST_COMMIT_DESC`':
+						$stmt->bindValue($identifier, $this->last_commit_desc, PDO::PARAM_STR);
+						break;
+					case '`IS_BLACKLISTED`':
+						$stmt->bindValue($identifier, $this->is_blacklisted, PDO::PARAM_INT);
+						break;
+					case '`REVIEW_REQUEST`':
+						$stmt->bindValue($identifier, $this->review_request, PDO::PARAM_INT);
+						break;
+					case '`STATUS`':
+						$stmt->bindValue($identifier, $this->status, PDO::PARAM_INT);
+						break;
+					case '`COMMIT_STATUS_CHANGED`':
+						$stmt->bindValue($identifier, $this->commit_status_changed, PDO::PARAM_STR);
+						break;
+					case '`USER_STATUS_CHANGED`':
+						$stmt->bindValue($identifier, $this->user_status_changed, PDO::PARAM_INT);
+						break;
+					case '`DATE_STATUS_CHANGED`':
+						$stmt->bindValue($identifier, $this->date_status_changed, PDO::PARAM_STR);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1060,8 +1206,8 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 
 
-				if ($this->collBranchComments !== null) {
-					foreach ($this->collBranchComments as $referrerFK) {
+				if ($this->collComments !== null) {
+					foreach ($this->collComments as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1172,12 +1318,17 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
 	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['Branch'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['Branch'][$this->getPrimaryKey()] = true;
 		$keys = BranchPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1196,10 +1347,19 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aRepository) {
-				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->asfGuardUser) {
-				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collComments) {
+				$result['Comments'] = $this->collComments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collFiles) {
+				$result['Files'] = $this->collFiles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collStatusActions) {
+				$result['StatusActions'] = $this->collStatusActions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 		}
 		return $result;
@@ -1389,31 +1549,32 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of Branch (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setRepositoryId($this->repository_id);
-		$copyObj->setName($this->name);
-		$copyObj->setBaseBranchName($this->base_branch_name);
-		$copyObj->setCommitReference($this->commit_reference);
-		$copyObj->setLastCommit($this->last_commit);
-		$copyObj->setLastCommitDesc($this->last_commit_desc);
-		$copyObj->setIsBlacklisted($this->is_blacklisted);
-		$copyObj->setReviewRequest($this->review_request);
-		$copyObj->setStatus($this->status);
-		$copyObj->setCommitStatusChanged($this->commit_status_changed);
-		$copyObj->setUserStatusChanged($this->user_status_changed);
-		$copyObj->setDateStatusChanged($this->date_status_changed);
+		$copyObj->setRepositoryId($this->getRepositoryId());
+		$copyObj->setName($this->getName());
+		$copyObj->setBaseBranchName($this->getBaseBranchName());
+		$copyObj->setCommitReference($this->getCommitReference());
+		$copyObj->setLastCommit($this->getLastCommit());
+		$copyObj->setLastCommitDesc($this->getLastCommitDesc());
+		$copyObj->setIsBlacklisted($this->getIsBlacklisted());
+		$copyObj->setReviewRequest($this->getReviewRequest());
+		$copyObj->setStatus($this->getStatus());
+		$copyObj->setCommitStatusChanged($this->getCommitStatusChanged());
+		$copyObj->setUserStatusChanged($this->getUserStatusChanged());
+		$copyObj->setDateStatusChanged($this->getDateStatusChanged());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
-			foreach ($this->getBranchComments() as $relObj) {
+			foreach ($this->getComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addBranchComment($relObj->copy($deepCopy));
+					$copyObj->addComment($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1431,9 +1592,10 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1513,11 +1675,11 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		if ($this->aRepository === null && ($this->repository_id !== null)) {
 			$this->aRepository = RepositoryQuery::create()->findPk($this->repository_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aRepository->addBranchs($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aRepository->addBranchs($this);
 			 */
 		}
 		return $this->aRepository;
@@ -1562,47 +1724,75 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		if ($this->asfGuardUser === null && ($this->user_status_changed !== null)) {
 			$this->asfGuardUser = sfGuardUserQuery::create()->findPk($this->user_status_changed, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->asfGuardUser->addBranchs($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->asfGuardUser->addBranchs($this);
 			 */
 		}
 		return $this->asfGuardUser;
 	}
 
+
 	/**
-	 * Clears out the collBranchComments collection
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('Comment' == $relationName) {
+			return $this->initComments();
+		}
+		if ('File' == $relationName) {
+			return $this->initFiles();
+		}
+		if ('StatusAction' == $relationName) {
+			return $this->initStatusActions();
+		}
+	}
+
+	/**
+	 * Clears out the collComments collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addBranchComments()
+	 * @see        addComments()
 	 */
-	public function clearBranchComments()
+	public function clearComments()
 	{
-		$this->collBranchComments = null; // important to set this to NULL since that means it is uninitialized
+		$this->collComments = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collBranchComments collection.
+	 * Initializes the collComments collection.
 	 *
-	 * By default this just sets the collBranchComments collection to an empty array (like clearcollBranchComments());
+	 * By default this just sets the collComments collection to an empty array (like clearcollComments());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initBranchComments()
+	public function initComments($overrideExisting = true)
 	{
-		$this->collBranchComments = new PropelObjectCollection();
-		$this->collBranchComments->setModel('BranchComment');
+		if (null !== $this->collComments && !$overrideExisting) {
+			return;
+		}
+		$this->collComments = new PropelObjectCollection();
+		$this->collComments->setModel('Comment');
 	}
 
 	/**
-	 * Gets an array of BranchComment objects which contain a foreign key that references this object.
+	 * Gets an array of Comment objects which contain a foreign key that references this object.
 	 *
 	 * If the $criteria is not null, it is used to always fetch the results from the database.
 	 * Otherwise the results are fetched from the database the first time, then cached.
@@ -1612,44 +1802,68 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 *
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array BranchComment[] List of BranchComment objects
+	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 * @throws     PropelException
 	 */
-	public function getBranchComments($criteria = null, PropelPDO $con = null)
+	public function getComments($criteria = null, PropelPDO $con = null)
 	{
-		if(null === $this->collBranchComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collBranchComments) {
+		if(null === $this->collComments || null !== $criteria) {
+			if ($this->isNew() && null === $this->collComments) {
 				// return empty collection
-				$this->initBranchComments();
+				$this->initComments();
 			} else {
-				$collBranchComments = BranchCommentQuery::create(null, $criteria)
+				$collComments = CommentQuery::create(null, $criteria)
 					->filterByBranch($this)
 					->find($con);
 				if (null !== $criteria) {
-					return $collBranchComments;
+					return $collComments;
 				}
-				$this->collBranchComments = $collBranchComments;
+				$this->collComments = $collComments;
 			}
 		}
-		return $this->collBranchComments;
+		return $this->collComments;
 	}
 
 	/**
-	 * Returns the number of related BranchComment objects.
+	 * Sets a collection of Comment objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $comments A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setComments(PropelCollection $comments, PropelPDO $con = null)
+	{
+		$this->commentsScheduledForDeletion = $this->getComments(new Criteria(), $con)->diff($comments);
+
+		foreach ($comments as $comment) {
+			// Fix issue with collection modified by reference
+			if ($comment->isNew()) {
+				$comment->setBranch($this);
+			}
+			$this->addComment($comment);
+		}
+
+		$this->collComments = $comments;
+	}
+
+	/**
+	 * Returns the number of related Comment objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related BranchComment objects.
+	 * @return     int Count of related Comment objects.
 	 * @throws     PropelException
 	 */
-	public function countBranchComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if(null === $this->collBranchComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collBranchComments) {
+		if(null === $this->collComments || null !== $criteria) {
+			if ($this->isNew() && null === $this->collComments) {
 				return 0;
 			} else {
-				$query = BranchCommentQuery::create(null, $criteria);
+				$query = CommentQuery::create(null, $criteria);
 				if($distinct) {
 					$query->distinct();
 				}
@@ -1658,27 +1872,36 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 					->count($con);
 			}
 		} else {
-			return count($this->collBranchComments);
+			return count($this->collComments);
 		}
 	}
 
 	/**
-	 * Method called to associate a BranchComment object to this object
-	 * through the BranchComment foreign key attribute.
+	 * Method called to associate a Comment object to this object
+	 * through the Comment foreign key attribute.
 	 *
-	 * @param      BranchComment $l BranchComment
-	 * @return     void
-	 * @throws     PropelException
+	 * @param      Comment $l Comment
+	 * @return     Branch The current object (for fluent API support)
 	 */
-	public function addBranchComment(BranchComment $l)
+	public function addComment(Comment $l)
 	{
-		if ($this->collBranchComments === null) {
-			$this->initBranchComments();
+		if ($this->collComments === null) {
+			$this->initComments();
 		}
-		if (!$this->collBranchComments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collBranchComments[]= $l;
-			$l->setBranch($this);
+		if (!$this->collComments->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddComment($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Comment $comment The comment object to add.
+	 */
+	protected function doAddComment($comment)
+	{
+		$this->collComments[]= $comment;
+		$comment->setBranch($this);
 	}
 
 
@@ -1687,7 +1910,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this Branch is new, it will return
 	 * an empty collection; or if this Branch has previously
-	 * been saved, it will retrieve related BranchComments from storage.
+	 * been saved, it will retrieve related Comments from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
@@ -1696,14 +1919,39 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array BranchComment[] List of BranchComment objects
+	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 */
-	public function getBranchCommentsJoinsfGuardUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getCommentsJoinsfGuardUser($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$query = BranchCommentQuery::create(null, $criteria);
+		$query = CommentQuery::create(null, $criteria);
 		$query->joinWith('sfGuardUser', $join_behavior);
 
-		return $this->getBranchComments($query, $con);
+		return $this->getComments($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this Branch is new, it will return
+	 * an empty collection; or if this Branch has previously
+	 * been saved, it will retrieve related Comments from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in Branch.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Comment[] List of Comment objects
+	 */
+	public function getCommentsJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = CommentQuery::create(null, $criteria);
+		$query->joinWith('File', $join_behavior);
+
+		return $this->getComments($query, $con);
 	}
 
 	/**
@@ -1727,10 +1975,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initFiles()
+	public function initFiles($overrideExisting = true)
 	{
+		if (null !== $this->collFiles && !$overrideExisting) {
+			return;
+		}
 		$this->collFiles = new PropelObjectCollection();
 		$this->collFiles->setModel('File');
 	}
@@ -1769,6 +2023,30 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of File objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $files A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setFiles(PropelCollection $files, PropelPDO $con = null)
+	{
+		$this->filesScheduledForDeletion = $this->getFiles(new Criteria(), $con)->diff($files);
+
+		foreach ($files as $file) {
+			// Fix issue with collection modified by reference
+			if ($file->isNew()) {
+				$file->setBranch($this);
+			}
+			$this->addFile($file);
+		}
+
+		$this->collFiles = $files;
+	}
+
+	/**
 	 * Returns the number of related File objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1801,8 +2079,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * through the File foreign key attribute.
 	 *
 	 * @param      File $l File
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Branch The current object (for fluent API support)
 	 */
 	public function addFile(File $l)
 	{
@@ -1810,9 +2087,19 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$this->initFiles();
 		}
 		if (!$this->collFiles->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collFiles[]= $l;
-			$l->setBranch($this);
+			$this->doAddFile($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	File $file The file object to add.
+	 */
+	protected function doAddFile($file)
+	{
+		$this->collFiles[]= $file;
+		$file->setBranch($this);
 	}
 
 
@@ -1861,10 +2148,16 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initStatusActions()
+	public function initStatusActions($overrideExisting = true)
 	{
+		if (null !== $this->collStatusActions && !$overrideExisting) {
+			return;
+		}
 		$this->collStatusActions = new PropelObjectCollection();
 		$this->collStatusActions->setModel('StatusAction');
 	}
@@ -1903,6 +2196,30 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of StatusAction objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $statusActions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setStatusActions(PropelCollection $statusActions, PropelPDO $con = null)
+	{
+		$this->statusActionsScheduledForDeletion = $this->getStatusActions(new Criteria(), $con)->diff($statusActions);
+
+		foreach ($statusActions as $statusAction) {
+			// Fix issue with collection modified by reference
+			if ($statusAction->isNew()) {
+				$statusAction->setBranch($this);
+			}
+			$this->addStatusAction($statusAction);
+		}
+
+		$this->collStatusActions = $statusActions;
+	}
+
+	/**
 	 * Returns the number of related StatusAction objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1935,8 +2252,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * through the StatusAction foreign key attribute.
 	 *
 	 * @param      StatusAction $l StatusAction
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Branch The current object (for fluent API support)
 	 */
 	public function addStatusAction(StatusAction $l)
 	{
@@ -1944,9 +2260,19 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			$this->initStatusActions();
 		}
 		if (!$this->collStatusActions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collStatusActions[]= $l;
-			$l->setBranch($this);
+			$this->doAddStatusAction($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	StatusAction $statusAction The statusAction object to add.
+	 */
+	protected function doAddStatusAction($statusAction)
+	{
+		$this->collStatusActions[]= $statusAction;
+		$statusAction->setBranch($this);
 	}
 
 
@@ -2052,39 +2378,58 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
-			if ($this->collBranchComments) {
-				foreach ((array) $this->collBranchComments as $o) {
+			if ($this->collComments) {
+				foreach ($this->collComments as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collFiles) {
-				foreach ((array) $this->collFiles as $o) {
+				foreach ($this->collFiles as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collStatusActions) {
-				foreach ((array) $this->collStatusActions as $o) {
+				foreach ($this->collStatusActions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
-		$this->collBranchComments = null;
+		if ($this->collComments instanceof PropelCollection) {
+			$this->collComments->clearIterator();
+		}
+		$this->collComments = null;
+		if ($this->collFiles instanceof PropelCollection) {
+			$this->collFiles->clearIterator();
+		}
 		$this->collFiles = null;
+		if ($this->collStatusActions instanceof PropelCollection) {
+			$this->collStatusActions->clearIterator();
+		}
 		$this->collStatusActions = null;
 		$this->aRepository = null;
 		$this->asfGuardUser = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(BranchPeer::DEFAULT_STRING_FORMAT);
 	}
 
 	/**
@@ -2092,6 +2437,7 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BaseBranch:' . $name))
 		{
@@ -2099,17 +2445,6 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 

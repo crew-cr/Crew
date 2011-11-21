@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om
+END
+NodeObject.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om/NodeObject.php
+END
+NestedSetRecursiveIterator.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om/NestedSetRecursiveIterator.php
+END
+Persistent.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om/Persistent.php
+END
+BaseObject.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om/BaseObject.php
+END
+PreOrderNodeIterator.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/om/PreOrderNodeIterator.php
+END

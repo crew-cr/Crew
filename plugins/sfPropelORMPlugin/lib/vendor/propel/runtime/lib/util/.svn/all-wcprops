@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util
+END
+PropelDateTime.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelDateTime.php
+END
+PropelPager.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelPager.php
+END
+NodePeer.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/NodePeer.php
+END
+PropelAutoloader.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelAutoloader.php
+END
+PropelModelPager.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelModelPager.php
+END
+PropelColumnTypes.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelColumnTypes.php
+END
+BasePeer.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/BasePeer.php
+END
+PropelConditionalProxy.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/util/PropelConditionalProxy.php
+END

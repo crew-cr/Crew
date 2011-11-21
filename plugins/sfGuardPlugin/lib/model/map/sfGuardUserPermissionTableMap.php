@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.plugins.sfGuardPlugin.lib.model.map
  */
-class sfGuardUserPermissionTableMap extends TableMap {
+class sfGuardUserPermissionTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class sfGuardUserPermissionTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('sf_guard_user_permission');
 		$this->setPhpName('sfGuardUserPermission');
 		$this->setClassname('sfGuardUserPermission');
@@ -47,14 +48,14 @@ class sfGuardUserPermissionTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
-    $this->addRelation('sfGuardPermission', 'sfGuardPermission', RelationMap::MANY_TO_ONE, array('permission_id' => 'id', ), 'CASCADE', null);
+		$this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
+		$this->addRelation('sfGuardPermission', 'sfGuardPermission', RelationMap::MANY_TO_ONE, array('permission_id' => 'id', ), 'CASCADE', null);
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

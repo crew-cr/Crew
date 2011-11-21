@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.lib.model.map
  */
-class StatusActionTableMap extends TableMap {
+class StatusActionTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class StatusActionTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('status_action');
 		$this->setPhpName('StatusAction');
 		$this->setClassname('StatusAction');
@@ -54,16 +55,16 @@ class StatusActionTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), null, null);
-    $this->addRelation('Repository', 'Repository', RelationMap::MANY_TO_ONE, array('repository_id' => 'id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('File', 'File', RelationMap::MANY_TO_ONE, array('file_id' => 'id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), null, null);
+		$this->addRelation('Repository', 'Repository', RelationMap::MANY_TO_ONE, array('repository_id' => 'id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('File', 'File', RelationMap::MANY_TO_ONE, array('file_id' => 'id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

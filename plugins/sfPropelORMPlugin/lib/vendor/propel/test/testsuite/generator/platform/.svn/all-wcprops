@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform
+END
+DefaultPlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/DefaultPlatformTest.php
+END
+PlatformMigrationTestProvider.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/PlatformMigrationTestProvider.php
+END
+MysqlPlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/MysqlPlatformTest.php
+END
+OraclePlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/OraclePlatformTest.php
+END
+PgsqlPlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/PgsqlPlatformTest.php
+END
+PlatformTestBase.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/PlatformTestBase.php
+END
+PlatformTestProvider.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/PlatformTestProvider.php
+END
+MssqlPlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/MssqlPlatformTest.php
+END
+MysqlPlatformMigrationTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/MysqlPlatformMigrationTest.php
+END
+OraclePlatformMigrationTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/OraclePlatformMigrationTest.php
+END
+PgsqlPlatformMigrationTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/PgsqlPlatformMigrationTest.php
+END
+SqlitePlatformTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/platform/SqlitePlatformTest.php
+END

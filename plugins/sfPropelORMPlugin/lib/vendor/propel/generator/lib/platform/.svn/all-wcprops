@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform
+END
+DefaultPlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/DefaultPlatform.php
+END
+MysqlPlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/MysqlPlatform.php
+END
+OraclePlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/OraclePlatform.php
+END
+PgsqlPlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/PgsqlPlatform.php
+END
+SqlsrvPlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/SqlsrvPlatform.php
+END
+MssqlPlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/MssqlPlatform.php
+END
+SqlitePlatform.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/SqlitePlatform.php
+END
+PropelPlatformInterface.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/platform/PropelPlatformInterface.php
+END

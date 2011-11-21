@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/!svn/ver/432/tags/2.3.3/classes/phing/parser
+END
+DataTypeHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/DataTypeHandler.php
+END
+ProjectConfigurator.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/ProjectConfigurator.php
+END
+NestedElementHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/NestedElementHandler.php
+END
+ExpatParseException.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/ExpatParseException.php
+END
+AbstractSAXParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/AbstractSAXParser.php
+END
+ExpatParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/ExpatParser.php
+END
+TaskHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/TaskHandler.php
+END
+AbstractHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/AbstractHandler.php
+END
+RootHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/RootHandler.php
+END
+ProjectHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/ProjectHandler.php
+END
+TargetHandler.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/TargetHandler.php
+END
+Location.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/!svn/ver/432/tags/2.3.3/classes/phing/parser/Location.php
+END

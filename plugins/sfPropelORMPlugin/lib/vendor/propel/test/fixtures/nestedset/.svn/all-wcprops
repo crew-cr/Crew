@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/nestedset
+END
+runtime-conf.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/nestedset/runtime-conf.xml
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/nestedset/build.properties
+END
+nestedset-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/nestedset/nestedset-schema.xml
+END

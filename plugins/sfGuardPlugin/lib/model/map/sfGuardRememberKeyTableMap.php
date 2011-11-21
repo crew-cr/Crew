@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.plugins.sfGuardPlugin.lib.model.map
  */
-class sfGuardRememberKeyTableMap extends TableMap {
+class sfGuardRememberKeyTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class sfGuardRememberKeyTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('sf_guard_remember_key');
 		$this->setPhpName('sfGuardRememberKey');
 		$this->setClassname('sfGuardRememberKey');
@@ -49,13 +50,13 @@ class sfGuardRememberKeyTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
+		$this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), 'CASCADE', null);
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn
+END
+SvnExportTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn/SvnExportTask.php
+END
+SvnLastRevisionTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn/SvnLastRevisionTask.php
+END
+SvnUpdateTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn/SvnUpdateTask.php
+END
+SvnCheckoutTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn/SvnCheckoutTask.php
+END
+SvnBaseTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/svn/SvnBaseTask.php
+END

@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates
+END
+objectSaveWithoutArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectSaveWithoutArchive.php
+END
+queryDeleteWithoutArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/queryDeleteWithoutArchive.php
+END
+queryUpdateWithoutArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/queryUpdateWithoutArchive.php
+END
+objectDeleteWithoutArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectDeleteWithoutArchive.php
+END
+objectPreDelete.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectPreDelete.php
+END
+objectRestoreFromArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectRestoreFromArchive.php
+END
+querySetArchiveOnDelete.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/querySetArchiveOnDelete.php
+END
+querySetArchiveOnUpdate.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/querySetArchiveOnUpdate.php
+END
+objectPopulateFromArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectPopulateFromArchive.php
+END
+queryArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/queryArchive.php
+END
+objectArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectArchive.php
+END
+objectGetArchive.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/archivable/templates/objectGetArchive.php
+END

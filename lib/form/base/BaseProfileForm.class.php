@@ -21,7 +21,7 @@ abstract class BaseProfileForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'               => new sfValidatorPropelChoice(array('model' => 'Profile', 'column' => 'id', 'required' => false)),
+      'id'               => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'nickname'         => new sfValidatorString(array('max_length' => 255, 'required' => false)),
       'email'            => new sfValidatorString(array('max_length' => 255, 'required' => false)),
       'sf_guard_user_id' => new sfValidatorPropelChoice(array('model' => 'sfGuardUser', 'column' => 'id')),

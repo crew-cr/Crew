@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/schemas
+END
+schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/schemas/schema.xml
+END
+runtime-conf.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/schemas/runtime-conf.xml
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/schemas/build.properties
+END

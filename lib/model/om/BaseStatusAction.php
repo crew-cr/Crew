@@ -409,45 +409,18 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     StatusAction The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->created_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->created_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->created_at = $newDateAsString;
 				$this->modifiedColumns[] = StatusActionPeer::CREATED_AT;
 			}
 		} // if either are not null
@@ -504,7 +477,7 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = StatusActionPeer::NUM_COLUMNS - StatusActionPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 9; // 9 = StatusActionPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating StatusAction object", $e);
@@ -606,6 +579,8 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = StatusActionQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BaseStatusAction:delete:pre') as $callable)
@@ -618,9 +593,7 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				StatusActionQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BaseStatusAction:delete:post') as $callable)
@@ -633,7 +606,7 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -676,8 +649,6 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 			  }
 			}
 
-			// symfony_timestampable behavior
-			
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
 				// symfony_timestampable behavior
@@ -709,7 +680,7 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -765,27 +736,15 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 				$this->setFile($this->aFile);
 			}
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = StatusActionPeer::ID;
-			}
-
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
 				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(StatusActionPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.StatusActionPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
+					$this->doInsert($con);
 				} else {
-					$affectedRows += StatusActionPeer::doUpdate($this, $con);
+					$this->doUpdate($con);
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
 			$this->alreadyInSave = false;
@@ -793,6 +752,122 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = StatusActionPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . StatusActionPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(StatusActionPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::USER_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`USER_ID`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::REPOSITORY_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`REPOSITORY_ID`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::BRANCH_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`BRANCH_ID`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::FILE_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`FILE_ID`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::MESSAGE)) {
+			$modifiedColumns[':p' . $index++]  = '`MESSAGE`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::OLD_STATUS)) {
+			$modifiedColumns[':p' . $index++]  = '`OLD_STATUS`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::NEW_STATUS)) {
+			$modifiedColumns[':p' . $index++]  = '`NEW_STATUS`';
+		}
+		if ($this->isColumnModified(StatusActionPeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `status_action` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`USER_ID`':
+						$stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+						break;
+					case '`REPOSITORY_ID`':
+						$stmt->bindValue($identifier, $this->repository_id, PDO::PARAM_INT);
+						break;
+					case '`BRANCH_ID`':
+						$stmt->bindValue($identifier, $this->branch_id, PDO::PARAM_INT);
+						break;
+					case '`FILE_ID`':
+						$stmt->bindValue($identifier, $this->file_id, PDO::PARAM_INT);
+						break;
+					case '`MESSAGE`':
+						$stmt->bindValue($identifier, $this->message, PDO::PARAM_STR);
+						break;
+					case '`OLD_STATUS`':
+						$stmt->bindValue($identifier, $this->old_status, PDO::PARAM_INT);
+						break;
+					case '`NEW_STATUS`':
+						$stmt->bindValue($identifier, $this->new_status, PDO::PARAM_INT);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -965,12 +1040,17 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
 	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['StatusAction'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['StatusAction'][$this->getPrimaryKey()] = true;
 		$keys = StatusActionPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -985,16 +1065,16 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->asfGuardUser) {
-				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aRepository) {
-				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['Repository'] = $this->aRepository->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aBranch) {
-				$result['Branch'] = $this->aBranch->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['Branch'] = $this->aBranch->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aFile) {
-				$result['File'] = $this->aFile->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['File'] = $this->aFile->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 		}
 		return $result;
@@ -1164,21 +1244,23 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of StatusAction (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setUserId($this->user_id);
-		$copyObj->setRepositoryId($this->repository_id);
-		$copyObj->setBranchId($this->branch_id);
-		$copyObj->setFileId($this->file_id);
-		$copyObj->setMessage($this->message);
-		$copyObj->setOldStatus($this->old_status);
-		$copyObj->setNewStatus($this->new_status);
-		$copyObj->setCreatedAt($this->created_at);
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		$copyObj->setUserId($this->getUserId());
+		$copyObj->setRepositoryId($this->getRepositoryId());
+		$copyObj->setBranchId($this->getBranchId());
+		$copyObj->setFileId($this->getFileId());
+		$copyObj->setMessage($this->getMessage());
+		$copyObj->setOldStatus($this->getOldStatus());
+		$copyObj->setNewStatus($this->getNewStatus());
+		$copyObj->setCreatedAt($this->getCreatedAt());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1258,11 +1340,11 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		if ($this->asfGuardUser === null && ($this->user_id !== null)) {
 			$this->asfGuardUser = sfGuardUserQuery::create()->findPk($this->user_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->asfGuardUser->addStatusActions($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->asfGuardUser->addStatusActions($this);
 			 */
 		}
 		return $this->asfGuardUser;
@@ -1307,11 +1389,11 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		if ($this->aRepository === null && ($this->repository_id !== null)) {
 			$this->aRepository = RepositoryQuery::create()->findPk($this->repository_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aRepository->addStatusActions($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aRepository->addStatusActions($this);
 			 */
 		}
 		return $this->aRepository;
@@ -1356,11 +1438,11 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		if ($this->aBranch === null && ($this->branch_id !== null)) {
 			$this->aBranch = BranchQuery::create()->findPk($this->branch_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aBranch->addStatusActions($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aBranch->addStatusActions($this);
 			 */
 		}
 		return $this->aBranch;
@@ -1405,11 +1487,11 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		if ($this->aFile === null && ($this->file_id !== null)) {
 			$this->aFile = FileQuery::create()->findPk($this->file_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->aFile->addStatusActions($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->aFile->addStatusActions($this);
 			 */
 		}
 		return $this->aFile;
@@ -1438,13 +1520,13 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
@@ -1458,10 +1540,21 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(StatusActionPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
 	 * Catches calls to virtual methods
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BaseStatusAction:' . $name))
 		{
@@ -1469,17 +1562,6 @@ abstract class BaseStatusAction extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter
+END
+DBMySQL.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBMySQL.php
+END
+DBOracle.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBOracle.php
+END
+DBPostgres.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBPostgres.php
+END
+DBSQLSRV.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBSQLSRV.php
+END
+DBMSSQL.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBMSSQL.php
+END
+DBNone.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBNone.php
+END
+DBAdapter.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBAdapter.php
+END
+DBSQLite.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/adapter/DBSQLite.php
+END

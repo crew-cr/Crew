@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map
+END
+ColumnMap.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map/ColumnMap.php
+END
+RelationMap.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map/RelationMap.php
+END
+DatabaseMap.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map/DatabaseMap.php
+END
+ValidatorMap.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map/ValidatorMap.php
+END
+TableMap.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/map/TableMap.php
+END

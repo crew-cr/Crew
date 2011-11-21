@@ -1,0 +1,149 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors
+END
+ContainsRegexpSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/ContainsRegexpSelector.php
+END
+SelectorScanner.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/SelectorScanner.php
+END
+MajoritySelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/MajoritySelector.php
+END
+NoneSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/NoneSelector.php
+END
+DependSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/DependSelector.php
+END
+NotSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/NotSelector.php
+END
+SelectorUtils.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/SelectorUtils.php
+END
+AndSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/AndSelector.php
+END
+DepthSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/DepthSelector.php
+END
+BaseSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/BaseSelector.php
+END
+SizeSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/SizeSelector.php
+END
+DateSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/DateSelector.php
+END
+BaseSelectorContainer.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/BaseSelectorContainer.php
+END
+ContainsSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/ContainsSelector.php
+END
+FileSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/FileSelector.php
+END
+SelectSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/SelectSelector.php
+END
+FilenameSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/FilenameSelector.php
+END
+OrSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/OrSelector.php
+END
+PresentSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/PresentSelector.php
+END
+TypeSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/TypeSelector.php
+END
+BaseExtendSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/BaseExtendSelector.php
+END
+SelectorContainer.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/SelectorContainer.php
+END
+ExtendSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/ExtendSelector.php
+END
+ExtendFileSelector.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/!svn/ver/432/tags/2.3.3/classes/phing/types/selectors/ExtendFileSelector.php
+END

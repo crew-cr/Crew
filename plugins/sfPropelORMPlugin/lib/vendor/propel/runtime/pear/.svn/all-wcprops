@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/propelorm/Propel.git/!svn/ver/2349/runtime/pear
+END
+build-pear-package.xml
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/pear/build-pear-package.xml
+END
+BuildPropelPEARPackageTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/pear/BuildPropelPEARPackageTask.php
+END

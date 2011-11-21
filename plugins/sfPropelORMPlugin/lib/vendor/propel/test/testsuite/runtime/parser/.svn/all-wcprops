@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser
+END
+PropelCSVParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser/PropelCSVParserTest.php
+END
+PropelParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser/PropelParserTest.php
+END
+PropelXMLParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser/PropelXMLParserTest.php
+END
+PropelYAMLParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser/PropelYAMLParserTest.php
+END
+PropelJSONParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/parser/PropelJSONParserTest.php
+END

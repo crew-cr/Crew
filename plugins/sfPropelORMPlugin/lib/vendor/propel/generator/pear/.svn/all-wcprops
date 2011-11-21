@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/propelorm/Propel.git/!svn/ver/2349/generator/pear
+END
+pear-propel-gen.bat
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/pear-propel-gen.bat
+END
+pear-build.xml
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/pear-build.xml
+END
+BuildPropelGenPEARPackageTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/BuildPropelGenPEARPackageTask.php
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/build.properties
+END
+build-pear-package.xml
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/build-pear-package.xml
+END
+pear-propel-gen
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/generator/pear/pear-propel-gen
+END

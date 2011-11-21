@@ -87,24 +87,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	protected $collBranchs;
 
 	/**
-	 * @var        array BranchComment[] Collection to store aggregation of BranchComment objects.
+	 * @var        array Comment[] Collection to store aggregation of Comment objects.
 	 */
-	protected $collBranchComments;
+	protected $collComments;
 
 	/**
 	 * @var        array File[] Collection to store aggregation of File objects.
 	 */
 	protected $collFiles;
-
-	/**
-	 * @var        array FileComment[] Collection to store aggregation of FileComment objects.
-	 */
-	protected $collFileComments;
-
-	/**
-	 * @var        array LineComment[] Collection to store aggregation of LineComment objects.
-	 */
-	protected $collLineComments;
 
 	/**
 	 * @var        array Profile[] Collection to store aggregation of Profile objects.
@@ -144,6 +134,54 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $branchsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $commentsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $filesScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $profilesScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $statusActionsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $sfGuardUserPermissionsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $sfGuardUserGroupsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $sfGuardRememberKeysScheduledForDeletion = null;
 
 	/**
 	 * Applies default values to this object.
@@ -366,7 +404,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$v = (string) $v;
 		}
 
-		if ($this->algorithm !== $v || $this->isNew()) {
+		if ($this->algorithm !== $v) {
 			$this->algorithm = $v;
 			$this->modifiedColumns[] = sfGuardUserPeer::ALGORITHM;
 		}
@@ -417,45 +455,18 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function setCreatedAt($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->created_at !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->created_at = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->created_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->created_at !== null && $tmpDt = new DateTime($this->created_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->created_at = $newDateAsString;
 				$this->modifiedColumns[] = sfGuardUserPeer::CREATED_AT;
 			}
 		} // if either are not null
@@ -466,45 +477,18 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	/**
 	 * Sets the value of [last_login] column to a normalized version of the date/time value specified.
 	 * 
-	 * @param      mixed $v string, integer (timestamp), or DateTime value.  Empty string will
-	 *						be treated as NULL for temporal objects.
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
 	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function setLastLogin($v)
 	{
-		// we treat '' as NULL for temporal objects because DateTime('') == DateTime('now')
-		// -- which is unexpected, to say the least.
-		if ($v === null || $v === '') {
-			$dt = null;
-		} elseif ($v instanceof DateTime) {
-			$dt = $v;
-		} else {
-			// some string/numeric value passed; we normalize that so that we can
-			// validate it.
-			try {
-				if (is_numeric($v)) { // if it's a unix timestamp
-					$dt = new DateTime('@'.$v, new DateTimeZone('UTC'));
-					// We have to explicitly specify and then change the time zone because of a
-					// DateTime bug: http://bugs.php.net/bug.php?id=43003
-					$dt->setTimeZone(new DateTimeZone(date_default_timezone_get()));
-				} else {
-					$dt = new DateTime($v);
-				}
-			} catch (Exception $x) {
-				throw new PropelException('Error parsing date/time value: ' . var_export($v, true), $x);
-			}
-		}
-
-		if ( $this->last_login !== null || $dt !== null ) {
-			// (nested ifs are a little easier to read in this case)
-
-			$currNorm = ($this->last_login !== null && $tmpDt = new DateTime($this->last_login)) ? $tmpDt->format('Y-m-d H:i:s') : null;
-			$newNorm = ($dt !== null) ? $dt->format('Y-m-d H:i:s') : null;
-
-			if ( ($currNorm !== $newNorm) // normalized values don't match 
-					)
-			{
-				$this->last_login = ($dt ? $dt->format('Y-m-d H:i:s') : null);
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->last_login !== null || $dt !== null) {
+			$currentDateAsString = ($this->last_login !== null && $tmpDt = new DateTime($this->last_login)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->last_login = $newDateAsString;
 				$this->modifiedColumns[] = sfGuardUserPeer::LAST_LOGIN;
 			}
 		} // if either are not null
@@ -513,18 +497,26 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	} // setLastLogin()
 
 	/**
-	 * Set the value of [is_active] column.
+	 * Sets the value of the [is_active] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function setIsActive($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
-		if ($this->is_active !== $v || $this->isNew()) {
+		if ($this->is_active !== $v) {
 			$this->is_active = $v;
 			$this->modifiedColumns[] = sfGuardUserPeer::IS_ACTIVE;
 		}
@@ -533,18 +525,26 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	} // setIsActive()
 
 	/**
-	 * Set the value of [is_super_admin] column.
+	 * Sets the value of the [is_super_admin] column.
+	 * Non-boolean arguments are converted using the following rules:
+	 *   * 1, '1', 'true',  'on',  and 'yes' are converted to boolean true
+	 *   * 0, '0', 'false', 'off', and 'no'  are converted to boolean false
+	 * Check on string values is case insensitive (so 'FaLsE' is seen as 'false').
 	 * 
-	 * @param      boolean $v new value
+	 * @param      boolean|integer|string $v The new value
 	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function setIsSuperAdmin($v)
 	{
 		if ($v !== null) {
-			$v = (boolean) $v;
+			if (is_string($v)) {
+				$v = in_array(strtolower($v), array('false', 'off', '-', 'no', 'n', '0', '')) ? false : true;
+			} else {
+				$v = (boolean) $v;
+			}
 		}
 
-		if ($this->is_super_admin !== $v || $this->isNew()) {
+		if ($this->is_super_admin !== $v) {
 			$this->is_super_admin = $v;
 			$this->modifiedColumns[] = sfGuardUserPeer::IS_SUPER_ADMIN;
 		}
@@ -613,7 +613,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 9; // 9 = sfGuardUserPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfGuardUser object", $e);
@@ -677,13 +677,9 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 			$this->collBranchs = null;
 
-			$this->collBranchComments = null;
+			$this->collComments = null;
 
 			$this->collFiles = null;
-
-			$this->collFileComments = null;
-
-			$this->collLineComments = null;
 
 			$this->collProfiles = null;
 
@@ -719,6 +715,8 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = sfGuardUserQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BasesfGuardUser:delete:pre') as $callable)
@@ -731,9 +729,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				sfGuardUserQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BasesfGuardUser:delete:post') as $callable)
@@ -746,7 +742,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -789,8 +785,6 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			  }
 			}
 
-			// symfony_timestampable behavior
-			
 			if ($isInsert) {
 				$ret = $ret && $this->preInsert($con);
 				// symfony_timestampable behavior
@@ -822,7 +816,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -845,27 +839,24 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = sfGuardUserPeer::ID;
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
+				if ($this->isNew()) {
+					$this->doInsert($con);
+				} else {
+					$this->doUpdate($con);
+				}
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
-				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(sfGuardUserPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.sfGuardUserPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows = 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
-				} else {
-					$affectedRows = sfGuardUserPeer::doUpdate($this, $con);
+			if ($this->branchsScheduledForDeletion !== null) {
+				if (!$this->branchsScheduledForDeletion->isEmpty()) {
+					BranchQuery::create()
+						->filterByPrimaryKeys($this->branchsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->branchsScheduledForDeletion = null;
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
 			if ($this->collBranchs !== null) {
@@ -876,11 +867,29 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
-			if ($this->collBranchComments !== null) {
-				foreach ($this->collBranchComments as $referrerFK) {
+			if ($this->commentsScheduledForDeletion !== null) {
+				if (!$this->commentsScheduledForDeletion->isEmpty()) {
+					CommentQuery::create()
+						->filterByPrimaryKeys($this->commentsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->commentsScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collComments !== null) {
+				foreach ($this->collComments as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->filesScheduledForDeletion !== null) {
+				if (!$this->filesScheduledForDeletion->isEmpty()) {
+					FileQuery::create()
+						->filterByPrimaryKeys($this->filesScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->filesScheduledForDeletion = null;
 				}
 			}
 
@@ -892,19 +901,12 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
-			if ($this->collFileComments !== null) {
-				foreach ($this->collFileComments as $referrerFK) {
-					if (!$referrerFK->isDeleted()) {
-						$affectedRows += $referrerFK->save($con);
-					}
-				}
-			}
-
-			if ($this->collLineComments !== null) {
-				foreach ($this->collLineComments as $referrerFK) {
-					if (!$referrerFK->isDeleted()) {
-						$affectedRows += $referrerFK->save($con);
-					}
+			if ($this->profilesScheduledForDeletion !== null) {
+				if (!$this->profilesScheduledForDeletion->isEmpty()) {
+					ProfileQuery::create()
+						->filterByPrimaryKeys($this->profilesScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->profilesScheduledForDeletion = null;
 				}
 			}
 
@@ -916,11 +918,29 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->statusActionsScheduledForDeletion !== null) {
+				if (!$this->statusActionsScheduledForDeletion->isEmpty()) {
+					StatusActionQuery::create()
+						->filterByPrimaryKeys($this->statusActionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->statusActionsScheduledForDeletion = null;
+				}
+			}
+
 			if ($this->collStatusActions !== null) {
 				foreach ($this->collStatusActions as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->sfGuardUserPermissionsScheduledForDeletion !== null) {
+				if (!$this->sfGuardUserPermissionsScheduledForDeletion->isEmpty()) {
+					sfGuardUserPermissionQuery::create()
+						->filterByPrimaryKeys($this->sfGuardUserPermissionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->sfGuardUserPermissionsScheduledForDeletion = null;
 				}
 			}
 
@@ -932,11 +952,29 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
+			if ($this->sfGuardUserGroupsScheduledForDeletion !== null) {
+				if (!$this->sfGuardUserGroupsScheduledForDeletion->isEmpty()) {
+					sfGuardUserGroupQuery::create()
+						->filterByPrimaryKeys($this->sfGuardUserGroupsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->sfGuardUserGroupsScheduledForDeletion = null;
+				}
+			}
+
 			if ($this->collsfGuardUserGroups !== null) {
 				foreach ($this->collsfGuardUserGroups as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->sfGuardRememberKeysScheduledForDeletion !== null) {
+				if (!$this->sfGuardRememberKeysScheduledForDeletion->isEmpty()) {
+					sfGuardRememberKeyQuery::create()
+						->filterByPrimaryKeys($this->sfGuardRememberKeysScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->sfGuardRememberKeysScheduledForDeletion = null;
 				}
 			}
 
@@ -953,6 +991,122 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = sfGuardUserPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . sfGuardUserPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(sfGuardUserPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::USERNAME)) {
+			$modifiedColumns[':p' . $index++]  = '`USERNAME`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::ALGORITHM)) {
+			$modifiedColumns[':p' . $index++]  = '`ALGORITHM`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::SALT)) {
+			$modifiedColumns[':p' . $index++]  = '`SALT`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::PASSWORD)) {
+			$modifiedColumns[':p' . $index++]  = '`PASSWORD`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::CREATED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::LAST_LOGIN)) {
+			$modifiedColumns[':p' . $index++]  = '`LAST_LOGIN`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::IS_ACTIVE)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_ACTIVE`';
+		}
+		if ($this->isColumnModified(sfGuardUserPeer::IS_SUPER_ADMIN)) {
+			$modifiedColumns[':p' . $index++]  = '`IS_SUPER_ADMIN`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `sf_guard_user` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`USERNAME`':
+						$stmt->bindValue($identifier, $this->username, PDO::PARAM_STR);
+						break;
+					case '`ALGORITHM`':
+						$stmt->bindValue($identifier, $this->algorithm, PDO::PARAM_STR);
+						break;
+					case '`SALT`':
+						$stmt->bindValue($identifier, $this->salt, PDO::PARAM_STR);
+						break;
+					case '`PASSWORD`':
+						$stmt->bindValue($identifier, $this->password, PDO::PARAM_STR);
+						break;
+					case '`CREATED_AT`':
+						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
+						break;
+					case '`LAST_LOGIN`':
+						$stmt->bindValue($identifier, $this->last_login, PDO::PARAM_STR);
+						break;
+					case '`IS_ACTIVE`':
+						$stmt->bindValue($identifier, (int) $this->is_active, PDO::PARAM_INT);
+						break;
+					case '`IS_SUPER_ADMIN`':
+						$stmt->bindValue($identifier, (int) $this->is_super_admin, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -1027,8 +1181,8 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					}
 				}
 
-				if ($this->collBranchComments !== null) {
-					foreach ($this->collBranchComments as $referrerFK) {
+				if ($this->collComments !== null) {
+					foreach ($this->collComments as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1037,22 +1191,6 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 				if ($this->collFiles !== null) {
 					foreach ($this->collFiles as $referrerFK) {
-						if (!$referrerFK->validate($columns)) {
-							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-						}
-					}
-				}
-
-				if ($this->collFileComments !== null) {
-					foreach ($this->collFileComments as $referrerFK) {
-						if (!$referrerFK->validate($columns)) {
-							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
-						}
-					}
-				}
-
-				if ($this->collLineComments !== null) {
-					foreach ($this->collLineComments as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1175,11 +1313,17 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['sfGuardUser'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['sfGuardUser'][$this->getPrimaryKey()] = true;
 		$keys = sfGuardUserPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -1192,6 +1336,32 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$keys[7] => $this->getIsActive(),
 			$keys[8] => $this->getIsSuperAdmin(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collBranchs) {
+				$result['Branchs'] = $this->collBranchs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collComments) {
+				$result['Comments'] = $this->collComments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collFiles) {
+				$result['Files'] = $this->collFiles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collProfiles) {
+				$result['Profiles'] = $this->collProfiles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collStatusActions) {
+				$result['StatusActions'] = $this->collStatusActions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collsfGuardUserPermissions) {
+				$result['sfGuardUserPermissions'] = $this->collsfGuardUserPermissions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collsfGuardUserGroups) {
+				$result['sfGuardUserGroups'] = $this->collsfGuardUserGroups->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collsfGuardRememberKeys) {
+				$result['sfGuardRememberKeys'] = $this->collsfGuardRememberKeys->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -1359,18 +1529,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of sfGuardUser (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setUsername($this->username);
-		$copyObj->setAlgorithm($this->algorithm);
-		$copyObj->setSalt($this->salt);
-		$copyObj->setPassword($this->password);
-		$copyObj->setCreatedAt($this->created_at);
-		$copyObj->setLastLogin($this->last_login);
-		$copyObj->setIsActive($this->is_active);
-		$copyObj->setIsSuperAdmin($this->is_super_admin);
+		$copyObj->setUsername($this->getUsername());
+		$copyObj->setAlgorithm($this->getAlgorithm());
+		$copyObj->setSalt($this->getSalt());
+		$copyObj->setPassword($this->getPassword());
+		$copyObj->setCreatedAt($this->getCreatedAt());
+		$copyObj->setLastLogin($this->getLastLogin());
+		$copyObj->setIsActive($this->getIsActive());
+		$copyObj->setIsSuperAdmin($this->getIsSuperAdmin());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -1383,27 +1554,15 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
-			foreach ($this->getBranchComments() as $relObj) {
+			foreach ($this->getComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addBranchComment($relObj->copy($deepCopy));
+					$copyObj->addComment($relObj->copy($deepCopy));
 				}
 			}
 
 			foreach ($this->getFiles() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addFile($relObj->copy($deepCopy));
-				}
-			}
-
-			foreach ($this->getFileComments() as $relObj) {
-				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addFileComment($relObj->copy($deepCopy));
-				}
-			}
-
-			foreach ($this->getLineComments() as $relObj) {
-				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addLineComment($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1439,9 +1598,10 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -1482,6 +1642,43 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		return self::$peer;
 	}
 
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('Branch' == $relationName) {
+			return $this->initBranchs();
+		}
+		if ('Comment' == $relationName) {
+			return $this->initComments();
+		}
+		if ('File' == $relationName) {
+			return $this->initFiles();
+		}
+		if ('Profile' == $relationName) {
+			return $this->initProfiles();
+		}
+		if ('StatusAction' == $relationName) {
+			return $this->initStatusActions();
+		}
+		if ('sfGuardUserPermission' == $relationName) {
+			return $this->initsfGuardUserPermissions();
+		}
+		if ('sfGuardUserGroup' == $relationName) {
+			return $this->initsfGuardUserGroups();
+		}
+		if ('sfGuardRememberKey' == $relationName) {
+			return $this->initsfGuardRememberKeys();
+		}
+	}
+
 	/**
 	 * Clears out the collBranchs collection
 	 *
@@ -1503,10 +1700,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initBranchs()
+	public function initBranchs($overrideExisting = true)
 	{
+		if (null !== $this->collBranchs && !$overrideExisting) {
+			return;
+		}
 		$this->collBranchs = new PropelObjectCollection();
 		$this->collBranchs->setModel('Branch');
 	}
@@ -1545,6 +1748,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of Branch objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $branchs A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setBranchs(PropelCollection $branchs, PropelPDO $con = null)
+	{
+		$this->branchsScheduledForDeletion = $this->getBranchs(new Criteria(), $con)->diff($branchs);
+
+		foreach ($branchs as $branch) {
+			// Fix issue with collection modified by reference
+			if ($branch->isNew()) {
+				$branch->setsfGuardUser($this);
+			}
+			$this->addBranch($branch);
+		}
+
+		$this->collBranchs = $branchs;
+	}
+
+	/**
 	 * Returns the number of related Branch objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1577,8 +1804,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the Branch foreign key attribute.
 	 *
 	 * @param      Branch $l Branch
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addBranch(Branch $l)
 	{
@@ -1586,9 +1812,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initBranchs();
 		}
 		if (!$this->collBranchs->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collBranchs[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddBranch($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Branch $branch The branch object to add.
+	 */
+	protected function doAddBranch($branch)
+	{
+		$this->collBranchs[]= $branch;
+		$branch->setsfGuardUser($this);
 	}
 
 
@@ -1617,36 +1853,42 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Clears out the collBranchComments collection
+	 * Clears out the collComments collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addBranchComments()
+	 * @see        addComments()
 	 */
-	public function clearBranchComments()
+	public function clearComments()
 	{
-		$this->collBranchComments = null; // important to set this to NULL since that means it is uninitialized
+		$this->collComments = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collBranchComments collection.
+	 * Initializes the collComments collection.
 	 *
-	 * By default this just sets the collBranchComments collection to an empty array (like clearcollBranchComments());
+	 * By default this just sets the collComments collection to an empty array (like clearcollComments());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initBranchComments()
+	public function initComments($overrideExisting = true)
 	{
-		$this->collBranchComments = new PropelObjectCollection();
-		$this->collBranchComments->setModel('BranchComment');
+		if (null !== $this->collComments && !$overrideExisting) {
+			return;
+		}
+		$this->collComments = new PropelObjectCollection();
+		$this->collComments->setModel('Comment');
 	}
 
 	/**
-	 * Gets an array of BranchComment objects which contain a foreign key that references this object.
+	 * Gets an array of Comment objects which contain a foreign key that references this object.
 	 *
 	 * If the $criteria is not null, it is used to always fetch the results from the database.
 	 * Otherwise the results are fetched from the database the first time, then cached.
@@ -1656,44 +1898,68 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 *
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array BranchComment[] List of BranchComment objects
+	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 * @throws     PropelException
 	 */
-	public function getBranchComments($criteria = null, PropelPDO $con = null)
+	public function getComments($criteria = null, PropelPDO $con = null)
 	{
-		if(null === $this->collBranchComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collBranchComments) {
+		if(null === $this->collComments || null !== $criteria) {
+			if ($this->isNew() && null === $this->collComments) {
 				// return empty collection
-				$this->initBranchComments();
+				$this->initComments();
 			} else {
-				$collBranchComments = BranchCommentQuery::create(null, $criteria)
+				$collComments = CommentQuery::create(null, $criteria)
 					->filterBysfGuardUser($this)
 					->find($con);
 				if (null !== $criteria) {
-					return $collBranchComments;
+					return $collComments;
 				}
-				$this->collBranchComments = $collBranchComments;
+				$this->collComments = $collComments;
 			}
 		}
-		return $this->collBranchComments;
+		return $this->collComments;
 	}
 
 	/**
-	 * Returns the number of related BranchComment objects.
+	 * Sets a collection of Comment objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $comments A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setComments(PropelCollection $comments, PropelPDO $con = null)
+	{
+		$this->commentsScheduledForDeletion = $this->getComments(new Criteria(), $con)->diff($comments);
+
+		foreach ($comments as $comment) {
+			// Fix issue with collection modified by reference
+			if ($comment->isNew()) {
+				$comment->setsfGuardUser($this);
+			}
+			$this->addComment($comment);
+		}
+
+		$this->collComments = $comments;
+	}
+
+	/**
+	 * Returns the number of related Comment objects.
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct
 	 * @param      PropelPDO $con
-	 * @return     int Count of related BranchComment objects.
+	 * @return     int Count of related Comment objects.
 	 * @throws     PropelException
 	 */
-	public function countBranchComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if(null === $this->collBranchComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collBranchComments) {
+		if(null === $this->collComments || null !== $criteria) {
+			if ($this->isNew() && null === $this->collComments) {
 				return 0;
 			} else {
-				$query = BranchCommentQuery::create(null, $criteria);
+				$query = CommentQuery::create(null, $criteria);
 				if($distinct) {
 					$query->distinct();
 				}
@@ -1702,27 +1968,36 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					->count($con);
 			}
 		} else {
-			return count($this->collBranchComments);
+			return count($this->collComments);
 		}
 	}
 
 	/**
-	 * Method called to associate a BranchComment object to this object
-	 * through the BranchComment foreign key attribute.
+	 * Method called to associate a Comment object to this object
+	 * through the Comment foreign key attribute.
 	 *
-	 * @param      BranchComment $l BranchComment
-	 * @return     void
-	 * @throws     PropelException
+	 * @param      Comment $l Comment
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
-	public function addBranchComment(BranchComment $l)
+	public function addComment(Comment $l)
 	{
-		if ($this->collBranchComments === null) {
-			$this->initBranchComments();
+		if ($this->collComments === null) {
+			$this->initComments();
 		}
-		if (!$this->collBranchComments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collBranchComments[]= $l;
-			$l->setsfGuardUser($this);
+		if (!$this->collComments->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddComment($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Comment $comment The comment object to add.
+	 */
+	protected function doAddComment($comment)
+	{
+		$this->collComments[]= $comment;
+		$comment->setsfGuardUser($this);
 	}
 
 
@@ -1731,7 +2006,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this sfGuardUser is new, it will return
 	 * an empty collection; or if this sfGuardUser has previously
-	 * been saved, it will retrieve related BranchComments from storage.
+	 * been saved, it will retrieve related Comments from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
@@ -1740,14 +2015,39 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @param      Criteria $criteria optional Criteria object to narrow the query
 	 * @param      PropelPDO $con optional connection object
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array BranchComment[] List of BranchComment objects
+	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 */
-	public function getBranchCommentsJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getCommentsJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
-		$query = BranchCommentQuery::create(null, $criteria);
+		$query = CommentQuery::create(null, $criteria);
 		$query->joinWith('Branch', $join_behavior);
 
-		return $this->getBranchComments($query, $con);
+		return $this->getComments($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfGuardUser is new, it will return
+	 * an empty collection; or if this sfGuardUser has previously
+	 * been saved, it will retrieve related Comments from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfGuardUser.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Comment[] List of Comment objects
+	 */
+	public function getCommentsJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = CommentQuery::create(null, $criteria);
+		$query->joinWith('File', $join_behavior);
+
+		return $this->getComments($query, $con);
 	}
 
 	/**
@@ -1771,10 +2071,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initFiles()
+	public function initFiles($overrideExisting = true)
 	{
+		if (null !== $this->collFiles && !$overrideExisting) {
+			return;
+		}
 		$this->collFiles = new PropelObjectCollection();
 		$this->collFiles->setModel('File');
 	}
@@ -1813,6 +2119,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of File objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $files A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setFiles(PropelCollection $files, PropelPDO $con = null)
+	{
+		$this->filesScheduledForDeletion = $this->getFiles(new Criteria(), $con)->diff($files);
+
+		foreach ($files as $file) {
+			// Fix issue with collection modified by reference
+			if ($file->isNew()) {
+				$file->setsfGuardUser($this);
+			}
+			$this->addFile($file);
+		}
+
+		$this->collFiles = $files;
+	}
+
+	/**
 	 * Returns the number of related File objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1845,8 +2175,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the File foreign key attribute.
 	 *
 	 * @param      File $l File
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addFile(File $l)
 	{
@@ -1854,9 +2183,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initFiles();
 		}
 		if (!$this->collFiles->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collFiles[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddFile($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	File $file The file object to add.
+	 */
+	protected function doAddFile($file)
+	{
+		$this->collFiles[]= $file;
+		$file->setsfGuardUser($this);
 	}
 
 
@@ -1885,274 +2224,6 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Clears out the collFileComments collection
-	 *
-	 * This does not modify the database; however, it will remove any associated objects, causing
-	 * them to be refetched by subsequent calls to accessor method.
-	 *
-	 * @return     void
-	 * @see        addFileComments()
-	 */
-	public function clearFileComments()
-	{
-		$this->collFileComments = null; // important to set this to NULL since that means it is uninitialized
-	}
-
-	/**
-	 * Initializes the collFileComments collection.
-	 *
-	 * By default this just sets the collFileComments collection to an empty array (like clearcollFileComments());
-	 * however, you may wish to override this method in your stub class to provide setting appropriate
-	 * to your application -- for example, setting the initial array to the values stored in database.
-	 *
-	 * @return     void
-	 */
-	public function initFileComments()
-	{
-		$this->collFileComments = new PropelObjectCollection();
-		$this->collFileComments->setModel('FileComment');
-	}
-
-	/**
-	 * Gets an array of FileComment objects which contain a foreign key that references this object.
-	 *
-	 * If the $criteria is not null, it is used to always fetch the results from the database.
-	 * Otherwise the results are fetched from the database the first time, then cached.
-	 * Next time the same method is called without $criteria, the cached collection is returned.
-	 * If this sfGuardUser is new, it will return
-	 * an empty collection or the current collection; the criteria is ignored on a new object.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
-	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array FileComment[] List of FileComment objects
-	 * @throws     PropelException
-	 */
-	public function getFileComments($criteria = null, PropelPDO $con = null)
-	{
-		if(null === $this->collFileComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collFileComments) {
-				// return empty collection
-				$this->initFileComments();
-			} else {
-				$collFileComments = FileCommentQuery::create(null, $criteria)
-					->filterBysfGuardUser($this)
-					->find($con);
-				if (null !== $criteria) {
-					return $collFileComments;
-				}
-				$this->collFileComments = $collFileComments;
-			}
-		}
-		return $this->collFileComments;
-	}
-
-	/**
-	 * Returns the number of related FileComment objects.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct
-	 * @param      PropelPDO $con
-	 * @return     int Count of related FileComment objects.
-	 * @throws     PropelException
-	 */
-	public function countFileComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-	{
-		if(null === $this->collFileComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collFileComments) {
-				return 0;
-			} else {
-				$query = FileCommentQuery::create(null, $criteria);
-				if($distinct) {
-					$query->distinct();
-				}
-				return $query
-					->filterBysfGuardUser($this)
-					->count($con);
-			}
-		} else {
-			return count($this->collFileComments);
-		}
-	}
-
-	/**
-	 * Method called to associate a FileComment object to this object
-	 * through the FileComment foreign key attribute.
-	 *
-	 * @param      FileComment $l FileComment
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function addFileComment(FileComment $l)
-	{
-		if ($this->collFileComments === null) {
-			$this->initFileComments();
-		}
-		if (!$this->collFileComments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collFileComments[]= $l;
-			$l->setsfGuardUser($this);
-		}
-	}
-
-
-	/**
-	 * If this collection has already been initialized with
-	 * an identical criteria, it returns the collection.
-	 * Otherwise if this sfGuardUser is new, it will return
-	 * an empty collection; or if this sfGuardUser has previously
-	 * been saved, it will retrieve related FileComments from storage.
-	 *
-	 * This method is protected by default in order to keep the public
-	 * api reasonable.  You can provide public methods for those you
-	 * actually need in sfGuardUser.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
-	 * @param      PropelPDO $con optional connection object
-	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array FileComment[] List of FileComment objects
-	 */
-	public function getFileCommentsJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$query = FileCommentQuery::create(null, $criteria);
-		$query->joinWith('File', $join_behavior);
-
-		return $this->getFileComments($query, $con);
-	}
-
-	/**
-	 * Clears out the collLineComments collection
-	 *
-	 * This does not modify the database; however, it will remove any associated objects, causing
-	 * them to be refetched by subsequent calls to accessor method.
-	 *
-	 * @return     void
-	 * @see        addLineComments()
-	 */
-	public function clearLineComments()
-	{
-		$this->collLineComments = null; // important to set this to NULL since that means it is uninitialized
-	}
-
-	/**
-	 * Initializes the collLineComments collection.
-	 *
-	 * By default this just sets the collLineComments collection to an empty array (like clearcollLineComments());
-	 * however, you may wish to override this method in your stub class to provide setting appropriate
-	 * to your application -- for example, setting the initial array to the values stored in database.
-	 *
-	 * @return     void
-	 */
-	public function initLineComments()
-	{
-		$this->collLineComments = new PropelObjectCollection();
-		$this->collLineComments->setModel('LineComment');
-	}
-
-	/**
-	 * Gets an array of LineComment objects which contain a foreign key that references this object.
-	 *
-	 * If the $criteria is not null, it is used to always fetch the results from the database.
-	 * Otherwise the results are fetched from the database the first time, then cached.
-	 * Next time the same method is called without $criteria, the cached collection is returned.
-	 * If this sfGuardUser is new, it will return
-	 * an empty collection or the current collection; the criteria is ignored on a new object.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
-	 * @param      PropelPDO $con optional connection object
-	 * @return     PropelCollection|array LineComment[] List of LineComment objects
-	 * @throws     PropelException
-	 */
-	public function getLineComments($criteria = null, PropelPDO $con = null)
-	{
-		if(null === $this->collLineComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collLineComments) {
-				// return empty collection
-				$this->initLineComments();
-			} else {
-				$collLineComments = LineCommentQuery::create(null, $criteria)
-					->filterBysfGuardUser($this)
-					->find($con);
-				if (null !== $criteria) {
-					return $collLineComments;
-				}
-				$this->collLineComments = $collLineComments;
-			}
-		}
-		return $this->collLineComments;
-	}
-
-	/**
-	 * Returns the number of related LineComment objects.
-	 *
-	 * @param      Criteria $criteria
-	 * @param      boolean $distinct
-	 * @param      PropelPDO $con
-	 * @return     int Count of related LineComment objects.
-	 * @throws     PropelException
-	 */
-	public function countLineComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
-	{
-		if(null === $this->collLineComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collLineComments) {
-				return 0;
-			} else {
-				$query = LineCommentQuery::create(null, $criteria);
-				if($distinct) {
-					$query->distinct();
-				}
-				return $query
-					->filterBysfGuardUser($this)
-					->count($con);
-			}
-		} else {
-			return count($this->collLineComments);
-		}
-	}
-
-	/**
-	 * Method called to associate a LineComment object to this object
-	 * through the LineComment foreign key attribute.
-	 *
-	 * @param      LineComment $l LineComment
-	 * @return     void
-	 * @throws     PropelException
-	 */
-	public function addLineComment(LineComment $l)
-	{
-		if ($this->collLineComments === null) {
-			$this->initLineComments();
-		}
-		if (!$this->collLineComments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collLineComments[]= $l;
-			$l->setsfGuardUser($this);
-		}
-	}
-
-
-	/**
-	 * If this collection has already been initialized with
-	 * an identical criteria, it returns the collection.
-	 * Otherwise if this sfGuardUser is new, it will return
-	 * an empty collection; or if this sfGuardUser has previously
-	 * been saved, it will retrieve related LineComments from storage.
-	 *
-	 * This method is protected by default in order to keep the public
-	 * api reasonable.  You can provide public methods for those you
-	 * actually need in sfGuardUser.
-	 *
-	 * @param      Criteria $criteria optional Criteria object to narrow the query
-	 * @param      PropelPDO $con optional connection object
-	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
-	 * @return     PropelCollection|array LineComment[] List of LineComment objects
-	 */
-	public function getLineCommentsJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
-	{
-		$query = LineCommentQuery::create(null, $criteria);
-		$query->joinWith('File', $join_behavior);
-
-		return $this->getLineComments($query, $con);
-	}
-
-	/**
 	 * Clears out the collProfiles collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
@@ -2173,10 +2244,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initProfiles()
+	public function initProfiles($overrideExisting = true)
 	{
+		if (null !== $this->collProfiles && !$overrideExisting) {
+			return;
+		}
 		$this->collProfiles = new PropelObjectCollection();
 		$this->collProfiles->setModel('Profile');
 	}
@@ -2215,6 +2292,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of Profile objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $profiles A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setProfiles(PropelCollection $profiles, PropelPDO $con = null)
+	{
+		$this->profilesScheduledForDeletion = $this->getProfiles(new Criteria(), $con)->diff($profiles);
+
+		foreach ($profiles as $profile) {
+			// Fix issue with collection modified by reference
+			if ($profile->isNew()) {
+				$profile->setsfGuardUser($this);
+			}
+			$this->addProfile($profile);
+		}
+
+		$this->collProfiles = $profiles;
+	}
+
+	/**
 	 * Returns the number of related Profile objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2247,8 +2348,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the Profile foreign key attribute.
 	 *
 	 * @param      Profile $l Profile
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addProfile(Profile $l)
 	{
@@ -2256,9 +2356,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initProfiles();
 		}
 		if (!$this->collProfiles->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collProfiles[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddProfile($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Profile $profile The profile object to add.
+	 */
+	protected function doAddProfile($profile)
+	{
+		$this->collProfiles[]= $profile;
+		$profile->setsfGuardUser($this);
 	}
 
 	/**
@@ -2282,10 +2392,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initStatusActions()
+	public function initStatusActions($overrideExisting = true)
 	{
+		if (null !== $this->collStatusActions && !$overrideExisting) {
+			return;
+		}
 		$this->collStatusActions = new PropelObjectCollection();
 		$this->collStatusActions->setModel('StatusAction');
 	}
@@ -2324,6 +2440,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of StatusAction objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $statusActions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setStatusActions(PropelCollection $statusActions, PropelPDO $con = null)
+	{
+		$this->statusActionsScheduledForDeletion = $this->getStatusActions(new Criteria(), $con)->diff($statusActions);
+
+		foreach ($statusActions as $statusAction) {
+			// Fix issue with collection modified by reference
+			if ($statusAction->isNew()) {
+				$statusAction->setsfGuardUser($this);
+			}
+			$this->addStatusAction($statusAction);
+		}
+
+		$this->collStatusActions = $statusActions;
+	}
+
+	/**
 	 * Returns the number of related StatusAction objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2356,8 +2496,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the StatusAction foreign key attribute.
 	 *
 	 * @param      StatusAction $l StatusAction
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addStatusAction(StatusAction $l)
 	{
@@ -2365,9 +2504,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initStatusActions();
 		}
 		if (!$this->collStatusActions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collStatusActions[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddStatusAction($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	StatusAction $statusAction The statusAction object to add.
+	 */
+	protected function doAddStatusAction($statusAction)
+	{
+		$this->collStatusActions[]= $statusAction;
+		$statusAction->setsfGuardUser($this);
 	}
 
 
@@ -2466,10 +2615,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initsfGuardUserPermissions()
+	public function initsfGuardUserPermissions($overrideExisting = true)
 	{
+		if (null !== $this->collsfGuardUserPermissions && !$overrideExisting) {
+			return;
+		}
 		$this->collsfGuardUserPermissions = new PropelObjectCollection();
 		$this->collsfGuardUserPermissions->setModel('sfGuardUserPermission');
 	}
@@ -2508,6 +2663,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of sfGuardUserPermission objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $sfGuardUserPermissions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setsfGuardUserPermissions(PropelCollection $sfGuardUserPermissions, PropelPDO $con = null)
+	{
+		$this->sfGuardUserPermissionsScheduledForDeletion = $this->getsfGuardUserPermissions(new Criteria(), $con)->diff($sfGuardUserPermissions);
+
+		foreach ($sfGuardUserPermissions as $sfGuardUserPermission) {
+			// Fix issue with collection modified by reference
+			if ($sfGuardUserPermission->isNew()) {
+				$sfGuardUserPermission->setsfGuardUser($this);
+			}
+			$this->addsfGuardUserPermission($sfGuardUserPermission);
+		}
+
+		$this->collsfGuardUserPermissions = $sfGuardUserPermissions;
+	}
+
+	/**
 	 * Returns the number of related sfGuardUserPermission objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2540,8 +2719,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the sfGuardUserPermission foreign key attribute.
 	 *
 	 * @param      sfGuardUserPermission $l sfGuardUserPermission
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addsfGuardUserPermission(sfGuardUserPermission $l)
 	{
@@ -2549,9 +2727,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initsfGuardUserPermissions();
 		}
 		if (!$this->collsfGuardUserPermissions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collsfGuardUserPermissions[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddsfGuardUserPermission($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	sfGuardUserPermission $sfGuardUserPermission The sfGuardUserPermission object to add.
+	 */
+	protected function doAddsfGuardUserPermission($sfGuardUserPermission)
+	{
+		$this->collsfGuardUserPermissions[]= $sfGuardUserPermission;
+		$sfGuardUserPermission->setsfGuardUser($this);
 	}
 
 
@@ -2600,10 +2788,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initsfGuardUserGroups()
+	public function initsfGuardUserGroups($overrideExisting = true)
 	{
+		if (null !== $this->collsfGuardUserGroups && !$overrideExisting) {
+			return;
+		}
 		$this->collsfGuardUserGroups = new PropelObjectCollection();
 		$this->collsfGuardUserGroups->setModel('sfGuardUserGroup');
 	}
@@ -2642,6 +2836,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of sfGuardUserGroup objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $sfGuardUserGroups A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setsfGuardUserGroups(PropelCollection $sfGuardUserGroups, PropelPDO $con = null)
+	{
+		$this->sfGuardUserGroupsScheduledForDeletion = $this->getsfGuardUserGroups(new Criteria(), $con)->diff($sfGuardUserGroups);
+
+		foreach ($sfGuardUserGroups as $sfGuardUserGroup) {
+			// Fix issue with collection modified by reference
+			if ($sfGuardUserGroup->isNew()) {
+				$sfGuardUserGroup->setsfGuardUser($this);
+			}
+			$this->addsfGuardUserGroup($sfGuardUserGroup);
+		}
+
+		$this->collsfGuardUserGroups = $sfGuardUserGroups;
+	}
+
+	/**
 	 * Returns the number of related sfGuardUserGroup objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2674,8 +2892,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the sfGuardUserGroup foreign key attribute.
 	 *
 	 * @param      sfGuardUserGroup $l sfGuardUserGroup
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addsfGuardUserGroup(sfGuardUserGroup $l)
 	{
@@ -2683,9 +2900,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initsfGuardUserGroups();
 		}
 		if (!$this->collsfGuardUserGroups->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collsfGuardUserGroups[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddsfGuardUserGroup($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	sfGuardUserGroup $sfGuardUserGroup The sfGuardUserGroup object to add.
+	 */
+	protected function doAddsfGuardUserGroup($sfGuardUserGroup)
+	{
+		$this->collsfGuardUserGroups[]= $sfGuardUserGroup;
+		$sfGuardUserGroup->setsfGuardUser($this);
 	}
 
 
@@ -2734,10 +2961,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initsfGuardRememberKeys()
+	public function initsfGuardRememberKeys($overrideExisting = true)
 	{
+		if (null !== $this->collsfGuardRememberKeys && !$overrideExisting) {
+			return;
+		}
 		$this->collsfGuardRememberKeys = new PropelObjectCollection();
 		$this->collsfGuardRememberKeys->setModel('sfGuardRememberKey');
 	}
@@ -2776,6 +3009,30 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of sfGuardRememberKey objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $sfGuardRememberKeys A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setsfGuardRememberKeys(PropelCollection $sfGuardRememberKeys, PropelPDO $con = null)
+	{
+		$this->sfGuardRememberKeysScheduledForDeletion = $this->getsfGuardRememberKeys(new Criteria(), $con)->diff($sfGuardRememberKeys);
+
+		foreach ($sfGuardRememberKeys as $sfGuardRememberKey) {
+			// Fix issue with collection modified by reference
+			if ($sfGuardRememberKey->isNew()) {
+				$sfGuardRememberKey->setsfGuardUser($this);
+			}
+			$this->addsfGuardRememberKey($sfGuardRememberKey);
+		}
+
+		$this->collsfGuardRememberKeys = $sfGuardRememberKeys;
+	}
+
+	/**
 	 * Returns the number of related sfGuardRememberKey objects.
 	 *
 	 * @param      Criteria $criteria
@@ -2808,8 +3065,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * through the sfGuardRememberKey foreign key attribute.
 	 *
 	 * @param      sfGuardRememberKey $l sfGuardRememberKey
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
 	public function addsfGuardRememberKey(sfGuardRememberKey $l)
 	{
@@ -2817,9 +3073,19 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->initsfGuardRememberKeys();
 		}
 		if (!$this->collsfGuardRememberKeys->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collsfGuardRememberKeys[]= $l;
-			$l->setsfGuardUser($this);
+			$this->doAddsfGuardRememberKey($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	sfGuardRememberKey $sfGuardRememberKey The sfGuardRememberKey object to add.
+	 */
+	protected function doAddsfGuardRememberKey($sfGuardRememberKey)
+	{
+		$this->collsfGuardRememberKeys[]= $sfGuardRememberKey;
+		$sfGuardRememberKey->setsfGuardUser($this);
 	}
 
 	/**
@@ -2846,79 +3112,101 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collBranchs) {
-				foreach ((array) $this->collBranchs as $o) {
+				foreach ($this->collBranchs as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collBranchComments) {
-				foreach ((array) $this->collBranchComments as $o) {
+			if ($this->collComments) {
+				foreach ($this->collComments as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collFiles) {
-				foreach ((array) $this->collFiles as $o) {
-					$o->clearAllReferences($deep);
-				}
-			}
-			if ($this->collFileComments) {
-				foreach ((array) $this->collFileComments as $o) {
-					$o->clearAllReferences($deep);
-				}
-			}
-			if ($this->collLineComments) {
-				foreach ((array) $this->collLineComments as $o) {
+				foreach ($this->collFiles as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collProfiles) {
-				foreach ((array) $this->collProfiles as $o) {
+				foreach ($this->collProfiles as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collStatusActions) {
-				foreach ((array) $this->collStatusActions as $o) {
+				foreach ($this->collStatusActions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collsfGuardUserPermissions) {
-				foreach ((array) $this->collsfGuardUserPermissions as $o) {
+				foreach ($this->collsfGuardUserPermissions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collsfGuardUserGroups) {
-				foreach ((array) $this->collsfGuardUserGroups as $o) {
+				foreach ($this->collsfGuardUserGroups as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collsfGuardRememberKeys) {
-				foreach ((array) $this->collsfGuardRememberKeys as $o) {
+				foreach ($this->collsfGuardRememberKeys as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collBranchs instanceof PropelCollection) {
+			$this->collBranchs->clearIterator();
+		}
 		$this->collBranchs = null;
-		$this->collBranchComments = null;
+		if ($this->collComments instanceof PropelCollection) {
+			$this->collComments->clearIterator();
+		}
+		$this->collComments = null;
+		if ($this->collFiles instanceof PropelCollection) {
+			$this->collFiles->clearIterator();
+		}
 		$this->collFiles = null;
-		$this->collFileComments = null;
-		$this->collLineComments = null;
+		if ($this->collProfiles instanceof PropelCollection) {
+			$this->collProfiles->clearIterator();
+		}
 		$this->collProfiles = null;
+		if ($this->collStatusActions instanceof PropelCollection) {
+			$this->collStatusActions->clearIterator();
+		}
 		$this->collStatusActions = null;
+		if ($this->collsfGuardUserPermissions instanceof PropelCollection) {
+			$this->collsfGuardUserPermissions->clearIterator();
+		}
 		$this->collsfGuardUserPermissions = null;
+		if ($this->collsfGuardUserGroups instanceof PropelCollection) {
+			$this->collsfGuardUserGroups->clearIterator();
+		}
 		$this->collsfGuardUserGroups = null;
+		if ($this->collsfGuardRememberKeys instanceof PropelCollection) {
+			$this->collsfGuardRememberKeys->clearIterator();
+		}
 		$this->collsfGuardRememberKeys = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(sfGuardUserPeer::DEFAULT_STRING_FORMAT);
 	}
 
 	/**
@@ -2926,6 +3214,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BasesfGuardUser:' . $name))
 		{
@@ -2933,17 +3222,6 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 

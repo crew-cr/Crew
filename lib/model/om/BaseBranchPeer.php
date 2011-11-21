@@ -24,12 +24,15 @@ abstract class BaseBranchPeer {
 
 	/** the related TableMap class for this table */
 	const TM_CLASS = 'BranchTableMap';
-	
+
 	/** The total number of columns. */
 	const NUM_COLUMNS = 13;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
+
+	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
+	const NUM_HYDRATE_COLUMNS = 13;
 
 	/** the column name for the ID field */
 	const ID = 'branch.ID';
@@ -70,6 +73,9 @@ abstract class BaseBranchPeer {
 	/** the column name for the DATE_STATUS_CHANGED field */
 	const DATE_STATUS_CHANGED = 'branch.DATE_STATUS_CHANGED';
 
+	/** The default string format for model objects of the related table **/
+	const DEFAULT_STRING_FORMAT = 'YAML';
+
 	/**
 	 * An identiy map to hold any loaded instances of Branch objects.
 	 * This must be public so that other peer classes can access this when hydrating from JOIN
@@ -79,20 +85,13 @@ abstract class BaseBranchPeer {
 	public static $instances = array();
 
 
-	// symfony behavior
-	
-	/**
-	 * Indicates whether the current model includes I18N.
-	 */
-	const IS_I18N = false;
-
 	/**
 	 * holds an array of fieldnames
 	 *
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
-	private static $fieldNames = array (
+	protected static $fieldNames = array (
 		BasePeer::TYPE_PHPNAME => array ('Id', 'RepositoryId', 'Name', 'BaseBranchName', 'CommitReference', 'LastCommit', 'LastCommitDesc', 'IsBlacklisted', 'ReviewRequest', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'repositoryId', 'name', 'baseBranchName', 'commitReference', 'lastCommit', 'lastCommitDesc', 'isBlacklisted', 'reviewRequest', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
 		BasePeer::TYPE_COLNAME => array (self::ID, self::REPOSITORY_ID, self::NAME, self::BASE_BRANCH_NAME, self::COMMIT_REFERENCE, self::LAST_COMMIT, self::LAST_COMMIT_DESC, self::IS_BLACKLISTED, self::REVIEW_REQUEST, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
@@ -107,7 +106,7 @@ abstract class BaseBranchPeer {
 	 * first dimension keys are the type constants
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
-	private static $fieldKeys = array (
+	protected static $fieldKeys = array (
 		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'RepositoryId' => 1, 'Name' => 2, 'BaseBranchName' => 3, 'CommitReference' => 4, 'LastCommit' => 5, 'LastCommitDesc' => 6, 'IsBlacklisted' => 7, 'ReviewRequest' => 8, 'Status' => 9, 'CommitStatusChanged' => 10, 'UserStatusChanged' => 11, 'DateStatusChanged' => 12, ),
 		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'repositoryId' => 1, 'name' => 2, 'baseBranchName' => 3, 'commitReference' => 4, 'lastCommit' => 5, 'lastCommitDesc' => 6, 'isBlacklisted' => 7, 'reviewRequest' => 8, 'status' => 9, 'commitStatusChanged' => 10, 'userStatusChanged' => 11, 'dateStatusChanged' => 12, ),
 		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::REPOSITORY_ID => 1, self::NAME => 2, self::BASE_BRANCH_NAME => 3, self::COMMIT_REFERENCE => 4, self::LAST_COMMIT => 5, self::LAST_COMMIT_DESC => 6, self::IS_BLACKLISTED => 7, self::REVIEW_REQUEST => 8, self::STATUS => 9, self::COMMIT_STATUS_CHANGED => 10, self::USER_STATUS_CHANGED => 11, self::DATE_STATUS_CHANGED => 12, ),
@@ -265,7 +264,7 @@ abstract class BaseBranchPeer {
 		return $count;
 	}
 	/**
-	 * Method to select one object from the DB.
+	 * Selects one object from the DB.
 	 *
 	 * @param      Criteria $criteria object used to create the SELECT statement.
 	 * @param      PropelPDO $con
@@ -284,7 +283,7 @@ abstract class BaseBranchPeer {
 		return null;
 	}
 	/**
-	 * Method to do selects.
+	 * Selects several row from the DB.
 	 *
 	 * @param      Criteria $criteria The Criteria object used to build the SELECT statement.
 	 * @param      PropelPDO $con
@@ -344,7 +343,7 @@ abstract class BaseBranchPeer {
 	 * @param      Branch $value A Branch object.
 	 * @param      string $key (optional) key to use for instance map (for performance boost if key was already calculated externally).
 	 */
-	public static function addInstanceToPool(Branch $obj, $key = null)
+	public static function addInstanceToPool($obj, $key = null)
 	{
 		if (Propel::isInstancePoolingEnabled()) {
 			if ($key === null) {
@@ -417,13 +416,10 @@ abstract class BaseBranchPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
-		// Invalidate objects in BranchCommentPeer instance pool, 
-		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
-		BranchCommentPeer::clearInstancePool();
-		// Invalidate objects in FilePeer instance pool, 
+		// Invalidate objects in FilePeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		FilePeer::clearInstancePool();
-		// Invalidate objects in StatusActionPeer instance pool, 
+		// Invalidate objects in StatusActionPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		StatusActionPeer::clearInstancePool();
 	}
@@ -448,7 +444,7 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Retrieves the primary key from the DB resultset row 
+	 * Retrieves the primary key from the DB resultset row
 	 * For tables with a single-column primary key, that simple pkey value will be returned.  For tables with
 	 * a multi-column primary key, an array of the primary key columns will be returned.
 	 *
@@ -508,7 +504,7 @@ abstract class BaseBranchPeer {
 			// We no longer rehydrate the object, since this can cause data loss.
 			// See http://www.propelorm.org/ticket/509
 			// $obj->hydrate($row, $startcol, true); // rehydrate
-			$col = $startcol + BranchPeer::NUM_COLUMNS;
+			$col = $startcol + BranchPeer::NUM_HYDRATE_COLUMNS;
 		} else {
 			$cls = BranchPeer::OM_CLASS;
 			$obj = new $cls();
@@ -517,6 +513,7 @@ abstract class BaseBranchPeer {
 		}
 		return array($obj, $col);
 	}
+
 
 	/**
 	 * Returns the number of rows matching criteria, joining the related Repository table
@@ -544,9 +541,9 @@ abstract class BaseBranchPeer {
 		if (!$criteria->hasSelectClause()) {
 			BranchPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -600,9 +597,9 @@ abstract class BaseBranchPeer {
 		if (!$criteria->hasSelectClause()) {
 			BranchPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -649,7 +646,7 @@ abstract class BaseBranchPeer {
 		}
 
 		BranchPeer::addSelectColumns($criteria);
-		$startcol = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = BranchPeer::NUM_HYDRATE_COLUMNS;
 		RepositoryPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
@@ -721,7 +718,7 @@ abstract class BaseBranchPeer {
 		}
 
 		BranchPeer::addSelectColumns($criteria);
-		$startcol = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol = BranchPeer::NUM_HYDRATE_COLUMNS;
 		sfGuardUserPeer::addSelectColumns($criteria);
 
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
@@ -800,9 +797,9 @@ abstract class BaseBranchPeer {
 		if (!$criteria->hasSelectClause()) {
 			BranchPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -851,13 +848,13 @@ abstract class BaseBranchPeer {
 		}
 
 		BranchPeer::addSelectColumns($criteria);
-		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = BranchPeer::NUM_HYDRATE_COLUMNS;
 
 		RepositoryPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + RepositoryPeer::NUM_HYDRATE_COLUMNS;
 
 		sfGuardUserPeer::addSelectColumns($criteria);
-		$startcol4 = $startcol3 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol4 = $startcol3 + sfGuardUserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
@@ -947,7 +944,7 @@ abstract class BaseBranchPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(BranchPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -955,9 +952,9 @@ abstract class BaseBranchPeer {
 		if (!$criteria->hasSelectClause()) {
 			BranchPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1003,7 +1000,7 @@ abstract class BaseBranchPeer {
 		// it will be impossible for the BasePeer::createSelectSql() method to determine which
 		// tables go into the FROM clause.
 		$criteria->setPrimaryTableName(BranchPeer::TABLE_NAME);
-		
+
 		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
 			$criteria->setDistinct();
 		}
@@ -1011,9 +1008,9 @@ abstract class BaseBranchPeer {
 		if (!$criteria->hasSelectClause()) {
 			BranchPeer::addSelectColumns($criteria);
 		}
-		
+
 		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
-		
+
 		// Set the correct dbName
 		$criteria->setDbName(self::DATABASE_NAME);
 
@@ -1063,10 +1060,10 @@ abstract class BaseBranchPeer {
 		}
 
 		BranchPeer::addSelectColumns($criteria);
-		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = BranchPeer::NUM_HYDRATE_COLUMNS;
 
 		sfGuardUserPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (sfGuardUserPeer::NUM_COLUMNS - sfGuardUserPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + sfGuardUserPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(BranchPeer::USER_STATUS_CHANGED, sfGuardUserPeer::ID, $join_behavior);
 
@@ -1142,10 +1139,10 @@ abstract class BaseBranchPeer {
 		}
 
 		BranchPeer::addSelectColumns($criteria);
-		$startcol2 = (BranchPeer::NUM_COLUMNS - BranchPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol2 = BranchPeer::NUM_HYDRATE_COLUMNS;
 
 		RepositoryPeer::addSelectColumns($criteria);
-		$startcol3 = $startcol2 + (RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS);
+		$startcol3 = $startcol2 + RepositoryPeer::NUM_HYDRATE_COLUMNS;
 
 		$criteria->addJoin(BranchPeer::REPOSITORY_ID, RepositoryPeer::ID, $join_behavior);
 
@@ -1239,7 +1236,7 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Method perform an INSERT on the database, given a Branch or Criteria object.
+	 * Performs an INSERT on the database, given a Branch or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Branch object containing data that is used to create the INSERT statement.
 	 * @param      PropelPDO $con the PropelPDO connection to use
@@ -1282,7 +1279,7 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Method perform an UPDATE on the database, given a Branch or Criteria object.
+	 * Performs an UPDATE on the database, given a Branch or Criteria object.
 	 *
 	 * @param      mixed $values Criteria or Branch object containing data that is used to create the UPDATE statement.
 	 * @param      PropelPDO $con The connection to use (specify PropelPDO connection object to exert more control over transactions).
@@ -1321,11 +1318,12 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Method to DELETE all rows from the branch table.
+	 * Deletes all rows from the branch table.
 	 *
+	 * @param      PropelPDO $con the connection to use
 	 * @return     int The number of affected rows (if supported by underlying database driver).
 	 */
-	public static function doDeleteAll($con = null)
+	public static function doDeleteAll(PropelPDO $con = null)
 	{
 		if ($con === null) {
 			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_WRITE);
@@ -1351,7 +1349,7 @@ abstract class BaseBranchPeer {
 	}
 
 	/**
-	 * Method perform a DELETE on the database, given a Branch or Criteria object OR a primary key value.
+	 * Performs a DELETE on the database, given a Branch or Criteria object OR a primary key value.
 	 *
 	 * @param      mixed $values Criteria or Branch object or primary key or array of primary keys
 	 *              which is used to create the DELETE statement
@@ -1438,12 +1436,6 @@ abstract class BaseBranchPeer {
 		foreach ($objects as $obj) {
 
 
-			// delete related BranchComment objects
-			$criteria = new Criteria(BranchCommentPeer::DATABASE_NAME);
-			
-			$criteria->add(BranchCommentPeer::BRANCH_ID, $obj->getId());
-			$affectedRows += BranchCommentPeer::doDelete($criteria, $con);
-
 			// delete related File objects
 			$criteria = new Criteria(FilePeer::DATABASE_NAME);
 			
@@ -1471,7 +1463,7 @@ abstract class BaseBranchPeer {
 	 *
 	 * @return     mixed TRUE if all columns are valid or the error message of the first invalid column.
 	 */
-	public static function doValidate(Branch $obj, $cols = null)
+	public static function doValidate($obj, $cols = null)
 	{
 		$columns = array();
 

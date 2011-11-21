@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/versionable
+END
+VersionableBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/versionable/VersionableBehaviorTest.php
+END
+VersionableBehaviorPeerBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/versionable/VersionableBehaviorPeerBuilderModifierTest.php
+END
+VersionableBehaviorObjectBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/versionable/VersionableBehaviorObjectBuilderModifierTest.php
+END

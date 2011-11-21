@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers
+END
+IdentityMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/IdentityMapper.php
+END
+RegexpMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/RegexpMapper.php
+END
+FlattenMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/FlattenMapper.php
+END
+MergeMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/MergeMapper.php
+END
+FileNameMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/FileNameMapper.php
+END
+GlobMapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/mappers/GlobMapper.php
+END

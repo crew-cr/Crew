@@ -1,0 +1,125 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/!svn/ver/432/tags/2.3.3/classes/phing/filters
+END
+ChainableReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/ChainableReader.php
+END
+ExpandProperties.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/ExpandProperties.php
+END
+TailFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/TailFilter.php
+END
+ReplaceTokens.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/ReplaceTokens.php
+END
+XsltFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/XsltFilter.php
+END
+StripLineBreaks.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/StripLineBreaks.php
+END
+LineContainsRegexp.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/LineContainsRegexp.php
+END
+TranslateGettext.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/TranslateGettext.php
+END
+BaseFilterReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/BaseFilterReader.php
+END
+HeadFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/HeadFilter.php
+END
+TabToSpaces.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/TabToSpaces.php
+END
+StripWhitespace.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/StripWhitespace.php
+END
+StripPhpComments.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/StripPhpComments.php
+END
+StripLineComments.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/StripLineComments.php
+END
+TidyFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/TidyFilter.php
+END
+XincludeFilter.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/XincludeFilter.php
+END
+BaseParamFilterReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/BaseParamFilterReader.php
+END
+ReplaceRegexp.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/ReplaceRegexp.php
+END
+LineContains.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/LineContains.php
+END
+PrefixLines.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/filters/PrefixLines.php
+END

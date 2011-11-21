@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map
+END
+GeneratedRelationMapTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/GeneratedRelationMapTest.php
+END
+GeneratedRelationMapWithSchemasTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/GeneratedRelationMapWithSchemasTest.php
+END
+ColumnMapTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/ColumnMapTest.php
+END
+RelationMapTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/RelationMapTest.php
+END
+DatabaseMapTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/DatabaseMapTest.php
+END
+TableMapTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/TableMapTest.php
+END
+RelatedMapSymmetricalTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/RelatedMapSymmetricalTest.php
+END
+RelatedMapSymmetricalWithSchemasTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/map/RelatedMapSymmetricalWithSchemasTest.php
+END

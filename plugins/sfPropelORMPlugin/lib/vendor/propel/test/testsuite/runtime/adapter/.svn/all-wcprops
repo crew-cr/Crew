@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/adapter
+END
+DBMySQLTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/adapter/DBMySQLTest.php
+END
+DBOracleTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/adapter/DBOracleTest.php
+END
+DBAdapterTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/adapter/DBAdapterTest.php
+END

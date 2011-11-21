@@ -17,12 +17,15 @@ propel:
     commit_status_changed:            { type: VARCHAR, size: '50', required: false }
     user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
     date_status_changed:              { type: TIMESTAMP, required: false }
-  branch_comment:
+  comment:
     _attributes:
     id:                               ~
     user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    value:                            { type: LONGVARCHAR, required: true }
+    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id }
+    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id }
+    position:                         { type: INTEGER, size: '11', required: false }
+    line:                             { type: INTEGER, size: '11', required: false }
+    type:                             { type: ENUM, valueSet: 'branch, file, line' }
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }
@@ -39,27 +42,6 @@ propel:
     commit_status_changed:            { type: VARCHAR, size: '50', required: false }
     user_status_changed:              { type: INTEGER, size: '11', required: false }
     date_status_changed:              { type: TIMESTAMP, required: false }
-  file_comment:
-    _attributes:
-    id:                               ~
-    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    file_id:                          { type: INTEGER, size: '11', required: true, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    value:                            { type: LONGVARCHAR, required: true }
-    created_at:                       { type: timestamp, required: true}
-    updated_at:                       { type: timestamp, required: true}
-    _indexes:                         { file_comment_FI_1: [user_id], file_comment_FI_2: [file_id] }
-  line_comment:
-    _attributes:
-    id:                               ~
-    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    commit:                           { type: VARCHAR, size: '50', required: true }
-    file_id:                          { type: INTEGER, size: '11', required: true, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    position:                         { type: INTEGER, size: '11', required: true }
-    line:                             { type: INTEGER, size: '11', required: true }
-    value:                            { type: LONGVARCHAR, required: true }
-    created_at:                       { type: timestamp, required: true}
-    updated_at:                       { type: timestamp, required: true}
-    _indexes:                         { line_comment_FI_1: [user_id], line_comment_FI_2: [file_id] }
   profile:
     _attributes:
     id:                               ~

@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore
+END
+behavior-sluggable-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-sluggable-schema.xml
+END
+cms-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/cms-schema.xml
+END
+schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/schema.xml
+END
+behavior-aggregate-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-aggregate-schema.xml
+END
+behavior-auto-add-pk-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-auto-add-pk-schema.xml
+END
+behavior-timestampable-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-timestampable-schema.xml
+END
+behavior-concrete-inheritance-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-concrete-inheritance-schema.xml
+END
+behavior-add-class-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-add-class-schema.xml
+END
+behavior-nested-set-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-nested-set-schema.xml
+END
+behavior-soft-delete-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-soft-delete-schema.xml
+END
+behavior-sortable-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-sortable-schema.xml
+END
+runtime-conf.xml
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/runtime-conf.xml
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/build.properties
+END
+behavior-schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore/behavior-schema.xml
+END

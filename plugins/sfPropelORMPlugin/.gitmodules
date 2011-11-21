@@ -1,0 +1,6 @@
+[submodule "lib/vendor/propel"]
+	path = lib/vendor/propel
+	url = git://github.com/propelorm/Propel.git
+[submodule "lib/vendor/phing"]
+	path = lib/vendor/phing
+	url = git://github.com/Xosofox/phing.git

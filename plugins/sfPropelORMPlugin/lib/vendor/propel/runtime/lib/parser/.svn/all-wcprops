@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser
+END
+PropelCSVParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/PropelCSVParser.php
+END
+PropelParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/PropelParser.php
+END
+PropelXMLParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/PropelXMLParser.php
+END
+PropelYAMLParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/PropelYAMLParser.php
+END
+PropelJSONParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/PropelJSONParser.php
+END

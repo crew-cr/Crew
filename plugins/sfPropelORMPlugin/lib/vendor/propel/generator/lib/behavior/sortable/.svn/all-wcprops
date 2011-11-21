@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/sortable
+END
+SortableBehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/sortable/SortableBehavior.php
+END
+SortableBehaviorPeerBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/sortable/SortableBehaviorPeerBuilderModifier.php
+END
+SortableBehaviorQueryBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/sortable/SortableBehaviorQueryBuilderModifier.php
+END
+SortableBehaviorObjectBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/sortable/SortableBehaviorObjectBuilderModifier.php
+END

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 40
+/propelorm/Propel.git/!svn/ver/2349/test
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/propelorm/Propel.git/!svn/ver/2349/test/README
+END
+reset_tests.sh
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/propelorm/Propel.git/!svn/ver/2349/test/reset_tests.sh
+END
+test.xml
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/propelorm/Propel.git/!svn/ver/2349/test/test.xml
+END

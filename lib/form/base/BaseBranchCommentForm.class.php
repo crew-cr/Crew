@@ -23,7 +23,7 @@ abstract class BaseBranchCommentForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'         => new sfValidatorPropelChoice(array('model' => 'BranchComment', 'column' => 'id', 'required' => false)),
+      'id'         => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'user_id'    => new sfValidatorPropelChoice(array('model' => 'sfGuardUser', 'column' => 'id', 'required' => false)),
       'branch_id'  => new sfValidatorPropelChoice(array('model' => 'Branch', 'column' => 'id')),
       'value'      => new sfValidatorString(),

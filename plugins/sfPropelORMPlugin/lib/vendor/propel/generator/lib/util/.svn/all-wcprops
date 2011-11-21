@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util
+END
+PropelSqlManager.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelSqlManager.php
+END
+PropelSQLParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelSQLParser.php
+END
+PropelQuickBuilder.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelQuickBuilder.php
+END
+PropelMigrationManager.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelMigrationManager.php
+END
+PropelPHPParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelPHPParser.php
+END
+PropelSchemaValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/util/PropelSchemaValidator.php
+END

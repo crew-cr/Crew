@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/i18n
+END
+I18nBehaviorQueryBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/i18n/I18nBehaviorQueryBuilderModifier.php
+END
+I18nBehaviorObjectBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/i18n/I18nBehaviorObjectBuilderModifier.php
+END
+I18nBehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/i18n/I18nBehavior.php
+END
+I18nBehaviorPeerBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/i18n/I18nBehaviorPeerBuilderModifier.php
+END

@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util
+END
+PropelDateTimeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/PropelDateTimeTest.php
+END
+PropelPagerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/PropelPagerTest.php
+END
+PropelModelPagerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/PropelModelPagerTest.php
+END
+BasePeerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/BasePeerTest.php
+END
+PropelConditionalProxyTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/PropelConditionalProxyTest.php
+END
+BasePeerExceptionsTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/util/BasePeerExceptionsTest.php
+END

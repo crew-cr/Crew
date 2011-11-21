@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior
+END
+DonothingBehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/DonothingBehavior.php
+END
+Testallhooksbehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/Testallhooksbehavior.php
+END
+AddClassBehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/AddClassBehavior.php
+END
+BookstoreSortableTestBase.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/BookstoreSortableTestBase.php
+END
+BookstoreNestedSetTestBase.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/BookstoreNestedSetTestBase.php
+END
+TestAuthor.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/TestAuthor.php
+END
+AddClassBehaviorBuilder.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/behavior/AddClassBehaviorBuilder.php
+END

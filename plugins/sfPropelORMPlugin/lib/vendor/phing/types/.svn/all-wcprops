@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/!svn/ver/432/tags/2.3.3/classes/phing/types
+END
+PatternSet.php
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/432/tags/2.3.3/classes/phing/types/PatternSet.php
+END
+DirSet.php
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/432/tags/2.3.3/classes/phing/types/DirSet.php
+END
+FileSet.php
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/432/tags/2.3.3/classes/phing/types/FileSet.php
+END
+Path.php
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Path.php
+END
+Reference.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Reference.php
+END
+PhingFilterReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/types/PhingFilterReader.php
+END
+TokenSource.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/types/TokenSource.php
+END
+TokenReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/types/TokenReader.php
+END
+Parameterizable.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Parameterizable.php
+END
+FileList.php
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/432/tags/2.3.3/classes/phing/types/FileList.php
+END
+DataType.php
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/432/tags/2.3.3/classes/phing/types/DataType.php
+END
+defaults.properties
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/types/defaults.properties
+END
+AbstractFileSet.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/types/AbstractFileSet.php
+END
+Parameter.php
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Parameter.php
+END
+RegularExpression.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/types/RegularExpression.php
+END
+Description.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Description.php
+END
+Mapper.php
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Mapper.php
+END
+Commandline.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/types/Commandline.php
+END
+FilterChain.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/types/FilterChain.php
+END

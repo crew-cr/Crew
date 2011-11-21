@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/propelorm/Propel.git/!svn/ver/2349/test/etc/xsl
+END
+phpunit-noframes.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/test/etc/xsl/phpunit-noframes.xsl
+END
+log.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/propelorm/Propel.git/!svn/ver/2349/test/etc/xsl/log.xsl
+END
+coverage-frames.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/test/etc/xsl/coverage-frames.xsl
+END
+str.replace.function.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/etc/xsl/str.replace.function.xsl
+END

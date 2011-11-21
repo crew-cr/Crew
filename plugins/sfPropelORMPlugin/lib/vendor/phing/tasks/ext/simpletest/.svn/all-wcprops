@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest
+END
+SimpleTestSummaryResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestSummaryResultFormatter.php
+END
+SimpleTestResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestResultFormatter.php
+END
+SimpleTestTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestTask.php
+END
+SimpleTestPlainResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestPlainResultFormatter.php
+END
+SimpleTestCountResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestCountResultFormatter.php
+END
+SimpleTestFormatterElement.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/simpletest/SimpleTestFormatterElement.php
+END

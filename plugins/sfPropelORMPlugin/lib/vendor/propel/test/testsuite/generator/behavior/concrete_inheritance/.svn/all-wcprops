@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/concrete_inheritance
+END
+ConcreteInheritanceBehaviorWithSchemaTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 136
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/concrete_inheritance/ConcreteInheritanceBehaviorWithSchemaTest.php
+END
+ConcreteInheritanceBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/concrete_inheritance/ConcreteInheritanceBehaviorTest.php
+END
+ConcreteInheritanceParentBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/concrete_inheritance/ConcreteInheritanceParentBehaviorTest.php
+END

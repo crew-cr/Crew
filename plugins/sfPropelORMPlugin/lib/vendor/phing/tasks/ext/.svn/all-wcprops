@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext
+END
+ManifestTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ManifestTask.php
+END
+FtpDeployTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/FtpDeployTask.php
+END
+PhpLintTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/PhpLintTask.php
+END
+SmartyTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/SmartyTask.php
+END
+JslLintTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/JslLintTask.php
+END
+MailTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/MailTask.php
+END
+PearPackage2Task.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/PearPackage2Task.php
+END
+TarTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/TarTask.php
+END
+XmlLintTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/XmlLintTask.php
+END
+UntarTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/UntarTask.php
+END
+CapsuleTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/CapsuleTask.php
+END
+PackageAsPathTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/PackageAsPathTask.php
+END
+PhpCodeSnifferTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/PhpCodeSnifferTask.php
+END
+ScpSendTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ScpSendTask.php
+END
+ZendCodeAnalyzerTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ZendCodeAnalyzerTask.php
+END
+ZipTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ZipTask.php
+END
+PearPackageTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/PearPackageTask.php
+END
+UnzipTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/UnzipTask.php
+END
+ExtractBaseTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ExtractBaseTask.php
+END

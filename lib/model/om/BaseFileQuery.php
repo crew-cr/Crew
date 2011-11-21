@@ -42,13 +42,9 @@
  * @method     FileQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
  * @method     FileQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
  *
- * @method     FileQuery leftJoinFileComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the FileComment relation
- * @method     FileQuery rightJoinFileComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the FileComment relation
- * @method     FileQuery innerJoinFileComment($relationAlias = null) Adds a INNER JOIN clause to the query using the FileComment relation
- *
- * @method     FileQuery leftJoinLineComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the LineComment relation
- * @method     FileQuery rightJoinLineComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the LineComment relation
- * @method     FileQuery innerJoinLineComment($relationAlias = null) Adds a INNER JOIN clause to the query using the LineComment relation
+ * @method     FileQuery leftJoinComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Comment relation
+ * @method     FileQuery rightJoinComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Comment relation
+ * @method     FileQuery innerJoinComment($relationAlias = null) Adds a INNER JOIN clause to the query using the Comment relation
  *
  * @method     FileQuery leftJoinStatusAction($relationAlias = null) Adds a LEFT JOIN clause to the query using the StatusAction relation
  * @method     FileQuery rightJoinStatusAction($relationAlias = null) Adds a RIGHT JOIN clause to the query using the StatusAction relation
@@ -85,7 +81,7 @@
  */
 abstract class BaseFileQuery extends ModelCriteria
 {
-
+	
 	/**
 	 * Initializes internal state of BaseFileQuery object.
 	 *
@@ -122,11 +118,14 @@ abstract class BaseFileQuery extends ModelCriteria
 	}
 
 	/**
-	 * Find object by primary key
-	 * Use instance pooling to avoid a database query if the object exists
+	 * Find object by primary key.
+	 * Propel uses the instance pool to skip the database if the object exists.
+	 * Go fast if the query is untouched.
+	 *
 	 * <code>
 	 * $obj  = $c->findPk(12, $con);
 	 * </code>
+	 *
 	 * @param     mixed $key Primary key to use for the query
 	 * @param     PropelPDO $con an optional connection object
 	 *
@@ -134,17 +133,73 @@ abstract class BaseFileQuery extends ModelCriteria
 	 */
 	public function findPk($key, $con = null)
 	{
-		if ((null !== ($obj = FilePeer::getInstanceFromPool((string) $key))) && $this->getFormatter()->isObjectFormatter()) {
+		if ($key === null) {
+			return null;
+		}
+		if ((null !== ($obj = FilePeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
 			// the object is alredy in the instance pool
 			return $obj;
-		} else {
-			// the object has not been requested yet, or the formatter is not an object formatter
-			$criteria = $this->isKeepQuery() ? clone $this : $this;
-			$stmt = $criteria
-				->filterByPrimaryKey($key)
-				->getSelectStatement($con);
-			return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 		}
+		if ($con === null) {
+			$con = Propel::getConnection(FilePeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
+		if ($this->formatter || $this->modelAlias || $this->with || $this->select
+		 || $this->selectColumns || $this->asColumns || $this->selectModifiers
+		 || $this->map || $this->having || $this->joins) {
+			return $this->findPkComplex($key, $con);
+		} else {
+			return $this->findPkSimple($key, $con);
+		}
+	}
+
+	/**
+	 * Find object by primary key using raw SQL to go fast.
+	 * Bypass doSelect() and the object formatter by using generated code.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    File A model object, or null if the key is not found
+	 */
+	protected function findPkSimple($key, $con)
+	{
+		$sql = 'SELECT `ID`, `BRANCH_ID`, `STATE`, `FILENAME`, `LAST_CHANGE_COMMIT`, `LAST_CHANGE_COMMIT_DESC`, `LAST_CHANGE_COMMIT_USER`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `file` WHERE `ID` = :p0';
+		try {
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), $e);
+		}
+		$obj = null;
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$obj = new File();
+			$obj->hydrate($row);
+			FilePeer::addInstanceToPool($obj, (string) $row[0]);
+		}
+		$stmt->closeCursor();
+
+		return $obj;
+	}
+
+	/**
+	 * Find object by primary key.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    File|array|mixed the result, formatted by the current formatter
+	 */
+	protected function findPkComplex($key, $con)
+	{
+		// As the query uses a PK condition, no limit(1) is necessary.
+		$criteria = $this->isKeepQuery() ? clone $this : $this;
+		$stmt = $criteria
+			->filterByPrimaryKey($key)
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 	}
 
 	/**
@@ -158,11 +213,16 @@ abstract class BaseFileQuery extends ModelCriteria
 	 * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
 	 */
 	public function findPks($keys, $con = null)
-	{	
+	{
+		if ($con === null) {
+			$con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
 		$criteria = $this->isKeepQuery() ? clone $this : $this;
-		return $this
+		$stmt = $criteria
 			->filterByPrimaryKeys($keys)
-			->find($con);
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->format($stmt);
 	}
 
 	/**
@@ -191,9 +251,18 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the id column
-	 * 
-	 * @param     int|array $id The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterById(1234); // WHERE id = 1234
+	 * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+	 * $query->filterById(array('min' => 12)); // WHERE id > 12
+	 * </code>
+	 *
+	 * @param     mixed $id The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -208,9 +277,20 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the branch_id column
-	 * 
-	 * @param     int|array $branchId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByBranchId(1234); // WHERE branch_id = 1234
+	 * $query->filterByBranchId(array(12, 34)); // WHERE branch_id IN (12, 34)
+	 * $query->filterByBranchId(array('min' => 12)); // WHERE branch_id > 12
+	 * </code>
+	 *
+	 * @see       filterByBranch()
+	 *
+	 * @param     mixed $branchId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -239,9 +319,15 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the state column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByState('fooValue');   // WHERE state = 'fooValue'
+	 * $query->filterByState('%fooValue%'); // WHERE state LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $state The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -261,9 +347,15 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the filename column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByFilename('fooValue');   // WHERE filename = 'fooValue'
+	 * $query->filterByFilename('%fooValue%'); // WHERE filename LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $filename The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -283,9 +375,15 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the last_change_commit column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByLastChangeCommit('fooValue');   // WHERE last_change_commit = 'fooValue'
+	 * $query->filterByLastChangeCommit('%fooValue%'); // WHERE last_change_commit LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $lastChangeCommit The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -305,9 +403,15 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the last_change_commit_desc column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByLastChangeCommitDesc('fooValue');   // WHERE last_change_commit_desc = 'fooValue'
+	 * $query->filterByLastChangeCommitDesc('%fooValue%'); // WHERE last_change_commit_desc LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $lastChangeCommitDesc The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -327,9 +431,20 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the last_change_commit_user column
-	 * 
-	 * @param     int|array $lastChangeCommitUser The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByLastChangeCommitUser(1234); // WHERE last_change_commit_user = 1234
+	 * $query->filterByLastChangeCommitUser(array(12, 34)); // WHERE last_change_commit_user IN (12, 34)
+	 * $query->filterByLastChangeCommitUser(array('min' => 12)); // WHERE last_change_commit_user > 12
+	 * </code>
+	 *
+	 * @see       filterBysfGuardUser()
+	 *
+	 * @param     mixed $lastChangeCommitUser The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -358,9 +473,18 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the status column
-	 * 
-	 * @param     int|array $status The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByStatus(1234); // WHERE status = 1234
+	 * $query->filterByStatus(array(12, 34)); // WHERE status IN (12, 34)
+	 * $query->filterByStatus(array('min' => 12)); // WHERE status > 12
+	 * </code>
+	 *
+	 * @param     mixed $status The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -389,9 +513,15 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the commit_status_changed column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCommitStatusChanged('fooValue');   // WHERE commit_status_changed = 'fooValue'
+	 * $query->filterByCommitStatusChanged('%fooValue%'); // WHERE commit_status_changed LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $commitStatusChanged The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -411,9 +541,18 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the user_status_changed column
-	 * 
-	 * @param     int|array $userStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByUserStatusChanged(1234); // WHERE user_status_changed = 1234
+	 * $query->filterByUserStatusChanged(array(12, 34)); // WHERE user_status_changed IN (12, 34)
+	 * $query->filterByUserStatusChanged(array('min' => 12)); // WHERE user_status_changed > 12
+	 * </code>
+	 *
+	 * @param     mixed $userStatusChanged The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -442,9 +581,20 @@ abstract class BaseFileQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the date_status_changed column
-	 * 
-	 * @param     string|array $dateStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByDateStatusChanged('2011-03-14'); // WHERE date_status_changed = '2011-03-14'
+	 * $query->filterByDateStatusChanged('now'); // WHERE date_status_changed = '2011-03-14'
+	 * $query->filterByDateStatusChanged(array('max' => 'yesterday')); // WHERE date_status_changed > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $dateStatusChanged The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
@@ -474,20 +624,30 @@ abstract class BaseFileQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related Branch object
 	 *
-	 * @param     Branch $branch  the related object to use as filter
+	 * @param     Branch|PropelCollection $branch The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
 	public function filterByBranch($branch, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(FilePeer::BRANCH_ID, $branch->getId(), $comparison);
+		if ($branch instanceof Branch) {
+			return $this
+				->addUsingAlias(FilePeer::BRANCH_ID, $branch->getId(), $comparison);
+		} elseif ($branch instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(FilePeer::BRANCH_ID, $branch->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterByBranch() only accepts arguments of type Branch or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the Branch relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -497,7 +657,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Branch');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -505,7 +665,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -513,7 +673,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'Branch');
 		}
-		
+
 		return $this;
 	}
 
@@ -521,7 +681,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	 * Use the Branch relation Branch object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -538,20 +698,30 @@ abstract class BaseFileQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related sfGuardUser object
 	 *
-	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     sfGuardUser|PropelCollection $sfGuardUser The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
 	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $sfGuardUser->getId(), $comparison);
+		if ($sfGuardUser instanceof sfGuardUser) {
+			return $this
+				->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $sfGuardUser->getId(), $comparison);
+		} elseif ($sfGuardUser instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(FilePeer::LAST_CHANGE_COMMIT_USER, $sfGuardUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterBysfGuardUser() only accepts arguments of type sfGuardUser or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the sfGuardUser relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -561,7 +731,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('sfGuardUser');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -569,7 +739,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -577,7 +747,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'sfGuardUser');
 		}
-		
+
 		return $this;
 	}
 
@@ -585,7 +755,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	 * Use the sfGuardUser relation sfGuardUser object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -600,32 +770,41 @@ abstract class BaseFileQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query by a related FileComment object
+	 * Filter the query by a related Comment object
 	 *
-	 * @param     FileComment $fileComment  the related object to use as filter
+	 * @param     Comment $comment  the related object to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
-	public function filterByFileComment($fileComment, $comparison = null)
+	public function filterByComment($comment, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(FilePeer::ID, $fileComment->getFileId(), $comparison);
+		if ($comment instanceof Comment) {
+			return $this
+				->addUsingAlias(FilePeer::ID, $comment->getFileId(), $comparison);
+		} elseif ($comment instanceof PropelCollection) {
+			return $this
+				->useCommentQuery()
+				->filterByPrimaryKeys($comment->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByComment() only accepts arguments of type Comment or PropelCollection');
+		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the FileComment relation
-	 * 
+	 * Adds a JOIN clause to the query using the Comment relation
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
-	public function joinFileComment($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function joinComment($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('FileComment');
-		
+		$relationMap = $tableMap->getRelation('Comment');
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -633,98 +812,34 @@ abstract class BaseFileQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'FileComment');
+			$this->addJoinObject($join, 'Comment');
 		}
-		
+
 		return $this;
 	}
 
 	/**
-	 * Use the FileComment relation FileComment object
+	 * Use the Comment relation Comment object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
-	 * @return    FileCommentQuery A secondary query class using the current class as primary query
+	 * @return    CommentQuery A secondary query class using the current class as primary query
 	 */
-	public function useFileCommentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function useCommentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		return $this
-			->joinFileComment($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'FileComment', 'FileCommentQuery');
-	}
-
-	/**
-	 * Filter the query by a related LineComment object
-	 *
-	 * @param     LineComment $lineComment  the related object to use as filter
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function filterByLineComment($lineComment, $comparison = null)
-	{
-		return $this
-			->addUsingAlias(FilePeer::ID, $lineComment->getFileId(), $comparison);
-	}
-
-	/**
-	 * Adds a JOIN clause to the query using the LineComment relation
-	 * 
-	 * @param     string $relationAlias optional alias for the relation
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function joinLineComment($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('LineComment');
-		
-		// create a ModelJoin object for this join
-		$join = new ModelJoin();
-		$join->setJoinType($joinType);
-		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
-		if ($previousJoin = $this->getPreviousJoin()) {
-			$join->setPreviousJoin($previousJoin);
-		}
-		
-		// add the ModelJoin to the current object
-		if($relationAlias) {
-			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
-			$this->addJoinObject($join, $relationAlias);
-		} else {
-			$this->addJoinObject($join, 'LineComment');
-		}
-		
-		return $this;
-	}
-
-	/**
-	 * Use the LineComment relation LineComment object
-	 *
-	 * @see       useQuery()
-	 * 
-	 * @param     string $relationAlias optional alias for the relation,
-	 *                                   to be used as main alias in the secondary query
-	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
-	 *
-	 * @return    LineCommentQuery A secondary query class using the current class as primary query
-	 */
-	public function useLineCommentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
-	{
-		return $this
-			->joinLineComment($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'LineComment', 'LineCommentQuery');
+			->joinComment($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'Comment', 'CommentQuery');
 	}
 
 	/**
@@ -737,13 +852,22 @@ abstract class BaseFileQuery extends ModelCriteria
 	 */
 	public function filterByStatusAction($statusAction, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(FilePeer::ID, $statusAction->getFileId(), $comparison);
+		if ($statusAction instanceof StatusAction) {
+			return $this
+				->addUsingAlias(FilePeer::ID, $statusAction->getFileId(), $comparison);
+		} elseif ($statusAction instanceof PropelCollection) {
+			return $this
+				->useStatusActionQuery()
+				->filterByPrimaryKeys($statusAction->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByStatusAction() only accepts arguments of type StatusAction or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the StatusAction relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -753,7 +877,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('StatusAction');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -761,7 +885,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -769,7 +893,7 @@ abstract class BaseFileQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'StatusAction');
 		}
-		
+
 		return $this;
 	}
 
@@ -777,7 +901,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	 * Use the StatusAction relation StatusAction object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -802,8 +926,8 @@ abstract class BaseFileQuery extends ModelCriteria
 	{
 		if ($file) {
 			$this->addUsingAlias(FilePeer::ID, $file->getId(), Criteria::NOT_EQUAL);
-	  }
-	  
+		}
+
 		return $this;
 	}
 

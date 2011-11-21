@@ -1,0 +1,173 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om
+END
+GeneratedNestedSetPeerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedNestedSetPeerTest.php
+END
+GeneratedQueryEnumColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedQueryEnumColumnTypeTest.php
+END
+PHP5TableMapBuilderTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/PHP5TableMapBuilderTest.php
+END
+GeneratedObjectEnumColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectEnumColumnTypeTest.php
+END
+GeneratedQueryObjectColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedQueryObjectColumnTypeTest.php
+END
+GeneratedObjectObjectColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectObjectColumnTypeTest.php
+END
+GeneratedPeerDoSelectTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedPeerDoSelectTest.php
+END
+OMBuilderNamespaceTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/OMBuilderNamespaceTest.php
+END
+GeneratedQueryArrayColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedQueryArrayColumnTypeTest.php
+END
+GeneratedObjectArrayColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectArrayColumnTypeTest.php
+END
+GeneratedNestedSetObjectTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedNestedSetObjectTest.php
+END
+GeneratedObjectBooleanColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectBooleanColumnTypeTest.php
+END
+GeneratedObjectTemporalColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectTemporalColumnTypeTest.php
+END
+GeneratedPeerLazyLoadTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedPeerLazyLoadTest.php
+END
+GeneratedPeerTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedPeerTest.php
+END
+PHP5ObjectBuilderTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/PHP5ObjectBuilderTest.php
+END
+GeneratedObjectWithFixturesTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectWithFixturesTest.php
+END
+QueryBuilderTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/QueryBuilderTest.php
+END
+GeneratedNestedSetTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedNestedSetTest.php
+END
+OMBuilderRelatedByTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/OMBuilderRelatedByTest.php
+END
+GeneratedPeerEnumColumnTypeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedPeerEnumColumnTypeTest.php
+END
+GeneratedPeerDoDeleteTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedPeerDoDeleteTest.php
+END
+GeneratedObjectLobTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectLobTest.php
+END
+OMBuilderTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/OMBuilderTest.php
+END
+GeneratedObjectTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectTest.php
+END
+GeneratedObjectLazyLoadTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectLazyLoadTest.php
+END
+QueryBuilderInheritanceTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/QueryBuilderInheritanceTest.php
+END
+GeneratedObjectRelTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/builder/om/GeneratedObjectRelTest.php
+END

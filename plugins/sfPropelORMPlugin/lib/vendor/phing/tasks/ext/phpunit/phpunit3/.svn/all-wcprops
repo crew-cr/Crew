@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/phpunit/phpunit3
+END
+SummaryPHPUnit3ResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/phpunit/phpunit3/SummaryPHPUnit3ResultFormatter.php
+END
+PHPUnit3ResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/phpunit/phpunit3/PHPUnit3ResultFormatter.php
+END
+XMLPHPUnit3ResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/phpunit/phpunit3/XMLPHPUnit3ResultFormatter.php
+END
+PlainPHPUnit3ResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/phpunit/phpunit3/PlainPHPUnit3ResultFormatter.php
+END

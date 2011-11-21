@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage
+END
+CoverageReportTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage/CoverageReportTask.php
+END
+CoverageReportTransformer.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage/CoverageReportTransformer.php
+END
+CoverageMerger.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage/CoverageMerger.php
+END
+CoverageSetupTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage/CoverageSetupTask.php
+END
+CoverageMergerTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/coverage/CoverageMergerTask.php
+END

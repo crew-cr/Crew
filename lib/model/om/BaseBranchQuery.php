@@ -46,9 +46,9 @@
  * @method     BranchQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
  * @method     BranchQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
  *
- * @method     BranchQuery leftJoinBranchComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the BranchComment relation
- * @method     BranchQuery rightJoinBranchComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the BranchComment relation
- * @method     BranchQuery innerJoinBranchComment($relationAlias = null) Adds a INNER JOIN clause to the query using the BranchComment relation
+ * @method     BranchQuery leftJoinComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Comment relation
+ * @method     BranchQuery rightJoinComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Comment relation
+ * @method     BranchQuery innerJoinComment($relationAlias = null) Adds a INNER JOIN clause to the query using the Comment relation
  *
  * @method     BranchQuery leftJoinFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the File relation
  * @method     BranchQuery rightJoinFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the File relation
@@ -93,7 +93,7 @@
  */
 abstract class BaseBranchQuery extends ModelCriteria
 {
-
+	
 	/**
 	 * Initializes internal state of BaseBranchQuery object.
 	 *
@@ -130,11 +130,14 @@ abstract class BaseBranchQuery extends ModelCriteria
 	}
 
 	/**
-	 * Find object by primary key
-	 * Use instance pooling to avoid a database query if the object exists
+	 * Find object by primary key.
+	 * Propel uses the instance pool to skip the database if the object exists.
+	 * Go fast if the query is untouched.
+	 *
 	 * <code>
 	 * $obj  = $c->findPk(12, $con);
 	 * </code>
+	 *
 	 * @param     mixed $key Primary key to use for the query
 	 * @param     PropelPDO $con an optional connection object
 	 *
@@ -142,17 +145,73 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 */
 	public function findPk($key, $con = null)
 	{
-		if ((null !== ($obj = BranchPeer::getInstanceFromPool((string) $key))) && $this->getFormatter()->isObjectFormatter()) {
+		if ($key === null) {
+			return null;
+		}
+		if ((null !== ($obj = BranchPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
 			// the object is alredy in the instance pool
 			return $obj;
-		} else {
-			// the object has not been requested yet, or the formatter is not an object formatter
-			$criteria = $this->isKeepQuery() ? clone $this : $this;
-			$stmt = $criteria
-				->filterByPrimaryKey($key)
-				->getSelectStatement($con);
-			return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 		}
+		if ($con === null) {
+			$con = Propel::getConnection(BranchPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
+		if ($this->formatter || $this->modelAlias || $this->with || $this->select
+		 || $this->selectColumns || $this->asColumns || $this->selectModifiers
+		 || $this->map || $this->having || $this->joins) {
+			return $this->findPkComplex($key, $con);
+		} else {
+			return $this->findPkSimple($key, $con);
+		}
+	}
+
+	/**
+	 * Find object by primary key using raw SQL to go fast.
+	 * Bypass doSelect() and the object formatter by using generated code.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    Branch A model object, or null if the key is not found
+	 */
+	protected function findPkSimple($key, $con)
+	{
+		$sql = 'SELECT `ID`, `REPOSITORY_ID`, `NAME`, `BASE_BRANCH_NAME`, `COMMIT_REFERENCE`, `LAST_COMMIT`, `LAST_COMMIT_DESC`, `IS_BLACKLISTED`, `REVIEW_REQUEST`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `branch` WHERE `ID` = :p0';
+		try {
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), $e);
+		}
+		$obj = null;
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$obj = new Branch();
+			$obj->hydrate($row);
+			BranchPeer::addInstanceToPool($obj, (string) $row[0]);
+		}
+		$stmt->closeCursor();
+
+		return $obj;
+	}
+
+	/**
+	 * Find object by primary key.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    Branch|array|mixed the result, formatted by the current formatter
+	 */
+	protected function findPkComplex($key, $con)
+	{
+		// As the query uses a PK condition, no limit(1) is necessary.
+		$criteria = $this->isKeepQuery() ? clone $this : $this;
+		$stmt = $criteria
+			->filterByPrimaryKey($key)
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 	}
 
 	/**
@@ -166,11 +225,16 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
 	 */
 	public function findPks($keys, $con = null)
-	{	
+	{
+		if ($con === null) {
+			$con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
 		$criteria = $this->isKeepQuery() ? clone $this : $this;
-		return $this
+		$stmt = $criteria
 			->filterByPrimaryKeys($keys)
-			->find($con);
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->format($stmt);
 	}
 
 	/**
@@ -199,9 +263,18 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the id column
-	 * 
-	 * @param     int|array $id The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterById(1234); // WHERE id = 1234
+	 * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+	 * $query->filterById(array('min' => 12)); // WHERE id > 12
+	 * </code>
+	 *
+	 * @param     mixed $id The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -216,9 +289,20 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the repository_id column
-	 * 
-	 * @param     int|array $repositoryId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByRepositoryId(1234); // WHERE repository_id = 1234
+	 * $query->filterByRepositoryId(array(12, 34)); // WHERE repository_id IN (12, 34)
+	 * $query->filterByRepositoryId(array('min' => 12)); // WHERE repository_id > 12
+	 * </code>
+	 *
+	 * @see       filterByRepository()
+	 *
+	 * @param     mixed $repositoryId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -247,9 +331,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the name column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByName('fooValue');   // WHERE name = 'fooValue'
+	 * $query->filterByName('%fooValue%'); // WHERE name LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $name The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -269,9 +359,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the base_branch_name column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByBaseBranchName('fooValue');   // WHERE base_branch_name = 'fooValue'
+	 * $query->filterByBaseBranchName('%fooValue%'); // WHERE base_branch_name LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $baseBranchName The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -291,9 +387,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the commit_reference column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCommitReference('fooValue');   // WHERE commit_reference = 'fooValue'
+	 * $query->filterByCommitReference('%fooValue%'); // WHERE commit_reference LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $commitReference The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -313,9 +415,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the last_commit column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByLastCommit('fooValue');   // WHERE last_commit = 'fooValue'
+	 * $query->filterByLastCommit('%fooValue%'); // WHERE last_commit LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $lastCommit The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -335,9 +443,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the last_commit_desc column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByLastCommitDesc('fooValue');   // WHERE last_commit_desc = 'fooValue'
+	 * $query->filterByLastCommitDesc('%fooValue%'); // WHERE last_commit_desc LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $lastCommitDesc The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -357,9 +471,18 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the is_blacklisted column
-	 * 
-	 * @param     int|array $isBlacklisted The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByIsBlacklisted(1234); // WHERE is_blacklisted = 1234
+	 * $query->filterByIsBlacklisted(array(12, 34)); // WHERE is_blacklisted IN (12, 34)
+	 * $query->filterByIsBlacklisted(array('min' => 12)); // WHERE is_blacklisted > 12
+	 * </code>
+	 *
+	 * @param     mixed $isBlacklisted The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -388,9 +511,18 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the review_request column
-	 * 
-	 * @param     int|array $reviewRequest The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByReviewRequest(1234); // WHERE review_request = 1234
+	 * $query->filterByReviewRequest(array(12, 34)); // WHERE review_request IN (12, 34)
+	 * $query->filterByReviewRequest(array('min' => 12)); // WHERE review_request > 12
+	 * </code>
+	 *
+	 * @param     mixed $reviewRequest The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -419,9 +551,18 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the status column
-	 * 
-	 * @param     int|array $status The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByStatus(1234); // WHERE status = 1234
+	 * $query->filterByStatus(array(12, 34)); // WHERE status IN (12, 34)
+	 * $query->filterByStatus(array('min' => 12)); // WHERE status > 12
+	 * </code>
+	 *
+	 * @param     mixed $status The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -450,9 +591,15 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the commit_status_changed column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCommitStatusChanged('fooValue');   // WHERE commit_status_changed = 'fooValue'
+	 * $query->filterByCommitStatusChanged('%fooValue%'); // WHERE commit_status_changed LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $commitStatusChanged The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -472,9 +619,20 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the user_status_changed column
-	 * 
-	 * @param     int|array $userStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByUserStatusChanged(1234); // WHERE user_status_changed = 1234
+	 * $query->filterByUserStatusChanged(array(12, 34)); // WHERE user_status_changed IN (12, 34)
+	 * $query->filterByUserStatusChanged(array('min' => 12)); // WHERE user_status_changed > 12
+	 * </code>
+	 *
+	 * @see       filterBysfGuardUser()
+	 *
+	 * @param     mixed $userStatusChanged The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -503,9 +661,20 @@ abstract class BaseBranchQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the date_status_changed column
-	 * 
-	 * @param     string|array $dateStatusChanged The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByDateStatusChanged('2011-03-14'); // WHERE date_status_changed = '2011-03-14'
+	 * $query->filterByDateStatusChanged('now'); // WHERE date_status_changed = '2011-03-14'
+	 * $query->filterByDateStatusChanged(array('max' => 'yesterday')); // WHERE date_status_changed > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $dateStatusChanged The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
@@ -535,20 +704,30 @@ abstract class BaseBranchQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related Repository object
 	 *
-	 * @param     Repository $repository  the related object to use as filter
+	 * @param     Repository|PropelCollection $repository The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
 	public function filterByRepository($repository, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::REPOSITORY_ID, $repository->getId(), $comparison);
+		if ($repository instanceof Repository) {
+			return $this
+				->addUsingAlias(BranchPeer::REPOSITORY_ID, $repository->getId(), $comparison);
+		} elseif ($repository instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(BranchPeer::REPOSITORY_ID, $repository->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterByRepository() only accepts arguments of type Repository or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the Repository relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -558,7 +737,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Repository');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -566,7 +745,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -574,7 +753,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'Repository');
 		}
-		
+
 		return $this;
 	}
 
@@ -582,7 +761,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 * Use the Repository relation Repository object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -599,20 +778,30 @@ abstract class BaseBranchQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related sfGuardUser object
 	 *
-	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     sfGuardUser|PropelCollection $sfGuardUser The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
 	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $sfGuardUser->getId(), $comparison);
+		if ($sfGuardUser instanceof sfGuardUser) {
+			return $this
+				->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $sfGuardUser->getId(), $comparison);
+		} elseif ($sfGuardUser instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(BranchPeer::USER_STATUS_CHANGED, $sfGuardUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterBysfGuardUser() only accepts arguments of type sfGuardUser or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the sfGuardUser relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -622,7 +811,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('sfGuardUser');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -630,7 +819,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -638,7 +827,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'sfGuardUser');
 		}
-		
+
 		return $this;
 	}
 
@@ -646,7 +835,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 * Use the sfGuardUser relation sfGuardUser object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -661,32 +850,41 @@ abstract class BaseBranchQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query by a related BranchComment object
+	 * Filter the query by a related Comment object
 	 *
-	 * @param     BranchComment $branchComment  the related object to use as filter
+	 * @param     Comment $comment  the related object to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function filterByBranchComment($branchComment, $comparison = null)
+	public function filterByComment($comment, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::ID, $branchComment->getBranchId(), $comparison);
+		if ($comment instanceof Comment) {
+			return $this
+				->addUsingAlias(BranchPeer::ID, $comment->getBranchId(), $comparison);
+		} elseif ($comment instanceof PropelCollection) {
+			return $this
+				->useCommentQuery()
+				->filterByPrimaryKeys($comment->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByComment() only accepts arguments of type Comment or PropelCollection');
+		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the BranchComment relation
-	 * 
+	 * Adds a JOIN clause to the query using the Comment relation
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    BranchQuery The current query, for fluid interface
 	 */
-	public function joinBranchComment($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function joinComment($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('BranchComment');
-		
+		$relationMap = $tableMap->getRelation('Comment');
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -694,34 +892,34 @@ abstract class BaseBranchQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'BranchComment');
+			$this->addJoinObject($join, 'Comment');
 		}
-		
+
 		return $this;
 	}
 
 	/**
-	 * Use the BranchComment relation BranchComment object
+	 * Use the Comment relation Comment object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
-	 * @return    BranchCommentQuery A secondary query class using the current class as primary query
+	 * @return    CommentQuery A secondary query class using the current class as primary query
 	 */
-	public function useBranchCommentQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	public function useCommentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		return $this
-			->joinBranchComment($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'BranchComment', 'BranchCommentQuery');
+			->joinComment($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'Comment', 'CommentQuery');
 	}
 
 	/**
@@ -734,13 +932,22 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 */
 	public function filterByFile($file, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::ID, $file->getBranchId(), $comparison);
+		if ($file instanceof File) {
+			return $this
+				->addUsingAlias(BranchPeer::ID, $file->getBranchId(), $comparison);
+		} elseif ($file instanceof PropelCollection) {
+			return $this
+				->useFileQuery()
+				->filterByPrimaryKeys($file->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByFile() only accepts arguments of type File or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the File relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -750,7 +957,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('File');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -758,7 +965,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -766,7 +973,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'File');
 		}
-		
+
 		return $this;
 	}
 
@@ -774,7 +981,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 * Use the File relation File object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -798,13 +1005,22 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 */
 	public function filterByStatusAction($statusAction, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(BranchPeer::ID, $statusAction->getBranchId(), $comparison);
+		if ($statusAction instanceof StatusAction) {
+			return $this
+				->addUsingAlias(BranchPeer::ID, $statusAction->getBranchId(), $comparison);
+		} elseif ($statusAction instanceof PropelCollection) {
+			return $this
+				->useStatusActionQuery()
+				->filterByPrimaryKeys($statusAction->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByStatusAction() only accepts arguments of type StatusAction or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the StatusAction relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -814,7 +1030,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('StatusAction');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -822,7 +1038,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -830,7 +1046,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'StatusAction');
 		}
-		
+
 		return $this;
 	}
 
@@ -838,7 +1054,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 * Use the StatusAction relation StatusAction object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -863,8 +1079,8 @@ abstract class BaseBranchQuery extends ModelCriteria
 	{
 		if ($branch) {
 			$this->addUsingAlias(BranchPeer::ID, $branch->getId(), Criteria::NOT_EQUAL);
-	  }
-	  
+		}
+
 		return $this;
 	}
 

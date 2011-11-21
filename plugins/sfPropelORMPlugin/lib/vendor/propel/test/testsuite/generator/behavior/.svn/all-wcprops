@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior
+END
+DelegateBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/DelegateBehaviorTest.php
+END
+PeerBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/PeerBehaviorTest.php
+END
+AutoAddPkBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/AutoAddPkBehaviorTest.php
+END
+AddClassBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/AddClassBehaviorTest.php
+END
+SoftDeleteBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/SoftDeleteBehaviorTest.php
+END
+AlternativeCodingStandardsBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/AlternativeCodingStandardsBehaviorTest.php
+END
+ObjectBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/ObjectBehaviorTest.php
+END
+TableBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/TableBehaviorTest.php
+END
+TimestampableBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/TimestampableBehaviorTest.php
+END

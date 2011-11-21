@@ -1,0 +1,143 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model
+END
+Inheritance.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Inheritance.php
+END
+ConstraintNameGenerator.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/ConstraintNameGenerator.php
+END
+IDMethod.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/IDMethod.php
+END
+Column.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Column.php
+END
+IdMethodParameter.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/IdMethodParameter.php
+END
+PhpNameGenerator.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/PhpNameGenerator.php
+END
+ColumnDefaultValue.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/ColumnDefaultValue.php
+END
+Behavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Behavior.php
+END
+ForeignKey.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/ForeignKey.php
+END
+Database.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Database.php
+END
+Unique.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Unique.php
+END
+Index.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Index.php
+END
+Domain.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Domain.php
+END
+Rule.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Rule.php
+END
+NameFactory.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/NameFactory.php
+END
+VendorInfo.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/VendorInfo.php
+END
+AppData.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/AppData.php
+END
+XMLElement.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/XMLElement.php
+END
+Validator.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Validator.php
+END
+PropelTypes.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/PropelTypes.php
+END
+NameGenerator.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/NameGenerator.php
+END
+ScopedElement.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/ScopedElement.php
+END
+Table.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/Table.php
+END

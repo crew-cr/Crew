@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/propelorm/Propel.git/!svn/ver/2349/generator/resources/xsl
+END
+dbd2propel.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/generator/resources/xsl/dbd2propel.xsl
+END
+database.xsl
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/propelorm/Propel.git/!svn/ver/2349/generator/resources/xsl/database.xsl
+END

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query
+END
+Criterion.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/Criterion.php
+END
+Join.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/Join.php
+END
+ModelCriterion.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/ModelCriterion.php
+END
+ModelJoin.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/ModelJoin.php
+END
+Criteria.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/Criteria.php
+END
+ModelCriteria.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/ModelCriteria.php
+END
+PropelQuery.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/PropelQuery.php
+END
+CriterionIterator.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/query/CriterionIterator.php
+END

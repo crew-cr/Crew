@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml
+END
+sfYamlInline.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml/sfYamlInline.php
+END
+sfYaml.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml/sfYaml.php
+END
+LICENSE
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml/LICENSE
+END
+sfYamlDumper.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml/sfYamlDumper.php
+END
+sfYamlParser.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/parser/yaml/sfYamlParser.php
+END

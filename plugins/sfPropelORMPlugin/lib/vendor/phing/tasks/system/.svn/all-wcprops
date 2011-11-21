@@ -1,0 +1,227 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system
+END
+ForeachTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ForeachTask.php
+END
+TstampTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/TstampTask.php
+END
+ExitTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ExitTask.php
+END
+SequentialTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/SequentialTask.php
+END
+ChownTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ChownTask.php
+END
+EchoTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/EchoTask.php
+END
+TaskdefTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/TaskdefTask.php
+END
+CvsPassTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/CvsPassTask.php
+END
+PropertyTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/PropertyTask.php
+END
+UpToDateTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/UpToDateTask.php
+END
+ConditionTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ConditionTask.php
+END
+XsltTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/XsltTask.php
+END
+CvsTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/CvsTask.php
+END
+ResolvePathTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ResolvePathTask.php
+END
+InputTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/InputTask.php
+END
+PhpEvalTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/PhpEvalTask.php
+END
+TypedefTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/TypedefTask.php
+END
+PhingTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/PhingTask.php
+END
+MoveTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/MoveTask.php
+END
+MkdirTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/MkdirTask.php
+END
+AppendTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/AppendTask.php
+END
+WarnTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/WarnTask.php
+END
+CopyTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/CopyTask.php
+END
+AdhocTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/AdhocTask.php
+END
+AdhocTaskdefTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/AdhocTaskdefTask.php
+END
+AvailableTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/AvailableTask.php
+END
+TouchTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/TouchTask.php
+END
+ExecTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ExecTask.php
+END
+PropertyPromptTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/PropertyPromptTask.php
+END
+ReflexiveTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ReflexiveTask.php
+END
+ChmodTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/ChmodTask.php
+END
+MatchingTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/MatchingTask.php
+END
+IfTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/IfTask.php
+END
+AdhocTypedefTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/AdhocTypedefTask.php
+END
+IncludePathTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/IncludePathTask.php
+END
+PhingCallTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/PhingCallTask.php
+END
+DeleteTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/system/DeleteTask.php
+END

@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/reverse/mysql/build/sql
+END
+sqldb.map
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/reverse/mysql/build/sql/sqldb.map
+END
+schema.sql
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/reverse/mysql/build/sql/schema.sql
+END

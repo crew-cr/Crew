@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates
+END
+objectUpdate.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates/objectUpdate.php
+END
+queryUpdateRelated.php
+K 25
+svn:wc:ra_dav:version-url
+V 108
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates/queryUpdateRelated.php
+END
+objectUpdateRelated.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates/objectUpdateRelated.php
+END
+objectCompute.php
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates/objectCompute.php
+END
+queryFindRelated.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/aggregate_column/templates/queryFindRelated.php
+END

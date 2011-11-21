@@ -21,7 +21,7 @@ abstract class BaseRepositoryForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'     => new sfValidatorPropelChoice(array('model' => 'Repository', 'column' => 'id', 'required' => false)),
+      'id'     => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'name'   => new sfValidatorString(array('max_length' => 50)),
       'value'  => new sfValidatorString(array('max_length' => 255)),
       'remote' => new sfValidatorString(array('max_length' => 255)),

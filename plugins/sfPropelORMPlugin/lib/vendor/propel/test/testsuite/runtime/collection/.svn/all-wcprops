@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 69
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection
+END
+PropelObjectCollectionWithFixturesTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelObjectCollectionWithFixturesTest.php
+END
+PropelArrayCollectionTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelArrayCollectionTest.php
+END
+PropelCollectionTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelCollectionTest.php
+END
+PropelCollectionConvertTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelCollectionConvertTest.php
+END
+PropelOnDemandIteratorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelOnDemandIteratorTest.php
+END
+PropelOnDemandCollectionTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelOnDemandCollectionTest.php
+END
+PropelObjectCollectionTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/collection/PropelObjectCollectionTest.php
+END

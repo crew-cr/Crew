@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ioncube
+END
+IoncubeLicenseTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ioncube/IoncubeLicenseTask.php
+END
+IoncubeComment.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ioncube/IoncubeComment.php
+END
+IoncubeEncoderTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/ioncube/IoncubeEncoderTask.php
+END

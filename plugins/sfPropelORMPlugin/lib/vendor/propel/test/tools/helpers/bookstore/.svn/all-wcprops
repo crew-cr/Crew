@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore
+END
+BookstoreEmptyTestBase.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/BookstoreEmptyTestBase.php
+END
+BookstoreTestBase.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/BookstoreTestBase.php
+END
+BookstoreDataPopulator.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/test/tools/helpers/bookstore/BookstoreDataPopulator.php
+END

@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util
+END
+Pluralizer.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/Pluralizer.php
+END
+PropelStringReader.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/PropelStringReader.php
+END
+PropelTemplate.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/PropelTemplate.php
+END
+XmlToDataSQL.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/XmlToDataSQL.php
+END
+XmlToAppData.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/XmlToAppData.php
+END
+StandardEnglishPluralizer.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/StandardEnglishPluralizer.php
+END
+DefaultEnglishPluralizer.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/builder/util/DefaultEnglishPluralizer.php
+END

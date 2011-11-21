@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.lib.model.map
  */
-class FileTableMap extends TableMap {
+class FileTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class FileTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('file');
 		$this->setPhpName('File');
 		$this->setClassname('File');
@@ -56,17 +57,16 @@ class FileTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('last_change_commit_user' => 'id', ), null, null);
-    $this->addRelation('FileComment', 'FileComment', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('LineComment', 'LineComment', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('last_change_commit_user' => 'id', ), null, null);
+		$this->addRelation('Comment', 'Comment', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), null, null, 'Comments');
+		$this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'file_id', ), 'CASCADE', 'RESTRICT', 'StatusActions');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

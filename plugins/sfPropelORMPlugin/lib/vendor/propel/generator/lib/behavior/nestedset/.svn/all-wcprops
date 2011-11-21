@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/nestedset
+END
+NestedSetBehaviorQueryBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/nestedset/NestedSetBehaviorQueryBuilderModifier.php
+END
+NestedSetBehaviorObjectBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/nestedset/NestedSetBehaviorObjectBuilderModifier.php
+END
+NestedSetBehavior.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/nestedset/NestedSetBehavior.php
+END
+NestedSetBehaviorPeerBuilderModifier.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/behavior/nestedset/NestedSetBehaviorPeerBuilderModifier.php
+END

@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff
+END
+PropelTableIndexComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelTableIndexComparatorTest.php
+END
+PropelTablePkColumnComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelTablePkColumnComparatorTest.php
+END
+PropelForeignKeyComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelForeignKeyComparatorTest.php
+END
+PropelTableColumnComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelTableColumnComparatorTest.php
+END
+PropelIndexComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelIndexComparatorTest.php
+END
+PropelTableForeignKeyComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelTableForeignKeyComparatorTest.php
+END
+PropelDatabaseTableComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelDatabaseTableComparatorTest.php
+END
+PropelColumnComparatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/model/diff/PropelColumnComparatorTest.php
+END

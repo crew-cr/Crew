@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff
+END
+PropelForeignKeyComparator.php
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelForeignKeyComparator.php
+END
+PropelDatabaseComparator.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelDatabaseComparator.php
+END
+PropelDatabaseDiff.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelDatabaseDiff.php
+END
+PropelIndexComparator.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelIndexComparator.php
+END
+PropelTableComparator.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelTableComparator.php
+END
+PropelTableDiff.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelTableDiff.php
+END
+PropelColumnComparator.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelColumnComparator.php
+END
+PropelColumnDiff.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/generator/lib/model/diff/PropelColumnDiff.php
+END

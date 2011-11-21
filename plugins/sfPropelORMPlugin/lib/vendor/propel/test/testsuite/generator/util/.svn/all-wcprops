@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/util
+END
+PropelSQLParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/util/PropelSQLParserTest.php
+END
+PropelQuickBuilderTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/util/PropelQuickBuilderTest.php
+END
+PropelPHPParserTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/util/PropelPHPParserTest.php
+END
+PropelSchemaValidatorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/util/PropelSchemaValidatorTest.php
+END

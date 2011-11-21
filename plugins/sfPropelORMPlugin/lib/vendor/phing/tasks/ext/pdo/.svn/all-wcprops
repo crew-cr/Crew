@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo
+END
+PlainPDOResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/PlainPDOResultFormatter.php
+END
+PDOSQLExecTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/PDOSQLExecTask.php
+END
+PDOResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/PDOResultFormatter.php
+END
+PDOSQLExecFormatterElement.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/PDOSQLExecFormatterElement.php
+END
+PDOTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/PDOTask.php
+END
+XMLPDOResultFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/pdo/XMLPDOResultFormatter.php
+END

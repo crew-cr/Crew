@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset
+END
+NestedSetBehaviorQueryBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorQueryBuilderModifierTest.php
+END
+NestedSetBehaviorObjectBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorObjectBuilderModifierTest.php
+END
+NestedSetBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorTest.php
+END
+NestedSetBehaviorPeerBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorPeerBuilderModifierTest.php
+END
+NestedSetBehaviorQueryBuilderModifierWithScopeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorQueryBuilderModifierWithScopeTest.php
+END
+NestedSetBehaviorObjectBuilderModifierWithScopeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorObjectBuilderModifierWithScopeTest.php
+END
+NestedSetBehaviorPeerBuilderModifierWithScopeTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/nestedset/NestedSetBehaviorPeerBuilderModifierWithScopeTest.php
+END

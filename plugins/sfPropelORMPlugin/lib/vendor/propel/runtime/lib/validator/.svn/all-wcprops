@@ -1,0 +1,77 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator
+END
+MinLengthValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/MinLengthValidator.php
+END
+UniqueValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/UniqueValidator.php
+END
+MaxLengthValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/MaxLengthValidator.php
+END
+ValidationFailed.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/ValidationFailed.php
+END
+MatchValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/MatchValidator.php
+END
+NotMatchValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/NotMatchValidator.php
+END
+ValidValuesValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/ValidValuesValidator.php
+END
+MinValueValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/MinValueValidator.php
+END
+RequiredValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/RequiredValidator.php
+END
+BasicValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/BasicValidator.php
+END
+TypeValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/TypeValidator.php
+END
+MaxValueValidator.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/validator/MaxValueValidator.php
+END

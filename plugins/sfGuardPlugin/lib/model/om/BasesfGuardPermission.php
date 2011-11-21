@@ -67,6 +67,18 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	protected $alreadyInValidation = false;
 
 	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $sfGuardGroupPermissionsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $sfGuardUserPermissionsScheduledForDeletion = null;
+
+	/**
 	 * Get the [id] column value.
 	 * 
 	 * @return     int
@@ -199,7 +211,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 3; // 3 = sfGuardPermissionPeer::NUM_COLUMNS - sfGuardPermissionPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 3; // 3 = sfGuardPermissionPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfGuardPermission object", $e);
@@ -289,6 +301,8 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = sfGuardPermissionQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BasesfGuardPermission:delete:pre') as $callable)
@@ -301,9 +315,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				sfGuardPermissionQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BasesfGuardPermission:delete:post') as $callable)
@@ -316,7 +328,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -384,7 +396,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -407,27 +419,24 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = sfGuardPermissionPeer::ID;
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
+				if ($this->isNew()) {
+					$this->doInsert($con);
+				} else {
+					$this->doUpdate($con);
+				}
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
-				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(sfGuardPermissionPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.sfGuardPermissionPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows = 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
-				} else {
-					$affectedRows = sfGuardPermissionPeer::doUpdate($this, $con);
+			if ($this->sfGuardGroupPermissionsScheduledForDeletion !== null) {
+				if (!$this->sfGuardGroupPermissionsScheduledForDeletion->isEmpty()) {
+					sfGuardGroupPermissionQuery::create()
+						->filterByPrimaryKeys($this->sfGuardGroupPermissionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->sfGuardGroupPermissionsScheduledForDeletion = null;
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
 			if ($this->collsfGuardGroupPermissions !== null) {
@@ -435,6 +444,15 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->sfGuardUserPermissionsScheduledForDeletion !== null) {
+				if (!$this->sfGuardUserPermissionsScheduledForDeletion->isEmpty()) {
+					sfGuardUserPermissionQuery::create()
+						->filterByPrimaryKeys($this->sfGuardUserPermissionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->sfGuardUserPermissionsScheduledForDeletion = null;
 				}
 			}
 
@@ -451,6 +469,86 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = sfGuardPermissionPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . sfGuardPermissionPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(sfGuardPermissionPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(sfGuardPermissionPeer::NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`NAME`';
+		}
+		if ($this->isColumnModified(sfGuardPermissionPeer::DESCRIPTION)) {
+			$modifiedColumns[':p' . $index++]  = '`DESCRIPTION`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `sf_guard_permission` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`NAME`':
+						$stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+						break;
+					case '`DESCRIPTION`':
+						$stmt->bindValue($identifier, $this->description, PDO::PARAM_STR);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -591,17 +689,31 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['sfGuardPermission'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['sfGuardPermission'][$this->getPrimaryKey()] = true;
 		$keys = sfGuardPermissionPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
 			$keys[1] => $this->getName(),
 			$keys[2] => $this->getDescription(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collsfGuardGroupPermissions) {
+				$result['sfGuardGroupPermissions'] = $this->collsfGuardGroupPermissions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collsfGuardUserPermissions) {
+				$result['sfGuardUserPermissions'] = $this->collsfGuardUserPermissions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -739,12 +851,13 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of sfGuardPermission (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setName($this->name);
-		$copyObj->setDescription($this->description);
+		$copyObj->setName($this->getName());
+		$copyObj->setDescription($this->getDescription());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -765,9 +878,10 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -808,6 +922,25 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 		return self::$peer;
 	}
 
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('sfGuardGroupPermission' == $relationName) {
+			return $this->initsfGuardGroupPermissions();
+		}
+		if ('sfGuardUserPermission' == $relationName) {
+			return $this->initsfGuardUserPermissions();
+		}
+	}
+
 	/**
 	 * Clears out the collsfGuardGroupPermissions collection
 	 *
@@ -829,10 +962,16 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initsfGuardGroupPermissions()
+	public function initsfGuardGroupPermissions($overrideExisting = true)
 	{
+		if (null !== $this->collsfGuardGroupPermissions && !$overrideExisting) {
+			return;
+		}
 		$this->collsfGuardGroupPermissions = new PropelObjectCollection();
 		$this->collsfGuardGroupPermissions->setModel('sfGuardGroupPermission');
 	}
@@ -871,6 +1010,30 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of sfGuardGroupPermission objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $sfGuardGroupPermissions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setsfGuardGroupPermissions(PropelCollection $sfGuardGroupPermissions, PropelPDO $con = null)
+	{
+		$this->sfGuardGroupPermissionsScheduledForDeletion = $this->getsfGuardGroupPermissions(new Criteria(), $con)->diff($sfGuardGroupPermissions);
+
+		foreach ($sfGuardGroupPermissions as $sfGuardGroupPermission) {
+			// Fix issue with collection modified by reference
+			if ($sfGuardGroupPermission->isNew()) {
+				$sfGuardGroupPermission->setsfGuardPermission($this);
+			}
+			$this->addsfGuardGroupPermission($sfGuardGroupPermission);
+		}
+
+		$this->collsfGuardGroupPermissions = $sfGuardGroupPermissions;
+	}
+
+	/**
 	 * Returns the number of related sfGuardGroupPermission objects.
 	 *
 	 * @param      Criteria $criteria
@@ -903,8 +1066,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 * through the sfGuardGroupPermission foreign key attribute.
 	 *
 	 * @param      sfGuardGroupPermission $l sfGuardGroupPermission
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardPermission The current object (for fluent API support)
 	 */
 	public function addsfGuardGroupPermission(sfGuardGroupPermission $l)
 	{
@@ -912,9 +1074,19 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 			$this->initsfGuardGroupPermissions();
 		}
 		if (!$this->collsfGuardGroupPermissions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collsfGuardGroupPermissions[]= $l;
-			$l->setsfGuardPermission($this);
+			$this->doAddsfGuardGroupPermission($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	sfGuardGroupPermission $sfGuardGroupPermission The sfGuardGroupPermission object to add.
+	 */
+	protected function doAddsfGuardGroupPermission($sfGuardGroupPermission)
+	{
+		$this->collsfGuardGroupPermissions[]= $sfGuardGroupPermission;
+		$sfGuardGroupPermission->setsfGuardPermission($this);
 	}
 
 
@@ -963,10 +1135,16 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initsfGuardUserPermissions()
+	public function initsfGuardUserPermissions($overrideExisting = true)
 	{
+		if (null !== $this->collsfGuardUserPermissions && !$overrideExisting) {
+			return;
+		}
 		$this->collsfGuardUserPermissions = new PropelObjectCollection();
 		$this->collsfGuardUserPermissions->setModel('sfGuardUserPermission');
 	}
@@ -1005,6 +1183,30 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of sfGuardUserPermission objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $sfGuardUserPermissions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setsfGuardUserPermissions(PropelCollection $sfGuardUserPermissions, PropelPDO $con = null)
+	{
+		$this->sfGuardUserPermissionsScheduledForDeletion = $this->getsfGuardUserPermissions(new Criteria(), $con)->diff($sfGuardUserPermissions);
+
+		foreach ($sfGuardUserPermissions as $sfGuardUserPermission) {
+			// Fix issue with collection modified by reference
+			if ($sfGuardUserPermission->isNew()) {
+				$sfGuardUserPermission->setsfGuardPermission($this);
+			}
+			$this->addsfGuardUserPermission($sfGuardUserPermission);
+		}
+
+		$this->collsfGuardUserPermissions = $sfGuardUserPermissions;
+	}
+
+	/**
 	 * Returns the number of related sfGuardUserPermission objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1037,8 +1239,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 * through the sfGuardUserPermission foreign key attribute.
 	 *
 	 * @param      sfGuardUserPermission $l sfGuardUserPermission
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     sfGuardPermission The current object (for fluent API support)
 	 */
 	public function addsfGuardUserPermission(sfGuardUserPermission $l)
 	{
@@ -1046,9 +1247,19 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 			$this->initsfGuardUserPermissions();
 		}
 		if (!$this->collsfGuardUserPermissions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collsfGuardUserPermissions[]= $l;
-			$l->setsfGuardPermission($this);
+			$this->doAddsfGuardUserPermission($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	sfGuardUserPermission $sfGuardUserPermission The sfGuardUserPermission object to add.
+	 */
+	protected function doAddsfGuardUserPermission($sfGuardUserPermission)
+	{
+		$this->collsfGuardUserPermissions[]= $sfGuardUserPermission;
+		$sfGuardUserPermission->setsfGuardPermission($this);
 	}
 
 
@@ -1093,31 +1304,47 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collsfGuardGroupPermissions) {
-				foreach ((array) $this->collsfGuardGroupPermissions as $o) {
+				foreach ($this->collsfGuardGroupPermissions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collsfGuardUserPermissions) {
-				foreach ((array) $this->collsfGuardUserPermissions as $o) {
+				foreach ($this->collsfGuardUserPermissions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collsfGuardGroupPermissions instanceof PropelCollection) {
+			$this->collsfGuardGroupPermissions->clearIterator();
+		}
 		$this->collsfGuardGroupPermissions = null;
+		if ($this->collsfGuardUserPermissions instanceof PropelCollection) {
+			$this->collsfGuardUserPermissions->clearIterator();
+		}
 		$this->collsfGuardUserPermissions = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(sfGuardPermissionPeer::DEFAULT_STRING_FORMAT);
 	}
 
 	/**
@@ -1125,6 +1352,7 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BasesfGuardPermission:' . $name))
 		{
@@ -1132,17 +1360,6 @@ abstract class BasesfGuardPermission extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 

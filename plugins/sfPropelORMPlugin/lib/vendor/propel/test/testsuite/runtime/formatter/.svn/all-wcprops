@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter
+END
+PropelStatementFormatterTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelStatementFormatterTest.php
+END
+PropelOnDemandFormatterTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelOnDemandFormatterTest.php
+END
+PropelObjectFormatterTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelObjectFormatterTest.php
+END
+PropelArrayFormatterWithTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelArrayFormatterWithTest.php
+END
+PropelArrayFormatterTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelArrayFormatterTest.php
+END
+PropelObjectFormatterInheritanceTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelObjectFormatterInheritanceTest.php
+END
+PropelOnDemandFormatterWithTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelOnDemandFormatterWithTest.php
+END
+PropelObjectFormatterWithTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 102
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/runtime/formatter/PropelObjectFormatterWithTest.php
+END

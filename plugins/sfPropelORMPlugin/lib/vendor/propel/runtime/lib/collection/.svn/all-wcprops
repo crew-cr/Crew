@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection
+END
+PropelArrayCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection/PropelArrayCollection.php
+END
+PropelCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection/PropelCollection.php
+END
+PropelOnDemandIterator.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection/PropelOnDemandIterator.php
+END
+PropelOnDemandCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection/PropelOnDemandCollection.php
+END
+PropelObjectCollection.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/collection/PropelObjectCollection.php
+END

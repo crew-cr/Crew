@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged
+END
+log.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/log.schema.xml
+END
+review.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/review.schema.xml
+END
+runtime-conf.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/runtime-conf.xml
+END
+book.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/book.schema.xml
+END
+book_club_list.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/book_club_list.schema.xml
+END
+build.properties
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/build.properties
+END
+publisher.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/publisher.schema.xml
+END
+media.schema.xml
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/test/fixtures/bookstore-packaged/media.schema.xml
+END

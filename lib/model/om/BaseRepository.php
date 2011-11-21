@@ -73,6 +73,18 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	protected $alreadyInValidation = false;
 
 	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $branchsScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $statusActionsScheduledForDeletion = null;
+
+	/**
 	 * Get the [id] column value.
 	 * 
 	 * @return     int
@@ -236,7 +248,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 4; // 4 = RepositoryPeer::NUM_COLUMNS - RepositoryPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 4; // 4 = RepositoryPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Repository object", $e);
@@ -326,6 +338,8 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = RepositoryQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BaseRepository:delete:pre') as $callable)
@@ -338,9 +352,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				RepositoryQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BaseRepository:delete:post') as $callable)
@@ -353,7 +365,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -421,7 +433,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -444,27 +456,24 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		if (!$this->alreadyInSave) {
 			$this->alreadyInSave = true;
 
-			if ($this->isNew() ) {
-				$this->modifiedColumns[] = RepositoryPeer::ID;
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
+				if ($this->isNew()) {
+					$this->doInsert($con);
+				} else {
+					$this->doUpdate($con);
+				}
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
-				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					if ($criteria->keyContainsValue(RepositoryPeer::ID) ) {
-						throw new PropelException('Cannot insert a value for auto-increment primary key ('.RepositoryPeer::ID.')');
-					}
-
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows = 1;
-					$this->setId($pk);  //[IMV] update autoincrement primary key
-					$this->setNew(false);
-				} else {
-					$affectedRows = RepositoryPeer::doUpdate($this, $con);
+			if ($this->branchsScheduledForDeletion !== null) {
+				if (!$this->branchsScheduledForDeletion->isEmpty()) {
+					BranchQuery::create()
+						->filterByPrimaryKeys($this->branchsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->branchsScheduledForDeletion = null;
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
 			}
 
 			if ($this->collBranchs !== null) {
@@ -472,6 +481,15 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
+				}
+			}
+
+			if ($this->statusActionsScheduledForDeletion !== null) {
+				if (!$this->statusActionsScheduledForDeletion->isEmpty()) {
+					StatusActionQuery::create()
+						->filterByPrimaryKeys($this->statusActionsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->statusActionsScheduledForDeletion = null;
 				}
 			}
 
@@ -488,6 +506,92 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+		$this->modifiedColumns[] = RepositoryPeer::ID;
+		if (null !== $this->id) {
+			throw new PropelException('Cannot insert a value for auto-increment primary key (' . RepositoryPeer::ID . ')');
+		}
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(RepositoryPeer::ID)) {
+			$modifiedColumns[':p' . $index++]  = '`ID`';
+		}
+		if ($this->isColumnModified(RepositoryPeer::NAME)) {
+			$modifiedColumns[':p' . $index++]  = '`NAME`';
+		}
+		if ($this->isColumnModified(RepositoryPeer::VALUE)) {
+			$modifiedColumns[':p' . $index++]  = '`VALUE`';
+		}
+		if ($this->isColumnModified(RepositoryPeer::REMOTE)) {
+			$modifiedColumns[':p' . $index++]  = '`REMOTE`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `repository` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`ID`':
+						$stmt->bindValue($identifier, $this->id, PDO::PARAM_INT);
+						break;
+					case '`NAME`':
+						$stmt->bindValue($identifier, $this->name, PDO::PARAM_STR);
+						break;
+					case '`VALUE`':
+						$stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
+						break;
+					case '`REMOTE`':
+						$stmt->bindValue($identifier, $this->remote, PDO::PARAM_STR);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		try {
+			$pk = $con->lastInsertId();
+		} catch (Exception $e) {
+			throw new PropelException('Unable to get autoincrement id.', $e);
+		}
+		$this->setId($pk);
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -631,11 +735,17 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
+	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['Repository'][$this->getPrimaryKey()])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['Repository'][$this->getPrimaryKey()] = true;
 		$keys = RepositoryPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getId(),
@@ -643,6 +753,14 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			$keys[2] => $this->getValue(),
 			$keys[3] => $this->getRemote(),
 		);
+		if ($includeForeignObjects) {
+			if (null !== $this->collBranchs) {
+				$result['Branchs'] = $this->collBranchs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collStatusActions) {
+				$result['StatusActions'] = $this->collStatusActions->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+		}
 		return $result;
 	}
 
@@ -785,13 +903,14 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of Repository (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setName($this->name);
-		$copyObj->setValue($this->value);
-		$copyObj->setRemote($this->remote);
+		$copyObj->setName($this->getName());
+		$copyObj->setValue($this->getValue());
+		$copyObj->setRemote($this->getRemote());
 
 		if ($deepCopy) {
 			// important: temporarily setNew(false) because this affects the behavior of
@@ -812,9 +931,10 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 
 		} // if ($deepCopy)
 
-
-		$copyObj->setNew(true);
-		$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		if ($makeNew) {
+			$copyObj->setNew(true);
+			$copyObj->setId(NULL); // this is a auto-increment column, so set to default value
+		}
 	}
 
 	/**
@@ -855,6 +975,25 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		return self::$peer;
 	}
 
+
+	/**
+	 * Initializes a collection based on the name of a relation.
+	 * Avoids crafting an 'init[$relationName]s' method name
+	 * that wouldn't work when StandardEnglishPluralizer is used.
+	 *
+	 * @param      string $relationName The name of the relation to initialize
+	 * @return     void
+	 */
+	public function initRelation($relationName)
+	{
+		if ('Branch' == $relationName) {
+			return $this->initBranchs();
+		}
+		if ('StatusAction' == $relationName) {
+			return $this->initStatusActions();
+		}
+	}
+
 	/**
 	 * Clears out the collBranchs collection
 	 *
@@ -876,10 +1015,16 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initBranchs()
+	public function initBranchs($overrideExisting = true)
 	{
+		if (null !== $this->collBranchs && !$overrideExisting) {
+			return;
+		}
 		$this->collBranchs = new PropelObjectCollection();
 		$this->collBranchs->setModel('Branch');
 	}
@@ -918,6 +1063,30 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of Branch objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $branchs A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setBranchs(PropelCollection $branchs, PropelPDO $con = null)
+	{
+		$this->branchsScheduledForDeletion = $this->getBranchs(new Criteria(), $con)->diff($branchs);
+
+		foreach ($branchs as $branch) {
+			// Fix issue with collection modified by reference
+			if ($branch->isNew()) {
+				$branch->setRepository($this);
+			}
+			$this->addBranch($branch);
+		}
+
+		$this->collBranchs = $branchs;
+	}
+
+	/**
 	 * Returns the number of related Branch objects.
 	 *
 	 * @param      Criteria $criteria
@@ -950,8 +1119,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 * through the Branch foreign key attribute.
 	 *
 	 * @param      Branch $l Branch
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Repository The current object (for fluent API support)
 	 */
 	public function addBranch(Branch $l)
 	{
@@ -959,9 +1127,19 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			$this->initBranchs();
 		}
 		if (!$this->collBranchs->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collBranchs[]= $l;
-			$l->setRepository($this);
+			$this->doAddBranch($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Branch $branch The branch object to add.
+	 */
+	protected function doAddBranch($branch)
+	{
+		$this->collBranchs[]= $branch;
+		$branch->setRepository($this);
 	}
 
 
@@ -1010,10 +1188,16 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
 	 * @return     void
 	 */
-	public function initStatusActions()
+	public function initStatusActions($overrideExisting = true)
 	{
+		if (null !== $this->collStatusActions && !$overrideExisting) {
+			return;
+		}
 		$this->collStatusActions = new PropelObjectCollection();
 		$this->collStatusActions->setModel('StatusAction');
 	}
@@ -1052,6 +1236,30 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Sets a collection of StatusAction objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $statusActions A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setStatusActions(PropelCollection $statusActions, PropelPDO $con = null)
+	{
+		$this->statusActionsScheduledForDeletion = $this->getStatusActions(new Criteria(), $con)->diff($statusActions);
+
+		foreach ($statusActions as $statusAction) {
+			// Fix issue with collection modified by reference
+			if ($statusAction->isNew()) {
+				$statusAction->setRepository($this);
+			}
+			$this->addStatusAction($statusAction);
+		}
+
+		$this->collStatusActions = $statusActions;
+	}
+
+	/**
 	 * Returns the number of related StatusAction objects.
 	 *
 	 * @param      Criteria $criteria
@@ -1084,8 +1292,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 * through the StatusAction foreign key attribute.
 	 *
 	 * @param      StatusAction $l StatusAction
-	 * @return     void
-	 * @throws     PropelException
+	 * @return     Repository The current object (for fluent API support)
 	 */
 	public function addStatusAction(StatusAction $l)
 	{
@@ -1093,9 +1300,19 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 			$this->initStatusActions();
 		}
 		if (!$this->collStatusActions->contains($l)) { // only add it if the **same** object is not already associated
-			$this->collStatusActions[]= $l;
-			$l->setRepository($this);
+			$this->doAddStatusAction($l);
 		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	StatusAction $statusAction The statusAction object to add.
+	 */
+	protected function doAddStatusAction($statusAction)
+	{
+		$this->collStatusActions[]= $statusAction;
+		$statusAction->setRepository($this);
 	}
 
 
@@ -1191,31 +1408,47 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
 			if ($this->collBranchs) {
-				foreach ((array) $this->collBranchs as $o) {
+				foreach ($this->collBranchs as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 			if ($this->collStatusActions) {
-				foreach ((array) $this->collStatusActions as $o) {
+				foreach ($this->collStatusActions as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
 		} // if ($deep)
 
+		if ($this->collBranchs instanceof PropelCollection) {
+			$this->collBranchs->clearIterator();
+		}
 		$this->collBranchs = null;
+		if ($this->collStatusActions instanceof PropelCollection) {
+			$this->collStatusActions->clearIterator();
+		}
 		$this->collStatusActions = null;
+	}
+
+	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(RepositoryPeer::DEFAULT_STRING_FORMAT);
 	}
 
 	/**
@@ -1223,6 +1456,7 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BaseRepository:' . $name))
 		{
@@ -1230,17 +1464,6 @@ abstract class BaseRepository extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 

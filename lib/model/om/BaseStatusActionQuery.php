@@ -73,7 +73,7 @@
  */
 abstract class BaseStatusActionQuery extends ModelCriteria
 {
-
+	
 	/**
 	 * Initializes internal state of BaseStatusActionQuery object.
 	 *
@@ -110,11 +110,14 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	}
 
 	/**
-	 * Find object by primary key
-	 * Use instance pooling to avoid a database query if the object exists
+	 * Find object by primary key.
+	 * Propel uses the instance pool to skip the database if the object exists.
+	 * Go fast if the query is untouched.
+	 *
 	 * <code>
 	 * $obj  = $c->findPk(12, $con);
 	 * </code>
+	 *
 	 * @param     mixed $key Primary key to use for the query
 	 * @param     PropelPDO $con an optional connection object
 	 *
@@ -122,17 +125,73 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 */
 	public function findPk($key, $con = null)
 	{
-		if ((null !== ($obj = StatusActionPeer::getInstanceFromPool((string) $key))) && $this->getFormatter()->isObjectFormatter()) {
+		if ($key === null) {
+			return null;
+		}
+		if ((null !== ($obj = StatusActionPeer::getInstanceFromPool((string) $key))) && !$this->formatter) {
 			// the object is alredy in the instance pool
 			return $obj;
-		} else {
-			// the object has not been requested yet, or the formatter is not an object formatter
-			$criteria = $this->isKeepQuery() ? clone $this : $this;
-			$stmt = $criteria
-				->filterByPrimaryKey($key)
-				->getSelectStatement($con);
-			return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 		}
+		if ($con === null) {
+			$con = Propel::getConnection(StatusActionPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
+		if ($this->formatter || $this->modelAlias || $this->with || $this->select
+		 || $this->selectColumns || $this->asColumns || $this->selectModifiers
+		 || $this->map || $this->having || $this->joins) {
+			return $this->findPkComplex($key, $con);
+		} else {
+			return $this->findPkSimple($key, $con);
+		}
+	}
+
+	/**
+	 * Find object by primary key using raw SQL to go fast.
+	 * Bypass doSelect() and the object formatter by using generated code.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    StatusAction A model object, or null if the key is not found
+	 */
+	protected function findPkSimple($key, $con)
+	{
+		$sql = 'SELECT `ID`, `USER_ID`, `REPOSITORY_ID`, `BRANCH_ID`, `FILE_ID`, `MESSAGE`, `OLD_STATUS`, `NEW_STATUS`, `CREATED_AT` FROM `status_action` WHERE `ID` = :p0';
+		try {
+			$stmt = $con->prepare($sql);
+			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute SELECT statement [%s]', $sql), $e);
+		}
+		$obj = null;
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$obj = new StatusAction();
+			$obj->hydrate($row);
+			StatusActionPeer::addInstanceToPool($obj, (string) $row[0]);
+		}
+		$stmt->closeCursor();
+
+		return $obj;
+	}
+
+	/**
+	 * Find object by primary key.
+	 *
+	 * @param     mixed $key Primary key to use for the query
+	 * @param     PropelPDO $con A connection object
+	 *
+	 * @return    StatusAction|array|mixed the result, formatted by the current formatter
+	 */
+	protected function findPkComplex($key, $con)
+	{
+		// As the query uses a PK condition, no limit(1) is necessary.
+		$criteria = $this->isKeepQuery() ? clone $this : $this;
+		$stmt = $criteria
+			->filterByPrimaryKey($key)
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->formatOne($stmt);
 	}
 
 	/**
@@ -146,11 +205,16 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 * @return    PropelObjectCollection|array|mixed the list of results, formatted by the current formatter
 	 */
 	public function findPks($keys, $con = null)
-	{	
+	{
+		if ($con === null) {
+			$con = Propel::getConnection($this->getDbName(), Propel::CONNECTION_READ);
+		}
+		$this->basePreSelect($con);
 		$criteria = $this->isKeepQuery() ? clone $this : $this;
-		return $this
+		$stmt = $criteria
 			->filterByPrimaryKeys($keys)
-			->find($con);
+			->doSelect($con);
+		return $criteria->getFormatter()->init($criteria)->format($stmt);
 	}
 
 	/**
@@ -179,9 +243,18 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the id column
-	 * 
-	 * @param     int|array $id The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterById(1234); // WHERE id = 1234
+	 * $query->filterById(array(12, 34)); // WHERE id IN (12, 34)
+	 * $query->filterById(array('min' => 12)); // WHERE id > 12
+	 * </code>
+	 *
+	 * @param     mixed $id The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -196,9 +269,20 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the user_id column
-	 * 
-	 * @param     int|array $userId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByUserId(1234); // WHERE user_id = 1234
+	 * $query->filterByUserId(array(12, 34)); // WHERE user_id IN (12, 34)
+	 * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
+	 * </code>
+	 *
+	 * @see       filterBysfGuardUser()
+	 *
+	 * @param     mixed $userId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -227,9 +311,20 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the repository_id column
-	 * 
-	 * @param     int|array $repositoryId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByRepositoryId(1234); // WHERE repository_id = 1234
+	 * $query->filterByRepositoryId(array(12, 34)); // WHERE repository_id IN (12, 34)
+	 * $query->filterByRepositoryId(array('min' => 12)); // WHERE repository_id > 12
+	 * </code>
+	 *
+	 * @see       filterByRepository()
+	 *
+	 * @param     mixed $repositoryId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -258,9 +353,20 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the branch_id column
-	 * 
-	 * @param     int|array $branchId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByBranchId(1234); // WHERE branch_id = 1234
+	 * $query->filterByBranchId(array(12, 34)); // WHERE branch_id IN (12, 34)
+	 * $query->filterByBranchId(array('min' => 12)); // WHERE branch_id > 12
+	 * </code>
+	 *
+	 * @see       filterByBranch()
+	 *
+	 * @param     mixed $branchId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -289,9 +395,20 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the file_id column
-	 * 
-	 * @param     int|array $fileId The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByFileId(1234); // WHERE file_id = 1234
+	 * $query->filterByFileId(array(12, 34)); // WHERE file_id IN (12, 34)
+	 * $query->filterByFileId(array('min' => 12)); // WHERE file_id > 12
+	 * </code>
+	 *
+	 * @see       filterByFile()
+	 *
+	 * @param     mixed $fileId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -320,9 +437,15 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the message column
-	 * 
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByMessage('fooValue');   // WHERE message = 'fooValue'
+	 * $query->filterByMessage('%fooValue%'); // WHERE message LIKE '%fooValue%'
+	 * </code>
+	 *
 	 * @param     string $message The value to use as filter.
-	 *            Accepts wildcards (* and % trigger a LIKE)
+	 *              Accepts wildcards (* and % trigger a LIKE)
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -342,9 +465,18 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the old_status column
-	 * 
-	 * @param     int|array $oldStatus The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByOldStatus(1234); // WHERE old_status = 1234
+	 * $query->filterByOldStatus(array(12, 34)); // WHERE old_status IN (12, 34)
+	 * $query->filterByOldStatus(array('min' => 12)); // WHERE old_status > 12
+	 * </code>
+	 *
+	 * @param     mixed $oldStatus The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -373,9 +505,18 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the new_status column
-	 * 
-	 * @param     int|array $newStatus The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByNewStatus(1234); // WHERE new_status = 1234
+	 * $query->filterByNewStatus(array(12, 34)); // WHERE new_status IN (12, 34)
+	 * $query->filterByNewStatus(array('min' => 12)); // WHERE new_status > 12
+	 * </code>
+	 *
+	 * @param     mixed $newStatus The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -404,9 +545,20 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 
 	/**
 	 * Filter the query on the created_at column
-	 * 
-	 * @param     string|array $createdAt The value to use as filter.
-	 *            Accepts an associative array('min' => $minValue, 'max' => $maxValue)
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+	 * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+	 * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $createdAt The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
@@ -436,20 +588,30 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related sfGuardUser object
 	 *
-	 * @param     sfGuardUser $sfGuardUser  the related object to use as filter
+	 * @param     sfGuardUser|PropelCollection $sfGuardUser The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
 	 */
 	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(StatusActionPeer::USER_ID, $sfGuardUser->getId(), $comparison);
+		if ($sfGuardUser instanceof sfGuardUser) {
+			return $this
+				->addUsingAlias(StatusActionPeer::USER_ID, $sfGuardUser->getId(), $comparison);
+		} elseif ($sfGuardUser instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(StatusActionPeer::USER_ID, $sfGuardUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterBysfGuardUser() only accepts arguments of type sfGuardUser or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the sfGuardUser relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -459,7 +621,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('sfGuardUser');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -467,7 +629,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -475,7 +637,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'sfGuardUser');
 		}
-		
+
 		return $this;
 	}
 
@@ -483,7 +645,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 * Use the sfGuardUser relation sfGuardUser object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -500,20 +662,30 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related Repository object
 	 *
-	 * @param     Repository $repository  the related object to use as filter
+	 * @param     Repository|PropelCollection $repository The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
 	 */
 	public function filterByRepository($repository, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(StatusActionPeer::REPOSITORY_ID, $repository->getId(), $comparison);
+		if ($repository instanceof Repository) {
+			return $this
+				->addUsingAlias(StatusActionPeer::REPOSITORY_ID, $repository->getId(), $comparison);
+		} elseif ($repository instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(StatusActionPeer::REPOSITORY_ID, $repository->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterByRepository() only accepts arguments of type Repository or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the Repository relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -523,7 +695,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Repository');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -531,7 +703,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -539,7 +711,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'Repository');
 		}
-		
+
 		return $this;
 	}
 
@@ -547,7 +719,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 * Use the Repository relation Repository object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -564,20 +736,30 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related Branch object
 	 *
-	 * @param     Branch $branch  the related object to use as filter
+	 * @param     Branch|PropelCollection $branch The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
 	 */
 	public function filterByBranch($branch, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(StatusActionPeer::BRANCH_ID, $branch->getId(), $comparison);
+		if ($branch instanceof Branch) {
+			return $this
+				->addUsingAlias(StatusActionPeer::BRANCH_ID, $branch->getId(), $comparison);
+		} elseif ($branch instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(StatusActionPeer::BRANCH_ID, $branch->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterByBranch() only accepts arguments of type Branch or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the Branch relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -587,7 +769,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('Branch');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -595,7 +777,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -603,7 +785,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'Branch');
 		}
-		
+
 		return $this;
 	}
 
@@ -611,7 +793,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 * Use the Branch relation Branch object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -628,20 +810,30 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	/**
 	 * Filter the query by a related File object
 	 *
-	 * @param     File $file  the related object to use as filter
+	 * @param     File|PropelCollection $file The related object(s) to use as filter
 	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
 	 *
 	 * @return    StatusActionQuery The current query, for fluid interface
 	 */
 	public function filterByFile($file, $comparison = null)
 	{
-		return $this
-			->addUsingAlias(StatusActionPeer::FILE_ID, $file->getId(), $comparison);
+		if ($file instanceof File) {
+			return $this
+				->addUsingAlias(StatusActionPeer::FILE_ID, $file->getId(), $comparison);
+		} elseif ($file instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(StatusActionPeer::FILE_ID, $file->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterByFile() only accepts arguments of type File or PropelCollection');
+		}
 	}
 
 	/**
 	 * Adds a JOIN clause to the query using the File relation
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
@@ -651,7 +843,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	{
 		$tableMap = $this->getTableMap();
 		$relationMap = $tableMap->getRelation('File');
-		
+
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
 		$join->setJoinType($joinType);
@@ -659,7 +851,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		if ($previousJoin = $this->getPreviousJoin()) {
 			$join->setPreviousJoin($previousJoin);
 		}
-		
+
 		// add the ModelJoin to the current object
 		if($relationAlias) {
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
@@ -667,7 +859,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 		} else {
 			$this->addJoinObject($join, 'File');
 		}
-		
+
 		return $this;
 	}
 
@@ -675,7 +867,7 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	 * Use the File relation File object
 	 *
 	 * @see       useQuery()
-	 * 
+	 *
 	 * @param     string $relationAlias optional alias for the relation,
 	 *                                   to be used as main alias in the secondary query
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
@@ -700,8 +892,8 @@ abstract class BaseStatusActionQuery extends ModelCriteria
 	{
 		if ($statusAction) {
 			$this->addUsingAlias(StatusActionPeer::ID, $statusAction->getId(), Criteria::NOT_EQUAL);
-	  }
-	  
+		}
+
 		return $this;
 	}
 

@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 58
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/connection
+END
+DebugPDO.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/connection/DebugPDO.php
+END
+DebugPDOStatement.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/connection/DebugPDOStatement.php
+END
+PropelPDO.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/connection/PropelPDO.php
+END

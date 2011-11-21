@@ -1,0 +1,6 @@
+test/functional/fixtures/data/database.sqlite
+test/functional/fixtures/data/sql/
+test/functional/fixtures/lib/form/base/
+test/functional/fixtures/lib/model/map/
+test/functional/fixtures/lib/model/om/
+

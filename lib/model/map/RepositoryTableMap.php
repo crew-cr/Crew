@@ -14,7 +14,8 @@
  *
  * @package    propel.generator.lib.model.map
  */
-class RepositoryTableMap extends TableMap {
+class RepositoryTableMap extends TableMap
+{
 
 	/**
 	 * The (dot-path) name of this class
@@ -30,7 +31,7 @@ class RepositoryTableMap extends TableMap {
 	 */
 	public function initialize()
 	{
-	  // attributes
+		// attributes
 		$this->setName('repository');
 		$this->setPhpName('Repository');
 		$this->setClassname('Repository');
@@ -49,14 +50,14 @@ class RepositoryTableMap extends TableMap {
 	 */
 	public function buildRelations()
 	{
-    $this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT');
-    $this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT', 'Branchs');
+		$this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'repository_id', ), 'CASCADE', 'RESTRICT', 'StatusActions');
 	} // buildRelations()
 
 	/**
-	 * 
+	 *
 	 * Gets the list of behaviors registered for this table
-	 * 
+	 *
 	 * @return array Associative array (name => parameters) of behaviors
 	 */
 	public function getBehaviors()

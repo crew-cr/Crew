@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter
+END
+PropelStatementFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 86
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelStatementFormatter.php
+END
+PropelOnDemandFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelOnDemandFormatter.php
+END
+ModelWith.php
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/ModelWith.php
+END
+PropelObjectFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelObjectFormatter.php
+END
+PropelSimpleArrayFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelSimpleArrayFormatter.php
+END
+PropelArrayFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelArrayFormatter.php
+END
+PropelFormatter.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/propelorm/Propel.git/!svn/ver/2349/runtime/lib/formatter/PropelFormatter.php
+END

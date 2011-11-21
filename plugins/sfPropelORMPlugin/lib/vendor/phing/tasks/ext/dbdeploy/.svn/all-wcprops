@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy
+END
+DbmsSyntax.php
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbmsSyntax.php
+END
+DbmsSyntaxMsSql.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbmsSyntaxMsSql.php
+END
+DbmsSyntaxSQLite.php
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbmsSyntaxSQLite.php
+END
+DbmsSyntaxMysql.php
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbmsSyntaxMysql.php
+END
+DbmsSyntaxFactory.php
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbmsSyntaxFactory.php
+END
+DbDeployTask.php
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/!svn/ver/432/tags/2.3.3/classes/phing/tasks/ext/dbdeploy/DbDeployTask.php
+END

@@ -28,7 +28,7 @@ abstract class BaseFileForm extends BaseFormPropel
     ));
 
     $this->setValidators(array(
-      'id'                      => new sfValidatorPropelChoice(array('model' => 'File', 'column' => 'id', 'required' => false)),
+      'id'                      => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'branch_id'               => new sfValidatorPropelChoice(array('model' => 'Branch', 'column' => 'id')),
       'state'                   => new sfValidatorString(array('max_length' => 1)),
       'filename'                => new sfValidatorString(array('max_length' => 255)),

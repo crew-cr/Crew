@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/misc
+END
+Ticket520Test.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/misc/Ticket520Test.php
+END
+CharacterEncodingTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/misc/CharacterEncodingTest.php
+END
+FieldnameRelatedTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/misc/FieldnameRelatedTest.php
+END
+BookstoreTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/misc/BookstoreTest.php
+END

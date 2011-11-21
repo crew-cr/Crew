@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/i18n
+END
+I18nBehaviorQueryBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/i18n/I18nBehaviorQueryBuilderModifierTest.php
+END
+I18nBehaviorObjectBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/i18n/I18nBehaviorObjectBuilderModifierTest.php
+END
+I18nBehaviorTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/i18n/I18nBehaviorTest.php
+END
+I18nBehaviorPeerBuilderModifierTest.php
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/propelorm/Propel.git/!svn/ver/2349/test/testsuite/generator/behavior/i18n/I18nBehaviorPeerBuilderModifierTest.php
+END

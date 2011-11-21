@@ -170,7 +170,7 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 2; // 2 = sfGuardUserGroupPeer::NUM_COLUMNS - sfGuardUserGroupPeer::NUM_LAZY_LOAD_COLUMNS).
+			return $startcol + 2; // 2 = sfGuardUserGroupPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating sfGuardUserGroup object", $e);
@@ -264,6 +264,8 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 
 		$con->beginTransaction();
 		try {
+			$deleteQuery = sfGuardUserGroupQuery::create()
+				->filterByPrimaryKey($this->getPrimaryKey());
 			$ret = $this->preDelete($con);
 			// symfony_behaviors behavior
 			foreach (sfMixer::getCallables('BasesfGuardUserGroup:delete:pre') as $callable)
@@ -276,9 +278,7 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 			}
 
 			if ($ret) {
-				sfGuardUserGroupQuery::create()
-					->filterByPrimaryKey($this->getPrimaryKey())
-					->delete($con);
+				$deleteQuery->delete($con);
 				$this->postDelete($con);
 				// symfony_behaviors behavior
 				foreach (sfMixer::getCallables('BasesfGuardUserGroup:delete:post') as $callable)
@@ -291,7 +291,7 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 			} else {
 				$con->commit();
 			}
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -359,7 +359,7 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 			}
 			$con->commit();
 			return $affectedRows;
-		} catch (PropelException $e) {
+		} catch (Exception $e) {
 			$con->rollBack();
 			throw $e;
 		}
@@ -401,19 +401,15 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 				$this->setsfGuardGroup($this->asfGuardGroup);
 			}
 
-
-			// If this object has been modified, then save it to the database.
-			if ($this->isModified()) {
+			if ($this->isNew() || $this->isModified()) {
+				// persist changes
 				if ($this->isNew()) {
-					$criteria = $this->buildCriteria();
-					$pk = BasePeer::doInsert($criteria, $con);
-					$affectedRows += 1;
-					$this->setNew(false);
+					$this->doInsert($con);
 				} else {
-					$affectedRows += sfGuardUserGroupPeer::doUpdate($this, $con);
+					$this->doUpdate($con);
 				}
-
-				$this->resetModified(); // [HL] After being saved an object is no longer 'modified'
+				$affectedRows += 1;
+				$this->resetModified();
 			}
 
 			$this->alreadyInSave = false;
@@ -421,6 +417,69 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 		}
 		return $affectedRows;
 	} // doSave()
+
+	/**
+	 * Insert the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @throws     PropelException
+	 * @see        doSave()
+	 */
+	protected function doInsert(PropelPDO $con)
+	{
+		$modifiedColumns = array();
+		$index = 0;
+
+
+		 // check the columns in natural order for more readable SQL queries
+		if ($this->isColumnModified(sfGuardUserGroupPeer::USER_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`USER_ID`';
+		}
+		if ($this->isColumnModified(sfGuardUserGroupPeer::GROUP_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`GROUP_ID`';
+		}
+
+		$sql = sprintf(
+			'INSERT INTO `sf_guard_user_group` (%s) VALUES (%s)',
+			implode(', ', $modifiedColumns),
+			implode(', ', array_keys($modifiedColumns))
+		);
+
+		try {
+			$stmt = $con->prepare($sql);
+			foreach ($modifiedColumns as $identifier => $columnName) {
+				switch ($columnName) {
+					case '`USER_ID`':
+						$stmt->bindValue($identifier, $this->user_id, PDO::PARAM_INT);
+						break;
+					case '`GROUP_ID`':
+						$stmt->bindValue($identifier, $this->group_id, PDO::PARAM_INT);
+						break;
+				}
+			}
+			$stmt->execute();
+		} catch (Exception $e) {
+			Propel::log($e->getMessage(), Propel::LOG_ERR);
+			throw new PropelException(sprintf('Unable to execute INSERT statement [%s]', $sql), $e);
+		}
+
+		$this->setNew(false);
+	}
+
+	/**
+	 * Update the row in the database.
+	 *
+	 * @param      PropelPDO $con
+	 *
+	 * @see        doSave()
+	 */
+	protected function doUpdate(PropelPDO $con)
+	{
+		$selectCriteria = $this->buildPkeyCriteria();
+		$valuesCriteria = $this->buildCriteria();
+		BasePeer::doUpdate($selectCriteria, $valuesCriteria, $con);
+	}
 
 	/**
 	 * Array of ValidationFailed objects.
@@ -560,12 +619,17 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 	 *                    BasePeer::TYPE_COLNAME, BasePeer::TYPE_FIELDNAME, BasePeer::TYPE_NUM.
 	 *                    Defaults to BasePeer::TYPE_PHPNAME.
 	 * @param     boolean $includeLazyLoadColumns (optional) Whether to include lazy loaded columns. Defaults to TRUE.
+	 * @param     array $alreadyDumpedObjects List of objects to skip to avoid recursion
 	 * @param     boolean $includeForeignObjects (optional) Whether to include hydrated related objects. Default to FALSE.
 	 *
 	 * @return    array an associative array containing the field names (as keys) and field values
 	 */
-	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $includeForeignObjects = false)
+	public function toArray($keyType = BasePeer::TYPE_PHPNAME, $includeLazyLoadColumns = true, $alreadyDumpedObjects = array(), $includeForeignObjects = false)
 	{
+		if (isset($alreadyDumpedObjects['sfGuardUserGroup'][serialize($this->getPrimaryKey())])) {
+			return '*RECURSION*';
+		}
+		$alreadyDumpedObjects['sfGuardUserGroup'][serialize($this->getPrimaryKey())] = true;
 		$keys = sfGuardUserGroupPeer::getFieldNames($keyType);
 		$result = array(
 			$keys[0] => $this->getUserId(),
@@ -573,10 +637,10 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->asfGuardUser) {
-				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->asfGuardGroup) {
-				$result['sfGuardGroup'] = $this->asfGuardGroup->toArray($keyType, $includeLazyLoadColumns, true);
+				$result['sfGuardGroup'] = $this->asfGuardGroup->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 		}
 		return $result;
@@ -718,14 +782,16 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 	 *
 	 * @param      object $copyObj An object of sfGuardUserGroup (or compatible) type.
 	 * @param      boolean $deepCopy Whether to also copy all rows that refer (by fkey) to the current row.
+	 * @param      boolean $makeNew Whether to reset autoincrement PKs and make the object new.
 	 * @throws     PropelException
 	 */
-	public function copyInto($copyObj, $deepCopy = false)
+	public function copyInto($copyObj, $deepCopy = false, $makeNew = true)
 	{
-		$copyObj->setUserId($this->user_id);
-		$copyObj->setGroupId($this->group_id);
-
-		$copyObj->setNew(true);
+		$copyObj->setUserId($this->getUserId());
+		$copyObj->setGroupId($this->getGroupId());
+		if ($makeNew) {
+			$copyObj->setNew(true);
+		}
 	}
 
 	/**
@@ -805,11 +871,11 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 		if ($this->asfGuardUser === null && ($this->user_id !== null)) {
 			$this->asfGuardUser = sfGuardUserQuery::create()->findPk($this->user_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->asfGuardUser->addsfGuardUserGroups($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->asfGuardUser->addsfGuardUserGroups($this);
 			 */
 		}
 		return $this->asfGuardUser;
@@ -854,11 +920,11 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 		if ($this->asfGuardGroup === null && ($this->group_id !== null)) {
 			$this->asfGuardGroup = sfGuardGroupQuery::create()->findPk($this->group_id, $con);
 			/* The following can be used additionally to
-				 guarantee the related object contains a reference
-				 to this object.  This level of coupling may, however, be
-				 undesirable since it could result in an only partially populated collection
-				 in the referenced object.
-				 $this->asfGuardGroup->addsfGuardUserGroups($this);
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->asfGuardGroup->addsfGuardUserGroups($this);
 			 */
 		}
 		return $this->asfGuardGroup;
@@ -880,13 +946,13 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Resets all collections of referencing foreign keys.
+	 * Resets all references to other model objects or collections of model objects.
 	 *
-	 * This method is a user-space workaround for PHP's inability to garbage collect objects
-	 * with circular references.  This is currently necessary when using Propel in certain
-	 * daemon or large-volumne/high-memory operations.
+	 * This method is a user-space workaround for PHP's inability to garbage collect
+	 * objects with circular references (even in PHP 5.3). This is currently necessary
+	 * when using Propel in certain daemon or large-volumne/high-memory operations.
 	 *
-	 * @param      boolean $deep Whether to also clear the references on all associated objects.
+	 * @param      boolean $deep Whether to also clear the references on all referrer objects.
 	 */
 	public function clearAllReferences($deep = false)
 	{
@@ -898,10 +964,21 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Return the string representation of this object
+	 *
+	 * @return string
+	 */
+	public function __toString()
+	{
+		return (string) $this->exportTo(sfGuardUserGroupPeer::DEFAULT_STRING_FORMAT);
+	}
+
+	/**
 	 * Catches calls to virtual methods
 	 */
 	public function __call($name, $params)
 	{
+		
 		// symfony_behaviors behavior
 		if ($callable = sfMixer::getCallable('BasesfGuardUserGroup:' . $name))
 		{
@@ -909,17 +986,6 @@ abstract class BasesfGuardUserGroup extends BaseObject  implements Persistent
 		  return call_user_func_array($callable, $params);
 		}
 
-		if (preg_match('/get(\w+)/', $name, $matches)) {
-			$virtualColumn = $matches[1];
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-			// no lcfirst in php<5.3...
-			$virtualColumn[0] = strtolower($virtualColumn[0]);
-			if ($this->hasVirtualColumn($virtualColumn)) {
-				return $this->getVirtualColumn($virtualColumn);
-			}
-		}
 		return parent::__call($name, $params);
 	}
 
