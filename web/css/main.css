@@ -630,7 +630,7 @@ h2.avatared {
 }
 
 .list_body table tr td.commit_desc {
-  color: #999;
+  color: #666;
   text-align: left;
   font-size: 11px;
   font-weight: normal;
@@ -639,21 +639,30 @@ h2.avatared {
 .list_body table tr td.file_infos {
   color: #777;
   text-align: center;
-  font-size: 11px;
+  font-size: 12px;
   width: 100px;
   background-color: #f5f5f5;
 }
 
 .list_body table tr td.file_infos span.added {
-  color: #8d8;
+  color: #5F0;
+  font-weight: bold;
+  background-color: #888;
+  padding: 2px 5px 0 5px;
 }
 
 .list_body table tr td.file_infos span.modified {
-  color: #aaa;
+  color: #eee;
+  font-weight: bold;
+  background-color: #888;
+  padding: 2px 5px 0 5px;
 }
 
 .list_body table tr td.file_infos span.deleted {
-  color: #d88;
+  color: #f60;
+  font-weight: bold;
+  background-color: #888;
+  padding: 2px 5px 0 5px;
 }
 
 #file_list table td {
@@ -815,12 +824,13 @@ a.branch-sync {
   color: #4183C4;
 }
 
-.footer .logoTF {
+.footer .logoCrew {
+  color: #888;
   width: auto;
   height: 90px;
   margin: 0 0 0 15px;
   float: left;
-  padding-left: 200px;
+  padding-left: 170px;
   line-height: 95px;
   background: url('../images/logoFooter.png') 0 22px no-repeat;
 }

@@ -22,7 +22,9 @@
         </td>
         <td class="file_infos">
           <?php echo $branch['total'].' files' ?><br />
-          <span class="added"><?php if($branch['added']) echo $branch['added'].'+ '; ?></span><span class="modified"><?php if($branch['modified']) echo $branch['modified'].'* '; ?></span><span class="deleted"><?php if($branch['deleted']) echo $branch['deleted'].'- '; ?></span>
+          <?php if($branch['added']): ?><span class="added"><?php echo $branch['added'].'+'; ?></span><?php endif; ?>
+          <?php if($branch['modified']): ?><span class="modified"><?php echo $branch['modified'].'*'; ?></span><?php endif; ?>
+          <?php if($branch['deleted']): ?><span class="deleted"><?php echo $branch['deleted'].'-'; ?></span><?php endif; ?>
         </td>
         <td class="status">
           <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-valid '. ($branch['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
