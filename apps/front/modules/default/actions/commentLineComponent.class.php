@@ -1,6 +1,6 @@
 <?php
  
-class lineCommentComponent extends sfComponent
+class commentLineComponent extends sfComponent
 {
   /**
    * @param sfWebRequest $request
@@ -8,16 +8,18 @@ class lineCommentComponent extends sfComponent
    */
   public function execute($request)
   {
-    // create lineCommentForm
-    $this->form = new LineCommentForm(null, array(
-      'commit' => $this->commit,
-      'file_id' => $this->file_id,
+    // create CommentLineForm
+    $this->form = new CommentLineForm(null, array(
+      'commit'   => $this->commit,
+      'file_id'  => $this->file_id,
+      'user_id'  => $this->user_id,
       'position' => $this->position,
-      'line' => $this->line
+      'line'     => $this->line,
+      'type'     => CommentPeer::TYPE_LINE
     ));
 
     // retrieves all line comments of this file $fileId
-    $this->comments = LineCommentQuery::create()
+    $this->comments = CommentQuery::create()
       ->filterByCommit($this->commit)
       ->filterByFileId($this->file_id)
       ->filterByPosition($this->position)

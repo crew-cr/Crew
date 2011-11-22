@@ -67,6 +67,18 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	protected $type;
 
 	/**
+	 * The value for the commit field.
+	 * @var        string
+	 */
+	protected $commit;
+
+	/**
+	 * The value for the value field.
+	 * @var        string
+	 */
+	protected $value;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -182,6 +194,26 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			throw new PropelException('Unknown stored enum key: ' . $this->type);
 		}
 		return $valueSet[$this->type];
+	}
+
+	/**
+	 * Get the [commit] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getCommit()
+	{
+		return $this->commit;
+	}
+
+	/**
+	 * Get the [value] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getValue()
+	{
+		return $this->value;
 	}
 
 	/**
@@ -417,6 +449,46 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	} // setType()
 
 	/**
+	 * Set the value of [commit] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Comment The current object (for fluent API support)
+	 */
+	public function setCommit($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->commit !== $v) {
+			$this->commit = $v;
+			$this->modifiedColumns[] = CommentPeer::COMMIT;
+		}
+
+		return $this;
+	} // setCommit()
+
+	/**
+	 * Set the value of [value] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     Comment The current object (for fluent API support)
+	 */
+	public function setValue($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->value !== $v) {
+			$this->value = $v;
+			$this->modifiedColumns[] = CommentPeer::VALUE;
+		}
+
+		return $this;
+	} // setValue()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
@@ -499,8 +571,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$this->position = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
 			$this->line = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
 			$this->type = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
-			$this->created_at = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->updated_at = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->commit = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
+			$this->value = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->created_at = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->updated_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -509,7 +583,7 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 9; // 9 = CommentPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 11; // 11 = CommentPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Comment object", $e);
@@ -819,6 +893,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(CommentPeer::TYPE)) {
 			$modifiedColumns[':p' . $index++]  = '`TYPE`';
 		}
+		if ($this->isColumnModified(CommentPeer::COMMIT)) {
+			$modifiedColumns[':p' . $index++]  = '`COMMIT`';
+		}
+		if ($this->isColumnModified(CommentPeer::VALUE)) {
+			$modifiedColumns[':p' . $index++]  = '`VALUE`';
+		}
 		if ($this->isColumnModified(CommentPeer::CREATED_AT)) {
 			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
 		}
@@ -856,6 +936,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 						break;
 					case '`TYPE`':
 						$stmt->bindValue($identifier, $this->type, PDO::PARAM_INT);
+						break;
+					case '`COMMIT`':
+						$stmt->bindValue($identifier, $this->commit, PDO::PARAM_STR);
+						break;
+					case '`VALUE`':
+						$stmt->bindValue($identifier, $this->value, PDO::PARAM_STR);
 						break;
 					case '`CREATED_AT`':
 						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1039,9 +1125,15 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				return $this->getType();
 				break;
 			case 7:
-				return $this->getCreatedAt();
+				return $this->getCommit();
 				break;
 			case 8:
+				return $this->getValue();
+				break;
+			case 9:
+				return $this->getCreatedAt();
+				break;
+			case 10:
 				return $this->getUpdatedAt();
 				break;
 			default:
@@ -1080,8 +1172,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$keys[4] => $this->getPosition(),
 			$keys[5] => $this->getLine(),
 			$keys[6] => $this->getType(),
-			$keys[7] => $this->getCreatedAt(),
-			$keys[8] => $this->getUpdatedAt(),
+			$keys[7] => $this->getCommit(),
+			$keys[8] => $this->getValue(),
+			$keys[9] => $this->getCreatedAt(),
+			$keys[10] => $this->getUpdatedAt(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->asfGuardUser) {
@@ -1150,9 +1244,15 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				$this->setType($value);
 				break;
 			case 7:
-				$this->setCreatedAt($value);
+				$this->setCommit($value);
 				break;
 			case 8:
+				$this->setValue($value);
+				break;
+			case 9:
+				$this->setCreatedAt($value);
+				break;
+			case 10:
 				$this->setUpdatedAt($value);
 				break;
 		} // switch()
@@ -1186,8 +1286,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if (array_key_exists($keys[4], $arr)) $this->setPosition($arr[$keys[4]]);
 		if (array_key_exists($keys[5], $arr)) $this->setLine($arr[$keys[5]]);
 		if (array_key_exists($keys[6], $arr)) $this->setType($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setCreatedAt($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setUpdatedAt($arr[$keys[8]]);
+		if (array_key_exists($keys[7], $arr)) $this->setCommit($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setValue($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setCreatedAt($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setUpdatedAt($arr[$keys[10]]);
 	}
 
 	/**
@@ -1206,6 +1308,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(CommentPeer::POSITION)) $criteria->add(CommentPeer::POSITION, $this->position);
 		if ($this->isColumnModified(CommentPeer::LINE)) $criteria->add(CommentPeer::LINE, $this->line);
 		if ($this->isColumnModified(CommentPeer::TYPE)) $criteria->add(CommentPeer::TYPE, $this->type);
+		if ($this->isColumnModified(CommentPeer::COMMIT)) $criteria->add(CommentPeer::COMMIT, $this->commit);
+		if ($this->isColumnModified(CommentPeer::VALUE)) $criteria->add(CommentPeer::VALUE, $this->value);
 		if ($this->isColumnModified(CommentPeer::CREATED_AT)) $criteria->add(CommentPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(CommentPeer::UPDATED_AT)) $criteria->add(CommentPeer::UPDATED_AT, $this->updated_at);
 
@@ -1276,6 +1380,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		$copyObj->setPosition($this->getPosition());
 		$copyObj->setLine($this->getLine());
 		$copyObj->setType($this->getType());
+		$copyObj->setCommit($this->getCommit());
+		$copyObj->setValue($this->getValue());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		if ($makeNew) {
@@ -1481,6 +1587,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		$this->position = null;
 		$this->line = null;
 		$this->type = null;
+		$this->commit = null;
+		$this->value = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->alreadyInSave = false;

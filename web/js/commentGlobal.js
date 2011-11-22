@@ -1,5 +1,5 @@
 $(document).ready(function() {
-  $('#comment_component').delegate('#globalComment', 'submit', function(e) {
+  $('#comment_component').delegate('#commentGlobal', 'submit', function(e) {
     e.preventDefault();
     var $this = $(this);
     $.ajax({

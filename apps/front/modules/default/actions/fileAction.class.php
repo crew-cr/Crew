@@ -31,11 +31,14 @@ class fileAction extends sfAction
       $this->file->getFilename()
     );
 
-    $fileLineCommentsModel = LineCommentQuery::create()
+    $fileLineCommentsModel = CommentQuery::create()
       ->filterByFileId($this->file->getId())
       ->filterByCommit($this->file->getLastChangeCommit())
+      ->filterByType(CommentPeer::TYPE_LINE)
       ->find()
     ;
+
+    $this->userId = $this->getUser()->getId();
 
     $this->fileLineComments = array();
     foreach ($fileLineCommentsModel as $fileLineCommentModel)

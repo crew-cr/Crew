@@ -10,13 +10,13 @@
           <div class="comment_user">
             <img class="avatar" src="<?php echo $comment->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
             <?php echo sprintf("<span><strong>%s</strong> %s</span>", $comment->getAuthorName(), $comment->getUpdatedAt('d/m/Y H\hi')) ?>
-            <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/lineDeleteComment'), $comment->getId()) : '' ?>
+            <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/commentDeleteLine'), $comment->getId()) : '' ?>
           </div>
           <div class="comment_body"><?php echo nl2br(sprintf("%s", $comment->getValue())) ?></div>
         </div>
         <?php endforeach; ?>
         <div class="comment_form <?php echo $formVisible ? '' : 'hidden' ?>">
-          <form name="fileComment" method="post" action="<?php echo url_for('default/lineAddComment') ?>" class="comment_form">
+          <form name="fileComment" method="post" action="<?php echo url_for('default/commentAddLine') ?>" class="comment_form">
             <?php echo $form->renderHiddenFields(); ?>
             <?php echo $form['value']->render(); ?>
             <button class="close safe" type="button">Close Form</button>

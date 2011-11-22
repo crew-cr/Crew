@@ -20,7 +20,7 @@ default:
     - vendor/jquery.fracs.js
     - toggleState.js
     - context.js
-    - globalComment.js
+    - commentGlobal.js
 
   has_layout:     true
   layout:         layout

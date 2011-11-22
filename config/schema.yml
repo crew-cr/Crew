@@ -26,6 +26,8 @@ propel:
     position:                         { type: INTEGER, size: '11', required: false }
     line:                             { type: INTEGER, size: '11', required: false }
     type:                             { type: ENUM, valueSet: 'branch, file, line' }
+    commit:                           { type: VARCHAR, size: '50', required: true }
+    value:                            { type: LONGVARCHAR, required: true }
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }

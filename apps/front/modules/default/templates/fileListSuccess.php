@@ -36,7 +36,7 @@
     </table>
   </div>
   <div id="comment_component" class="comments_holder">
-    <?php include_component('default', 'branchComment', array('branch' => $branch)); ?>
+    <?php include_component('default', 'commentGlobal', array('type' => CommentPeer::TYPE_BRANCH, 'id' => $branch->getId())); ?>
   </div>
 </div>
 <?php include_partial('default/statusAction', array('statusActions' => $statusActions)) ?>

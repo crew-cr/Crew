@@ -50,6 +50,8 @@ class CommentTableMap extends TableMap
   1 => 'file',
   2 => 'line',
 ));
+		$this->addColumn('COMMIT', 'Commit', 'VARCHAR', true, 50, null);
+		$this->addColumn('VALUE', 'Value', 'LONGVARCHAR', true, null, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', true, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', true, null, null);
 		// validators

@@ -13,6 +13,8 @@
  * @method     CommentQuery orderByPosition($order = Criteria::ASC) Order by the position column
  * @method     CommentQuery orderByLine($order = Criteria::ASC) Order by the line column
  * @method     CommentQuery orderByType($order = Criteria::ASC) Order by the type column
+ * @method     CommentQuery orderByCommit($order = Criteria::ASC) Order by the commit column
+ * @method     CommentQuery orderByValue($order = Criteria::ASC) Order by the value column
  * @method     CommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     CommentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -23,6 +25,8 @@
  * @method     CommentQuery groupByPosition() Group by the position column
  * @method     CommentQuery groupByLine() Group by the line column
  * @method     CommentQuery groupByType() Group by the type column
+ * @method     CommentQuery groupByCommit() Group by the commit column
+ * @method     CommentQuery groupByValue() Group by the value column
  * @method     CommentQuery groupByCreatedAt() Group by the created_at column
  * @method     CommentQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -52,6 +56,8 @@
  * @method     Comment findOneByPosition(int $position) Return the first Comment filtered by the position column
  * @method     Comment findOneByLine(int $line) Return the first Comment filtered by the line column
  * @method     Comment findOneByType(int $type) Return the first Comment filtered by the type column
+ * @method     Comment findOneByCommit(string $commit) Return the first Comment filtered by the commit column
+ * @method     Comment findOneByValue(string $value) Return the first Comment filtered by the value column
  * @method     Comment findOneByCreatedAt(string $created_at) Return the first Comment filtered by the created_at column
  * @method     Comment findOneByUpdatedAt(string $updated_at) Return the first Comment filtered by the updated_at column
  *
@@ -62,6 +68,8 @@
  * @method     array findByPosition(int $position) Return Comment objects filtered by the position column
  * @method     array findByLine(int $line) Return Comment objects filtered by the line column
  * @method     array findByType(int $type) Return Comment objects filtered by the type column
+ * @method     array findByCommit(string $commit) Return Comment objects filtered by the commit column
+ * @method     array findByValue(string $value) Return Comment objects filtered by the value column
  * @method     array findByCreatedAt(string $created_at) Return Comment objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return Comment objects filtered by the updated_at column
  *
@@ -152,7 +160,7 @@ abstract class BaseCommentQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `USER_ID`, `BRANCH_ID`, `FILE_ID`, `POSITION`, `LINE`, `TYPE`, `CREATED_AT`, `UPDATED_AT` FROM `comment` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `USER_ID`, `BRANCH_ID`, `FILE_ID`, `POSITION`, `LINE`, `TYPE`, `COMMIT`, `VALUE`, `CREATED_AT`, `UPDATED_AT` FROM `comment` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -499,6 +507,62 @@ abstract class BaseCommentQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(CommentPeer::TYPE, $type, $comparison);
+	}
+
+	/**
+	 * Filter the query on the commit column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCommit('fooValue');   // WHERE commit = 'fooValue'
+	 * $query->filterByCommit('%fooValue%'); // WHERE commit LIKE '%fooValue%'
+	 * </code>
+	 *
+	 * @param     string $commit The value to use as filter.
+	 *              Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function filterByCommit($commit = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($commit)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $commit)) {
+				$commit = str_replace('*', '%', $commit);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(CommentPeer::COMMIT, $commit, $comparison);
+	}
+
+	/**
+	 * Filter the query on the value column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByValue('fooValue');   // WHERE value = 'fooValue'
+	 * $query->filterByValue('%fooValue%'); // WHERE value LIKE '%fooValue%'
+	 * </code>
+	 *
+	 * @param     string $value The value to use as filter.
+	 *              Accepts wildcards (* and % trigger a LIKE)
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function filterByValue($value = null, $comparison = null)
+	{
+		if (null === $comparison) {
+			if (is_array($value)) {
+				$comparison = Criteria::IN;
+			} elseif (preg_match('/[\%\*]/', $value)) {
+				$value = str_replace('*', '%', $value);
+				$comparison = Criteria::LIKE;
+			}
+		}
+		return $this->addUsingAlias(CommentPeer::VALUE, $value, $comparison);
 	}
 
 	/**

@@ -29,14 +29,16 @@ class fileListAction extends sfAction
     $this->files = array();
     foreach ($files as $file)
     {
-      $fileCommentsCount = FileCommentQuery::create()
+      $fileCommentsCount = CommentQuery::create()
         ->filterByFileId($file->getId())
+        ->filterByType(CommentPeer::TYPE_FILE)
         ->count()
       ;
       
-      $lineCommentsCount = LineCommentQuery::create()
+      $lineCommentsCount = CommentQuery::create()
         ->filterByFileId($file->getId())
         ->filterByCommit($file->getLastChangeCommit())
+        ->filterByType(CommentPeer::TYPE_LINE)
         ->count()
       ;
 
@@ -53,77 +55,35 @@ class fileListAction extends sfAction
     $this->commentBoards = $this->getCommentBoards($this->branch->getId());
   }
 
-  private function getCommentBoards($branchId)
+  /**
+   * Returns comments
+   * @return array
+   */
+  private function getCommentBoards()
   {
     $commentBoards = array();
 
-    $branchComments = BranchCommentQuery::create()
+    $comments = CommentQuery::create()
       ->orderByCreatedAt(Criteria::DESC)
-      ->filterByBranchId($branchId)
+      ->limit(50)
       ->find()
     ;
 
-    foreach ($branchComments as $branchComment)
+    foreach ($comments as $comment)
     {
-      $commentBoards[$branchComment->getCreatedAt('YmdHisu')] = array(
-        'ProjectName' => $branchComment->getBranch()->getRepository(),
-        'ProjectId'   => $branchComment->getBranch()->getRepositoryId(),
-        'UserName'    => $branchComment->getAuthorName(),
-        'UserId'      => $branchComment->getUserId(),
-        'BranchName'  => $branchComment->getBranch(),
-        'BranchId'    => $branchComment->getBranchId(),
-        'Message'     => stringUtils::shorten($branchComment->getValue(), 60),
-        'CreatedAt'   => $branchComment->getCreatedAt('d/m/Y H:i:s')
-      );
-    }
-
-    $FileComments = FileCommentQuery::create()
-      ->orderByCreatedAt(Criteria::DESC)
-      ->useFileQuery()
-        ->filterByBranchId($branchId)
-      ->endUse()
-      ->find()
-    ;
-
-    foreach ($FileComments as $FileComment)
-    {
-      $commentBoards[$FileComment->getCreatedAt('YmdHisu')] = array(
-        'ProjectName' => $FileComment->getFile()->getBranch()->getRepository(),
-        'ProjectId'   => $FileComment->getFile()->getBranch()->getRepositoryId(),
-        'UserName'    => $FileComment->getAuthorName(),
-        'UserId'      => $FileComment->getUserId(),
-        'BranchName'  => $FileComment->getFile()->getBranch(),
-        'BranchId'    => $FileComment->getFile()->getBranchId(),
-        'FileName'    => $FileComment->getFile(),
-        'FileId'      => $FileComment->getFileId(),
-        'Message'     => stringUtils::shorten($FileComment->getValue(), 60),
-        'CreatedAt'   => $FileComment->getCreatedAt('d/m/Y H:i:s')
-      );
-    }
-
-    $LineComments = LineCommentQuery::create()
-      ->orderByCreatedAt(Criteria::DESC)
-      ->useFileQuery()
-        ->filterByBranchId($branchId)
-      ->endUse()
-      ->find()
-    ;
-
-    foreach ($LineComments as $LineComment)
-    {
-      $commentBoards[$LineComment->getCreatedAt('YmdHisu')] = array(
-        'ProjectName' => $LineComment->getFile()->getBranch()->getRepository(),
-        'ProjectId'   => $LineComment->getFile()->getBranch()->getRepositoryId(),
-        'UserName'    => $LineComment->getAuthorName(),
-        'UserId'      => $LineComment->getUserId(),
-        'BranchName'  => $LineComment->getFile()->getBranch(),
-        'BranchId'    => $LineComment->getFile()->getBranchId(),
-        'FileName'    => $LineComment->getFile(),
-        'FileId'      => $LineComment->getFileId(),
-        'Position'    => $LineComment->getPosition(),
-        'Line'        => $LineComment->getLine(),
-        'Message'     => stringUtils::shorten($LineComment->getValue(), 60),
-        'CreatedAt'   => $LineComment->getCreatedAt('d/m/Y H:i:s')
+      $commentBoards[$comment->getCreatedAt('YmdHisu')] = array(
+        'ProjectName' => $comment->getBranch()->getRepository(),
+        'ProjectId'   => $comment->getBranch()->getRepositoryId(),
+        'UserName'    => $comment->getAuthorName(),
+        'UserId'      => $comment->getUserId(),
+        'BranchName'  => $comment->getBranch(),
+        'BranchId'    => $comment->getBranchId(),
+        'FileName'    => $comment->getFile(),
+        'FileId'      => $comment->getFileId(),
+        'Position'    => $comment->getPosition(),
+        'Line'        => $comment->getLine(),
+        'Message'     => stringUtils::shorten($comment->getValue(), 60),
+        'CreatedAt'   => $comment->getCreatedAt('d/m/Y H:i:s')
       );
     }
 

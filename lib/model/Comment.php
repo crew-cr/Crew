@@ -13,6 +13,13 @@
  *
  * @package    propel.generator.lib.model
  */
-class Comment extends BaseComment {
-
+class Comment extends BaseComment
+{
+  /**
+   * @return string
+   */
+  public function getAuthorName()
+  {
+    return $this->getsfGuardUser()->getProfile()->__toString();
+  }
 } // Comment

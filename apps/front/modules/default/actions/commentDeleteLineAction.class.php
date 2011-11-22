@@ -1,0 +1,64 @@
+<?php
+
+class commentDeleteLineAction extends sfAction
+{
+  /**
+   * @param sfWebRequest $request
+   * @return application/json data
+   */
+  public function execute($request)
+  {
+    $con = Propel::getConnection();
+    $con->beginTransaction();
+
+    $html = '';
+    try
+    {
+      $id = $request->getParameter('id');
+      $this->forward404Unless($id, 'Line Comment Id Not Found');
+
+      $aComment = CommentQuery::create()
+        ->filterByType(CommentPeer::TYPE_LINE)
+        ->filterById($id)
+        ->findOne()
+      ;
+      $this->forward404Unless($aComment, 'Line Comment Not Found');
+
+      $countLineComment = CommentQuery::create()
+        ->filterByCommit($aComment->getCommit())
+        ->filterByFileId($aComment->getFileId())
+        ->filterByPosition($aComment->getPosition())
+        ->filterByLine($aComment->getLine())
+        ->filterByType(CommentPeer::TYPE_LINE)
+        ->count($con)
+      ;
+
+      $datas = array(
+        'commit'       => $aComment->getCommit(),
+        'file_id'      => $aComment->getFileId(),
+        'position'     => $aComment->getPosition(),
+        'line'         => $aComment->getLine(),
+        'user_id'      => $this->getUser()->getId(),
+        'form_visible' => false,
+      );
+
+      $aComment->delete($con);
+
+      if (($countLineComment -1) > 0)
+      {
+        $html = $this->getComponent('default', 'commentLine', $datas);
+      }
+
+      $con->commit();
+    }
+    catch (Exception $e)
+    {
+      $con->rollBack();
+      throw $e;
+    }
+
+    // returns a json object
+    $this->getResponse()->setContentType('application/json');
+    return $this->renderText(json_encode(array('html' => $html)));
+  }
+}
