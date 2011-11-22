@@ -1,13 +1,13 @@
 <?php
 
 /**
- * LineComment filter form.
+ * Comment filter form.
  *
  * @package    crew
  * @subpackage filter
  * @author     Your name here
  */
-class LineCommentFormFilter extends BaseLineCommentFormFilter
+class CommentFormFilter extends BaseCommentFormFilter
 {
   public function configure()
   {

@@ -21,6 +21,8 @@ abstract class BaseCommentForm extends BaseFormPropel
       'position'   => new sfWidgetFormInputText(),
       'line'       => new sfWidgetFormInputText(),
       'type'       => new sfWidgetFormChoice(array('choices' => array(''=>'','branch'=>'branch','file'=>'file','line'=>'line',))),
+      'commit'     => new sfWidgetFormInputText(),
+      'value'      => new sfWidgetFormTextarea(),
       'created_at' => new sfWidgetFormDateTime(),
       'updated_at' => new sfWidgetFormDateTime(),
     ));
@@ -33,6 +35,8 @@ abstract class BaseCommentForm extends BaseFormPropel
       'position'   => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647, 'required' => false)),
       'line'       => new sfValidatorInteger(array('min' => -2147483648, 'max' => 2147483647, 'required' => false)),
       'type'       => new sfValidatorChoice(array('choices' => array(0=>'branch',1=>'file',2=>'line',), 'required' => false)),
+      'commit'     => new sfValidatorString(array('max_length' => 50)),
+      'value'      => new sfValidatorString(),
       'created_at' => new sfValidatorDateTime(),
       'updated_at' => new sfValidatorDateTime(),
     ));
