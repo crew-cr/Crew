@@ -18,12 +18,7 @@ class viewAction extends sfAction
     $this->user = sfGuardUserPeer::retrieveByPK($request->getParameter('id'));
     $this->forward404Unless($this->user, 'User Not Found');
 
-    $this->statusActions = StatusActionQuery::create()
-      ->orderByCreatedAt(\Criteria::DESC)
-      ->filterByUserId($this->user->getId())
-      ->find()
-    ;
-
+    $this->statusActions = StatusActionPeer::getStatusActionsForBoard($this->user->getId());
     $this->commentBoards = CommentPeer::getCommentsForBoard($this->user->getId());
   }
 }

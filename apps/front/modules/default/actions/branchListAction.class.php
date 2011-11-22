@@ -39,13 +39,7 @@ class branchListAction extends sfAction
       ));
     }
 
-    $this->statusActions = StatusActionQuery::create()
-      ->orderByCreatedAt(\Criteria::DESC)
-      ->filterByRepositoryId($repository->getId())
-      ->limit(25)
-      ->find()
-    ;
-
+    $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $repository->getId());
     $this->commentBoards = CommentPeer::getCommentsForBoard(null, $repository->getId());
   }
 }

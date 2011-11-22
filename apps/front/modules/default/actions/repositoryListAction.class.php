@@ -25,12 +25,7 @@ class repositoryListAction extends sfAction
       $this->repositories[] = array_merge($repository->toArray(), array('NbBranches' => $branchesCount));
     }
 
-    $this->statusActions = StatusActionQuery::create()
-      ->orderByCreatedAt(\Criteria::DESC)
-      ->limit(25)
-      ->find()
-    ;
-
+    $this->statusActions = StatusActionPeer::getStatusActionsForBoard();
     $this->commentBoards = CommentPeer::getCommentsForBoard();
   }
 }

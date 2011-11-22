@@ -14,5 +14,30 @@
  * @package    propel.generator.lib.model
  */
 class StatusActionPeer extends BaseStatusActionPeer {
+  public static function getStatusActionsForBoard($userId = null, $repositoryId = null, $branchId = null)
+  {
+    $statusActionsQuery = StatusActionQuery::create();
 
+    if(!is_null($userId))
+    {
+      $statusActionsQuery->filterByUserId($userId);
+    }
+
+    if(!is_null($repositoryId))
+    {
+      $statusActionsQuery->filterByRepositoryId($repositoryId);
+    }
+
+    if(!is_null($branchId))
+    {
+      $statusActionsQuery->filterByBranchId($branchId);
+    }
+
+    $statusActions = $statusActionsQuery->orderByCreatedAt(\Criteria::DESC)
+    ->limit(25)
+    ->find()
+  ;
+
+    return $statusActions;
+  }
 } // StatusActionPeer
