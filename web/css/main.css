@@ -761,6 +761,10 @@ a.branch-sync {
   border-right: 1px solid #EEE;
 }
 
+.list_body td.status_info span.date {
+  white-space:nowrap;
+}
+
 .list_body td div.message {
   color: #777;
 }
