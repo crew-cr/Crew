@@ -8,7 +8,7 @@
       <?php foreach ($statusActions as $statusAction): ?>
       <tr>
         <td class="status_info">
-          <img class="avatar" src="<?php echo $sf_user->getProfile()->getAvatarUrl(18) ?>" />
+          <img class="avatar" src="<?php echo Profile::getAvatarUrlFromEmail($statusAction->getsfGuardUser()->getProfile()->getEmail(), 18) ?>" />
           <?php echo link_to($statusAction->getAuthorName(), 'user/view', array('query_string' => 'id=' . $statusAction->getUserId())) ?><br/>
           <span class="date"><?php echo $statusAction->getCreatedAt('d/m/Y H:i:s') ?></span>
         </td>

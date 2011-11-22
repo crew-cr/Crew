@@ -26,4 +26,20 @@ class Profile extends BaseProfile {
   {
     return sprintf("http://www.gravatar.com/avatar/%s?d=%s&s=%s", md5(strtolower(trim($this->getEmail()))), urlencode(self::DEFAULT_AVATAR_URL), $size);
   }
+
+  /**
+   * @static
+   * @param string $email
+   * @param int $size
+   * @return string
+   */
+  public static function getAvatarUrlFromEmail($email, $size = 24)
+  {
+    if (null === $email)
+    {
+      $email = 0;
+    }
+
+    return sprintf("http://www.gravatar.com/avatar/%s?d=%s&s=%s", md5(strtolower(trim($email))), urlencode(self::DEFAULT_AVATAR_URL), $size);
+  }
 } // Profile

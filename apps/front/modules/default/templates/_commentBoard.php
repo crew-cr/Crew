@@ -8,7 +8,7 @@
       <?php foreach ($commentBoards as $commentBoard): ?>
       <tr>
         <td class="status_info">
-          <img class="avatar" src="<?php echo $sf_user->getProfile()->getAvatarUrl(18) ?>" />
+          <img class="avatar" src="<?php echo Profile::getAvatarUrlFromEmail($commentBoard['UserEmail'], 18) ?>" />
           <?php echo link_to($commentBoard['UserName'], 'user/view', array('query_string' => 'id=' . $commentBoard['UserId'])) ?><br/>
           <span class="date"><?php echo $commentBoard['CreatedAt'] ?></span>
         </td>

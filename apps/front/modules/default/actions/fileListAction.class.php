@@ -69,6 +69,7 @@ class fileListAction extends sfAction
       ->find()
     ;
 
+    /** @var Comment $comment */
     foreach ($comments as $comment)
     {
       $commentBoards[$comment->getCreatedAt('YmdHisu')] = array(
@@ -76,6 +77,7 @@ class fileListAction extends sfAction
         'ProjectId'   => $comment->getBranch()->getRepositoryId(),
         'UserName'    => $comment->getAuthorName(),
         'UserId'      => $comment->getUserId(),
+        'UserEmail'   => $comment->getsfGuardUser()->getProfile()->getEmail(),
         'BranchName'  => $comment->getBranch(),
         'BranchId'    => $comment->getBranchId(),
         'FileName'    => $comment->getFile(),
