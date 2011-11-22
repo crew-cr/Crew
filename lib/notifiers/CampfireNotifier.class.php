@@ -66,5 +66,7 @@ class CampfireNotifier extends BaseNotifier
 
     $cmd = sprintf("curl -u %s:X -H 'Content-Type: application/json' -d '%s' %s/room/%s/speak.json", $serviceToken, json_encode(array('message' => array('body' => $message))), $serviceUrl, $roomId);
     exec($cmd);
+
+    return true;
   }
 }
