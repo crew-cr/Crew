@@ -25,7 +25,7 @@
           <?php if (! empty($commentBoard['Position'])): ?>
             / <?php echo link_to(sprintf('on line %s', $commentBoard['Line']), 'default/file', array('query_string' => sprintf('file=%s#position_%s', $commentBoard['FileId'], $commentBoard['Position']))) ?>
           <?php endif; ?>
-          <div class="message"><?php echo htmlspecialchars_decode($commentBoard['Message']) ?></div>
+          <div class="message"><?php echo $commentBoard['Message'] ?></div>
         </td>
       </tr>
       <?php endforeach; ?>
