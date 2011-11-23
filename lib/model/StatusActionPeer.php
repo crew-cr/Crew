@@ -33,7 +33,7 @@ class StatusActionPeer extends BaseStatusActionPeer {
       $statusActionsQuery->filterByBranchId($branchId);
     }
 
-    $statusActions = $statusActionsQuery->orderByCreatedAt(\Criteria::DESC)
+    $statusActions = $statusActionsQuery->orderByCreatedAt(Criteria::DESC)
     ->limit(25)
     ->find()
   ;
