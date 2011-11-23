@@ -4,11 +4,6 @@ class initTask extends sfBaseTask
 {
   protected function configure()
   {
-    // // add your own arguments here
-    // $this->addArguments(array(
-    //   new sfCommandArgument('my_arg', sfCommandArgument::REQUIRED, 'My argument'),
-    // ));
-
     $this->addOptions(array(
       new sfCommandOption('application', null, sfCommandOption::PARAMETER_REQUIRED, 'The application name'),
       new sfCommandOption('env', null, sfCommandOption::PARAMETER_REQUIRED, 'The environment', 'dev'),
@@ -32,6 +27,14 @@ EOF;
     // initialize the database connection
     $databaseManager = new sfDatabaseManager($this->configuration);
     $connection = $databaseManager->getDatabase($options['connection'])->getConnection();
+    
+    // delete previous tables
+    $deleteTablesTask = new deleteTablesTask($this->dispatcher, $this->formatter);
+    $return = $deleteTablesTask->run(array(), array('no-confirmation', 'connection' => $options['connection']));
+    if ($return)
+    {
+      return $return;
+    }
 
     // generates Propel model and form classes, SQL and initializes the database
     $propelBuildAllTask = new sfPropelBuildAllTask($this->dispatcher, $this->formatter);
