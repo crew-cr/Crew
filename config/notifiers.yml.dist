@@ -11,6 +11,9 @@ CampfireNotifier:
     add-links: 1
   comment:
     enabled: 0
+    branch_message: "[Crew] message with %branch% %message% %author% %date%"
+    file_message: "[Crew] message with %file% %branch% %message% %author% %date%"
+    line_message: "[Crew] message with %line% %file% %branch% %message% %author% %date%"
   projects:
     your-project-id:
       base-url: campfire-url

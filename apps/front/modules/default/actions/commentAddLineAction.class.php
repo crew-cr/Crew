@@ -69,6 +69,8 @@ class commentAddLineAction extends sfAction
         $datas = array_merge($datas, array('form_visible' => false));
 
         $con->commit();
+
+        $this->dispatcher->notify(new sfEvent($this, 'notification.comment', array('project-id' => $lineComment->getBranch()->getRepositoryId(), 'type' => 'line', 'object' => $lineComment)));
       }
       catch (Exception $e)
       {

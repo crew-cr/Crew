@@ -69,6 +69,73 @@ class CampfireNotifier extends BaseNotifier
     return true;
   }
 
+  public function notifyComment(sfEvent $event)
+  {
+    if(!$this->configure($event))
+    {
+      return true;
+    }
+
+    $configCurrentProject = $this->getCurrentProjectConfig();
+
+    if(isset($configCurrentProject['comment-type']) && !in_array($this->arguments['type'], $configCurrentProject['comment-type']))
+    {
+      return true;
+    }
+
+    $message = $this->createCommentNotificationMessage($this->arguments['type'], $this->arguments['object']);
+    $this->send($message);
+
+    return true;
+  }
+
+  protected function createCommentNotificationMessage($type, $comment)
+  {
+    $configEvent = $this->getEventConfig('comment');
+
+    if(isset($configEvent[$type.'_message']))
+    {
+      $message = $configEvent[$type.'_message'];
+      $message = str_replace('%branch%',  stringUtils::displayBranchName($comment->getBranch()->getName()), $message);
+      $message = str_replace('%message%', stringUtils::shorten($comment->getValue(), 40), $message);
+      $message = str_replace('%date%',    date('d/m/Y H:i'), $message);
+      $message = str_replace('%author%',  $this->subject->getUser()->__toString(), $message);
+
+      switch($type)
+      {
+        case 'line':
+          $message = str_replace('%line%', stringUtils::displayBranchName($comment->getLine()), $message);
+
+        case 'file':
+          $message = str_replace('%file%', stringUtils::displayBranchName($comment->getFile()->getFilename()), $message);
+      }
+
+      if(isset($configEvent['add-links']) && $configEvent['add-links'])
+      {
+        sfContext::getInstance()->getConfiguration()->loadHelpers(array('Url', 'Tag'));
+
+        switch($type)
+        {
+          case 'branch':
+            $link = " : ".url_for(sprintf('default/fileList?branch=%s#comment_component', $comment->getBranch()->getId()), true);
+            break;
+
+          case 'file':
+            $link = " : ".url_for(sprintf('default/file?file=%s#comment_component', $comment->getFileId()), true);
+            break;
+
+          case 'line':
+            $link = " : ".url_for(sprintf('default/file?file=%s#position_%s', $comment->getFileId(), $comment->getPosition()), true);
+            break;
+        }
+
+        $message .= $link;
+      }
+
+      $this->send($message);
+    }
+  }
+
   protected function send($message)
   {
     $configCurrentProject = $this->getCurrentProjectConfig();

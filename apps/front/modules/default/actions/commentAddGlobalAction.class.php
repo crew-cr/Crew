@@ -54,7 +54,9 @@ class commentAddGlobalAction extends sfAction
     $aComment
       ->save()
     ;
-    
+
+    $this->dispatcher->notify(new sfEvent($this, 'notification.comment', array('project-id' => $aComment->getBranch()->getRepositoryId(), 'type' => ($type == CommentPeer::TYPE_BRANCH) ? 'branch' : 'file', 'object' => $aComment)));
+
     $this->getResponse()->setContentType('application/json');
     return $this->renderText(json_encode(array('html' => $this->getComponent('default', 'commentGlobal', array('id' => $id, 'type' => $type)))));
   }
