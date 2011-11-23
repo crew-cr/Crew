@@ -674,6 +674,15 @@ h2.avatared {
   padding: 5px 5px 0 5px;
 }
 
+#project_list table td div.path {
+  font-size: 11px;
+  color: #444;
+}
+
+#project_list table td div.path a {
+  color: #4183C4;
+}
+
 a.disabled {
   opacity: 0.25;
 }
