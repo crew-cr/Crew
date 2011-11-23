@@ -6,20 +6,20 @@ class registerNotifiersFilter extends sfFilter
   {
     if($this->isFirstCall())
     {
-      $notifiers = sfConfig::get('app_notifiers_all');
+      $notifiers = sfYaml::load(dirname(__FILE__).'/../../config/notifiers.yml');
 
-      if(!is_null($notifiers))
+      if(!is_null($notifiers) && is_array($notifiers))
       {
-        foreach($notifiers as $notifierClassName => $notifierConfig)
+        foreach($notifiers as $notifierClassName => $config)
         {
-          $databaseNotifier = new $notifierClassName();
-          if($databaseNotifier->isEnabled('status'))
+          $notifier = new $notifierClassName($config);
+          if($notifier->isEnabled('status'))
           {
-            $this->getContext()->getEventDispatcher()->connect('notification.status', array($databaseNotifier, 'notifyStatus'));
+            $this->getContext()->getEventDispatcher()->connect('notification.status', array($notifier, 'notifyStatus'));
           }
-          if($databaseNotifier->isEnabled('comment'))
+          if($notifier->isEnabled('comment'))
           {
-            $this->getContext()->getEventDispatcher()->connect('notification.comment', array($databaseNotifier, 'notifyComment'));
+            $this->getContext()->getEventDispatcher()->connect('notification.comment', array($notifier, 'notifyComment'));
           }
         }
       }

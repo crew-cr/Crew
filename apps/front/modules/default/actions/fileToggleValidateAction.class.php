@@ -38,7 +38,7 @@ class fileToggleValidateAction extends sfAction
 
       $con->commit();
 
-      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('type' => 'file', 'object' => $file, 'old' => $oldStatus)));
+      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('project-id' => $file->getBranch()->getRepositoryId(), 'type' => 'file', 'object' => $file, 'old' => $oldStatus)));
     }
     catch (\Exception $e)
     {

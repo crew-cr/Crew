@@ -36,7 +36,7 @@ class branchToggleValidateAction extends sfAction
         $render = array('toggleState' => 'enabled');
       }
 
-      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('type' => 'branch', 'object' => $branch, 'old' => $oldStatus)));
+      $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('project-id' => $branch->getRepositoryId(), 'type' => 'branch', 'object' => $branch, 'old' => $oldStatus)));
 
       $con->commit();
     }

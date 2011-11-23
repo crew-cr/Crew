@@ -4,7 +4,10 @@ class DatabaseNotifier extends BaseNotifier
 {
   public function notifyStatus(sfEvent $event)
   {
-    $this->configure($event);
+    if(!$this->configure($event))
+    {
+      return true;
+    }
 
     switch($this->arguments['type'])
     {

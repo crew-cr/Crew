@@ -7,15 +7,9 @@ abstract class BaseNotifier
   protected $subject;
   protected $parameters;
 
-  function __construct()
+  function __construct($config)
   {
-    $notifiersConfig = sfConfig::get('app_notifiers_all');
-    $this->config = (isset($notifiersConfig[get_class($this)])) ? $notifiersConfig[get_class($this)] : array();
-  }
-
-  public function getConfig($eventType)
-  {
-    return (isset($this->config[$eventType])) ? $this->config[$eventType] : array();
+    $this->config = $config;
   }
 
   public function isEnabled($eventType)
@@ -23,11 +17,33 @@ abstract class BaseNotifier
     return (isset($this->config[$eventType]['enabled']) && $this->config[$eventType]['enabled']);
   }
 
+  public function getEventConfig($eventType)
+  {
+    return (isset($this->config[$eventType])) ? $this->config[$eventType] : array();
+  }
+
+  public function getCurrentProjectConfig()
+  {
+    return (isset($this->config['projects'][$this->arguments['project-id']])) ? $this->config['projects'][$this->arguments['project-id']] : array();
+  }
+
+  protected function isEnabledForCurrentProject()
+  {
+    return isset($this->config['projects'][$this->arguments['project-id']]) || !isset($this->config['projects']);
+  }
+
   protected function configure(sfEvent $event)
   {
     $this->name       = $event->getName();
     $this->subject    = $event->getSubject();
     $this->arguments  = $event->getParameters();
+
+    if(!$this->isEnabledForCurrentProject())
+    {
+      return false;
+    }
+
+    return true;
   }
 
   public function notifyComment(sfEvent $event)
