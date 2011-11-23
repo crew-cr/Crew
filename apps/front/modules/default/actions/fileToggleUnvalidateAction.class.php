@@ -40,7 +40,7 @@ class fileToggleUnvalidateAction extends sfAction
 
       $this->dispatcher->notify(new sfEvent($this, 'notification.status', array('project-id' => $file->getBranch()->getRepositoryId(), 'type' => 'file', 'object' => $file, 'old' => $oldStatus)));
     }
-    catch (\Exception $e)
+    catch (Exception $e)
     {
       $con->rollBack();
       throw $e;

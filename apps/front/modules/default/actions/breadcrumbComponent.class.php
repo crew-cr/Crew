@@ -27,13 +27,13 @@ class breadcrumbComponent extends sfComponent
       $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
       if($branch === null)
       {
-        throw new \Exception('Branch not found');
+        throw new Exception('Branch not found');
       }
 
       $repository = RepositoryPeer::retrieveByPK($branch->getRepositoryId());
       if($repository === null)
       {
-        throw new \Exception('Repository not found');
+        throw new Exception('Repository not found');
       }
 
       $this->links = array(
@@ -56,19 +56,19 @@ class breadcrumbComponent extends sfComponent
       $file = FilePeer::retrieveByPK($request->getParameter('file'));
       if($file === null)
       {
-        throw new \Exception('File not found');
+        throw new Exception('File not found');
       }
 
       $branch = BranchPeer::retrieveByPK($file->getBranchId());
       if($branch === null)
       {
-        throw new \Exception('Branch not found');
+        throw new Exception('Branch not found');
       }
 
       $repository = RepositoryPeer::retrieveByPK($branch->getRepositoryId());
       if($repository === null)
       {
-        throw new \Exception('Repository not found');
+        throw new Exception('Repository not found');
       }
 
       $this->links = array(

@@ -40,7 +40,7 @@ class branchToggleUnvalidateAction extends sfAction
 
       $con->commit();
     }
-    catch (\Exception $e)
+    catch (Exception $e)
     {
       $con->rollBack();
       throw $e;
