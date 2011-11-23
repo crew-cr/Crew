@@ -13,12 +13,12 @@
           <span class="date"><?php echo $statusAction->getCreatedAt('d/m/Y H:i:s') ?></span>
         </td>
         <td>
+          <div class="message"><?php echo htmlspecialchars_decode($statusAction->getMessage()) ?></div>
           <div class="path">
             <?php if (null !== $statusAction->getRepository()): ?><?php echo link_to($statusAction->getRepository(), 'default/branchList', array('query_string' => 'repository=' . $statusAction->getRepositoryId())) ?><?php endif; ?>
             <?php if (null !== $statusAction->getBranch()): ?>&gt; <?php echo link_to($statusAction->getBranch(), 'default/fileList', array('query_string' => 'branch=' . $statusAction->getBranchId())) ?><?php endif; ?>
             <?php if (null !== $statusAction->getFile()): ?>&gt; <?php echo link_to(stringUtils::lshorten($statusAction->getFile(), 50), 'default/file', array('query_string' => 'file=' . $statusAction->getFileId(), 'title' => $statusAction->getFile())) ?><?php endif; ?>
           </div>
-          <div class="message"><?php echo htmlspecialchars_decode($statusAction->getMessage()) ?></div>
         </td>
       </tr>
       <?php endforeach; ?>

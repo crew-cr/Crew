@@ -30,6 +30,7 @@ h2 {
 
 h3 {
   color: #4183C4;
+  font-weight: bold;
 }
 
 a {
@@ -671,7 +672,7 @@ h2.avatared {
 }
 
 #project_list table td {
-  padding: 5px 5px 0 5px;
+  padding: 8px 8px 3px 8px;
 }
 
 #project_list table td div.path {
@@ -770,12 +771,16 @@ a.branch-sync {
   border-right: 1px solid #EEE;
 }
 
+.list_body td.status_info a {
+  font-weight: bold;
+}
+
 .list_body td.status_info span.date {
   white-space:nowrap;
 }
 
 .list_body td div.message {
-  color: #777;
+  color: #555;
 }
 
 .review_request_icon
