@@ -18,6 +18,10 @@ sf_guard_password:
   url:   /request_password
   param: { module: sfGuardAuth, action: password }
 
+branch_by_name:
+  url:   /branch/:repository/:name
+  param: { module: default, action: fileList }
+
 # generic rules
 # please, remove them by adding more specific rules
 default_index:
