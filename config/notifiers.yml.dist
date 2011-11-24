@@ -20,3 +20,4 @@ CampfireNotifier:
       api-token: campfire-api-token
       room-id: room-id
       status-type: ['branch', 'file']
+      comment-type: ['branch', 'file', 'line']
