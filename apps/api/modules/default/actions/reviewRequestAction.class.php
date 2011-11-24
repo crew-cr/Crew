@@ -50,6 +50,7 @@ class reviewRequestAction extends sfAction
             ->save()
           ;
           $result['result'] = true;
+          $this->dispatcher->notify(new sfEvent($this, 'notification.review-request', array('project-id' => $branch->getRepositoryId(), 'object' => $branch)));
         }
         else
         {

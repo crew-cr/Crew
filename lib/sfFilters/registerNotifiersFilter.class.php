@@ -12,7 +12,7 @@ class registerNotifiersFilter extends sfFilter
       {
         foreach($notifiers as $notifierClassName => $config)
         {
-          $notifier = new $notifierClassName($config);
+          $notifier = new $notifierClassName($config, $this->getContext());
           if($notifier->isEnabled('status'))
           {
             $this->getContext()->getEventDispatcher()->connect('notification.status', array($notifier, 'notifyStatus'));
@@ -20,6 +20,10 @@ class registerNotifiersFilter extends sfFilter
           if($notifier->isEnabled('comment'))
           {
             $this->getContext()->getEventDispatcher()->connect('notification.comment', array($notifier, 'notifyComment'));
+          }
+          if($notifier->isEnabled('review-request'))
+          {
+            $this->getContext()->getEventDispatcher()->connect('notification.review-request', array($notifier, 'notifyReviewRequest'));
           }
         }
       }
