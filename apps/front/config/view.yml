@@ -13,6 +13,7 @@ default:
     #robots:       index, follow
 
   stylesheets:
+    - reset.min.css
     - main.less: { rel: stylesheet/less }
 
   javascripts:
