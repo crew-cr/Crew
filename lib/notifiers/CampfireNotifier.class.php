@@ -35,8 +35,7 @@ class CampfireNotifier extends BaseNotifier
 
           if(isset($configEvent['add-links']) && $configEvent['add-links'])
           {
-            sfContext::getInstance()->getConfiguration()->loadHelpers(array('Url', 'Tag'));
-            $message .= " : ".url_for('default/file?file='.$file->getId(), true);
+            $message .= " : ".$this->generateUrl('file', array('file' => $file->getId()));
           }
 
           $this->send($message);
@@ -58,8 +57,7 @@ class CampfireNotifier extends BaseNotifier
 
           if(isset($configEvent['add-links']) && $configEvent['add-links'])
           {
-            sfContext::getInstance()->getConfiguration()->loadHelpers(array('Url', 'Tag'));
-            $message .= " : ".url_for('default/fileList?branch='.$branch->getId(), true);
+            $message .= " : ".$this->generateUrl('fileList', array('branch' => $branch->getId()));
           }
 
           $this->send($message);
@@ -89,6 +87,30 @@ class CampfireNotifier extends BaseNotifier
     return true;
   }
 
+  public function notifyReviewRequest(sfEvent $event)
+  {
+    if(!$this->configure($event))
+    {
+      return true;
+    }
+
+    $configEvent = $this->getEventConfig('review-request');
+    $branch      = $this->arguments['object'];
+
+    $message = $configEvent['message'];
+    $message = str_replace('%branch%',      stringUtils::displayBranchName($branch->getName()), $message);
+    $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
+
+    if(isset($configEvent['add-links']) && $configEvent['add-links'])
+    {
+      $message .= " : ".$this->generateUrl('fileList', array('branch' => $branch->getId()));
+    }
+
+    $this->send($message);
+
+    return true;
+  }
+
   protected function createCommentNotificationMessage($type, $comment)
   {
     $configEvent = $this->getEventConfig('comment');
@@ -112,20 +134,18 @@ class CampfireNotifier extends BaseNotifier
 
       if(isset($configEvent['add-links']) && $configEvent['add-links'])
       {
-        sfContext::getInstance()->getConfiguration()->loadHelpers(array('Url', 'Tag'));
-
         switch($type)
         {
           case 'branch':
-            $link = " : ".url_for(sprintf('default/fileList?branch=%s#comment_component', $comment->getBranch()->getId()), true);
+            $link = " : ".$this->generateUrl('fileList', array('branch' => $comment->getBranch()->getId(), 'anchor' => 'comment_component'));
             break;
 
           case 'file':
-            $link = " : ".url_for(sprintf('default/file?file=%s#comment_component', $comment->getFileId()), true);
+            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'comment_component'));
             break;
 
           case 'line':
-            $link = " : ".url_for(sprintf('default/file?file=%s#position_%s', $comment->getFileId(), $comment->getPosition()), true);
+            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'position_'.$comment->getPosition()));
             break;
         }
 
