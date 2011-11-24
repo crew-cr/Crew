@@ -67,4 +67,10 @@ propel:
     old_status:                       { type: INTEGER, size: '11', required: true }
     new_status:                       { type: INTEGER, size: '11', required: true }
     created_at:                       { type: timestamp, required: true}
+  configuration:
+    id:                               ~
+    name:                             { type: VARCHAR, size: '50', required: true }
+    value:                            { type: LONGVARCHAR}
+    _uniques:                         { name: [name] }
+  
   

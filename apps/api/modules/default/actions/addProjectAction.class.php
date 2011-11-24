@@ -14,7 +14,8 @@ class addProjectAction extends sfAction
     
     if($projectName && $remote)
     {
-      $repository = sfConfig::get('app_projects_repository') . $projectName;
+      $repositoryRootPath = Configuration::get('repositories_path');
+      $repository = sprintf('%s/%s', $repositoryRootPath, $projectName);
 
       if(!$this->checkLocalRepository($repository, $remote))
       {
