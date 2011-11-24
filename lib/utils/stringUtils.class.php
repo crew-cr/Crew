@@ -61,6 +61,6 @@ class stringUtils {
 
   public static function trimTicketInfos($str)
   {
-    return preg_replace('/^refs #(\d)+ /i', '', $str);
+    return preg_replace('/^refs #(\d)+ (:[ ]*)?/i', '', $str);
   }
 }
