@@ -34,7 +34,7 @@ class Configuration extends BaseConfiguration {
    * @param $value
    * @return void
    */
-  public static function set($name, $value)
+  public static function set($name, $value = null)
   {
     $configuration = ConfigurationPeer::retrieveByName($name);
     
@@ -46,6 +46,21 @@ class Configuration extends BaseConfiguration {
     
     $configuration->setValue($value);
     $configuration->save();
+  }
+  
+  /**
+   * @static
+   * @param $name
+   * @return void
+   */
+  public static function remove($name)
+  {
+    $configuration = ConfigurationPeer::retrieveByName($name);
+    
+    if ($configuration)
+    {
+      $configuration->delete();
+    }
   }
 
 } // Configuration

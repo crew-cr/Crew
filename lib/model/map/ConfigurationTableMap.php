@@ -40,7 +40,7 @@ class ConfigurationTableMap extends TableMap
 		// columns
 		$this->addPrimaryKey('ID', 'Id', 'INTEGER', true, null, null);
 		$this->addColumn('NAME', 'Name', 'VARCHAR', true, 50, null);
-		$this->addColumn('VALUE', 'Value', 'LONGVARCHAR', true, null, null);
+		$this->addColumn('VALUE', 'Value', 'LONGVARCHAR', false, null, null);
 		// validators
 	} // initialize()
 

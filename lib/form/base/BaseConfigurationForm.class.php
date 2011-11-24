@@ -22,7 +22,7 @@ abstract class BaseConfigurationForm extends BaseFormPropel
     $this->setValidators(array(
       'id'    => new sfValidatorChoice(array('choices' => array($this->getObject()->getId()), 'empty_value' => $this->getObject()->getId(), 'required' => false)),
       'name'  => new sfValidatorString(array('max_length' => 50)),
-      'value' => new sfValidatorString(),
+      'value' => new sfValidatorString(array('required' => false)),
     ));
 
     $this->validatorSchema->setPostValidator(

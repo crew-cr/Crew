@@ -70,7 +70,7 @@ propel:
   configuration:
     id:                               ~
     name:                             { type: VARCHAR, size: '50', required: true }
-    value:                            { type: LONGVARCHAR, required: true }
+    value:                            { type: LONGVARCHAR}
     _uniques:                         { name: [name] }
   
   

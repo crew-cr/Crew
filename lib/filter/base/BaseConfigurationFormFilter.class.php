@@ -13,7 +13,7 @@ abstract class BaseConfigurationFormFilter extends BaseFormFilterPropel
   {
     $this->setWidgets(array(
       'name'  => new sfWidgetFormFilterInput(array('with_empty' => false)),
-      'value' => new sfWidgetFormFilterInput(array('with_empty' => false)),
+      'value' => new sfWidgetFormFilterInput(),
     ));
 
     $this->setValidators(array(
