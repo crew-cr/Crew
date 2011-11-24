@@ -27,7 +27,7 @@ class CampfireNotifier extends BaseNotifier
         {
           $message = $configEvent['file_message'];
           $message = str_replace('%file%',        $file->getFilename(), $message);
-          $message = str_replace('%branch%',      stringUtils::displayBranchName($file->getBranch()->getName()), $message);
+          $message = str_replace('%branch%',      $file->getBranch()->__toString(), $message);
           $message = str_replace('%old-status%',  BranchPeer::getBasecampLabelStatus($oldStatus), $message);
           $message = str_replace('%status%',      BranchPeer::getBasecampLabelStatus($file->getStatus()), $message);
           $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
@@ -49,7 +49,7 @@ class CampfireNotifier extends BaseNotifier
         if(isset($configEvent['branch_message']))
         {
           $message = $configEvent['branch_message'];
-          $message = str_replace('%branch%',      stringUtils::displayBranchName($branch->getName()), $message);
+          $message = str_replace('%branch%',      $branch->__toString(), $message);
           $message = str_replace('%old-status%',  BranchPeer::getBasecampLabelStatus($oldStatus), $message);
           $message = str_replace('%status%',      BranchPeer::getBasecampLabelStatus($branch->getStatus()), $message);
           $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
@@ -98,7 +98,7 @@ class CampfireNotifier extends BaseNotifier
     $branch      = $this->arguments['object'];
 
     $message = $configEvent['message'];
-    $message = str_replace('%branch%',      stringUtils::displayBranchName($branch->getName()), $message);
+    $message = str_replace('%branch%',      $branch->__toString(), $message);
     $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
 
     if(isset($configEvent['add-links']) && $configEvent['add-links'])
@@ -118,7 +118,7 @@ class CampfireNotifier extends BaseNotifier
     if(isset($configEvent[$type.'_message']))
     {
       $message = $configEvent[$type.'_message'];
-      $message = str_replace('%branch%',  stringUtils::displayBranchName($comment->getBranch()->getName()), $message);
+      $message = str_replace('%branch%',  $comment->getBranch()->__toString(), $message);
       $message = str_replace('%message%', stringUtils::shorten($comment->getValue(), 40), $message);
       $message = str_replace('%date%',    date('d/m/Y H:i'), $message);
       $message = str_replace('%author%',  $this->subject->getUser()->__toString(), $message);
@@ -126,10 +126,10 @@ class CampfireNotifier extends BaseNotifier
       switch($type)
       {
         case 'line':
-          $message = str_replace('%line%', stringUtils::displayBranchName($comment->getLine()), $message);
+          $message = str_replace('%line%', $comment->getLine(), $message);
 
         case 'file':
-          $message = str_replace('%file%', stringUtils::displayBranchName($comment->getFile()->getFilename()), $message);
+          $message = str_replace('%file%', $comment->getFile()->getFilename(), $message);
       }
 
       if(isset($configEvent['add-links']) && $configEvent['add-links'])

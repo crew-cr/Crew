@@ -24,7 +24,7 @@ class Branch extends BaseBranch
    */
   public function __toString()
   {
-    return stringUtils::displayBranchName($this->getName());
+    return (strpos($this->getName(), 'origin/') === 0) ? substr($this->getName(), 7) : $this->getName();
   }
 
   public function changeStatus($newStatus, $user, $con = null)

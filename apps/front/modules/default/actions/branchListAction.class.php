@@ -31,12 +31,17 @@ class branchListAction extends sfAction
       $modifiedFilesCount = FileQuery::create()->filterByBranchId($branch->getId())->filterByState(FilePeer::MODIFIED)->count();
       $deletedFilesCount = FileQuery::create()->filterByBranchId($branch->getId())->filterByState(FilePeer::DELETED)->count();
 
-      $this->branches[] = array_merge($branch->toArray(), array(
+      $this->branches[] = array(
+        'id' => $branch->getId(),
+        'name' => $branch->__toString(),
+        'status' => $branch->getStatus(),
+        'reviewRequest' => $branch->getReviewRequest(),
+        'lastCommitDesc' => $branch->getLastCommitDesc(),
         'total' => $addedFilesCount + $modifiedFilesCount + $deletedFilesCount,
         'added' => $addedFilesCount,
         'modified' => $modifiedFilesCount,
         'deleted' => $deletedFilesCount
-      ));
+      );
     }
 
     $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $repository->getId());

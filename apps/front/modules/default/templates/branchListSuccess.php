@@ -10,15 +10,15 @@
       <?php foreach ($branches as $branch): ?>
       <tr>
         <td class="review_request">
-        <?php if($branch['ReviewRequest'] === 1) : ?>
+        <?php if($branch['reviewRequest'] === 1) : ?>
           <span class="review_request_icon"></span>
         <?php endif; ?>
         </td>
         <td class="branch_name">
-          <h3><?php echo link_to(stringUtils::displayBranchName($branch['Name']), 'default/fileList', array('query_string' => 'branch='.$branch['Id'])) ?></h3>
+          <h3><?php echo link_to($branch['name'], 'default/fileList', array('query_string' => 'branch='.$branch['id'])) ?></h3>
         </td>
         <td class="commit_desc">
-          <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['LastCommitDesc']), 100) ?>
+          <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['lastCommitDesc']), 100) ?>
         </td>
         <td class="file_infos">
           <?php echo $branch['total'].' files' ?><br />
@@ -27,11 +27,11 @@
           <?php if($branch['deleted']): ?><span class="deleted"><?php echo $branch['deleted'].'-'; ?></span><?php endif; ?>
         </td>
         <td class="status">
-          <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-valid '. ($branch['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
-          <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-invalid '. ($branch['Status'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
+          <?php echo link_to('Valider', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch['id'], 'class' => 'toggle status-valid '. ($branch['status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
+          <?php echo link_to('Invalider', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch['id'], 'class' => 'toggle status-invalid '. ($branch['status'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
         </td>
         <td class="state">
-          <?php echo link_to('Blacklister', 'default/branchBlacklist', array('title' => 'Blacklist branch', 'query_string' => 'branch='.$branch['Id'], 'class' => 'toggle status-blacklist disabled')) ?>
+          <?php echo link_to('Blacklister', 'default/branchBlacklist', array('title' => 'Blacklist branch', 'query_string' => 'branch='.$branch['id'], 'class' => 'toggle status-blacklist disabled')) ?>
         </td>
       </tr>
       <?php endforeach; ?>

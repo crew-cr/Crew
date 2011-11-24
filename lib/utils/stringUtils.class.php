@@ -54,11 +54,6 @@ class stringUtils {
     }
   }
 
-  public static function displayBranchName($branch)
-  {
-    return (strpos($branch, 'origin/') === 0) ? substr($branch, 7) : $branch;
-  }
-
   public static function trimTicketInfos($str)
   {
     return preg_replace('/^refs #(\d)+ (:[ ]*)?/i', '', $str);
