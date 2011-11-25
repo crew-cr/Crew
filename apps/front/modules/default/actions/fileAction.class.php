@@ -18,6 +18,22 @@ class fileAction extends sfAction
     $this->file = FilePeer::retrieveByPK($request->getParameter('file'));
     $this->forward404Unless($this->file, "File not found");
 
+    $this->previousFileId = FileQuery::create()
+      ->select('Id')
+      ->filterByBranchId($this->file->getBranchId())
+      ->filterById($this->file->getId(), \Criteria::LESS_THAN)
+      ->orderById(\Criteria::DESC)
+      ->findOne()
+    ;
+
+    $this->nextFileId = \FileQuery::create()
+      ->select('Id')
+      ->filterByBranchId($this->file->getBranchId())
+      ->filterById($this->file->getId(), \Criteria::GREATER_THAN)
+      ->orderById(\Criteria::ASC)
+      ->findOne()
+    ;
+
     $this->branch = BranchPeer::retrieveByPK($this->file->getBranchId());
     $this->forward404Unless($this->branch, "Branch not found");
 
