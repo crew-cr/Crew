@@ -1,0 +1,284 @@
+@urlCrew: '/crew/images';
+
+@blue: #4183C4;
+@grey: #666666;
+@darkGrey: #333333;
+@lightGrey: #999999;
+
+@smallFont: 11px;
+@normalFont: 13px;
+@largeFont: 16px;
+
+@import "button.less";
+@import "list.less";
+@import "comment.less";
+@import "data.less";
+
+/* Utils functions */
+.radius (@radius: 3px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+.radius-bottom (@radius: 3px) {
+  -webkit-border-bottom-right-radius: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.gradient (@from: #f4f4f4, @to: #ececec, @default: #ececec) {
+  background-color: @default;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@from), to(@to));
+  background-image: -moz-linear-gradient(@from, @to);
+  background-image: -o-linear-gradient(@from, @to);
+  background-image: linear-gradient(@from, @to);
+}
+
+.box-shadow (@x: 0, @y: 0, @blur: 1px, @alpha) {
+  @val: @x @y @blur rgba(0, 0, 0, @alpha);
+  box-shadow:         @val;
+  -webkit-box-shadow: @val;
+  -moz-box-shadow:    @val;
+}
+
+/* Basic elements ui */
+h2 {
+  color: @darkGrey;
+  font-size: @largeFont;
+  text-transform: uppercase;
+  text-shadow: white 1px 1px 0px;
+}
+
+h3 {
+  color: @blue;
+  font-weight: bold;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+
+  &.anchor {
+    padding: 2px;
+    color: #eee;
+    font-size: @normalFont;
+
+    &:hover {
+      color: @grey;
+      text-decoration: underline;
+    }
+  }
+
+  &.disabled {
+    opacity: 0.25;
+    filter: alpha(opacity=25);
+    -webkit-transition: opacity .3s ease-out;
+
+    &:hover {
+      opacity: 0.6;
+      filter: alpha(opacity=60);
+    }
+  }
+
+  &.icon {
+    font-size: @smallFont;
+    font-weight: bold;
+    color: #999;
+    padding-left: 18px;
+
+    &.comment { background: url('@{urlCrew}/comment_icon.png') 0 50% no-repeat; }
+    &.branch { background: url('@{urlCrew}/branch_icon.png') 0 50% no-repeat;}
+  }
+}
+
+img {
+  &.avatar {
+    height: 24px;
+    vertical-align: middle;
+    .radius;
+  }
+}
+
+.right { float: right; }
+.left { float: left; }
+.hidden { display: none; }
+table { width: 100% }
+strong { font-weight: bold; }
+
+/* Crew structure */
+html {
+  height: 100%;
+
+  body {
+    height: 100%;
+    color: @grey;
+    font-size: @normalFont;
+    font-family: helvetica, arial, freesans, clean, sans-serif;
+    background: url("@{urlCrew}/background-v2.png") repeat-x;
+
+    .wrapper {
+      min-height: 100%;
+      margin: 0 auto -90px; /* fixed footer at the bottom of the page */
+
+      .header {
+        width: 945px;
+        margin: 0 auto;
+        padding: 0 15px;
+        height: 91px;
+        line-height: 30px;
+        font-size: @smallFont;
+        color: #333;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+        overflow: hidden;
+
+        h2 {
+          font-size: @largeFont;
+          text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+        }
+
+        .userbox {
+          float: right;
+          padding: 0 5px 0 5px;
+          margin-right: 5px;
+          font-size: @normalFont;
+          border-top: none;
+          .radius-bottom(5px);
+          .gradient (#FCFCFC, #E8E8E8, #F5F5F5);
+          border-color: #EEE;
+          border: 1px solid #E9E9E9;
+          border-top: none;
+          border-bottom-color: whiteSmoke;
+          .box-shadow (0px, 1px, 1px, 0.2);
+          font-weight: bold;
+          color: #4183C4;
+          text-shadow: white 1px 1px 0;
+
+          li {
+            display: inline;
+            border-right: 1px solid #DDD;
+            padding: 10px;
+
+            &.last { border-right: none; }
+
+            &.username {
+              padding-left: 2px;
+              font-weight: bold;
+              color: black;
+
+              img.avatar {
+                height: 20px;
+                margin-right: 3px;
+                border: 1px solid #E1E1E1;
+              }
+            }
+          }
+        }
+
+        #crew_logo {
+          position: relative;
+          width: 145px;
+          height: 50px;
+          margin-top: 12px;
+
+          img {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            -webkit-transition: opacity .25s linear;
+            
+            &:hover {
+              opacity: .0;
+            }
+          }
+        }
+      }
+
+      .site {
+        width: 945px;
+        margin: 0 auto;
+        padding: 0 15px;
+
+        .page {
+          position: relative;
+          display: block;
+          margin: -20px 0 10px -25px;
+          padding: 20px 25px 0;
+          background: url('@{urlCrew}/background-white.png') 0 0 no-repeat;
+
+          #breadcrumb {
+            margin: 5px 0 20px 0;
+            font-size: @largeFont;
+
+            li {
+              display: inline-block;
+              color: black;
+
+              a, select { color: @blue; }
+              &.repository { font-weight: bold; }
+            }
+          }
+
+          .page_body {
+            line-height: 1.4em;
+            margin: 0 auto 15px auto;
+
+            .avatared {
+              color: @blue;
+              margin-bottom: 10px;
+              font-weight: bold;
+            }
+          }
+        }
+      }
+    }
+
+    .footer {
+      position: relative;
+      bottom: 0;
+      color: #636363;
+      font-size: @normalFont;
+      overflow: hidden;
+      background: url('@{urlCrew}/bg_footer_top.png') #F8F8F8 repeat-x;
+      min-height: 64px;
+      margin-top: 20px;
+
+      .site {
+        width: 945px;
+        margin: 0 auto;
+        padding: 0 15px;
+      }
+
+      a { color: @blue; }
+
+      .logoCrew {
+        color: #888;
+        width: auto;
+        height: 90px;
+        margin: 0 0 0 15px;
+        float: left;
+        padding-left: 170px;
+        line-height: 95px;
+        background: url('@{urlCrew}/logoFooter.png') 0 22px no-repeat;
+      }
+    }
+  }
+}
+
+
+
+/* Filtre du context */
+#sfWebDebugBar[id]
+{
+  positino: absolute;
+  bottom:0;
+  right: 0;
+  top: auto;
+}
+
+.push { height: 90px; } /* use for footer position */

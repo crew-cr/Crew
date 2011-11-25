@@ -1,8 +1,8 @@
 <canvas id="outline" width="50" height="700" style="position: fixed;"></canvas>
 <div class="file_bloc">
-  <div class="data">
-    <div class="data_head">
-      <span title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
+  <div class="list">
+    <div class="list_head">
+      <span class="title" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
           <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : 
@@ -14,8 +14,8 @@
             <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-invalid '. ($file->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>
       </div>
     </div>
-    <div class="data_body">
-      <table >
+    <div class="list_body data">
+      <table>
         <tbody>
         <?php $deleledLinesCounter = 0; ?>
         <?php $addedLinesCounter = 0; ?>
@@ -46,8 +46,8 @@
         </tbody>
       </table>
     </div>
-  </div>
-  <div id="comment_component" class="comments_holder">
-    <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
+    <div id="comment_component" class="comments_holder">
+      <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
+    </div>
   </div>
 </div>

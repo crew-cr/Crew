@@ -1,0 +1,198 @@
+.list {
+  border: 1px solid #d8d8d8;
+  font-family: 'Bitstream Vera Sans Mono','Courier New',monospace;
+  margin-bottom: 20px;
+
+  .list_head {
+    border-bottom: 1px solid #ccc;
+    padding: 0 5px;
+    height: 30px;
+    line-height: 30px;
+    font-size: @normalFont;
+    color: @lightGrey;
+    background: url('@{urlCrew}/file_head.gif') 0 0 repeat-x #eee;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
+    overflow: hidden;
+
+    span.title {
+      color: @grey;
+      font-weight: bold;
+    }
+
+    &.icon {
+      background-image: url('@{urlCrew}/icons.png');
+      background-repeat: no-repeat;
+      padding-left: 30px;
+
+      &.status_action { background-position: 6px -294px; }
+      &.comment_board { background-position: 6px 6px; }
+    }
+
+    .status {
+      margin-right: 5px;
+      
+      & > a {
+        display: inline-block;
+        width: 23px;
+        height: 23px;
+        text-indent: 9999px;
+        margin-top: 4px;
+
+        &.status-valid { background: url('@{urlCrew}/accept.gif') 0 0 no-repeat; }
+
+        &.status-invalid { background: url('@{urlCrew}/cancel.gif') 0 0 no-repeat; }
+      }
+    }
+  }
+
+  .list_body {
+
+    &.scrollable {
+      max-height: 228px;
+      overflow-y: scroll;
+    }
+
+    table {
+      width: 100%;
+      color: @blue;
+
+      h3 {
+        display: inline-block;
+
+        a { margin: 0 10px; }
+      }
+
+      tr {
+        vertical-align: middle;
+        border-bottom: 1px solid #EBEBEB;
+        line-height: 24px;
+
+        &.no-border { border: none; }
+        &:nth-child(odd) { background-color: white; }
+        &:hover { background-color: #ffffcc; }
+
+        &.review_request {
+          td.branch_name {
+            background: url('@{urlCrew}/review_request.png') 4px 5px no-repeat;
+            padding-left: 20px;
+          }
+        }
+
+        td {
+          padding: 3px 0;
+
+          &.state {
+            line-height: 24px;
+            padding-left: 6px;
+            width: 26px;
+
+            & > span {
+              display: block;
+              width: 20px;
+              height: 19px;
+              text-indent: -9999px;
+              margin-top: 1px;
+              
+              &.state_A { background: url('@{urlCrew}/file_modes.png') 0 0 no-repeat; }
+              &.state_M { background: url('@{urlCrew}/file_modes.png') 0 -50px no-repeat; }
+              &.state_D { background: url('@{urlCrew}/file_modes.png') 0 -100px no-repeat; }
+            }
+          }
+          
+          &.status {
+            width: 90px;
+            line-height: 24px;
+            padding: 0 10px;
+            text-align: right;
+
+            &.minified {
+              width: 55px;
+            }
+
+            & > a {
+              display: inline-block;
+              width: 23px;
+              height: 23px;
+              text-indent: 9999px;
+              
+              &.status-valid { background: url('@{urlCrew}/accept.gif') 0 0 no-repeat; }
+              &.status-invalid { background: url('@{urlCrew}/cancel.gif') 0 0 no-repeat; }
+              &.status-blacklist { background: url('@{urlCrew}/stop.gif') 0 0 no-repeat; }
+            }
+          }
+
+
+          &.branch_name { white-space: nowrap; }
+
+          &.commit_desc {
+            color: @grey;
+            text-align: left;
+            font-size: @smallFont;
+            font-weight: normal;
+          }
+
+          &.file_infos {
+            color: #777;
+            text-align: center;
+            font-size: @smallFont;
+            width: 180px;
+            background-color: #f5f5f5;
+
+            span {
+              font-weight: bold;
+              background-color: white;
+              border: 1px solid #ccc;
+              .box-shadow (0, 0, 1px, 0.2);
+              padding: 2px 5px 0 5px;
+              .radius (3px);
+
+              &.added { color: #73ab00; }
+              &.modified { color: #4183C4; }
+              &.deleted { color: #c20000; }
+            }
+          }
+
+          &.view_infos {
+            text-align: right;
+
+            a {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &.notifier {
+    .status_info {
+      line-height: 25px;
+      padding: 5px 0 0 5px;
+      background-color: whiteSmoke;
+      border-right: 1px solid #EEE;
+      
+      a { font-weight: bold; }
+      
+      .date {
+        font-size: @smallFont;
+        color: @lightGrey;
+        white-space:nowrap;
+      }
+    }
+
+    .status_content {
+      line-height: 25px;
+      padding: 5px 0 0 5px;
+      
+      .message {
+        color: @grey;
+      }
+
+      .path {
+        font-size: @smallFont;
+        color: @grey;
+        a { color: @blue; }
+      }
+    }
+  }
+}

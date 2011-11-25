@@ -1,7 +1,7 @@
 <?php if (sizeof($statusActions) > 0): ?>
-<div class="list">
-  <div class="list_head status_actions_icon">
-    Status actions list
+<div class="list notifier">
+  <div class="list_head icon status_action">
+    <span class="title">Status actions list</span>
   </div>
   <div class="list_body scrollable" id="project_list">
     <table>
@@ -12,7 +12,7 @@
           <?php echo link_to($statusAction->getAuthorName(), 'user/view', array('query_string' => 'id=' . $statusAction->getUserId())) ?><br/>
           <span class="date"><?php echo $statusAction->getCreatedAt('d/m/Y H:i:s') ?></span>
         </td>
-        <td>
+        <td class="status_content">
           <div class="message"><?php echo htmlspecialchars_decode($statusAction->getMessage()) ?></div>
           <div class="path">
             <?php if (null !== $statusAction->getRepository()): ?><?php echo link_to($statusAction->getRepository(), 'default/branchList', array('query_string' => 'repository=' . $statusAction->getRepositoryId())) ?><?php endif; ?>

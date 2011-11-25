@@ -4,7 +4,7 @@
 <?php include_http_metas() ?>
 <?php include_metas() ?>
 <?php include_title() ?>
-<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="shortcut icon" href="/crew/favicon.ico" />
 <?php include_stylesheets() ?>
 <?php include_javascripts() ?>
 </head>
@@ -14,8 +14,11 @@
       <div class="userbox">
         <?php include_component('default', 'userbox') ?>
       </div>
-      <div>
-        <h2 id="crew_logo"><?php echo link_to('Crew, a code review tool for git projects', 'default/repositoryList') ?></h2>
+      <div id="crew_logo">
+        <a href="<?php echo url_for('default/repositoryList') ?>" title="Crew, a code review tool for git projects">
+          <?php echo image_tag('crew-logo-hover.png') ?>
+          <?php echo image_tag('crew-logo.png') ?>
+        </a>
       </div>
     </div>
     <div class="site">

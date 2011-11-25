@@ -1,6 +1,6 @@
 <div class="list">
   <div class="list_head">
-    File list
+    <span class="title">File list</span>
     <span class="view_files_info">
        :
       added <input type="checkbox" checked id="view_files_A" name="view_files_A">,
@@ -24,10 +24,15 @@
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>
-            <span class="file_comments"><?php echo link_to($file['NbFileComments'].' comment(s)', 'default/file', array('query_string' => 'file='.$file['Id'])) ?></span>
+            <?php echo link_to($file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'], 'class' => 'icon comment', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
           <?php endif; ?>
         </td>
-        <td class="status">
+        <td class="file_infos">
+          999 lines
+          <span class="added" title="99 added lines">99+</span>
+          <span class="deleted" title="900 deleted lines">900-</span>
+        </td>
+        <td class="status minified">
           <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle status-valid '. ($file['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>
           <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle status-invalid '. ($file['Status'] !== BranchPeer::KO ? 'disabled' : ''))) ?>
         </td>
