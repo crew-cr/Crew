@@ -1,0 +1,198 @@
+.form {
+  display: inline-block;
+  width: auto;
+  font-size: @normalFont;
+
+  border: 1px solid #d8d8d8;
+  font-family: 'Bitstream Vera Sans Mono','Courier New',monospace;
+  margin-bottom: 20px;
+
+  .form_head {
+    border-bottom: 1px solid #ccc;
+    padding: 0 5px;
+    height: 30px;
+    line-height: 30px;
+    font-size: @normalFont;
+    color: @lightGrey;
+    background: url('@{urlCrew}/file_head.gif') 0 0 repeat-x #eee;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
+    overflow: hidden;
+
+    span.title {
+      color: @grey;
+      font-weight: bold;
+    }
+  }
+
+  .form_body {
+    margin: 0 5px;
+
+    .flashMessage {
+      margin: 10px 0 0 0;
+    }
+  }
+
+  input, textarea, select {
+    width: 270px;
+    height: 20px;
+    line-height: 20px;
+    margin: 0px;
+    border:1px solid #CDCDCD;
+    font-size: @normalFont;
+
+    .radius(3px);
+
+    :disabled {
+      background: #DDD;
+      text-shadow: 1px 1px 0 #fff;
+    }
+  }
+
+  textarea {
+    min-height: 60px;
+  }
+
+  select {
+    width: 234px;
+    height: 23px;
+    line-height: 23px;
+    background: #FFF;
+    max-width: 234px;
+    &[multiple="multiple"]
+    {
+      height: auto;
+    }
+  }
+
+
+  input {
+    padding: 0px 6px;
+    margin: 0px;
+    background-color: white;
+
+    &[type="checkbox"], &[type="radio"] {
+      width: auto;
+      height: auto;
+      margin-right: 3px;
+      margin-top: 3px;
+      border: none !important;
+    }
+
+    &[type="submit"], &.inputSubmit {
+      width: auto;
+      height: 26px;
+      text-align: left;
+      cursor: pointer;
+      padding: 4px 6px;
+      border:1px solid #CDCDCD;
+    }
+  }
+
+  a {
+    &.img, &.icon {
+      float: right;
+      margin-top: 7px;
+    }
+  }
+
+  label {
+    float: left;
+  }
+
+  // Field du formulaire.
+  .fieldBloc {
+    clear: both;
+    overflow: auto;
+
+    margin: 0;
+    padding: 0;
+
+    padding-top: 14px;
+
+    label, span.label {
+      width: 200px;
+      margin-right: 14px;
+      text-align: right;
+
+      line-height: 20px;
+    }
+    .fieldGroup {
+      float: left;
+      min-width: 270px;
+
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .fieldBlocStep {
+    padding: 6px 0px;
+
+    label {
+      display: inline;
+      margin-right: 14px;
+
+      line-height: 22px;
+    }
+
+    .fieldGroup {
+      float: left;
+
+      margin: 0;
+      padding: 0;
+    }
+
+    .info_error {
+      margin-top: 6px;
+    }
+  }
+
+  // Pied du formulaire
+  .form_footer
+  {
+    clear: both;
+    padding: 14px 6px 7px 6px;
+    text-align: right;
+
+    .form_cancel {
+      position: absolute;
+      left: 14px;
+      bottom: 14px;
+    }
+
+    button {
+      margin-left: 20px;
+    }
+  }
+
+  .info_error {
+    display: block;
+    margin-top: 4px;
+    width: 270px;
+
+    .content {
+      font-size: @normalFont;
+      margin-left: 4px;
+      padding-left:20px;
+      line-height: 20px;
+      color: #f00;
+    }
+  }
+}
+
+.fieldGroup
+{
+  &.radio, &.checkbox
+  {
+    input
+    {
+      float: left;
+      margin-top: 4px;
+      margin-right: 8px;
+    }
+    label
+    {
+      width: auto;
+    }
+  }
+}

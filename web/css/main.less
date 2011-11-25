@@ -13,6 +13,7 @@
 @import "list.less";
 @import "comment.less";
 @import "data.less";
+@import "form.less";
 
 /* Utils functions */
 .radius (@radius: 3px) {
@@ -43,6 +44,34 @@
   box-shadow:         @val;
   -webkit-box-shadow: @val;
   -moz-box-shadow:    @val;
+}
+
+/* Flash messages */
+.flashMessage {
+  line-height: 2em;
+  padding: 0 0.8em;
+  margin: 0 0 1em 0;
+  .radius;
+
+  &.warning {
+    border: 1px solid #FC6C06;
+    background-color: #ffe4d3;
+  }
+
+  &.success {
+    border: 1px solid #73AB00;
+    background-color: #f1ffd3;
+  }
+
+  &.error {
+    border: 1px solid #C20000;
+    background-color: #ffd6d6;
+  }
+
+  &.notice {
+    border: 1px solid @blue;
+    background-color: #d6ebff;
+  }
 }
 
 /* Basic elements ui */
@@ -85,7 +114,9 @@ a {
       filter: alpha(opacity=60);
     }
   }
+}
 
+a, span {
   &.icon {
     font-size: @smallFont;
     font-weight: bold;
@@ -282,3 +313,5 @@ html {
 }
 
 .push { height: 90px; } /* use for footer position */
+
+#admin_project_add { width: 510px; }
