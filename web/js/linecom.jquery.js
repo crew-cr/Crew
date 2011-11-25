@@ -152,7 +152,7 @@
       var commentForm = $('.comment_form', base.bloc);
       var commentContent = commentForm.find('#comment_value').val();
 
-      if(commentContent != '' && confirm('Are you sure you want to close this comment form ?\nYou will loose all your modification if you do.'))
+      if(commentContent == '' || (commentContent != '' && confirm('Are you sure you want to close this comment form ?\nYou will loose all your modification if you do.')))
       {
         if (base.commented) {
           commentForm.hide();
