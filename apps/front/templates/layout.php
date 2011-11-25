@@ -16,8 +16,8 @@
       </div>
       <div id="crew_logo">
         <a href="<?php echo url_for('default/repositoryList') ?>" title="Crew, a code review tool for git projects">
-          <img src="/crew/images/crew-logo-hover.png">
-          <img src="/crew/images/crew-logo.png">
+          <?php echo image_tag('crew-logo-hover.png') ?>
+          <?php echo image_tag('crew-logo.png') ?>
         </a>
       </div>
     </div>

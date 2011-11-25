@@ -10,7 +10,7 @@
     line-height: 30px;
     font-size: @normalFont;
     color: @lightGrey;
-    background: url('/crew/images/file_head.gif') 0 0 repeat-x #eee;
+    background: url('@{urlCrew}/file_head.gif') 0 0 repeat-x #eee;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
     overflow: hidden;
 
@@ -20,7 +20,7 @@
     }
 
     &.icon {
-      background-image: url('/crew/images/icons.png');
+      background-image: url('@{urlCrew}/icons.png');
       background-repeat: no-repeat;
       padding-left: 30px;
 
@@ -38,9 +38,9 @@
         text-indent: 9999px;
         margin-top: 4px;
 
-        &.status-valid { background: url('/crew/images/accept.gif') 0 0 no-repeat; }
+        &.status-valid { background: url('@{urlCrew}/accept.gif') 0 0 no-repeat; }
 
-        &.status-invalid { background: url('/crew/images/cancel.gif') 0 0 no-repeat; }
+        &.status-invalid { background: url('@{urlCrew}/cancel.gif') 0 0 no-repeat; }
       }
     }
   }
@@ -73,7 +73,7 @@
 
         &.review_request {
           td.branch_name {
-            background: url('/crew/images/review_request.png') 4px 5px no-repeat;
+            background: url('@{urlCrew}/review_request.png') 4px 5px no-repeat;
             padding-left: 20px;
           }
         }
@@ -93,9 +93,9 @@
               text-indent: -9999px;
               margin-top: 1px;
               
-              &.state_A { background: url('/crew/images/file_modes.png') 0 0 no-repeat; }
-              &.state_M { background: url('/crew/images/file_modes.png') 0 -50px no-repeat; }
-              &.state_D { background: url('/crew/images/file_modes.png') 0 -100px no-repeat; }
+              &.state_A { background: url('@{urlCrew}/file_modes.png') 0 0 no-repeat; }
+              &.state_M { background: url('@{urlCrew}/file_modes.png') 0 -50px no-repeat; }
+              &.state_D { background: url('@{urlCrew}/file_modes.png') 0 -100px no-repeat; }
             }
           }
           
@@ -115,9 +115,9 @@
               height: 23px;
               text-indent: 9999px;
               
-              &.status-valid { background: url('/crew/images/accept.gif') 0 0 no-repeat; }
-              &.status-invalid { background: url('/crew/images/cancel.gif') 0 0 no-repeat; }
-              &.status-blacklist { background: url('/crew/images/stop.gif') 0 0 no-repeat; }
+              &.status-valid { background: url('@{urlCrew}/accept.gif') 0 0 no-repeat; }
+              &.status-invalid { background: url('@{urlCrew}/cancel.gif') 0 0 no-repeat; }
+              &.status-blacklist { background: url('@{urlCrew}/stop.gif') 0 0 no-repeat; }
             }
           }
 
