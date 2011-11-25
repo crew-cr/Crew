@@ -34,6 +34,7 @@ fileContentSuccess:
     - vendor/syntaxHighlighter/brush/shBrushSql.js
     - vendor/syntaxHighlighter/brush/shBrushVb.js
     - vendor/syntaxHighlighter/brush/shBrushXml.js
+    - syntaxHighlighter/brush/shBrushYaml.js
 fileListSuccess:
   javascripts:
     - viewFilesInfo.js
