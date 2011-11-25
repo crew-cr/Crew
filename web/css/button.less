@@ -1,0 +1,163 @@
+button {
+  position: relative;
+  overflow: visible;
+  display: inline-block;
+  padding: 0.5em 1em;
+  border: 1px solid #d4d4d4;
+  margin: 0;
+  text-decoration: none;
+  text-shadow: 1px 1px 0 #fff;
+  font:11px/normal sans-serif;
+  color: @darkGrey;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  .gradient (#f4f4f4, #ececec, #ececec);
+  .radius(0.2em);
+  /* IE hacks */
+  zoom: 1;
+  display: inline;
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  &.no-marge {
+    margin: 0 0;
+  }
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active {
+    border-color: #3072b3;
+    border-bottom-color: #2a65a0;
+    text-decoration: none;
+    text-shadow: -1px -1px 0 rgba(0,0,0,0.3);
+    color: #fff;
+    .gradient (#599bdc, #3072b3, #3C8DDE);
+  }
+
+  &:active,
+  &.active {
+    border-color: #2a65a0;
+    border-bottom-color: #3884CF;
+    .gradient (#3072b3, #599bdc, #3072b3);
+  }
+
+  &.primary {
+    font-weight: bold;
+  }
+
+  &.danger {
+    color: #900;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: #b53f3a;
+      border-bottom-color: #a0302a;
+      color: #fff;
+      .gradient (#dc5f59, #b33630, #dc5f59);
+    }
+
+    &:active,
+    &.active {
+      border-color: #a0302a;
+      border-bottom-color: #bf4843;
+      .gradient (#b33630, #dc5f59, #b33630);
+    }
+  }
+
+  &.safe {
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: #686868;
+      border-bottom-color: #767676;
+      color: #fff;
+      .gradient (#767676, #9e9e9e, #767676);
+    }
+
+    &:active,
+    &.active {
+      border-color: #767676;
+      border-bottom-color: #686868;
+      .gradient (#767676, #767676, #9e9e9e);
+    }
+  }
+
+  &.icon:before {
+    content: "";
+    position: relative;
+    top: 1px;
+    float:left;
+    width: 12px;
+    height: 12px;
+    margin: 0 0.75em 0 -0.25em;
+    background: url('/crew/images/gh-icons.png') 0 99px no-repeat;
+  }
+
+  &.comment
+    &.icon {
+      &:before { background-position: 0 -132px; }
+
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -132px;
+      }
+  }
+
+  &.loop
+    &.icon {
+      &:before { background-position: 0 -216px; }
+
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -216px;
+      }
+  }
+
+  &.fork {
+    &.icon {
+      &:before { background-position: 0 -144px; }
+
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -144px;
+      }
+    }
+  }
+
+  &.remove {
+    &.icon {
+      &:before { background-position: 0 -60px; }
+
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -60px;
+      }
+    }
+  }
+
+  &.chat {
+    &.icon {
+      &:before { background-position: 0 -96px; }
+
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -96px;
+      }
+    }
+  }
+}

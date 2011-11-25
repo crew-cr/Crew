@@ -14,8 +14,11 @@
       <div class="userbox">
         <?php include_component('default', 'userbox') ?>
       </div>
-      <div>
-        <h2 id="crew_logo"><?php echo link_to('Crew, a code review tool for git projects', 'default/repositoryList') ?></h2>
+      <div id="crew_logo">
+        <a href="<?php echo url_for('default/repositoryList') ?>" title="Crew, a code review tool for git projects">
+          <img src="/crew/images/crew-logo-hover.png">
+          <img src="/crew/images/crew-logo.png">
+        </a>
       </div>
     </div>
     <div class="site">

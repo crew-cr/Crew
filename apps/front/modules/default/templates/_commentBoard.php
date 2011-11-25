@@ -1,9 +1,9 @@
 <?php if (sizeof($commentBoards) > 0): ?>
-<div class="list">
-  <div class="list_head comment_board_icon">
-    Comments list
+<div class="list notifier">
+  <div class="list_head icon comment_board">
+    <span class="title">Comments list</span>
   </div>
-  <div class="list_body scrollable" id="project_list">
+  <div class="list_body scrollable" id="comment_list">
     <table>
       <?php foreach ($commentBoards as $commentBoard): ?>
       <tr>
@@ -12,7 +12,7 @@
           <?php echo link_to($commentBoard['UserName'], 'user/view', array('query_string' => 'id=' . $commentBoard['UserId'])) ?><br/>
           <span class="date"><?php echo $commentBoard['CreatedAt'] ?></span>
         </td>
-        <td>
+        <td class="status_content">
           <div class="message"><?php echo $commentBoard['Message'] ?></div>
           <div class="path">
             <?php if (!empty($commentBoard['ProjectId'])): ?><?php echo link_to($commentBoard['ProjectName'], 'default/branchList', array('query_string' => 'repository=' . $commentBoard['ProjectId'])) ?><?php endif; ?>

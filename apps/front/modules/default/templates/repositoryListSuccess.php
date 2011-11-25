@@ -9,11 +9,8 @@
         <td>
           <h3><?php echo link_to($repository['Name'], 'default/branchList', array('query_string' => 'repository='.$repository['Id'])) ?></h3>
         </td>
-        <td>
-          <div class="view_infos">
-            <span class="branch_icon"></span>
-            <?php echo link_to($repository['NbBranches'].' branch(es)', 'default/branchList', array('query_string' => 'repository='.$repository['Id'])) ?>
-          </div>
+        <td class="view_infos">
+          <?php echo link_to($repository['NbBranches'].' branch(es)', 'default/branchList', array('query_string' => 'repository='.$repository['Id'], 'class' => 'icon branch')) ?>
         </td>
       </tr>
       <?php endforeach; ?>

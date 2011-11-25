@@ -10,6 +10,8 @@ $(document).ready(function() {
           .addClass('disabled')
         ;
 
+        console.log(json);
+
         if (json.toggleState == 'blacklisted')
         {
           $this
