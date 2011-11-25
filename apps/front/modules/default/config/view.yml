@@ -1,6 +1,15 @@
 fileSuccess:
   javascripts:
     - linecom.jquery.js
+fileContentSuccess:
+  stylesheets:
+    - syntaxHighlighter/shCore.css
+    - syntaxHighlighter/shCoreDefault.css
+  javascripts:
+    - vendor/syntaxHighlighter/XRegExp.js
+    - vendor/syntaxHighlighter/shCore.js
+    - vendor/syntaxHighlighter/shAutoloader.js
+    - vendor/syntaxHighlighter/brush/shBrushPhp.js
 fileListSuccess:
   javascripts:
     - viewFilesInfo.js
