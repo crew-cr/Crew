@@ -52,6 +52,7 @@ class CommentTableMap extends TableMap
 ));
 		$this->addColumn('COMMIT', 'Commit', 'VARCHAR', true, 50, null);
 		$this->addColumn('VALUE', 'Value', 'LONGVARCHAR', true, null, null);
+		$this->addColumn('ROOT_COMMENT_ID', 'RootCommentId', 'INTEGER', false, 11, null);
 		$this->addColumn('CREATED_AT', 'CreatedAt', 'TIMESTAMP', true, null, null);
 		$this->addColumn('UPDATED_AT', 'UpdatedAt', 'TIMESTAMP', true, null, null);
 		// validators
@@ -63,8 +64,8 @@ class CommentTableMap extends TableMap
 	public function buildRelations()
 	{
 		$this->addRelation('sfGuardUser', 'sfGuardUser', RelationMap::MANY_TO_ONE, array('user_id' => 'id', ), null, null);
-		$this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), null, null);
-		$this->addRelation('File', 'File', RelationMap::MANY_TO_ONE, array('file_id' => 'id', ), null, null);
+		$this->addRelation('Branch', 'Branch', RelationMap::MANY_TO_ONE, array('branch_id' => 'id', ), 'CASCADE', 'RESTRICT');
+		$this->addRelation('File', 'File', RelationMap::MANY_TO_ONE, array('file_id' => 'id', ), 'CASCADE', 'RESTRICT');
 	} // buildRelations()
 
 	/**

@@ -21,13 +21,14 @@ propel:
     _attributes:
     id:                               ~
     user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id }
-    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id }
+    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
+    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     position:                         { type: INTEGER, size: '11', required: false }
     line:                             { type: INTEGER, size: '11', required: false }
     type:                             { type: ENUM, valueSet: 'branch, file, line' }
     commit:                           { type: VARCHAR, size: '50', required: true }
     value:                            { type: LONGVARCHAR, required: true }
+    root_comment_id:                  { type: INTEGER, size: '11', required: false }
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }
@@ -37,6 +38,9 @@ propel:
     branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     state:                            { type: CHAR, size: '1', required: true }
     filename:                         { type: VARCHAR, size: '255', required: true }
+    nb_added_files:                   { type: INTEGER, size: '11', required: false }
+    nb_modified_files:                { type: INTEGER, size: '11', required: false }
+    nb_deleted_files:                 { type: INTEGER, size: '11', required: false }
     last_change_commit:               { type: VARCHAR, size: '50', required: false }
     last_change_commit_desc:          { type: VARCHAR, size: '255', required: false }
     last_change_commit_user:          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }
@@ -72,5 +76,3 @@ propel:
     name:                             { type: VARCHAR, size: '50', required: true }
     value:                            { type: LONGVARCHAR}
     _uniques:                         { name: [name] }
-  
-  
