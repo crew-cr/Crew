@@ -11,6 +11,8 @@ class repositoryListAction extends sfAction
 {
   public function execute($request)
   {
+    $this->form = new RepositoryForm();
+
     $repositories = RepositoryQuery::create()->find();
 
     $this->repositories = array();
@@ -21,7 +23,7 @@ class repositoryListAction extends sfAction
         ->filterByIsBlacklisted(0)
         ->count()
       ;
-      
+
       $this->repositories[] = array_merge($repository->toArray(), array('NbBranches' => $branchesCount));
     }
   }
