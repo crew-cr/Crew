@@ -30,7 +30,7 @@ class FilePeer extends BaseFilePeer {
    */
   public static function synchronize(Branch $branch)
   {
-    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(),$branch->getCommitReference(), $branch->getLastCommit());
+    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(), $branch->getCommitReference(), $branch->getLastCommit());
 
     $filesModel = FileQuery::create()
       ->filterByBranchId($branch->getId())
@@ -52,7 +52,10 @@ class FilePeer extends BaseFilePeer {
           $fileModel->setStatus(BranchPeer::A_TRAITER)
             ->setLastChangeCommit($lastChangeCommit)
             ->setCommitStatusChanged($lastChangeCommit)
-            ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"));
+            ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
+            ->setNbAddedFiles($filesGit[$fileModel->getFilename()]['added-lines'])
+            ->setNbDeletedFiles($filesGit[$fileModel->getFilename()]['deleted-lines'])
+          ;
         }
         $fileModel->save();
       }
@@ -70,6 +73,8 @@ class FilePeer extends BaseFilePeer {
         ->setBranchId($branch->getId())
         ->setLastChangeCommit($lastChangeCommit)
         ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
+        ->setNbAddedFiles($fileGit['added-lines'])
+        ->setNbDeletedFiles($fileGit['deleted-lines'])
         ->save()
       ;
     }

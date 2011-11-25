@@ -28,9 +28,9 @@
           <?php endif; ?>
         </td>
         <td class="file_infos">
-          999 lines
-          <span class="added" title="99 added lines">99+</span>
-          <span class="deleted" title="900 deleted lines">900-</span>
+          lines
+          <?php if($file['NbAddedFiles'] > 0): ?><span class="added" title="<?php echo $file['NbAddedFiles'] ?> added lines"><?php echo $file['NbAddedFiles'] ?>+</span><?php endif; ?>
+          <?php if($file['NbDeletedFiles'] > 0): ?><span class="deleted" title="<?php echo $file['NbDeletedFiles'] ?> deleted lines"><?php echo $file['NbDeletedFiles'] ?>-</span><?php endif; ?>
         </td>
         <td class="status minified">
           <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle status-valid '. ($file['Status'] !== BranchPeer::OK ? 'disabled' : ''))) ?>

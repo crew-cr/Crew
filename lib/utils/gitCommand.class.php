@@ -70,13 +70,29 @@ class GitCommand
     $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --name-status', $gitDir,  $referenceCommit, $lastCommit);
     exec($cmd, $results);
 
-    $diffFiles = array();
+    $cmd = sprintf('git --git-dir="%s/.git" log %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
+    exec($cmd, $lineResults);
 
+    $linesInfos = array();
+    foreach($lineResults as $line)
+    {
+      $infos = explode(' ', $line);
+      if(count($infos) == 3)
+      {
+        $linesInfos[$infos[2]] = array($infos[0], $infos[1]);
+      }
+    }
+
+    $diffFiles = array();
     foreach($results as $result)
     {
-      $diffFiles[substr($result,2)] = array(
+      $filename = substr($result, 2);
+
+      $diffFiles[$filename] = array(
         'state' => substr($result,0, 1),
-        'filename' => substr($result,2)
+        'filename' => $filename,
+        'added-lines' => (isset($linesInfos[$filename])) ? $linesInfos[$filename][0] : '',
+        'deleted-lines' => (isset($linesInfos[$filename])) ? $linesInfos[$filename][1] : ''
       );
     }
 
