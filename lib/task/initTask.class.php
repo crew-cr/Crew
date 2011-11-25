@@ -18,7 +18,7 @@ class initTask extends sfBaseTask
 The [init|INFO] task does things.
 Call it with:
 
-  [php symfony init|INFO]
+  [php symfony crew:init|INFO]
 EOF;
   }
 
