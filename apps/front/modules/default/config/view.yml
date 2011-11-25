@@ -3,7 +3,6 @@ fileSuccess:
     - linecom.jquery.js
 fileContentSuccess:
   stylesheets:
-    - syntaxHighlighter/shCore.css
     - syntaxHighlighter/shCoreDefault.css
   javascripts:
     - vendor/syntaxHighlighter/XRegExp.js

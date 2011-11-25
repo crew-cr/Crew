@@ -8,9 +8,7 @@
         </li>
       </ul>
     </div>
-    <div class="data_body">
-      <pre class="brush: <?php echo $fileExtension ?>"><?php echo $fileContent; ?></pre>
-  </div>
+    <pre class="brush: <?php echo $fileExtension ?>"><?php echo $fileContent; ?><?php echo $fileContent; ?><?php echo $fileContent; ?><?php echo $fileContent; ?><?php echo $fileContent; ?><?php echo $fileContent; ?></pre>
 </div>
 
 <script type="text/javascript">
