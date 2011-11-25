@@ -15,7 +15,7 @@
       </div>
       <ul class="right actions">
         <li>
-          <?php echo link_to('View file @ <code>1f83b9f</code>', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
         </li>
       </ul>
     </div>
