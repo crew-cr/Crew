@@ -32,9 +32,8 @@
     <div class="push"></div>
   </div>
   <div class="footer">
-      <div class="site">
-        <div class="logoCrew">by <a href="http://team-fusion.pmsipilot.com" title="Team Fusion">Team Fusion</a> from <a href="http://www.pmsipilot.com/" title="PMSIpilot">PMSIpilot</a>.</div>
-      </div>
+    <div class="site">
+      <div class="logoCrew">by <a href="http://team-fusion.pmsipilot.com" title="Team Fusion">Team Fusion</a> from <a href="http://www.pmsipilot.com/" title="PMSIpilot">PMSIpilot</a>.</div>
     </div>
   </div>
 </body>
