@@ -6,10 +6,10 @@ $(document).ready(function() {
       type: "POST",
       url: $this.attr('href'),
       success: function(json) {
-        $('.toggle', $this.parent('.status'))
-          .addClass('disabled')
+        $('button', $this.parent('button').parent('.status'))
+          .removeClass('enabled')
         ;
-
+        
         if (json.toggleState == 'blacklisted')
         {
           $this
@@ -20,11 +20,11 @@ $(document).ready(function() {
         }
         else if (json.toggleState == 'enabled')
         {
-          $this.removeClass('disabled');
+          $this.parent('button').addClass(json.toggleState);
         }
-        else
+        else if (json.toggleState == 'disabled')
         {
-          $this.addClass(json.toggleState);
+          $this.parent('button').removeClass(json.toggleState);
         }
       }
     });

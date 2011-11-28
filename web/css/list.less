@@ -104,14 +104,10 @@
           }
           
           &.status {
-            width: 90px;
+            width: 110px;
             line-height: 24px;
             padding: 0 10px;
             text-align: right;
-
-            &.minified {
-              width: 55px;
-            }
 
             & > a {
               display: inline-block;
@@ -123,6 +119,10 @@
               &.status-valid { background: url('@{urlCrew}/accept.gif') 0 0 no-repeat; }
               &.status-invalid { background: url('@{urlCrew}/cancel.gif') 0 0 no-repeat; }
               &.status-blacklist { background: url('@{urlCrew}/stop.gif') 0 0 no-repeat; }
+            }
+
+            &.minified {
+              width: 70px;
             }
           }
 
@@ -175,6 +175,12 @@
           }
         }
       }
+    }
+  }
+
+  #file_list {
+    h3 {
+      font-weight: normal;
     }
   }
 

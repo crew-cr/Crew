@@ -23,6 +23,7 @@ default:
     - toggleState.js
     - context.js
     - commentGlobal.js
+    - button.js
 
   has_layout:     true
   layout:         layout

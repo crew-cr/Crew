@@ -18,12 +18,21 @@ button {
   zoom: 1;
   display: inline;
 
+  &.only-icon {
+    a {
+      display: inline-block;
+      text-indent: -5000px;
+    }
+
+    padding: 0.5em 0 0.5em 1em;
+  }
+
   a:hover {
     text-decoration: none;
   }
 
   &.no-marge {
-    margin: 0 0;
+    margin: 0!important;
   }
 
   &::-moz-focus-inner {
@@ -31,6 +40,7 @@ button {
     border: 0;
   }
 
+  &.enabled,
   &:hover,
   &:focus,
   &:active,
@@ -57,6 +67,7 @@ button {
   &.danger {
     color: #900;
 
+    &.enabled,
     &:hover,
     &:focus,
     &:active {
@@ -74,7 +85,29 @@ button {
     }
   }
 
+  &.success {
+    color: #009906;
+
+    &.enabled,
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: #39b53b;
+      border-bottom-color: #29a02b;
+      color: #fff;
+      .gradient (#58dc5e, #2fb339, #58dc5e);
+    }
+
+    &:active,
+    &.active {
+      border-color: #29a032;
+      border-bottom-color: #43bf48;
+      .gradient (#2fb339, #58dc5e, #2fb339);
+    }
+  }
+
   &.safe {
+    &.enabled,
     &:hover,
     &:focus,
     &:active {
@@ -107,6 +140,7 @@ button {
     &.icon {
       &:before { background-position: 0 -132px; }
 
+      &.enabled:before,
       &:hover:before,
       &:focus:before,
       &:active:before {
@@ -118,6 +152,7 @@ button {
     &.icon {
       &:before { background-position: 0 -216px; }
 
+      &.enabled:before,
       &:hover:before,
       &:focus:before,
       &:active:before {
@@ -129,6 +164,7 @@ button {
     &.icon {
       &:before { background-position: 0 -144px; }
 
+      &.enabled:before,
       &:hover:before,
       &:focus:before,
       &:active:before {
@@ -141,6 +177,7 @@ button {
     &.icon {
       &:before { background-position: 0 -60px; }
 
+      &.enabled:before,
       &:hover:before,
       &:focus:before,
       &:active:before {
@@ -153,10 +190,40 @@ button {
     &.icon {
       &:before { background-position: 0 -96px; }
 
+      &.enabled:before,
       &:hover:before,
       &:focus:before,
       &:active:before {
         background-position: -12px -96px;
+      }
+    }
+  }
+
+  &.like {
+    &.icon {
+      &:before {
+        background-position: 0 -372px;
+        top: 0px;
+      }
+
+      &.enabled:before,
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -372px;
+      }
+    }
+  }
+
+  &.dislike {
+    &.icon {
+      &:before { background-position: 0 -384px; }
+
+      &.enabled:before,
+      &:hover:before,
+      &:focus:before,
+      &:active:before {
+        background-position: -12px -384px;
       }
     }
   }

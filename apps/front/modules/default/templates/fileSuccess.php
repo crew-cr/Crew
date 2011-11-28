@@ -7,15 +7,13 @@
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
           <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> :
         <?php endif; ?>
-        <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
+        <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 70) ?>
       </span>
-      <div class="right status">
-        <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-valid '. ($file->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
-        <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-invalid '. ($file->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>
-      </div>
       <ul class="right actions">
-        <li>
-          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+        <li class="status">
+          <button class="icon success like <?php echo $file->getStatus() === BranchPeer::OK ? 'enabled' : ''?>"><?php echo link_to('Validated', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle')) ?></button>
+          <button class="icon danger dislike <?php echo $file->getStatus() === BranchPeer::KO ? 'enabled' : ''?>"><?php echo link_to('Unvalidated', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle')) ?></button>
+          <button><?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?></button>
         </li>
       </ul>
     </div>
@@ -54,9 +52,13 @@
     <div id="comment_component" class="comments_holder">
       <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
     </div>
-    <div class="navigation_links">
-      <?php echo (null === $previousFileId) ? '' : link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
-      <?php echo (null === $nextFileId) ? '' : link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
-    </div>
+  </div>
+  <div class="navigation_links">
+    <?php if (null !== $previousFileId): ?>
+      <button><?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?></button>
+    <?php endif; ?>
+    <?php if (null !== $nextFileId): ?>
+      <button class="right"><?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?></button>
+    <?php endif; ?>
   </div>
 </div>
