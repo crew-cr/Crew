@@ -5,7 +5,7 @@
       <span class="title" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
-          <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> : 
+          <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> :
         <?php endif; ?>
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
       </span>
@@ -48,6 +48,10 @@
     </div>
     <div id="comment_component" class="comments_holder">
       <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
+    </div>
+    <div class="navigation_links">
+      <?php echo (null === $previousFileId) ? '' : link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
+      <?php echo (null === $nextFileId) ? '' : link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
     </div>
   </div>
 </div>
