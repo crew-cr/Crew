@@ -14,12 +14,14 @@ default:
 
   stylesheets:
     - reset.min.css
+    - vendor/jquery.qtip.min.css
     - main.less: { rel: stylesheet/less }
 
   javascripts:
     - vendor/less-1.1.5.min.js
-    - vendor/jquery/jquery-1.6.4.min.js
+    - vendor/jquery-1.6.4.min.js
     - vendor/jquery.fracs.js
+    - vendor/jquery.qtip.min.js
     - toggleState.js
     - context.js
     - commentGlobal.js
