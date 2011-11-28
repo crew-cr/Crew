@@ -10,9 +10,14 @@
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 110) ?>
       </span>
       <div class="right status">
-            <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-valid '. ($file->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
-            <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-invalid '. ($file->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>
+        <?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-valid '. ($file->getStatus() !== BranchPeer::OK ? 'disabled' : ''))) ?>
+        <?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file->getId(), 'class' => 'toggle status-invalid '. ($file->getStatus() !== BranchPeer::KO ? 'disabled' : ''))) ?>
       </div>
+      <ul class="right actions">
+        <li>
+          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+        </li>
+      </ul>
     </div>
     <div class="list_body data">
       <table>

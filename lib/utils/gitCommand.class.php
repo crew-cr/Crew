@@ -107,6 +107,24 @@ class GitCommand
    * @param string $filename
    * @return string
    */
+  public static function getShowFile($gitDir, $currentCommit, $filename)
+  {
+    self::fetch($gitDir);
+
+    $cmd = sprintf('git --git-dir="%s/.git" show %s:%s', $gitDir, $currentCommit, $filename);
+    exec($cmd, $fileContent);
+
+    return implode(PHP_EOL, $fileContent);
+  }
+
+  /**
+   * @static
+   * @param string $gitDir
+   * @param string $currentCommit
+   * @param string $referenceCommit
+   * @param string $filename
+   * @return string
+   */
   public static function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename)
   {
     self::fetch($gitDir);
