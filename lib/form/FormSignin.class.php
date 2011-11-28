@@ -7,5 +7,7 @@ class FormSignin extends BasesfGuardFormSignin
     parent::configure();
     
     $this->validatorSchema->setPostValidator(new ValidatorUser());
+
+    $this->widgetSchema->setFormFormatterName('custom');
   }
 }

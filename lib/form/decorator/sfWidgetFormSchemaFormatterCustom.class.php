@@ -17,7 +17,7 @@ class sfWidgetFormSchemaFormatterCustom extends \sfWidgetFormSchemaFormatter
   protected $helpFormat = '%help%';
   protected $errorRowFormat = "\n<div class='box error'>%errors%</div>\n";
   protected $errorListFormatInARow = '%errors%';
-  protected $errorRowFormatInARow = '<span class="iconContainer info_error error_%field_id%"><span class="icon imgError"></span><span class="content">%error%</span></span>';
+  protected $errorRowFormatInARow = '<span class="iconContainer info_error error_%field_id%"><span class="content">%error%</span></span>';
   protected $namedErrorRowFormatInARow = "%name%: %error%";
   protected $decoratorFormat = "%content%";
 

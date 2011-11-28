@@ -26,7 +26,6 @@ class RepositoryForm extends BaseRepositoryForm
       'remote' => new sfValidatorUrl(array('trim' => true), array('required' => 'The remote url field is required.', 'invalid' => 'The remote url field is not an url')),
     ));
 
-
     $this->widgetSchema->setFormFormatterName('custom');
   }
 }
