@@ -8,8 +8,8 @@
       deleted <input type="checkbox" checked id="view_files_D" name="view_files_D">
     </span>
     <div class="right status">
-      <button title="Validate <strong><?php echo $branch->getName() ?></strong> branch" class="tooltip icon success like only-icon <?php echo $branch->getStatus() === BranchPeer::OK ? 'enabled' : '' ?>"><?php echo link_to('Validate branch', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
-      <button title="Invalidate <strong><?php echo $branch->getName() ?></strong> branch" class="tooltip icon danger dislike only-icon <?php echo $branch->getStatus() === BranchPeer::KO ? 'enabled' : '' ?>"><?php echo link_to('Invalidate branch', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
+      <button title="Validate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon success like only-icon <?php echo $branch->getStatus() === BranchPeer::OK ? 'enabled' : '' ?>"><?php echo link_to('Validate branch', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
+      <button title="Invalidate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon danger dislike only-icon <?php echo $branch->getStatus() === BranchPeer::KO ? 'enabled' : '' ?>"><?php echo link_to('Invalidate branch', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
     </div>
   </div>
   <div class="list_body" id="file_list">
@@ -33,8 +33,8 @@
           <?php if($file['NbDeletedFiles'] > 0): ?><span class="deleted" title="<?php echo $file['NbDeletedFiles'] ?> deleted lines"><?php echo $file['NbDeletedFiles'] ?>-</span><?php endif; ?>
         </td>
         <td class="status minified">
-          <button title="Validate <strong><?php echo $file['Filename'] ?></strong> file" class="tooltip icon success like only-icon <?php echo $file['Status'] === BranchPeer::OK ? 'enabled' : ''?>"><?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
-          <button title="Invalidate <strong><?php echo $file['Filename'] ?></strong> file" class="tooltip icon danger dislike only-icon <?php echo $file['Status'] === BranchPeer::KO ? 'enabled' : ''?>"><?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
+          <button title="Validate file" class="tooltip icon success like only-icon <?php echo $file['Status'] === BranchPeer::OK ? 'enabled' : ''?>"><?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
+          <button title="Invalidate file" class="tooltip icon danger dislike only-icon <?php echo $file['Status'] === BranchPeer::KO ? 'enabled' : ''?>"><?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
         </td>
       </tr>
       <?php endforeach; ?>

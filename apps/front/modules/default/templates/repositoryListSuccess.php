@@ -1,6 +1,6 @@
 <div class="list">
   <div class="list_head">
-    Project list
+    <span class="title">Project list</span>
   </div>
   <div class="list_body" id="project_list">
     <table>

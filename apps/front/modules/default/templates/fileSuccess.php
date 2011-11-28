@@ -2,11 +2,13 @@
 <div class="file_bloc">
   <div class="list">
     <div class="list_head">
-      <span class="title" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
+      <span class="title">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
-          <strong><?php echo $file->getsfGuardUser()->getProfile()->__toString() ?></strong> :
+          <?php echo $file->getsfGuardUser()->getProfile()->__toString() ?> :
         <?php endif; ?>
+      </span>
+      <span class="tooltip" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 70) ?>
       </span>
       <ul class="right actions">
