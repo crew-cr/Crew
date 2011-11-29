@@ -17,7 +17,7 @@
           <div class="path">
             <?php if (!empty($commentBoard['ProjectId'])): ?><?php echo link_to($commentBoard['ProjectName'], 'default/branchList', array('query_string' => 'repository=' . $commentBoard['ProjectId'])) ?><?php endif; ?>
             <?php if (!empty($commentBoard['BranchId'])): ?>&gt; <?php echo link_to($commentBoard['BranchName'], 'default/fileList', array('query_string' => 'branch=' . $commentBoard['BranchId'])) ?><?php endif; ?>
-            <?php if (!empty($commentBoard['FileId'])): ?>&gt; <?php echo link_to(StringUtils::lshorten($commentBoard['FileName'], 40), 'default/file', array('query_string' => 'file=' . $commentBoard['FileId'], 'title' => $commentBoard['FileName'], 'class' => 'tooltip')) ?><?php endif; ?>
+            <?php if (!empty($commentBoard['FileId'])): ?>&gt; <?php echo link_to(stringUtils::lshorten($commentBoard['FileName'], 40), 'default/file', array('query_string' => 'file=' . $commentBoard['FileId'], 'title' => $commentBoard['FileName'], 'class' => 'tooltip')) ?><?php endif; ?>
             <?php if (!empty($commentBoard['Position'])): ?>&gt; <?php echo link_to(sprintf('line %s', $commentBoard['Line']), 'default/file', array('query_string' => sprintf('file=%s#position_%s', $commentBoard['FileId'], $commentBoard['Position']))) ?><?php endif; ?>
           </div>
         </td>
