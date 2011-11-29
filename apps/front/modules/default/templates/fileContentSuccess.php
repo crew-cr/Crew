@@ -12,5 +12,5 @@
 </div>
 
 <script type="text/javascript">
-SyntaxHighlighter.all();
+  SyntaxHighlighter.all();
 </script>
