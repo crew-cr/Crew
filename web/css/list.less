@@ -59,8 +59,6 @@
 
       h3 {
         display: inline-block;
-
-        a { margin: 0 10px; }
       }
 
       tr {
@@ -75,19 +73,19 @@
         &.review_request {
           td.branch_name {
             background: url('@{urlCrew}/review_request.png') 4px 5px no-repeat;
-            padding-left: 20px;
+            padding-left: 30px;
           }
         }
 
         td {
-          padding: 3px 0;
+          padding: 3px 5px;
           &.padding-left { padding-left: 10px; }
           &.padding-right { padding-right: 10px; }
 
           &.state {
             line-height: 24px;
             padding-left: 6px;
-            width: 26px;
+            width: 21px;
 
             & > span {
               display: block;
@@ -129,7 +127,7 @@
 
           &.branch_name { white-space: nowrap; }
 
-          &.commit_desc {
+          & span.commit_desc {
             color: @grey;
             text-align: left;
             font-size: @smallFont;
@@ -149,7 +147,6 @@
             color: #777;
             text-align: center;
             font-size: @smallFont;
-            width: 180px;
             background-color: #f5f5f5;
 
             span {
@@ -187,12 +184,11 @@
   &.notifier {
     .status_info {
       line-height: 25px;
-      padding: 5px 0 0 5px;
       background-color: whiteSmoke;
       border-right: 1px solid #EEE;
-      
+
       a { font-weight: bold; }
-      
+
       .date {
         font-size: @smallFont;
         color: @lightGrey;
@@ -202,8 +198,7 @@
 
     .status_content {
       line-height: 25px;
-      padding: 5px 0 0 5px;
-      
+
       .message {
         color: @grey;
       }
