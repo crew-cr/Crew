@@ -1,6 +1,6 @@
 <?php
 
-class sfWidgetFormSchemaFormatterCustom extends \sfWidgetFormSchemaFormatter
+class sfWidgetFormSchemaFormatterCustom extends sfWidgetFormSchemaFormatter
 {
   /**
    * @var string
