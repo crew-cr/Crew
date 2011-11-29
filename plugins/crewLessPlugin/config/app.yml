@@ -1,0 +1,4 @@
+all:
+  less:
+    less_dir: /web/css/less
+    css_dir: /web/css

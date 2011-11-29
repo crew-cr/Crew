@@ -32,6 +32,10 @@ class cacheClearTask extends sfBaseTask
         ->discard('.gitignore')
         ->in(sfConfig::get('sf_cache_dir'))
       );
+
+      $this->logSection('less', 'Compilation');
+      $lessTask = new crewLessPluginTask($this->dispatcher, $this->formatter);
+      $lessTask->run(array(), array());
     }
     catch(Exception $e)
     {

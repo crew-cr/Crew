@@ -9,5 +9,6 @@ class ProjectConfiguration extends sfProjectConfiguration
   {
     $this->enablePlugins('sfPropelORMPlugin');
     $this->enablePlugins('sfGuardPlugin');
+    $this->enablePlugins('crewLessPlugin');
   }
 }
