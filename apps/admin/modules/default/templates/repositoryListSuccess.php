@@ -12,7 +12,7 @@
     <div class="form_head">
       <span class="title">Add project</span>
     </div>
-    <div class="form_body" id="project_list1">
+    <div class="form_body">
       <?php echo $form ?>
     </div>
     <div class="form_footer">
