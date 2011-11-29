@@ -24,7 +24,7 @@
           </form>
         </div>
         <div class="comment_add <?php echo $formVisible ? 'hidden' : '' ?>">
-          <button class="add_comment good">Add a line note</button>
+          <button class="add_comment good">Add line note</button>
         </div>
       </div>
     </div>
