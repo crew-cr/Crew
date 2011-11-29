@@ -9,7 +9,7 @@
         <?php endif; ?>
       </span>
       <span class="tooltip" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
-        <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 70) ?>
+        <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 65) ?>
       </span>
       <ul class="right actions">
         <li class="status">
