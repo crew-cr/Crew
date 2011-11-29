@@ -29,8 +29,8 @@
         </td>
         <td class="file_infos">
           lines
-          <?php if($file['NbAddedFiles'] > 0): ?><span class="added tooltip" title="<?php echo $file['NbAddedFiles'] ?> added lines"><?php echo $file['NbAddedFiles'] ?>+</span><?php endif; ?>
-          <?php if($file['NbDeletedFiles'] > 0): ?><span class="deleted tooltip" title="<?php echo $file['NbDeletedFiles'] ?> deleted lines"><?php echo $file['NbDeletedFiles'] ?>-</span><?php endif; ?>
+          <?php if($file['NbAddedLines'] > 0): ?><span class="added tooltip" title="<?php echo $file['NbAddedLines'] ?> added lines"><?php echo $file['NbAddedLines'] ?>+</span><?php endif; ?>
+          <?php if($file['NbDeletedLines'] > 0): ?><span class="deleted tooltip" title="<?php echo $file['NbDeletedLines'] ?> deleted lines"><?php echo $file['NbDeletedLines'] ?>-</span><?php endif; ?>
         </td>
         <td class="status minified">
           <button title="Validate file" class="tooltip icon success like only-icon <?php echo $file['Status'] === BranchPeer::OK ? 'enabled' : ''?>"><?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>

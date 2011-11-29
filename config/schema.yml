@@ -38,9 +38,8 @@ propel:
     branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
     state:                            { type: CHAR, size: '1', required: true }
     filename:                         { type: VARCHAR, size: '255', required: true }
-    nb_added_files:                   { type: INTEGER, size: '11', required: false }
-    nb_modified_files:                { type: INTEGER, size: '11', required: false }
-    nb_deleted_files:                 { type: INTEGER, size: '11', required: false }
+    nb_added_lines:                   { type: INTEGER, size: '11', required: false }
+    nb_deleted_lines:                 { type: INTEGER, size: '11', required: false }
     last_change_commit:               { type: VARCHAR, size: '50', required: false }
     last_change_commit_desc:          { type: VARCHAR, size: '255', required: false }
     last_change_commit_user:          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }

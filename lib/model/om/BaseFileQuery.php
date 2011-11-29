@@ -10,9 +10,8 @@
  * @method     FileQuery orderByBranchId($order = Criteria::ASC) Order by the branch_id column
  * @method     FileQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method     FileQuery orderByFilename($order = Criteria::ASC) Order by the filename column
- * @method     FileQuery orderByNbAddedFiles($order = Criteria::ASC) Order by the nb_added_files column
- * @method     FileQuery orderByNbModifiedFiles($order = Criteria::ASC) Order by the nb_modified_files column
- * @method     FileQuery orderByNbDeletedFiles($order = Criteria::ASC) Order by the nb_deleted_files column
+ * @method     FileQuery orderByNbAddedLines($order = Criteria::ASC) Order by the nb_added_lines column
+ * @method     FileQuery orderByNbDeletedLines($order = Criteria::ASC) Order by the nb_deleted_lines column
  * @method     FileQuery orderByLastChangeCommit($order = Criteria::ASC) Order by the last_change_commit column
  * @method     FileQuery orderByLastChangeCommitDesc($order = Criteria::ASC) Order by the last_change_commit_desc column
  * @method     FileQuery orderByLastChangeCommitUser($order = Criteria::ASC) Order by the last_change_commit_user column
@@ -25,9 +24,8 @@
  * @method     FileQuery groupByBranchId() Group by the branch_id column
  * @method     FileQuery groupByState() Group by the state column
  * @method     FileQuery groupByFilename() Group by the filename column
- * @method     FileQuery groupByNbAddedFiles() Group by the nb_added_files column
- * @method     FileQuery groupByNbModifiedFiles() Group by the nb_modified_files column
- * @method     FileQuery groupByNbDeletedFiles() Group by the nb_deleted_files column
+ * @method     FileQuery groupByNbAddedLines() Group by the nb_added_lines column
+ * @method     FileQuery groupByNbDeletedLines() Group by the nb_deleted_lines column
  * @method     FileQuery groupByLastChangeCommit() Group by the last_change_commit column
  * @method     FileQuery groupByLastChangeCommitDesc() Group by the last_change_commit_desc column
  * @method     FileQuery groupByLastChangeCommitUser() Group by the last_change_commit_user column
@@ -63,9 +61,8 @@
  * @method     File findOneByBranchId(int $branch_id) Return the first File filtered by the branch_id column
  * @method     File findOneByState(string $state) Return the first File filtered by the state column
  * @method     File findOneByFilename(string $filename) Return the first File filtered by the filename column
- * @method     File findOneByNbAddedFiles(int $nb_added_files) Return the first File filtered by the nb_added_files column
- * @method     File findOneByNbModifiedFiles(int $nb_modified_files) Return the first File filtered by the nb_modified_files column
- * @method     File findOneByNbDeletedFiles(int $nb_deleted_files) Return the first File filtered by the nb_deleted_files column
+ * @method     File findOneByNbAddedLines(int $nb_added_lines) Return the first File filtered by the nb_added_lines column
+ * @method     File findOneByNbDeletedLines(int $nb_deleted_lines) Return the first File filtered by the nb_deleted_lines column
  * @method     File findOneByLastChangeCommit(string $last_change_commit) Return the first File filtered by the last_change_commit column
  * @method     File findOneByLastChangeCommitDesc(string $last_change_commit_desc) Return the first File filtered by the last_change_commit_desc column
  * @method     File findOneByLastChangeCommitUser(int $last_change_commit_user) Return the first File filtered by the last_change_commit_user column
@@ -78,9 +75,8 @@
  * @method     array findByBranchId(int $branch_id) Return File objects filtered by the branch_id column
  * @method     array findByState(string $state) Return File objects filtered by the state column
  * @method     array findByFilename(string $filename) Return File objects filtered by the filename column
- * @method     array findByNbAddedFiles(int $nb_added_files) Return File objects filtered by the nb_added_files column
- * @method     array findByNbModifiedFiles(int $nb_modified_files) Return File objects filtered by the nb_modified_files column
- * @method     array findByNbDeletedFiles(int $nb_deleted_files) Return File objects filtered by the nb_deleted_files column
+ * @method     array findByNbAddedLines(int $nb_added_lines) Return File objects filtered by the nb_added_lines column
+ * @method     array findByNbDeletedLines(int $nb_deleted_lines) Return File objects filtered by the nb_deleted_lines column
  * @method     array findByLastChangeCommit(string $last_change_commit) Return File objects filtered by the last_change_commit column
  * @method     array findByLastChangeCommitDesc(string $last_change_commit_desc) Return File objects filtered by the last_change_commit_desc column
  * @method     array findByLastChangeCommitUser(int $last_change_commit_user) Return File objects filtered by the last_change_commit_user column
@@ -176,7 +172,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `BRANCH_ID`, `STATE`, `FILENAME`, `NB_ADDED_FILES`, `NB_MODIFIED_FILES`, `NB_DELETED_FILES`, `LAST_CHANGE_COMMIT`, `LAST_CHANGE_COMMIT_DESC`, `LAST_CHANGE_COMMIT_USER`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `file` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `BRANCH_ID`, `STATE`, `FILENAME`, `NB_ADDED_LINES`, `NB_DELETED_LINES`, `LAST_CHANGE_COMMIT`, `LAST_CHANGE_COMMIT_DESC`, `LAST_CHANGE_COMMIT_USER`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `file` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -386,16 +382,16 @@ abstract class BaseFileQuery extends ModelCriteria
 	}
 
 	/**
-	 * Filter the query on the nb_added_files column
+	 * Filter the query on the nb_added_lines column
 	 *
 	 * Example usage:
 	 * <code>
-	 * $query->filterByNbAddedFiles(1234); // WHERE nb_added_files = 1234
-	 * $query->filterByNbAddedFiles(array(12, 34)); // WHERE nb_added_files IN (12, 34)
-	 * $query->filterByNbAddedFiles(array('min' => 12)); // WHERE nb_added_files > 12
+	 * $query->filterByNbAddedLines(1234); // WHERE nb_added_lines = 1234
+	 * $query->filterByNbAddedLines(array(12, 34)); // WHERE nb_added_lines IN (12, 34)
+	 * $query->filterByNbAddedLines(array('min' => 12)); // WHERE nb_added_lines > 12
 	 * </code>
 	 *
-	 * @param     mixed $nbAddedFiles The value to use as filter.
+	 * @param     mixed $nbAddedLines The value to use as filter.
 	 *              Use scalar values for equality.
 	 *              Use array values for in_array() equivalent.
 	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -403,16 +399,16 @@ abstract class BaseFileQuery extends ModelCriteria
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
-	public function filterByNbAddedFiles($nbAddedFiles = null, $comparison = null)
+	public function filterByNbAddedLines($nbAddedLines = null, $comparison = null)
 	{
-		if (is_array($nbAddedFiles)) {
+		if (is_array($nbAddedLines)) {
 			$useMinMax = false;
-			if (isset($nbAddedFiles['min'])) {
-				$this->addUsingAlias(FilePeer::NB_ADDED_FILES, $nbAddedFiles['min'], Criteria::GREATER_EQUAL);
+			if (isset($nbAddedLines['min'])) {
+				$this->addUsingAlias(FilePeer::NB_ADDED_LINES, $nbAddedLines['min'], Criteria::GREATER_EQUAL);
 				$useMinMax = true;
 			}
-			if (isset($nbAddedFiles['max'])) {
-				$this->addUsingAlias(FilePeer::NB_ADDED_FILES, $nbAddedFiles['max'], Criteria::LESS_EQUAL);
+			if (isset($nbAddedLines['max'])) {
+				$this->addUsingAlias(FilePeer::NB_ADDED_LINES, $nbAddedLines['max'], Criteria::LESS_EQUAL);
 				$useMinMax = true;
 			}
 			if ($useMinMax) {
@@ -422,20 +418,20 @@ abstract class BaseFileQuery extends ModelCriteria
 				$comparison = Criteria::IN;
 			}
 		}
-		return $this->addUsingAlias(FilePeer::NB_ADDED_FILES, $nbAddedFiles, $comparison);
+		return $this->addUsingAlias(FilePeer::NB_ADDED_LINES, $nbAddedLines, $comparison);
 	}
 
 	/**
-	 * Filter the query on the nb_modified_files column
+	 * Filter the query on the nb_deleted_lines column
 	 *
 	 * Example usage:
 	 * <code>
-	 * $query->filterByNbModifiedFiles(1234); // WHERE nb_modified_files = 1234
-	 * $query->filterByNbModifiedFiles(array(12, 34)); // WHERE nb_modified_files IN (12, 34)
-	 * $query->filterByNbModifiedFiles(array('min' => 12)); // WHERE nb_modified_files > 12
+	 * $query->filterByNbDeletedLines(1234); // WHERE nb_deleted_lines = 1234
+	 * $query->filterByNbDeletedLines(array(12, 34)); // WHERE nb_deleted_lines IN (12, 34)
+	 * $query->filterByNbDeletedLines(array('min' => 12)); // WHERE nb_deleted_lines > 12
 	 * </code>
 	 *
-	 * @param     mixed $nbModifiedFiles The value to use as filter.
+	 * @param     mixed $nbDeletedLines The value to use as filter.
 	 *              Use scalar values for equality.
 	 *              Use array values for in_array() equivalent.
 	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
@@ -443,16 +439,16 @@ abstract class BaseFileQuery extends ModelCriteria
 	 *
 	 * @return    FileQuery The current query, for fluid interface
 	 */
-	public function filterByNbModifiedFiles($nbModifiedFiles = null, $comparison = null)
+	public function filterByNbDeletedLines($nbDeletedLines = null, $comparison = null)
 	{
-		if (is_array($nbModifiedFiles)) {
+		if (is_array($nbDeletedLines)) {
 			$useMinMax = false;
-			if (isset($nbModifiedFiles['min'])) {
-				$this->addUsingAlias(FilePeer::NB_MODIFIED_FILES, $nbModifiedFiles['min'], Criteria::GREATER_EQUAL);
+			if (isset($nbDeletedLines['min'])) {
+				$this->addUsingAlias(FilePeer::NB_DELETED_LINES, $nbDeletedLines['min'], Criteria::GREATER_EQUAL);
 				$useMinMax = true;
 			}
-			if (isset($nbModifiedFiles['max'])) {
-				$this->addUsingAlias(FilePeer::NB_MODIFIED_FILES, $nbModifiedFiles['max'], Criteria::LESS_EQUAL);
+			if (isset($nbDeletedLines['max'])) {
+				$this->addUsingAlias(FilePeer::NB_DELETED_LINES, $nbDeletedLines['max'], Criteria::LESS_EQUAL);
 				$useMinMax = true;
 			}
 			if ($useMinMax) {
@@ -462,47 +458,7 @@ abstract class BaseFileQuery extends ModelCriteria
 				$comparison = Criteria::IN;
 			}
 		}
-		return $this->addUsingAlias(FilePeer::NB_MODIFIED_FILES, $nbModifiedFiles, $comparison);
-	}
-
-	/**
-	 * Filter the query on the nb_deleted_files column
-	 *
-	 * Example usage:
-	 * <code>
-	 * $query->filterByNbDeletedFiles(1234); // WHERE nb_deleted_files = 1234
-	 * $query->filterByNbDeletedFiles(array(12, 34)); // WHERE nb_deleted_files IN (12, 34)
-	 * $query->filterByNbDeletedFiles(array('min' => 12)); // WHERE nb_deleted_files > 12
-	 * </code>
-	 *
-	 * @param     mixed $nbDeletedFiles The value to use as filter.
-	 *              Use scalar values for equality.
-	 *              Use array values for in_array() equivalent.
-	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
-	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
-	 *
-	 * @return    FileQuery The current query, for fluid interface
-	 */
-	public function filterByNbDeletedFiles($nbDeletedFiles = null, $comparison = null)
-	{
-		if (is_array($nbDeletedFiles)) {
-			$useMinMax = false;
-			if (isset($nbDeletedFiles['min'])) {
-				$this->addUsingAlias(FilePeer::NB_DELETED_FILES, $nbDeletedFiles['min'], Criteria::GREATER_EQUAL);
-				$useMinMax = true;
-			}
-			if (isset($nbDeletedFiles['max'])) {
-				$this->addUsingAlias(FilePeer::NB_DELETED_FILES, $nbDeletedFiles['max'], Criteria::LESS_EQUAL);
-				$useMinMax = true;
-			}
-			if ($useMinMax) {
-				return $this;
-			}
-			if (null === $comparison) {
-				$comparison = Criteria::IN;
-			}
-		}
-		return $this->addUsingAlias(FilePeer::NB_DELETED_FILES, $nbDeletedFiles, $comparison);
+		return $this->addUsingAlias(FilePeer::NB_DELETED_LINES, $nbDeletedLines, $comparison);
 	}
 
 	/**
