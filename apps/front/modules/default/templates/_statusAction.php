@@ -1,7 +1,7 @@
 <?php if (sizeof($statusActions) > 0): ?>
 <div class="list notifier">
   <div class="list_head icon status_action">
-    <span class="title">Status actions list</span>
+    <span class="title">Status action list</span>
   </div>
   <div class="list_body scrollable" id="project_list">
     <table>
@@ -17,7 +17,7 @@
           <div class="path">
             <?php if (null !== $statusAction->getRepository()): ?><?php echo link_to($statusAction->getRepository(), 'default/branchList', array('query_string' => 'repository=' . $statusAction->getRepositoryId())) ?><?php endif; ?>
             <?php if (null !== $statusAction->getBranch()): ?>&gt; <?php echo link_to($statusAction->getBranch(), 'default/fileList', array('query_string' => 'branch=' . $statusAction->getBranchId())) ?><?php endif; ?>
-            <?php if (null !== $statusAction->getFile()): ?>&gt; <?php echo link_to(stringUtils::lshorten($statusAction->getFile(), 50), 'default/file', array('query_string' => 'file=' . $statusAction->getFileId(), 'title' => $statusAction->getFile())) ?><?php endif; ?>
+            <?php if (null !== $statusAction->getFile()): ?>&gt; <?php echo link_to(StringUtils::lshorten($statusAction->getFile(), 50), 'default/file', array('query_string' => 'file=' . $statusAction->getFileId(), 'title' => $statusAction->getFile())) ?><?php endif; ?>
           </div>
         </td>
       </tr>
