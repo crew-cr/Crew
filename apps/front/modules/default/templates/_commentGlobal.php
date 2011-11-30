@@ -4,7 +4,7 @@
       <div class="comment_holder">
         <?php if (count($commentGlobals) > 0) : ?>
           <?php foreach ($commentGlobals as $commentGlobal) : ?>
-          <div class="comment">
+          <div class="comment" id="comment-<?php echo $commentGlobal->getId()?>">
             <div class="comment_user">
               <img class="avatar" src="<?php echo $commentGlobal->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
               <?php echo sprintf("<span><strong>%s</strong> %s</span>", $commentGlobal->getAuthorName(), $commentGlobal->getUpdatedAt('d/m/Y H\hi')) ?>

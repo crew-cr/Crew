@@ -6,7 +6,7 @@
     <div class="clipper">
       <div class="comments_holder">
         <?php foreach ($comments as $comment): ?>
-        <div class="comment">
+        <div class="comment" id="comment-<?php echo $comment->getId()?>">
           <div class="comment_user">
             <img class="avatar" src="<?php echo $comment->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
             <?php echo sprintf("<span><strong>%s</strong> %s</span>", $comment->getAuthorName(), $comment->getUpdatedAt('d/m/Y H\hi')) ?>

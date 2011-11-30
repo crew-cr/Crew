@@ -137,15 +137,12 @@ class CampfireNotifier extends BaseNotifier
         switch($type)
         {
           case 'branch':
-            $link = " : ".$this->generateUrl('fileList', array('branch' => $comment->getBranch()->getId(), 'anchor' => 'comment_component'));
+            $link = " : ".$this->generateUrl('fileList', array('branch' => $comment->getBranch()->getId(), 'anchor' => 'comment-'.$comment->getId()));
             break;
 
           case 'file':
-            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'comment_component'));
-            break;
-
           case 'line':
-            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'position_'.$comment->getPosition()));
+            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'comment-'.$comment->getId()));
             break;
         }
 
