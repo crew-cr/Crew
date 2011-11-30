@@ -1,4 +1,4 @@
-@urlCrew: '/crew/images';
+@urlCrew: '../images';
 
 @blue: #4183C4;
 @grey: #666666;
@@ -9,11 +9,11 @@
 @normalFont: 13px;
 @largeFont: 16px;
 
-@import "_button.less";
 @import "_list.less";
 @import "_comment.less";
 @import "_data.less";
 @import "_form.less";
+@import "_button.less";
 
 /* Utils functions */
 .radius (@radius: 3px) {
@@ -123,8 +123,8 @@ a, span {
     color: #999;
     padding-left: 18px;
 
-    &.comment { background: url('@{urlCrew}/comment_icon.png') 0 50% no-repeat; }
-    &.branch { background: url('@{urlCrew}/branch_icon.png') 0 50% no-repeat;}
+    &.comment { background: url('../images/comment_icon.png') 0 50% no-repeat; }
+    &.branch { background: url('../images/branch_icon.png') 0 50% no-repeat;}
   }
 }
 
@@ -151,7 +151,7 @@ html {
     color: @grey;
     font-size: @normalFont;
     font-family: helvetica, arial, freesans, clean, sans-serif;
-    background: url("@{urlCrew}/background-v2.png") repeat-x;
+    background: url("../images/background-v2.png") repeat-x;
 
     .wrapper {
       min-height: 100%;
@@ -240,7 +240,7 @@ html {
           display: block;
           margin: -20px 0 10px -25px;
           padding: 20px 25px 0;
-          background: url('@{urlCrew}/background-white.png') 0 0 no-repeat;
+          background: url('../images/background-white.png') 0 0 no-repeat;
 
           #breadcrumb {
             margin: 5px 0 20px 0;
@@ -275,7 +275,7 @@ html {
       color: #636363;
       font-size: @normalFont;
       overflow: hidden;
-      background: url('@{urlCrew}/bg_footer_top.png') #F8F8F8 repeat-x;
+      background: url('../images/bg_footer_top.png') #F8F8F8 repeat-x;
       min-height: 64px;
 
       .site {
@@ -294,7 +294,7 @@ html {
         float: left;
         padding-left: 170px;
         line-height: 95px;
-        background: url('@{urlCrew}/logoFooter.png') 0 22px no-repeat;
+        background: url('../images/logoFooter.png') 0 22px no-repeat;
       }
     }
   }

@@ -7,7 +7,7 @@ button {
   margin: 0;
   text-decoration: none;
   text-shadow: 1px 1px 0 #fff;
-  font:11px/normal sans-serif;
+  font:11px/arial;
   color: @darkGrey;
   white-space: nowrap;
   cursor: pointer;
@@ -133,10 +133,10 @@ button {
     width: 12px;
     height: 12px;
     margin: 0 0.75em 0 -0.25em;
-    background: url('@{urlCrew}/gh-icons.png') 0 99px no-repeat;
+    background: url('../images/gh-icons.png') 0 99px no-repeat;
   }
 
-  &.comment
+  &.comment {
     &.icon {
       &:before { background-position: 0 -132px; }
 
@@ -146,9 +146,10 @@ button {
       &:active:before {
         background-position: -12px -132px;
       }
+    }
   }
 
-  &.loop
+  &.loop {
     &.icon {
       &:before { background-position: 0 -216px; }
 
@@ -158,6 +159,7 @@ button {
       &:active:before {
         background-position: -12px -216px;
       }
+    }
   }
 
   &.fork {
