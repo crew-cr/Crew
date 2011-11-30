@@ -2,12 +2,25 @@
 <html>
   <head>
     <meta charset='utf-8'>
-    <title>Crew</title>
+    <title>Crew - Code review tool</title>
     <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css">
     <link rel="stylesheet" type="text/css" href="css/style.css" media="all" />
   </head>
   <body>
-    <a href="http://github.com/KuiKui/Crew"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+    <div id="menu">
+      <ul>
+        <li><a href="#screenshots">Screenshots</a></li>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#requirements">Requirements</a></li>
+        <li><a href="#help">Help</a></li>
+        <li><a href="#contributing">Contributing</a></li>
+        <li><a href="#authors">Authors</a></li>
+        <li><a href="http://team-fusion.pmsipilot.com">Blog</a></li>
+      </ul>
+    </div>
+    <a href="http://github.com/KuiKui/Crew"><img style="position: fixed; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
     <div id="container">
       <div class="download">
         <a href="http://github.com/KuiKui/Crew/zipball/master">
@@ -18,39 +31,55 @@
       <h1><a href="http://github.com/KuiKui/Crew">Crew</a><span class="small"> by <a href="http://team-fusion.pmsipilot.com">Team Fusion</a></span></h1>
       <div class="description">Code review tool for Git projects.</div>
 
+      <h2 id="screenshots">Screenshots</h2>
       <a class="screenshot first" href="images/screenshots/file-list.png" title="File liste"><img src="images/screenshots/file-list-thumbnail.png" alt="File list" title="File list"></a>
       <a class="screenshot" href="images/screenshots/file-comment.png" title="File comment"><img src="images/screenshots/file-comment-thumbnail.png" alt="File comment" title="File comment"></a>
 
-      <p class="item"><strong>Crew</strong> is a code review tool for git projects.</br >
-        It works with a <a href="http://github.com/KuiKui/Crew/wiki/How-to-use-Crew">simple API</a>.</br >
-        So, you can easily integrate it in your workflow.</p>
+      <h2 id="introduction">Introduction</h2>
+      <p class="item"><strong>Crew is a code review tool for git projects.</strong><br />
+        It works with a <a href="http://github.com/KuiKui/Crew/wiki/How-to-use-Crew">simple API</a> : you can easily integrate it in your workflow.</p>
 
-      <p class="item"><strong>Crew</strong> is a standalone LAMP project.</br >
-        It is based on web common technologies : <a href="http://www.symfony-project.org/">symfony 1.x</a>, <a href="http://jquery.com/">jQuery</a> and <a href="http://lesscss.org/">LESS</a>.</br >
-        So, you can easily <a href="http://github.com/KuiKui/Crew/wiki/How-to-install-Crew">install it</a> on your own server.</p>
+      <p class="item"><strong>Crew is a standalone LAMP project.</strong><br />
+        It is based on web common technologies(<a href="http://www.symfony-project.org/">symfony 1.x</a>, <a href="http://jquery.com/">jQuery</a> and <a href="http://lesscss.org/">LESS</a>) : you can easily <a href="http://github.com/KuiKui/Crew/wiki/How-to-install-Crew">install it</a> on your own server.</p>
 
-      <p class="item"><strong>Crew</strong> is an open-source project.</br >
-        It is published under <a href="http://en.wikipedia.org/wiki/MIT_License">MIT license</a>.</br >
-        So, you can use it Like A Boss !</p>
+      <p class="item"><strong>Crew is an open-source project.</strong></br >
+        It is published under <a href="http://en.wikipedia.org/wiki/MIT_License">MIT license</a> : you can use it Like A Boss !</p>
+      
+      <p class="github"><span class="brand">Crew</span> is deeply inspired by the legendary <a href="http://github.com">Github</a> !</p>
 
-      <h2>Help</h2>
-      <p>Help is hosted in the <a href="http://github.com/KuiKui/Crew/wiki">project wiki</a> on Github</p>
+      <h2 id="features">Features</h2>
+      <ul class="features">
+        <li>Code review based on features (git branches) and not commits.</li>
+        <li>Quickly see how many files/lines where added/deleted.</li>
+        <li>Validate one file at a time or the whole feature.</li>
+        <li>Feature, file and line comments.</li>
+        <li>Versatile notification system (<a href="http://campfirenow.com/">Campfire</a> included).</li>
+        <li>Dashboard with comments and validations activity.</li>
+        <li>User-friendly interface inspired by Github.</li>
+      </ul>
 
-      <h2>Contributing</h2>
-      <p>Get the source code on <a href="http://github.com/KuiKui/Crew">GitHub</a> and use <a href="http://help.github.com/send-pull-requests/">pull requests</a> for improve it.</p>
+      <h2 id="requirements">Requirements</h2>
+      <p>Server requirements : PHP 5.2+, MySql 5+ and Git 1.6.6+</p>
+      <p>Client requirement : <a href="http://media.rhizome.org/blog/3637/01.jpg">recent navigator</a>.</p>
 
-      <h2>Authors</h2>
-      <ul>
+      <h2 id="help">Help</h2>
+      <p>Help is hosted in the <a href="http://github.com/KuiKui/Crew/wiki">project wiki</a> on Github.</p>
+
+      <h2 id="contributing">Contributing</h2>
+      <p>Get the <a href="http://github.com/KuiKui/Crew">source code</a> on GitHub and use <a href="http://help.github.com/send-pull-requests/">pull requests</a> to improve it.</p>
+
+      <h2 id="authors">Authors</h2>
+      <p>Crew is an <a href="http://tom.preston-werner.com/2011/11/22/open-source-everything.html">open-source</a> <a href="http://zachholman.com/posts/why-github-hacks-on-side-projects/">side project</a> of <a href="http://pmsipilot.com">PMSIpilot</a>, developped by :</p>
+      <ul class="floating">
         <li><a href="http://github.com/KuiKui/" title="Github profil">Denis Roussel</a></li>
         <li><a href="http://github.com/oziks" title="Github profil">Morgan Brunot</a></li>
         <li><a href="http://github.com/maxailloud" title="Github profil">Maxime Ailloud</a></li>
         <li><a href="http://github.com/lotholf" title="Github profil">Florent Lavy</a></li>
         <li><a href="http://github.com/ratibus" title="Github profil">Eric Lemoine</a></li>
       </ul>
-
-      <div class="footer">
-        Theme inspired by <a href="http://kogakure.github.com/gitweb-theme/">kogakure/gitweb-theme</a>
-      </div>
+    </div>
+    <div id="footer">
+      Theme inspired by <a href="http://kogakure.github.com/gitweb-theme/">kogakure/gitweb-theme</a>
     </div>
   </body>
 </html>
