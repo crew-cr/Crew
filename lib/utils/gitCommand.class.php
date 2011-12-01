@@ -70,7 +70,7 @@ class GitCommand
     $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --name-status', $gitDir,  $referenceCommit, $lastCommit);
     exec($cmd, $results);
 
-    $cmd = sprintf('git --git-dir="%s/.git" log %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
+    $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
     exec($cmd, $lineResults);
 
     $linesInfos = array();

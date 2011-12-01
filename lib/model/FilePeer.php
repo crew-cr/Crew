@@ -50,6 +50,7 @@ class FilePeer extends BaseFilePeer {
         if($lastChangeCommit != $fileModel->getLastChangeCommit())
         {
           $fileModel->setStatus(BranchPeer::A_TRAITER)
+            ->setState($filesGit[$fileModel->getFilename()]['state'])
             ->setLastChangeCommit($lastChangeCommit)
             ->setCommitStatusChanged($lastChangeCommit)
             ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
