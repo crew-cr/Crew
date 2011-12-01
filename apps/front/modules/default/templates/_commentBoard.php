@@ -13,7 +13,7 @@
           <span class="date"><?php echo $commentBoard['CreatedAt'] ?></span>
         </td>
         <td class="status_content">
-          <div class="message"><?php echo $commentBoard['Message'] ?></div>
+          <div class="message tooltip" title="<?php echo $commentBoard['Message'] ?>"><?php echo stringUtils::shorten($commentBoard['Message'], 120) ?></div>
           <div class="path">
             <?php if (!empty($commentBoard['ProjectId'])): ?><?php echo link_to($commentBoard['ProjectName'], 'default/branchList', array('query_string' => 'repository=' . $commentBoard['ProjectId'])) ?><?php endif; ?>
             <?php if (!empty($commentBoard['BranchId'])): ?>&gt; <?php echo link_to($commentBoard['BranchName'], 'default/fileList', array('query_string' => 'branch=' . $commentBoard['BranchId'])) ?><?php endif; ?>

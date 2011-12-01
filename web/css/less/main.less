@@ -9,6 +9,10 @@
 @normalFont: 13px;
 @largeFont: 16px;
 
+@normalFontFamily: arial, verdana;
+@technicalFontFamily: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+@codeFontFamily: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+
 @import "_list.less";
 @import "_comment.less";
 @import "_data.less";
@@ -150,7 +154,7 @@ html {
     height: 100%;
     color: @grey;
     font-size: @normalFont;
-    font-family: helvetica, arial, freesans, clean, sans-serif;
+    font-family: @normalFontFamily;
     background: url("../images/background-v2.png") repeat-x;
 
     .wrapper {

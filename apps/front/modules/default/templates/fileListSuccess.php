@@ -20,7 +20,7 @@
           <span class="state_<?php echo $file['State'] ?>" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>"><?php echo $file['State'] ?></span>
         </td>
         <td>
-          <h3><?php echo link_to(stringUtils::lshorten($file['Filename'], 70), 'default/file', array('title' => stringUtils::trimTicketInfos($file['LastChangeCommitDesc']), 'query_string' => 'file='.$file['Id'], 'class' => 'tooltip')) ?></h3>
+          <h3><?php echo link_to(stringUtils::lshorten($file['Filename'], 80), 'default/file', array('title' => stringUtils::trimTicketInfos($file['LastChangeCommitDesc']), 'query_string' => 'file='.$file['Id'], 'class' => 'tooltip')) ?></h3>
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>

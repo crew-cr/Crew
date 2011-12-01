@@ -56,7 +56,7 @@ class CommentPeer extends BaseCommentPeer {
         'FileId'      => $comment->getFileId(),
         'Position'    => $comment->getPosition(),
         'Line'        => $comment->getLine(),
-        'Message'     => stringUtils::shorten($comment->getValue(), 95),
+        'Message'     => $comment->getValue(),
         'CreatedAt'   => $comment->getCreatedAt('d/m/Y H:i:s')
       );
     }

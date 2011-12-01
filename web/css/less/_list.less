@@ -1,6 +1,5 @@
 .list {
   border: 1px solid #d8d8d8;
-  font-family: 'Bitstream Vera Sans Mono','Courier New',monospace;
   margin-bottom: 20px;
 
   .list_head {
@@ -59,6 +58,9 @@
 
       h3 {
         display: inline-block;
+        a {
+          font-family: @technicalFontFamily;
+        }
       }
 
       tr {
@@ -72,7 +74,7 @@
 
         &.review_request {
           td.branch_name {
-            background: url('../images/review_request.png') 4px 5px no-repeat;
+            background: url('../images/review_request.png') 6px 7px no-repeat;
             padding-left: 30px;
           }
         }
@@ -130,7 +132,7 @@
           & span.commit_desc {
             color: @grey;
             text-align: left;
-            font-size: @smallFont;
+            font-size: @normalFont;
             font-weight: normal;
           }
 
@@ -154,7 +156,7 @@
               background-color: white;
               border: 1px solid #ccc;
               .box-shadow (0, 0, 1px, 0.2);
-              padding: 2px 5px 0 5px;
+              padding: 2px 5px;
               .radius (3px);
 
               &.added { color: #73ab00; }
@@ -178,6 +180,7 @@
   #file_list {
     h3 {
       font-weight: normal;
+      font-size: 12px;
     }
   }
 
@@ -204,6 +207,7 @@
       }
 
       .path {
+        font-family: @technicalFontFamily;
         font-size: @smallFont;
         color: @grey;
         a { color: @blue; }
