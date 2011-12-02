@@ -19,6 +19,50 @@ body {
 strong {
   font-weight: bolder;
 }
+h1 {
+  color: #535353;
+  font-size: 4.5em;
+  margin: 0;
+  font-family: 'GraublauWebBold', Helvetica, Arial, FreeSans, san-serif;
+  letter-spacing: 0.05em;
+}
+h1 .small {
+  clear: both;
+  font-size: 0.4em;
+  letter-spacing: 0.02em;
+}
+h1 a {
+  text-decoration: none
+}
+h2 {
+  clear: both;
+  color: #545454;
+  font-size: 1.5em;
+  font-family: 'GraublauWebBold', Helvetica, Arial, FreeSans, san-serif;
+  margin: 30px 0 15px;
+}
+p {
+  margin-bottom: 15px;
+}
+a {
+  color: #4183C4;
+  text-decoration: none;
+}
+a.screenshot img {
+  box-shadow: 2px 2px 8px #777;
+  -moz-box-shadow: 2px 2px 8px #777;
+  -webkit-box-shadow: 2px 2px 8px #777;
+}
+a.screenshot.first img {
+  margin-right: 50px;
+}
+ul {
+  padding-left: 0;
+  list-style-position:inside;
+}
+li {
+  margin-bottom: 0.25em;
+}
 #menu {
   position: fixed;
   left:0;
@@ -44,53 +88,12 @@ strong {
 #menu li {
   float: left;
   list-style: none;
-  padding: 0 12px;
+  padding: 0 32px 0 0;
 }
 #container {
   margin: 0 auto;
   padding-top: 40px;
   width: 900px;
-}
-h1 {
-  color: #535353;
-  font-size: 4.5em;
-  margin: 0;
-  font-family: 'GraublauWebBold', Helvetica, Arial, FreeSans, san-serif;
-  letter-spacing: 0.05em;
-}
-h1 .small {
-  clear: both;
-  font-size: 0.4em;
-  letter-spacing: 0.02em;
-}
-h1 a {
-  text-decoration: none
-}
-h2 {
-  clear: both;
-  color: #545454;
-  font-size: 1.5em;
-  font-family: 'GraublauWebBold', Helvetica, Arial, FreeSans, san-serif;
-  margin: 30px 0 15px;
-}
-a {
-  color: #4183C4;
-  text-decoration: none;
-}
-a.screenshot img {
-  box-shadow: 2px 2px 8px #777;
-  -moz-box-shadow: 2px 2px 8px #777;
-  -webkit-box-shadow: 2px 2px 8px #777;
-}
-a.screenshot.first img {
-  margin-right: 50px;
-}
-ul {
-  padding-left: 0;
-  list-style-position:inside;
-}
-li {
-  margin-bottom: 0.25em;
 }
 .description {
   color: #A8A8A8;
@@ -100,30 +103,29 @@ li {
 .download {
   float: right;
 }
-p.item {
-  padding-bottom: 25px;
-}
-p.github {
-  padding: 20px 0 20px 60px;
-  background: #e5ebf2 url('https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png') no-repeat 15px center;
+div.introduction {
+  padding: 20px 20px 0;
+  background: #e5ebf2;
   background-size:32px 32px;
-  margin: 10px auto;
-  width: 380px;
+  margin: 10px 0;
+  width: 840px;
   border: 1px solid #DDD;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
 }
-.features li {
-  padding: 0 25px 0;
-  margin-bottom: 10px;
-  background: url('../images/right-arrow.png') no-repeat left center;
-  background-size: 16px 16px;
+div.introduction p {
+  margin-bottom: 25px;
 }
 .brand {
   color: #4183C4;
   font-family: 'GraublauWebBold', Helvetica, Arial, FreeSans, san-serif;
   font-size: 1.3em;
+}
+ul.puces li{
+  padding: 0 25px 0;
+  margin-bottom: 10px;
+  background: url('../images/right-arrow.png') no-repeat left center;
 }
 ul.floating {
   margin-top: 20px;
