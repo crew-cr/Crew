@@ -1,3 +1,4 @@
+<?php use_helper('Markdown') ?>
 <table>
   <tr>
     <td class="line_comment">
@@ -11,7 +12,7 @@
               <button class="right"><a title="Copy permalink to clipboard" class="clipboard" href="<?php printf("%s#comment-%s", $_SERVER['REQUEST_URI'], $commentGlobal->getId()) ?>">Permalink</a></button>
               <?php echo $userId === $commentGlobal->getUserId() ? sprintf('<button class="right danger delete" data="%s?id=%s&type=%s">Delete</button>', url_for('default/commentDeleteGlobal'), $commentGlobal->getId(), $type) : '' ?>
             </div>
-            <div class="comment_body"><?php echo nl2br(sprintf("%s", $commentGlobal->getValue())) ?></div>
+            <div class="comment_body"><?php echo Markdown($commentGlobal->getValue()) ?></div>
           </div>
           <?php endforeach; ?>
         <?php endif; ?>

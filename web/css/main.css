@@ -202,6 +202,23 @@
   font-style:normal;
   background:white;
 }
+.comment_bloc .comment .comment_body h1, .comments_holder .comment .comment_body h1 {
+  font-size:1.5em;
+  font-weight:bold;
+}
+.comment_bloc .comment .comment_body h2, .comments_holder .comment .comment_body h2 {
+  font-size:1.2em;
+  text-transform:none;
+  color:#555555;
+}
+.comment_bloc .comment .comment_body ul li, .comments_holder .comment .comment_body ul li {
+  list-style-position:inside;
+  list-style-type:disc;
+}
+.comment_bloc .comment .comment_body ol li, .comments_holder .comment .comment_body ol li {
+  list-style-position:inside;
+  list-style-type:decimal;
+}
 .list_body.data {
   border-bottom:1px solid #cccccc;
   overflow:auto;

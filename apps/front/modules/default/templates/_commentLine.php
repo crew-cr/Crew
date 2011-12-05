@@ -1,3 +1,4 @@
+<?php use_helper('Markdown') ?>
 <tr class="comment_bloc">
   <td class="comment_count" colspan="2">
     <span class="counter"><?php echo sizeof($comments) ?></span>
@@ -13,7 +14,7 @@
             <button class="right"><a title="Copy permalink to clipboard" class="clipboard" href="<?php printf("%s#comment-%s", $_SERVER['REQUEST_URI'], $comment->getId()) ?>">Permalink</a></button>
             <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/commentDeleteLine'), $comment->getId()) : '' ?>
           </div>
-          <div class="comment_body"><?php echo nl2br(sprintf("%s", $comment->getValue())) ?></div>
+          <div class="comment_body"><?php echo Markdown($comment->getValue()) ?></div>
         </div>
         <?php endforeach; ?>
         <div class="comment_form <?php echo $formVisible ? '' : 'hidden' ?>">
