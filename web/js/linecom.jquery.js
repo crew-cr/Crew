@@ -181,32 +181,4 @@
 
 $(document).ready(function() {
   $('.add_bubble').linecom();
-
-  var DocumentRect = Fracs.Rect.ofDocument();
-  var DataSize = $('.data').width();
-  var FracsPosition = ((DocumentRect.width - DataSize) / 2) + DataSize + 10;
-  $("#outline").offset({ top: 200, left: FracsPosition});
-  $("#outline").height($(window).height / 2);
-
-  $("#outline").fracs("outline", {
-    crop: false,
-    styles: [{
-      selector: 'body',
-      fillStyle: '#efeff5',
-      strokeStyle: 'rgb(0, 0, 0)',
-      strokeWidth: 2
-    }, {
-      selector: '.line.added',
-      fillStyle: '#B5E655'
-    }, {
-      selector: '.line.deleted',
-      fillStyle: '#C9001A'
-    }, {
-      selector: '.comment_bloc',
-      fillStyle: '#FFF168'
-    }],
-    viewportStyle: {
-      fillStyle: 'rgba(65,131,196,0.2)'
-    }
-  });
 });

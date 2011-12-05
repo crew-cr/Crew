@@ -19,8 +19,8 @@ default:
 
   javascripts:
     - vendor/jquery-1.6.4.min.js
-    - vendor/jquery.fracs.js
     - vendor/jquery.qtip.min.js
+    - vendor/jquery.mousewheel.min.js
     - toggleState.js
     - context.js
     - commentGlobal.js

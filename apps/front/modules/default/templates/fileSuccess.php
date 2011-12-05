@@ -1,4 +1,3 @@
-<canvas id="outline" width="50" height="700" style="position: fixed;"></canvas>
 <div class="file_bloc">
   <div class="list">
     <div class="list_head">
@@ -19,7 +18,7 @@
         </li>
       </ul>
     </div>
-    <div class="list_body data">
+    <div id="window" class="list_body data">
       <table>
         <tbody>
         <?php $deleledLinesCounter = 0; ?>

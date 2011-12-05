@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#context select').bind('change', function() {
     this.form.submit();
-  })
+  });
   $('.clipboard').bind('click', function() {
     window.prompt("Copy to clipboard: Ctrl+C, Enter", this.href);
     return false;
@@ -20,6 +20,30 @@ $(document).ready(function() {
     },
     hide: {
       fixed: true // Helps to prevent the tooltip from hiding ocassionally when tracking!
+    }
+  });
+
+  var shiftKeyIsPressed = false;
+
+  $(document).keydown(function(e) {
+    var code = e.keyCode || e.which
+    if (code == '16') {
+      shiftKeyIsPressed = true;
+     }
+  });
+
+  $(document).keyup(function(e) {
+    var code = e.keyCode || e.which
+    if (code == '16') {
+      shiftKeyIsPressed = false;
+     }
+  });
+
+  $('#window').mousewheel(function(event, delta, deltaX, deltaY) {
+    if(shiftKeyIsPressed)
+    {
+      this.scrollLeft -= (delta * 120);
+      event.preventDefault();
     }
   });
 });
