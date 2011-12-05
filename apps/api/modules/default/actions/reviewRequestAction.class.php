@@ -37,31 +37,45 @@ class reviewRequestAction extends sfAction
         ;
       }
 
+      if($branch->getBaseBranchName() != $baseBranchName)
+      {
+        $branch->setBaseBranchName($baseBranchName)->save();
+      }
+
+      file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), sprintf("%s [%s] ReviewRequest = projectId : %s - baseBranchName : %s - branchName : %s - commit : %s\n", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $projectId, $baseBranchName, $branchName, $commit), FILE_APPEND);
       BranchPeer::synchronize($repository, $branch);
 
-      if(strlen($commit) === 40)
+      if(!$branch->isDeleted())
       {
-        if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
+        if(strlen($commit) === 40)
         {
-          $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
-          $branch->setReviewRequest(1)
-            ->setStatus(BranchPeer::A_TRAITER)
-            ->setIsBlacklisted(0)
-            ->save()
-          ;
-          $result['result'] = true;
-          $this->dispatcher->notify(new sfEvent($this, 'notification.review-request', array('project-id' => $branch->getRepositoryId(), 'object' => $branch)));
+          if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
+          {
+            $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
+            $branch->setReviewRequest(1)
+              ->setStatus(BranchPeer::A_TRAITER)
+              ->setIsBlacklisted(0)
+              ->save()
+            ;
+            $result['result'] = true;
+            $this->dispatcher->notify(new sfEvent($this, 'notification.review-request', array('project-id' => $branch->getRepositoryId(), 'object' => $branch)));
+          }
+          else
+          {
+            $result['result'] = true;
+            $result['message'] = sprintf("Commit already used : '%s'", $commit);
+          }
         }
         else
         {
-          $result['result'] = true;
-          $result['message'] = sprintf("Commit already used : '%s'", $commit);
+          $result['result'] = false;
+          $result['message'] = sprintf("No valid commit '%s'", $commit);
         }
       }
       else
       {
         $result['result'] = false;
-        $result['message'] = sprintf("No valid commit '%s'", $commit);
+        $result['message'] = sprintf("Unknown branch '%s' in project '%s'", $branch->__toString(), $repository->getName());
       }
     }
     else
