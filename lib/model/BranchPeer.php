@@ -64,7 +64,7 @@ class BranchPeer extends BaseBranchPeer {
    * @param $branch
    * @return void
    */
-  public static function synchronize(Repository $repository, Branch $branch)
+  public static function synchronize(Repository $repository, Branch $branch, $deleteOnly = false)
   {
     $branchGit = GitCommand::getNoMergedBranchInfos($repository->getValue(), $branch->getBaseBranchName(), $branch->getName());
 
@@ -76,11 +76,11 @@ class BranchPeer extends BaseBranchPeer {
 
     if($branchModel)
     {
-      if (is_null($branchGit))
+      if(is_null($branchGit))
       {
         $branchModel->delete();
       }
-      elseif(!$branchModel->getIsBlacklisted())
+      elseif(!$branchModel->getIsBlacklisted() && !$deleteOnly)
       {
         $branchModel->setCommitReference($branchGit['commit_reference']);
         $branchModel->setLastCommit($branchGit['last_commit']);
