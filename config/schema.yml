@@ -38,6 +38,7 @@ propel:
     branch_id:                        { type: integer, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
     state:                            { type: char, size: '1', required: true }
     filename:                         { type: varchar, size: '255', required: true }
+    commit_reference:                 { type: varchar, size: '50', required: true }
     nb_added_lines:                   { type: integer, size: '11', required: false }
     nb_deleted_lines:                 { type: integer, size: '11', required: false }
     last_change_commit:               { type: varchar, size: '50', required: false }

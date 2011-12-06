@@ -56,6 +56,7 @@ class FilePeer extends BaseFilePeer {
             ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
             ->setNbAddedLines($filesGit[$fileModel->getFilename()]['added-lines'])
             ->setNbDeletedLines($filesGit[$fileModel->getFilename()]['deleted-lines'])
+            ->setCommitReference($branch->getCommitReference())
           ;
         }
         $fileModel->save();
@@ -76,6 +77,7 @@ class FilePeer extends BaseFilePeer {
         ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
         ->setNbAddedLines($fileGit['added-lines'])
         ->setNbDeletedLines($fileGit['deleted-lines'])
+        ->setCommitReference($branch->getCommitReference())
         ->save()
       ;
     }
