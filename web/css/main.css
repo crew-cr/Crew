@@ -620,6 +620,13 @@ button.dislike.icon.enabled:before, button.dislike.icon:hover:before, button.dis
   border:1px solid #4183c4;
   background-color:#d6ebff;
 }
+.ricon {
+  font-family:'raphaelicons';
+  font-size:16px;
+  text-decoration:none;
+  padding:0 0 0 4px;
+  vertical-align:bottom;
+}
 h2 {
   color:#333333;
   font-size:16px;
@@ -676,33 +683,19 @@ strong { font-weight:bold; }
 .dropdown { position:relative; }
 .dropdown.open .dropdown-menu { display:block; }
 .dropdown.open .dropdown-toggle {
-  background-color:#4183c4;
   -webkit-border-top-right-radius:5px;
   -webkit-border-top-left-radius:5px;
   -moz-border-radius-topright:5px;
   -moz-border-radius-topleft:5px;
   border-top-right-radius:5px;
   border-top-left-radius:5px;
-  color:white !important;
 }
 .dropdown .dropdown-toggle { z-index:1001; }
-.dropdown .dropdown-toggle.icon {
-  font-family:'raphaelicons';
-  font-size:16px;
-  text-decoration:none;
-  padding:0 0 0 4px;
-}
 .dropdown .dropdown-menu {
   z-index:1000;
-  background-color:#4183c4;
   float:left;
   display:none;
   position:absolute;
-  top:34px;
-  left:0;
-  padding:6px 10px 0;
-  zoom:1;
-  font-size:80%;
   -webkit-border-bottom-right-radius:5px;
   -webkit-border-bottom-left-radius:5px;
   -moz-border-radius-bottomright:5px;
@@ -714,18 +707,7 @@ strong { font-weight:bold; }
 .dropdown .dropdown-menu > li {
   width:100%;
   display:block;
-  color:white;
   white-space:nowrap;
-}
-.dropdown .dropdown-menu > li span.ricon {
-  font-family:raphaelicons;
-  display:inline-block;
-  width:4px;
-  white-space:normal;
-}
-.dropdown .dropdown-menu > li a {
-  line-height:20px;
-  color:white;
 }
 html { height:100%; }
 html body {
@@ -816,33 +798,65 @@ html body .wrapper .site .page {
   margin:-20px 0 10px -25px;
   padding:20px 25px 0;
 }
-html body .wrapper .site .page .breadcrumb {
-  margin:0 0 15px 0;
-  padding:6px 10px 0;
-  background:#eeeeee;
-  font-size:16px;
+html body .wrapper .site .page ul.breadcrumb {
+  margin:0 0 20px 0;
+  padding:4px 0 0 5px;
+  font-size:13px;
   background-color:whiteSmoke;
-}
-html body .wrapper .site .page .breadcrumb > li {
-  display:inline-block;
-  color:black;
-}
-html body .wrapper .site .page .breadcrumb > li > a {
   line-height:28px;
-  color:#4183c4;
+  border:1px solid #dddddd;
 }
-html body .wrapper .site .page .breadcrumb > li a {
-  -webkit-border-top-right-radius:5px;
-  -webkit-border-top-left-radius:5px;
-  -moz-border-radius-topright:5px;
-  -moz-border-radius-topleft:5px;
-  border-top-right-radius:5px;
-  border-top-left-radius:5px;
-  padding:0 6px 6px;
+html body .wrapper .site .page ul.breadcrumb a {
+  color:#4183c4;
+  font-weight:bold;
+}
+html body .wrapper .site .page ul.breadcrumb li { display:inline-block; }
+html body .wrapper .site .page ul.breadcrumb li.dropdown a {
+  padding:0 0 4px;
   display:inline-block;
 }
-html body .wrapper .site .page .breadcrumb > li a+a { padding-left:0; }
-html body .wrapper .site .page .breadcrumb > li.repository { font-weight:bold; }
+html body .wrapper .site .page ul.breadcrumb li.dropdown a.dropdown-toggle {
+  padding:0 4px 4px;
+  font-family:'raphaelicons';
+  font-size:18px;
+  text-decoration:none;
+  color:#999999;
+  vertical-align:bottom;
+}
+html body .wrapper .site .page ul.breadcrumb li.dropdown.open .dropdown-toggle {
+  background-color:#4183c4;
+  color:white !important;
+}
+html body .wrapper .site .page ul.breadcrumb li.dropdown ul.dropdown-menu {
+  background-color:#4183c4;
+  top:32px;
+  left:0;
+  padding:0 6px 0;
+}
+html body .wrapper .site .page ul.breadcrumb li.dropdown ul.dropdown-menu > li {
+  line-height:24px;
+  color:white;
+}
+html body .wrapper .site .page ul.breadcrumb li.dropdown ul.dropdown-menu > li span.ricon {
+  width:16px;
+  display:inline-block;
+}
+html body .wrapper .site .page ul.breadcrumb li.dropdown ul.dropdown-menu > li a {
+  display:inline-block;
+  width:100%;
+  height:100%;
+  color:white;
+  font-weight:normal;
+}
+html body .wrapper .site .page ul.breadcrumb li a.logo {
+  display:block;
+  width:21px;
+  height:28px;
+  text-indent:-9999px;
+  background:url("../images/logo.png") 0 2px no-repeat transparent;
+  margin:0 10px 0 5px;
+  vertical-align:bottom;
+}
 html body .wrapper .site .page .page_body {
   line-height:1.4em;
   margin:0 auto 15px auto;
