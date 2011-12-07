@@ -166,7 +166,7 @@ class CampfireNotifier extends BaseNotifier
     $serviceToken = $configCurrentProject['api-token'];
     $roomId       = $configCurrentProject['room-id'];
 
-    $cmd = sprintf("curl -u %s:X -H 'Content-Type: application/json' -d '%s' %s/room/%s/speak.json", $serviceToken, json_encode(array('message' => array('body' => $message))), $serviceUrl, $roomId);
+    $cmd = sprintf("curl -u %s:X -H 'Content-Type: application/json' -d %s %s/room/%s/speak.json", $serviceToken, escapeshellarg(json_encode(array('message' => array('body' => $message)))), $serviceUrl, $roomId);
     exec($cmd);
 
     return true;
