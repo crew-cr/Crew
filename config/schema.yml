@@ -5,73 +5,75 @@ propel:
   branch:
     _attributes:
     id:                               ~
-    repository_id:                    { type: INTEGER, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    name:                             { type: VARCHAR, size: '255', required: true }
-    base_branch_name:                 { type: VARCHAR, size: '255', required: true }
-    commit_reference:                 { type: VARCHAR, size: '50', required: true }
-    last_commit:                      { type: VARCHAR, size: '50', required: false }
-    last_commit_desc:                 { type: VARCHAR, size: '255', required: false }
-    is_blacklisted:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    review_request:                   { type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
+    repository_id:                    { type: integer, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    name:                             { type: varchar, size: '255', required: true }
+    base_branch_name:                 { type: varchar, size: '255', required: true }
+    commit_reference:                 { type: varchar, size: '50', required: true }
+    last_commit:                      { type: varchar, size: '50', required: false }
+    last_commit_desc:                 { type: varchar, size: '255', required: false }
+    is_blacklisted:                   { type: tinyint, size: '1', required: true, defaultValue: '0' }
+    review_request:                   { type: tinyint, size: '1', required: true, defaultValue: '0' }
+    status:                           { type: tinyint, size: '1', required: true, defaultValue: '0' }
+    commit_status_changed:            { type: varchar, size: '50', required: false }
     user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    date_status_changed:              { type: TIMESTAMP, required: false }
+    date_status_changed:              { type: timestamp, required: false }
   comment:
     _attributes:
     id:                               ~
     user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
-    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    position:                         { type: INTEGER, size: '11', required: false }
-    line:                             { type: INTEGER, size: '11', required: false }
-    type:                             { type: ENUM, valueSet: 'branch, file, line' }
-    commit:                           { type: VARCHAR, size: '50', required: true }
-    value:                            { type: LONGVARCHAR, required: true }
-    root_comment_id:                  { type: INTEGER, size: '11', required: false }
+    branch_id:                        { type: integer, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    file_id:                          { type: integer, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    position:                         { type: integer, size: '11', required: false }
+    line:                             { type: integer, size: '11', required: false }
+    type:                             { type: enum, valueSet: 'branch, file, line' }
+    commit:                           { type: varchar, size: '50', required: true }
+    value:                            { type: longvarchar, required: true }
+    root_comment_id:                  { type: integer, size: '11', required: false }
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }
   file:
     _attributes:
     id:                               ~
-    branch_id:                        { type: INTEGER, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    state:                            { type: CHAR, size: '1', required: true }
-    filename:                         { type: VARCHAR, size: '255', required: true }
-    nb_added_lines:                   { type: INTEGER, size: '11', required: false }
-    nb_deleted_lines:                 { type: INTEGER, size: '11', required: false }
-    last_change_commit:               { type: VARCHAR, size: '50', required: false }
-    last_change_commit_desc:          { type: VARCHAR, size: '255', required: false }
-    last_change_commit_user:          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }
-    status:                           { type: TINYINT, size: '1', required: true, defaultValue: '0' }
-    commit_status_changed:            { type: VARCHAR, size: '50', required: false }
-    user_status_changed:              { type: INTEGER, size: '11', required: false }
-    date_status_changed:              { type: TIMESTAMP, required: false }
+    branch_id:                        { type: integer, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    state:                            { type: char, size: '1', required: true }
+    filename:                         { type: varchar, size: '255', required: true }
+    commit_reference:                 { type: varchar, size: '50', required: true }
+    review_request:                   { type: tinyint, size: '1', required: true, defaultValue: '0' }
+    nb_added_lines:                   { type: integer, size: '11', required: false }
+    nb_deleted_lines:                 { type: integer, size: '11', required: false }
+    last_change_commit:               { type: varchar, size: '50', required: false }
+    last_change_commit_desc:          { type: varchar, size: '255', required: false }
+    last_change_commit_user:          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    status:                           { type: tinyint, size: '1', required: true, defaultValue: '0' }
+    commit_status_changed:            { type: varchar, size: '50', required: false }
+    user_status_changed:              { type: integer, size: '11', required: false }
+    date_status_changed:              { type: timestamp, required: false }
   profile:
     _attributes:
     id:                               ~
-    nickname:                         { type: VARCHAR, size: '255' }
-    email:                            { type: VARCHAR, size: '255' }
-    sf_guard_user_id:                 { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
+    nickname:                         { type: varchar, size: '255' }
+    email:                            { type: varchar, size: '255' }
+    sf_guard_user_id:                 { type: integer, foreignTable: sf_guard_user, foreignReference: id, required: true, onDelete: cascade }
   repository:
     _attributes:
     id:                               ~
-    name:                             { type: VARCHAR, size: '50', required: true }
-    value:                            { type: VARCHAR, size: '255', required: true }
-    remote:                           { type: VARCHAR, size: '255', required: true }
+    name:                             { type: varchar, size: '50', required: true }
+    value:                            { type: varchar, size: '255', required: true }
+    remote:                           { type: varchar, size: '255', required: true }
   status_action:
     _attributes:
     id:                               ~
-    user_id:                          { type: INTEGER, foreignTable: sf_guard_user, foreignReference: id }
-    repository_id:                    { type: INTEGER, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    branch_id:                        { type: INTEGER, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    file_id:                          { type: INTEGER, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: CASCADE, onUpdate: RESTRICT }
-    message:                          { type: VARCHAR, size: '255', required: true }
-    old_status:                       { type: INTEGER, size: '11', required: true }
-    new_status:                       { type: INTEGER, size: '11', required: true }
+    user_id:                          { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    repository_id:                    { type: integer, size: '11', required: true, foreignTable: repository, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    branch_id:                        { type: integer, size: '11', required: false, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    file_id:                          { type: integer, size: '11', required: false, foreignTable: file, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    message:                          { type: varchar, size: '255', required: true }
+    old_status:                       { type: integer, size: '11', required: true }
+    new_status:                       { type: integer, size: '11', required: true }
     created_at:                       { type: timestamp, required: true}
   configuration:
     id:                               ~
-    name:                             { type: VARCHAR, size: '50', required: true }
-    value:                            { type: LONGVARCHAR}
+    name:                             { type: varchar, size: '50', required: true }
+    value:                            { type: longvarchar}
     _uniques:                         { name: [name] }

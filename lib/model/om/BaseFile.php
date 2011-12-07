@@ -49,6 +49,19 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	protected $filename;
 
 	/**
+	 * The value for the commit_reference field.
+	 * @var        string
+	 */
+	protected $commit_reference;
+
+	/**
+	 * The value for the review_request field.
+	 * Note: this column has a database default value of: 0
+	 * @var        int
+	 */
+	protected $review_request;
+
+	/**
 	 * The value for the nb_added_lines field.
 	 * @var        int
 	 */
@@ -157,6 +170,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 */
 	public function applyDefaultValues()
 	{
+		$this->review_request = 0;
 		$this->status = 0;
 	}
 
@@ -208,6 +222,26 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	public function getFilename()
 	{
 		return $this->filename;
+	}
+
+	/**
+	 * Get the [commit_reference] column value.
+	 * 
+	 * @return     string
+	 */
+	public function getCommitReference()
+	{
+		return $this->commit_reference;
+	}
+
+	/**
+	 * Get the [review_request] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getReviewRequest()
+	{
+		return $this->review_request;
 	}
 
 	/**
@@ -413,6 +447,46 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	} // setFilename()
 
 	/**
+	 * Set the value of [commit_reference] column.
+	 * 
+	 * @param      string $v new value
+	 * @return     File The current object (for fluent API support)
+	 */
+	public function setCommitReference($v)
+	{
+		if ($v !== null) {
+			$v = (string) $v;
+		}
+
+		if ($this->commit_reference !== $v) {
+			$this->commit_reference = $v;
+			$this->modifiedColumns[] = FilePeer::COMMIT_REFERENCE;
+		}
+
+		return $this;
+	} // setCommitReference()
+
+	/**
+	 * Set the value of [review_request] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     File The current object (for fluent API support)
+	 */
+	public function setReviewRequest($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->review_request !== $v) {
+			$this->review_request = $v;
+			$this->modifiedColumns[] = FilePeer::REVIEW_REQUEST;
+		}
+
+		return $this;
+	} // setReviewRequest()
+
+	/**
 	 * Set the value of [nb_added_lines] column.
 	 * 
 	 * @param      int $v new value
@@ -608,6 +682,10 @@ abstract class BaseFile extends BaseObject  implements Persistent
 	 */
 	public function hasOnlyDefaultValues()
 	{
+			if ($this->review_request !== 0) {
+				return false;
+			}
+
 			if ($this->status !== 0) {
 				return false;
 			}
@@ -638,15 +716,17 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			$this->branch_id = ($row[$startcol + 1] !== null) ? (int) $row[$startcol + 1] : null;
 			$this->state = ($row[$startcol + 2] !== null) ? (string) $row[$startcol + 2] : null;
 			$this->filename = ($row[$startcol + 3] !== null) ? (string) $row[$startcol + 3] : null;
-			$this->nb_added_lines = ($row[$startcol + 4] !== null) ? (int) $row[$startcol + 4] : null;
-			$this->nb_deleted_lines = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
-			$this->last_change_commit = ($row[$startcol + 6] !== null) ? (string) $row[$startcol + 6] : null;
-			$this->last_change_commit_desc = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
-			$this->last_change_commit_user = ($row[$startcol + 8] !== null) ? (int) $row[$startcol + 8] : null;
-			$this->status = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-			$this->commit_status_changed = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-			$this->user_status_changed = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
-			$this->date_status_changed = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->commit_reference = ($row[$startcol + 4] !== null) ? (string) $row[$startcol + 4] : null;
+			$this->review_request = ($row[$startcol + 5] !== null) ? (int) $row[$startcol + 5] : null;
+			$this->nb_added_lines = ($row[$startcol + 6] !== null) ? (int) $row[$startcol + 6] : null;
+			$this->nb_deleted_lines = ($row[$startcol + 7] !== null) ? (int) $row[$startcol + 7] : null;
+			$this->last_change_commit = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
+			$this->last_change_commit_desc = ($row[$startcol + 9] !== null) ? (string) $row[$startcol + 9] : null;
+			$this->last_change_commit_user = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+			$this->status = ($row[$startcol + 11] !== null) ? (int) $row[$startcol + 11] : null;
+			$this->commit_status_changed = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->user_status_changed = ($row[$startcol + 13] !== null) ? (int) $row[$startcol + 13] : null;
+			$this->date_status_changed = ($row[$startcol + 14] !== null) ? (string) $row[$startcol + 14] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -655,7 +735,7 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 13; // 13 = FilePeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 15; // 15 = FilePeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating File object", $e);
@@ -972,6 +1052,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($this->isColumnModified(FilePeer::FILENAME)) {
 			$modifiedColumns[':p' . $index++]  = '`FILENAME`';
 		}
+		if ($this->isColumnModified(FilePeer::COMMIT_REFERENCE)) {
+			$modifiedColumns[':p' . $index++]  = '`COMMIT_REFERENCE`';
+		}
+		if ($this->isColumnModified(FilePeer::REVIEW_REQUEST)) {
+			$modifiedColumns[':p' . $index++]  = '`REVIEW_REQUEST`';
+		}
 		if ($this->isColumnModified(FilePeer::NB_ADDED_LINES)) {
 			$modifiedColumns[':p' . $index++]  = '`NB_ADDED_LINES`';
 		}
@@ -1021,6 +1107,12 @@ abstract class BaseFile extends BaseObject  implements Persistent
 						break;
 					case '`FILENAME`':
 						$stmt->bindValue($identifier, $this->filename, PDO::PARAM_STR);
+						break;
+					case '`COMMIT_REFERENCE`':
+						$stmt->bindValue($identifier, $this->commit_reference, PDO::PARAM_STR);
+						break;
+					case '`REVIEW_REQUEST`':
+						$stmt->bindValue($identifier, $this->review_request, PDO::PARAM_INT);
 						break;
 					case '`NB_ADDED_LINES`':
 						$stmt->bindValue($identifier, $this->nb_added_lines, PDO::PARAM_INT);
@@ -1226,30 +1318,36 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				return $this->getFilename();
 				break;
 			case 4:
-				return $this->getNbAddedLines();
+				return $this->getCommitReference();
 				break;
 			case 5:
-				return $this->getNbDeletedLines();
+				return $this->getReviewRequest();
 				break;
 			case 6:
-				return $this->getLastChangeCommit();
+				return $this->getNbAddedLines();
 				break;
 			case 7:
-				return $this->getLastChangeCommitDesc();
+				return $this->getNbDeletedLines();
 				break;
 			case 8:
-				return $this->getLastChangeCommitUser();
+				return $this->getLastChangeCommit();
 				break;
 			case 9:
-				return $this->getStatus();
+				return $this->getLastChangeCommitDesc();
 				break;
 			case 10:
-				return $this->getCommitStatusChanged();
+				return $this->getLastChangeCommitUser();
 				break;
 			case 11:
-				return $this->getUserStatusChanged();
+				return $this->getStatus();
 				break;
 			case 12:
+				return $this->getCommitStatusChanged();
+				break;
+			case 13:
+				return $this->getUserStatusChanged();
+				break;
+			case 14:
 				return $this->getDateStatusChanged();
 				break;
 			default:
@@ -1285,15 +1383,17 @@ abstract class BaseFile extends BaseObject  implements Persistent
 			$keys[1] => $this->getBranchId(),
 			$keys[2] => $this->getState(),
 			$keys[3] => $this->getFilename(),
-			$keys[4] => $this->getNbAddedLines(),
-			$keys[5] => $this->getNbDeletedLines(),
-			$keys[6] => $this->getLastChangeCommit(),
-			$keys[7] => $this->getLastChangeCommitDesc(),
-			$keys[8] => $this->getLastChangeCommitUser(),
-			$keys[9] => $this->getStatus(),
-			$keys[10] => $this->getCommitStatusChanged(),
-			$keys[11] => $this->getUserStatusChanged(),
-			$keys[12] => $this->getDateStatusChanged(),
+			$keys[4] => $this->getCommitReference(),
+			$keys[5] => $this->getReviewRequest(),
+			$keys[6] => $this->getNbAddedLines(),
+			$keys[7] => $this->getNbDeletedLines(),
+			$keys[8] => $this->getLastChangeCommit(),
+			$keys[9] => $this->getLastChangeCommitDesc(),
+			$keys[10] => $this->getLastChangeCommitUser(),
+			$keys[11] => $this->getStatus(),
+			$keys[12] => $this->getCommitStatusChanged(),
+			$keys[13] => $this->getUserStatusChanged(),
+			$keys[14] => $this->getDateStatusChanged(),
 		);
 		if ($includeForeignObjects) {
 			if (null !== $this->aBranch) {
@@ -1352,30 +1452,36 @@ abstract class BaseFile extends BaseObject  implements Persistent
 				$this->setFilename($value);
 				break;
 			case 4:
-				$this->setNbAddedLines($value);
+				$this->setCommitReference($value);
 				break;
 			case 5:
-				$this->setNbDeletedLines($value);
+				$this->setReviewRequest($value);
 				break;
 			case 6:
-				$this->setLastChangeCommit($value);
+				$this->setNbAddedLines($value);
 				break;
 			case 7:
-				$this->setLastChangeCommitDesc($value);
+				$this->setNbDeletedLines($value);
 				break;
 			case 8:
-				$this->setLastChangeCommitUser($value);
+				$this->setLastChangeCommit($value);
 				break;
 			case 9:
-				$this->setStatus($value);
+				$this->setLastChangeCommitDesc($value);
 				break;
 			case 10:
-				$this->setCommitStatusChanged($value);
+				$this->setLastChangeCommitUser($value);
 				break;
 			case 11:
-				$this->setUserStatusChanged($value);
+				$this->setStatus($value);
 				break;
 			case 12:
+				$this->setCommitStatusChanged($value);
+				break;
+			case 13:
+				$this->setUserStatusChanged($value);
+				break;
+			case 14:
 				$this->setDateStatusChanged($value);
 				break;
 		} // switch()
@@ -1406,15 +1512,17 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if (array_key_exists($keys[1], $arr)) $this->setBranchId($arr[$keys[1]]);
 		if (array_key_exists($keys[2], $arr)) $this->setState($arr[$keys[2]]);
 		if (array_key_exists($keys[3], $arr)) $this->setFilename($arr[$keys[3]]);
-		if (array_key_exists($keys[4], $arr)) $this->setNbAddedLines($arr[$keys[4]]);
-		if (array_key_exists($keys[5], $arr)) $this->setNbDeletedLines($arr[$keys[5]]);
-		if (array_key_exists($keys[6], $arr)) $this->setLastChangeCommit($arr[$keys[6]]);
-		if (array_key_exists($keys[7], $arr)) $this->setLastChangeCommitDesc($arr[$keys[7]]);
-		if (array_key_exists($keys[8], $arr)) $this->setLastChangeCommitUser($arr[$keys[8]]);
-		if (array_key_exists($keys[9], $arr)) $this->setStatus($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setCommitStatusChanged($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setUserStatusChanged($arr[$keys[11]]);
-		if (array_key_exists($keys[12], $arr)) $this->setDateStatusChanged($arr[$keys[12]]);
+		if (array_key_exists($keys[4], $arr)) $this->setCommitReference($arr[$keys[4]]);
+		if (array_key_exists($keys[5], $arr)) $this->setReviewRequest($arr[$keys[5]]);
+		if (array_key_exists($keys[6], $arr)) $this->setNbAddedLines($arr[$keys[6]]);
+		if (array_key_exists($keys[7], $arr)) $this->setNbDeletedLines($arr[$keys[7]]);
+		if (array_key_exists($keys[8], $arr)) $this->setLastChangeCommit($arr[$keys[8]]);
+		if (array_key_exists($keys[9], $arr)) $this->setLastChangeCommitDesc($arr[$keys[9]]);
+		if (array_key_exists($keys[10], $arr)) $this->setLastChangeCommitUser($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setStatus($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setCommitStatusChanged($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setUserStatusChanged($arr[$keys[13]]);
+		if (array_key_exists($keys[14], $arr)) $this->setDateStatusChanged($arr[$keys[14]]);
 	}
 
 	/**
@@ -1430,6 +1538,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		if ($this->isColumnModified(FilePeer::BRANCH_ID)) $criteria->add(FilePeer::BRANCH_ID, $this->branch_id);
 		if ($this->isColumnModified(FilePeer::STATE)) $criteria->add(FilePeer::STATE, $this->state);
 		if ($this->isColumnModified(FilePeer::FILENAME)) $criteria->add(FilePeer::FILENAME, $this->filename);
+		if ($this->isColumnModified(FilePeer::COMMIT_REFERENCE)) $criteria->add(FilePeer::COMMIT_REFERENCE, $this->commit_reference);
+		if ($this->isColumnModified(FilePeer::REVIEW_REQUEST)) $criteria->add(FilePeer::REVIEW_REQUEST, $this->review_request);
 		if ($this->isColumnModified(FilePeer::NB_ADDED_LINES)) $criteria->add(FilePeer::NB_ADDED_LINES, $this->nb_added_lines);
 		if ($this->isColumnModified(FilePeer::NB_DELETED_LINES)) $criteria->add(FilePeer::NB_DELETED_LINES, $this->nb_deleted_lines);
 		if ($this->isColumnModified(FilePeer::LAST_CHANGE_COMMIT)) $criteria->add(FilePeer::LAST_CHANGE_COMMIT, $this->last_change_commit);
@@ -1504,6 +1614,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$copyObj->setBranchId($this->getBranchId());
 		$copyObj->setState($this->getState());
 		$copyObj->setFilename($this->getFilename());
+		$copyObj->setCommitReference($this->getCommitReference());
+		$copyObj->setReviewRequest($this->getReviewRequest());
 		$copyObj->setNbAddedLines($this->getNbAddedLines());
 		$copyObj->setNbDeletedLines($this->getNbDeletedLines());
 		$copyObj->setLastChangeCommit($this->getLastChangeCommit());
@@ -2124,6 +2236,8 @@ abstract class BaseFile extends BaseObject  implements Persistent
 		$this->branch_id = null;
 		$this->state = null;
 		$this->filename = null;
+		$this->commit_reference = null;
+		$this->review_request = null;
 		$this->nb_added_lines = null;
 		$this->nb_deleted_lines = null;
 		$this->last_change_commit = null;

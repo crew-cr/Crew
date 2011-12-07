@@ -26,7 +26,7 @@ class branchesSynchronizeAction extends sfAction
 
     foreach($branches as $branch)
     {
-      BranchPeer::synchronize($repository, $branch);
+      BranchPeer::synchronize($repository, $branch, true);
     }
 
     $this->redirect('default/branchList?repository='.$repository->getId());

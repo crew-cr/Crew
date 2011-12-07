@@ -34,6 +34,7 @@ class File extends BaseFile
       ->setCommitStatusChanged($this->getLastChangeCommit())
       ->setUserStatusChanged($user)
       ->setDateStatusChanged(time())
+      ->setReviewRequest(false)
       ->save($con)
     ;
   }
