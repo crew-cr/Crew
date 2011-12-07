@@ -23,7 +23,6 @@
     </div>
     <div class="site">
       <div class="page">
-        <?php echo include_component('default', 'breadcrumb') ?>
         <div class="page_body">
           <?php echo $sf_content ?>
         </div>

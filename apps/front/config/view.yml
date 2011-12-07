@@ -21,6 +21,7 @@ default:
     - vendor/jquery-1.6.4.min.js
     - vendor/jquery.qtip.min.js
     - vendor/jquery.mousewheel.min.js
+    - vendor/bootstrap-dropdown.js
     - toggleState.js
     - context.js
     - commentGlobal.js

@@ -4,14 +4,19 @@
 @grey: #666666;
 @darkGrey: #333333;
 @lightGrey: #999999;
+@lighterGrey: #eeeeee;
 
 @smallFont: 11px;
 @normalFont: 13px;
 @largeFont: 16px;
 
+@webWidth: 1020px;
+
 @normalFontFamily: arial, verdana;
 @technicalFontFamily: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
 @codeFontFamily: 'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+
+@font-face { font-family: raphaelicons; src: url('../font/raphaelicons-webfont.woff'); }
 
 @import "_list.less";
 @import "_comment.less";
@@ -33,6 +38,15 @@
   -moz-border-radius-bottomleft: 5px;
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
+}
+
+.radius-top (@radius: 3px) {
+  -webkit-border-top-right-radius: 5px;
+  -webkit-border-top-left-radius: 5px;
+  -moz-border-radius-topright: 5px;
+  -moz-border-radius-topleft: 5px;
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
 }
 
 .gradient (@from: #f4f4f4, @to: #ececec, @default: #ececec) {
@@ -76,6 +90,14 @@
     border: 1px solid @blue;
     background-color: #d6ebff;
   }
+}
+
+.ricon {
+  font-family: 'raphaelicons';
+  font-size: 16px;
+  text-decoration: none;
+  padding: 0 0 0 4px;
+  vertical-align: bottom;
 }
 
 /* Basic elements ui */
@@ -146,6 +168,39 @@ img {
 table { width: 100% }
 strong { font-weight: bold; }
 
+.dropdown {
+  position: relative;
+
+  &.open {
+    .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-toggle {
+      .radius-top(5px);
+    }
+  }
+
+  .dropdown-toggle {
+    z-index: 1001;
+  }
+
+  .dropdown-menu {
+    z-index: 1000;
+    float: left;
+    display: none;
+    position: absolute;
+    .radius-bottom(5px);
+    min-width: 100%;
+
+    & > li {
+      width: 100%;
+      display: block;
+      white-space: nowrap;
+    }
+  }
+}
+
 /* Crew structure */
 html {
   height: 100%;
@@ -155,22 +210,33 @@ html {
     color: @grey;
     font-size: @normalFont;
     font-family: @normalFontFamily;
-    background: url("../images/background-v2.png") repeat-x;
 
     .wrapper {
       min-height: 100%;
-      margin: 0 auto -90px; /* fixed footer at the bottom of the page */
+      margin: 50px auto -90px; /* fixed footer at the bottom of the page */
 
       .header {
-        width: 945px;
-        margin: 0 auto;
-        padding: 0 15px;
-        height: 91px;
+        position: absolute;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+        height: 32px;
         line-height: 30px;
         font-size: @smallFont;
         color: #333;
         text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
         overflow: hidden;
+        border-color: #EEE;
+        border: 1px solid #E9E9E9;
+        border-top: none;
+        border-bottom-color: whiteSmoke;
+        .box-shadow (0, 0, 1px, 0.5);
+        opacity: 0.3;
+        -webkit-transition: opacity .3s linear;
+
+        &:hover {
+           opacity: 1;
+        }
 
         h2 {
           font-size: @largeFont;
@@ -178,28 +244,19 @@ html {
         }
 
         .userbox {
-          float: right;
+          width: @webWidth;
+          margin: 0 auto;
           padding: 0 5px 0 5px;
-          margin-right: 5px;
           font-size: @normalFont;
-          border-top: none;
-          .radius-bottom(5px);
-          .gradient (#FCFCFC, #E8E8E8, #F5F5F5);
-          border-color: #EEE;
-          border: 1px solid #E9E9E9;
-          border-top: none;
-          border-bottom-color: whiteSmoke;
-          .box-shadow (0px, 1px, 1px, 0.2);
           font-weight: bold;
           color: #4183C4;
           text-shadow: white 1px 1px 0;
 
           li {
             display: inline;
-            border-right: 1px solid #DDD;
             padding: 10px;
 
-            &.last { border-right: none; }
+            &.last { border-right: none; width: 100%; text-align: right }
 
             &.username {
               padding-left: 2px;
@@ -235,7 +292,7 @@ html {
       }
 
       .site {
-        width: 945px;
+        width: @webWidth;
         margin: 0 auto;
         padding: 0 15px;
 
@@ -244,18 +301,79 @@ html {
           display: block;
           margin: -20px 0 10px -25px;
           padding: 20px 25px 0;
-          background: url('../images/background-white.png') 0 0 no-repeat;
 
-          #breadcrumb {
-            margin: 5px 0 20px 0;
-            font-size: @largeFont;
+          ul.breadcrumb {
+            margin: 0 0 20px 0;
+            padding: 4px 0 0 5px;
+            font-size: @normalFont;
+            background-color: whiteSmoke;
+            line-height: 28px;
+            border: 1px solid #ddd;
+
+            a {
+              color: @blue;
+              font-weight: bold;
+            }
 
             li {
               display: inline-block;
-              color: black;
+              &.dropdown {
+                a {
+                  padding: 0 0 4px;
+                  display: inline-block;
 
-              a, select { color: @blue; }
-              &.repository { font-weight: bold; }
+                  &.dropdown-toggle {
+                    padding: 0 4px 4px;
+                    font-family: 'raphaelicons';
+                    font-size: 18px;
+                    text-decoration: none;
+                    color: @lightGrey;
+                    vertical-align: bottom;
+                  }
+                }
+
+                &.open {
+                  .dropdown-toggle {
+                    background-color: @blue;
+                    color: white!important;
+                  }
+                }
+
+                ul.dropdown-menu {
+                  background-color: @blue;
+                  top: 32px;
+                  left: 0;
+                  padding: 0 6px 0;
+
+                  & > li {
+                    line-height: 24px;
+                    color: white;
+
+                    span.ricon {
+                      width: 16px;
+                      display: inline-block;
+                    }
+
+                    a {
+                      display: inline-block;
+                      width: 100%;
+                      height: 100%;
+                      color: white;
+                      font-weight: normal;
+                    }
+                  }
+                }
+              }
+
+              a.logo {
+                display: block;
+                width: 21px;
+                height: 28px;
+                text-indent: -9999px;
+                background: url("../images/logo.png") 0 2px no-repeat transparent;
+                margin: 0 10px 0 5px;
+                vertical-align: bottom;
+              }
             }
           }
 
