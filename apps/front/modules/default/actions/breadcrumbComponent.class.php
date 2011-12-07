@@ -8,91 +8,66 @@ class breadcrumbComponent extends sfComponent
    */
   public function execute($request)
   {
-    $this->links               = array();
-    $this->typeContext         = null;
-    $this->widgetDefault       = null;
-    $this->form                = null;
-    $this->userIsAuthenticated = $this->getUser()->isAuthenticated();
+    $this->list                        = null;
+    $this->userIsAuthenticated         = $this->getUser()->isAuthenticated();
+    $this->currentBreadCrumbFile       = null;
+    $this->currentBreadCrumbBranch     = null;
+    $this->currentBreadCrumbRepository = null;
+    $this->fileBreadCrumbList          = array();
+    $this->branchBreadCrumbList        = array();
+    $this->repositoryBreadCrumbList    = array();
 
-    $criteria = null;
-
-    if ($widgetDefault = $request->getParameter('repository'))
+    if ($fileId = $request->getParameter('file'))
     {
-      $this->typeContext = 'Repository';
-    }
-    else if($widgetDefault = $request->getParameter('branch'))
-    {
-      $this->typeContext = 'Branch';
-
-      $branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
-      if($branch === null)
-      {
-        throw new Exception('Branch not found');
-      }
-
-      $repository = RepositoryPeer::retrieveByPK($branch->getRepositoryId());
-      if($repository === null)
-      {
-        throw new Exception('Repository not found');
-      }
-
-      $this->links = array(
-        array(
-          'label' => $repository->getname(),
-          'url' => 'default/branchList?repository=' . $repository->getId(),
-          'class' => 'repository'
-        )
-      );
-
-      $criteria = BranchQuery::create()
-        ->filterByRepositoryId($repository->getId())
-        ->filterByIsBlacklisted(0)
+      $this->currentBreadCrumbFile = FileQuery::create()
+        ->filterById($fileId)
+        ->findOne()
       ;
-    }
-    else if($widgetDefault = $request->getParameter('file'))
-    {
-      $this->typeContext = 'File';
 
-      $file = FilePeer::retrieveByPK($request->getParameter('file'));
-      if($file === null)
-      {
-        throw new Exception('File not found');
-      }
-
-      $branch = BranchPeer::retrieveByPK($file->getBranchId());
-      if($branch === null)
-      {
-        throw new Exception('Branch not found');
-      }
-
-      $repository = RepositoryPeer::retrieveByPK($branch->getRepositoryId());
-      if($repository === null)
-      {
-        throw new Exception('Repository not found');
-      }
-
-      $this->links = array(
-        array(
-          'label' => $repository->__toString(),
-          'url' => 'default/branchList?repository=' . $repository->getId(),
-          'class' => 'repository'
-        ),
-        array(
-          'label' => $branch->__toString(),
-          'url' => 'default/fileList?branch=' . $branch->getId(),
-          'class' => 'branch'
-        ),
-      );
-
-      $criteria = FileQuery::create()
-        ->filterByBranchId($branch->getId())
+      $this->fileBreadCrumbList    = FileQuery::create()
+        ->filterById($fileId, Criteria::NOT_EQUAL)
+        ->filterByBranchId($this->currentBreadCrumbFile->getBranchId())
+        ->find()
       ;
     }
 
-    if ($this->typeContext !== null)
+    $branchId = $request->getParameter('branch');
+    if (!$branchId)
     {
-      $this->form = new sfForm();
-      $this->form->setWidget($this->typeContext, new sfWidgetFormPropelChoice(array('model' => $this->typeContext, 'criteria' => $criteria, 'add_empty' => false, 'default' => $widgetDefault), array('name' => strtolower($this->typeContext))));
+      $branchId = null != $this->currentBreadCrumbFile ? $this->currentBreadCrumbFile->getBranchId() : null;
+    }
+
+    if (null !== $branchId)
+    {
+      $this->currentBreadCrumbBranch = BranchQuery::create()
+        ->filterById($branchId)
+        ->findOne()
+      ;
+
+      $this->branchBreadCrumbList    = BranchQuery::create()
+        ->filterById($branchId, Criteria::NOT_EQUAL)
+        ->filterByRepositoryId($this->currentBreadCrumbBranch->getRepositoryId())
+        ->find()
+      ;
+    }
+
+    $repositoryId = $request->getParameter('repository');
+    if (!$repositoryId)
+    {
+      $repositoryId = null != $this->currentBreadCrumbBranch ? $this->currentBreadCrumbBranch->getRepositoryId() : null;
+    }
+
+    if (null !== $repositoryId)
+    {
+      $this->currentBreadCrumbRepository = RepositoryQuery::create()
+        ->filterById($repositoryId)
+        ->findOne()
+      ;
+
+      $this->repositoryBreadCrumbList    = RepositoryQuery::create()
+        ->filterById($repositoryId, Criteria::NOT_EQUAL)
+        ->find()
+      ;
     }
   }
 }
