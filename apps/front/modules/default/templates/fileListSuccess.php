@@ -15,11 +15,11 @@
   <div class="list_body" id="file_list">
     <table>
       <?php foreach ($files as $file): ?>
-      <tr>
+      <tr class="<?php echo $file['ReviewRequest'] === 1 ? 'review_request':'' ?>">
         <td class="state">
           <span class="state_<?php echo $file['State'] ?>" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>"><?php echo $file['State'] ?></span>
         </td>
-        <td>
+        <td class="file_name">
           <h3><?php echo link_to(stringUtils::lshorten($file['Filename'], 80), 'default/file', array('title' => stringUtils::trimTicketInfos($file['LastChangeCommitDesc']), 'query_string' => 'file='.$file['Id'], 'class' => 'tooltip')) ?></h3>
         </td>
         <td class="view_infos">

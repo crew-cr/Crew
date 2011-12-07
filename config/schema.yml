@@ -39,6 +39,7 @@ propel:
     state:                            { type: char, size: '1', required: true }
     filename:                         { type: varchar, size: '255', required: true }
     commit_reference:                 { type: varchar, size: '50', required: true }
+    review_request:                   { type: tinyint, size: '1', required: true, defaultValue: '0' }
     nb_added_lines:                   { type: integer, size: '11', required: false }
     nb_deleted_lines:                 { type: integer, size: '11', required: false }
     last_change_commit:               { type: varchar, size: '50', required: false }

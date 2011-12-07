@@ -57,6 +57,10 @@
   background:url('../images/review_request.png') 6px 7px no-repeat;
   padding-left:30px;
 }
+.list .list_body table tr.review_request td.file_name {
+  background:url('../images/review_request.png') 6px 7px no-repeat;
+  padding-left:30px;
+}
 .list .list_body table tr td { padding:3px 5px; }
 .list .list_body table tr td.padding-left { padding-left:10px; }
 .list .list_body table tr td.padding-right { padding-right:10px; }

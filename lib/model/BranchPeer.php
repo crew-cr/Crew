@@ -82,12 +82,13 @@ class BranchPeer extends BaseBranchPeer {
       }
       elseif(!$branchModel->getIsBlacklisted() && !$deleteOnly)
       {
+        $lastSynchronizationCommit = $branchModel->getLastCommit();
         $branchModel->setCommitReference($branchGit['commit_reference']);
         $branchModel->setLastCommit($branchGit['last_commit']);
         $branchModel->setLastCommitDesc($branchGit['last_commit_desc']);
         $branchModel->save();
 
-        FilePeer::synchronize($branchModel);
+        FilePeer::synchronize($branchModel, $lastSynchronizationCommit);
       }
     }
   }

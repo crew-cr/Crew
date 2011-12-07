@@ -63,23 +63,26 @@ class GitCommand
    * @param string $lastCommit
    * @return array
    */
-  public static function getDiffFilesFromBranch($gitDir, $referenceCommit, $lastCommit)
+  public static function getDiffFilesFromBranch($gitDir, $referenceCommit, $lastCommit, $withDetails = true)
   {
     self::fetch($gitDir);
 
     $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --name-status', $gitDir,  $referenceCommit, $lastCommit);
     exec($cmd, $results);
 
-    $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
-    exec($cmd, $lineResults);
-
-    $linesInfos = array();
-    foreach($lineResults as $line)
+    if($withDetails)
     {
-      $infos = explode(' ', $line);
-      if(count($infos) == 3)
+      $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
+      exec($cmd, $lineResults);
+
+      $linesInfos = array();
+      foreach($lineResults as $line)
       {
-        $linesInfos[$infos[2]] = array($infos[0], $infos[1]);
+        $infos = explode(' ', $line);
+        if(count($infos) == 3)
+        {
+          $linesInfos[$infos[2]] = array($infos[0], $infos[1]);
+        }
       }
     }
 
@@ -90,10 +93,14 @@ class GitCommand
 
       $diffFiles[$filename] = array(
         'state' => substr($result,0, 1),
-        'filename' => $filename,
-        'added-lines' => (isset($linesInfos[$filename])) ? $linesInfos[$filename][0] : '',
-        'deleted-lines' => (isset($linesInfos[$filename])) ? $linesInfos[$filename][1] : ''
+        'filename' => $filename
       );
+
+      if($withDetails)
+      {
+        $diffFiles[$filename]['added-lines'] = (isset($linesInfos[$filename])) ? $linesInfos[$filename][0] : '';
+        $diffFiles[$filename]['deleted-lines'] = (isset($linesInfos[$filename])) ? $linesInfos[$filename][1] : '';
+      }
     }
 
     return $diffFiles;
