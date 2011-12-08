@@ -28,16 +28,15 @@
 
       .add_bubble {
         position: absolute;
-        left: 0;
+        left: -22px;
         width: 30px;
         height: 14px;
         margin-left: -10px;
-        margin-top: 3px;
         background: url('../images/add_bubble.png') 0 0 no-repeat white;
         cursor: pointer;
         opacity: 0;
         filter: alpha(opacity=0);
-        -webkit-transition: opacity .3s ease-out;
+        .transition(opacity, .3s, ease-out);
       }
     }
 
