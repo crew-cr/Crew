@@ -24,7 +24,7 @@ class fileContentAction extends sfAction
     $this->repository = RepositoryPeer::retrieveByPK($this->branch->getRepositoryId());
     $this->forward404Unless($this->repository, "Repository not found");
 
-    $this->fileContent = GitCommand::getShowFile($this->repository->getValue(), $this->file->getLastChangeCommit(), $this->file->getFilename());
+    $this->fileContent = GitCommand::getShowFile($this->repository->getGitDir(), $this->file->getLastChangeCommit(), $this->file->getFilename());
 
     $this->fileExtension = pathinfo($this->file->getFilename(), PATHINFO_EXTENSION);
   }

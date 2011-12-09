@@ -41,7 +41,7 @@ class fileAction extends sfAction
     $this->forward404Unless($this->repository, "Repository not found");
 
     $this->fileContentLines = GitCommand::getShowFileFromBranch(
-      $this->repository->getValue(),
+      $this->repository->getGitDir(),
       $this->branch->getCommitReference(),
       $this->file->getLastChangeCommit(),
       $this->file->getFilename()

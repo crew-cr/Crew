@@ -23,8 +23,9 @@ class projectAddAction extends sfAction
     {
       if($name && $remote)
       {
-        $repositoryRootPath = Configuration::get('repositories_path');
-        $repository = sprintf('%s/%s', $repositoryRootPath, $name);
+        $repositoryPath = Configuration::get('repositories_path');
+        $repositoryName = $name;
+        $repository     = sprintf('%s/%s', $repositoryPath, $repositoryName);
 
         if(!$this->checkLocalRepository($repository, $remote))
         {
@@ -40,7 +41,7 @@ class projectAddAction extends sfAction
               $newProject
                 ->setName($name)
                 ->setRemote($remote)
-                ->setValue($repository)
+                ->setValue($repositoryName)
                 ->save()
               ;
 
@@ -60,7 +61,7 @@ class projectAddAction extends sfAction
             $cloneStatus = GitCommand::cloneRepository($remote, $repository);
             if($cloneStatus == 0)
             {
-              $message .= sprintf(" and remote '%s' is correctly cloned in '%s'", $remote, $repository );
+              $message .= sprintf(" and remote '%s' is correctly cloned in '%s'", $remote, $repository);
               $this->getUser()->setFlash('notice', $message);
             }
             else

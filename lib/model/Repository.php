@@ -22,4 +22,9 @@ class Repository extends BaseRepository {
   {
     return $this->getName();
   }
+
+  public function getGitDir()
+  {
+    return sprintf('%s/%s', Configuration::get('repositories_path'), $this->getValue());
+  }
 } // Repository

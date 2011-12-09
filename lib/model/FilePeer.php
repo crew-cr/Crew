@@ -30,7 +30,7 @@ class FilePeer extends BaseFilePeer {
    */
   public static function synchronize(Branch $branch, $lastBranchSynchronizationCommit = null)
   {
-    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(), $branch->getCommitReference(), $branch->getLastCommit());
+    $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getGitDir(), $branch->getCommitReference(), $branch->getLastCommit());
 
     $filesModel = FileQuery::create()
       ->filterByBranchId($branch->getId())
@@ -39,7 +39,7 @@ class FilePeer extends BaseFilePeer {
 
     if(count($filesModel) > 0)
     {
-      $diffFilesFromLastSynch = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getValue(), (!is_null($lastBranchSynchronizationCommit)) ? $lastBranchSynchronizationCommit : $branch->getCommitReference(), $branch->getLastCommit(), false);
+      $diffFilesFromLastSynch = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getGitDir(), (!is_null($lastBranchSynchronizationCommit)) ? $lastBranchSynchronizationCommit : $branch->getCommitReference(), $branch->getLastCommit(), false);
     }
 
     foreach ($filesModel as $fileModel)
@@ -51,12 +51,12 @@ class FilePeer extends BaseFilePeer {
       }
       else
       {
-        $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getValue(), $branch->getName(), $fileModel->getFilename());
+        $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getGitDir(), $branch->getName(), $fileModel->getFilename());
         $fileModel->setStatus(BranchPeer::A_TRAITER)
           ->setState($filesGit[$fileModel->getFilename()]['state'])
           ->setLastChangeCommit($lastChangeCommit)
           ->setCommitStatusChanged($lastChangeCommit)
-          ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
+          ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getGitDir(), $lastChangeCommit, "%ce %s"))
           ->setNbAddedLines($filesGit[$fileModel->getFilename()]['added-lines'])
           ->setNbDeletedLines($filesGit[$fileModel->getFilename()]['deleted-lines'])
           ->setCommitReference($branch->getCommitReference())
@@ -70,14 +70,14 @@ class FilePeer extends BaseFilePeer {
 
     foreach ($filesGit as $fileGit)
     {
-      $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getValue(), $branch->getName(), $fileGit['filename']);
+      $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getGitDir(), $branch->getName(), $fileGit['filename']);
       $file = new File();
       $file->setFilename($fileGit['filename'])
         ->setStatus(BranchPeer::A_TRAITER)
         ->setState($fileGit['state'])
         ->setBranchId($branch->getId())
         ->setLastChangeCommit($lastChangeCommit)
-        ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getValue(), $lastChangeCommit, "%ce %s"))
+        ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getGitDir(), $lastChangeCommit, "%ce %s"))
         ->setNbAddedLines($fileGit['added-lines'])
         ->setNbDeletedLines($fileGit['deleted-lines'])
         ->setCommitReference($branch->getCommitReference())

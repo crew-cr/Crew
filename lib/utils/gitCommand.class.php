@@ -9,7 +9,7 @@ class GitCommand
    */
   public static function getRemote($gitDir)
   {
-    $cmd = sprintf("git --git-dir='%s/.git' remote -v | grep origin | head -n1 | tr -d '\t' | sed 's/origin//' | cut -d' ' -f1", $gitDir);
+    $cmd = sprintf("git --git-dir='%s' remote -v | head -n1 | tr -d '\t' | cut -d' ' -f1", $gitDir);
     exec($cmd, $remote);
     return (count($remote)) ? $remote[0] : '';
   }
@@ -21,7 +21,7 @@ class GitCommand
    */
   public static function fetch($gitDir)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" fetch -p origin', $gitDir);
+    $cmd = sprintf('git --git-dir="%s" fetch -p origin', $gitDir);
     exec($cmd, $tata, $retour);
   }
   
@@ -34,7 +34,7 @@ class GitCommand
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s/.git" branch -r --no-merged %s | grep %s | sed "s/ //g"', $gitDir, $baseBranch, $branch);
+    $cmd = sprintf('git --git-dir="%s" branch --no-merged %s | grep %s | sed "s/ //g"', $gitDir, $baseBranch, $branch);
     exec($cmd, $result);
     if(count($result) == 0 || strpos($result[0], '->') !== false || $result[0] != $branch)
     {
@@ -43,11 +43,11 @@ class GitCommand
 
     $noMergedBranchInfos = array();
 
-    $cmd = sprintf('git --git-dir="%s/.git" merge-base %s %s | head -1', $gitDir, $baseBranch, $branch);
+    $cmd = sprintf('git --git-dir="%s" merge-base %s %s | head -1', $gitDir, $baseBranch, $branch);
     exec($cmd, $commitRef);
     $noMergedBranchInfos['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
 
-    $cmd = sprintf('git --git-dir="%s/.git" rev-parse --verify %s', $gitDir, $branch);
+    $cmd = sprintf('git --git-dir="%s" rev-parse --verify %s', $gitDir, $branch);
     exec($cmd, $commitStatus);
     $noMergedBranchInfos['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
 
@@ -67,12 +67,12 @@ class GitCommand
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --name-status', $gitDir,  $referenceCommit, $lastCommit);
+    $cmd = sprintf('git --git-dir="%s" diff %s..%s --name-status', $gitDir,  $referenceCommit, $lastCommit);
     exec($cmd, $results);
 
     if($withDetails)
     {
-      $cmd = sprintf('git --git-dir="%s/.git" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
+      $cmd = sprintf('git --git-dir="%s" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit);
       exec($cmd, $lineResults);
 
       $linesInfos = array();
@@ -118,7 +118,7 @@ class GitCommand
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s/.git" show %s:%s', $gitDir, $currentCommit, $filename);
+    $cmd = sprintf('git --git-dir="%s" show %s:%s', $gitDir, $currentCommit, $filename);
     exec($cmd, $fileContent);
 
     return implode(PHP_EOL, $fileContent);
@@ -136,7 +136,7 @@ class GitCommand
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s/.git" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
+    $cmd = sprintf('git --git-dir="%s" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
     exec($cmd, $currentContentLinesResults);
 
     $patternFinded = false;
@@ -158,7 +158,7 @@ class GitCommand
 
   public static function getLastModificationCommit($gitDir, $branch, $filename)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" log %s --format="%%H" -- %s | head -n1', $gitDir, $branch, $filename);
+    $cmd = sprintf('git --git-dir="%s" log %s --format="%%H" -- %s | head -n1', $gitDir, $branch, $filename);
     exec($cmd, $return);
     return (count($return)) ? $return[0] : false;
   }
@@ -171,21 +171,21 @@ class GitCommand
    */
   public static function cloneRepository($repositoryReadOnlyUrl, $path)
   {
-    $cmd = sprintf('git clone %s %s', $repositoryReadOnlyUrl, $path);
+    $cmd = sprintf('git clone --mirror %s %s', $repositoryReadOnlyUrl, $path);
     exec($cmd, $return, $status);
     return $status;
   }
 
   public static function commitIsInHistory($gitDir, $commit, $searchedCommit)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" log %s | grep %s', $gitDir, $commit, $searchedCommit);
+    $cmd = sprintf('git --git-dir="%s" log %s | grep %s', $gitDir, $commit, $searchedCommit);
     exec($cmd, $return);
     return (count($return) > 0);
   }
 
   public static function getCommitInfos($gitDir, $commit, $format)
   {
-    $cmd = sprintf('git --git-dir="%s/.git" log %s --format="%s" -n1', $gitDir, $commit, $format);
+    $cmd = sprintf('git --git-dir="%s" log %s --format="%s" -n1', $gitDir, $commit, $format);
     exec($cmd, $return);
     return (count($return)) ? $return[0] : '';
   }

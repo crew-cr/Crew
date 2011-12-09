@@ -22,7 +22,7 @@ class fileListAction extends sfAction
       $this->forward404Unless($repository, "Repository not found");
       
       $this->branch = BranchQuery::create()
-        ->filterByName(sprintf('origin/%s', $request->getParameter('name')))
+        ->filterByName($request->getParameter('name'))
         ->filterByRepository($repository)
         ->findOne();
       
