@@ -69,21 +69,17 @@
 .list .list_body table tr td.padding-left { padding-left:10px; }
 .list .list_body table tr td.padding-right { padding-right:10px; }
 .list .list_body table tr td.state {
+  background-color:#f5f5f5;
   line-height:24px;
-  padding-left:6px;
-  width:21px;
+  padding-left:0;
+  padding-right:0;
+  width:22px;
+  font-size:20px;
+  text-align:center;
 }
-.list .list_body table tr td.state > span {
-  display:block;
-  width:20px;
-  height:19px;
-  text-align:left;
-  text-indent:-9999px;
-  margin-top:1px;
-}
-.list .list_body table tr td.state > span.state_A { background:url('../images/file_modes.png') 0 0 no-repeat; }
-.list .list_body table tr td.state > span.state_M { background:url('../images/file_modes.png') 0 -50px no-repeat; }
-.list .list_body table tr td.state > span.state_D { background:url('../images/file_modes.png') 0 -100px no-repeat; }
+.list .list_body table tr td.state.state_A { color:#55bb55; }
+.list .list_body table tr td.state.state_M { color:#666666; }
+.list .list_body table tr td.state.state_D { color:#bb5555; }
 .list .list_body table tr td.status {
   width:110px;
   line-height:24px;

@@ -89,22 +89,16 @@
           &.padding-right { padding-right: 10px; }
 
           &.state {
+            background-color: #f5f5f5;
             line-height: 24px;
-            padding-left: 6px;
-            width: 21px;
-
-            & > span {
-              display: block;
-              width: 20px;
-              height: 19px;
-              text-align: left;
-              text-indent: -9999px;
-              margin-top: 1px;
-              
-              &.state_A { background: url('../images/file_modes.png') 0 0 no-repeat; }
-              &.state_M { background: url('../images/file_modes.png') 0 -50px no-repeat; }
-              &.state_D { background: url('../images/file_modes.png') 0 -100px no-repeat; }
-            }
+            padding-left: 0;
+            padding-right: 0;
+            width: 22px;
+            font-size: 20px;
+            text-align: center;
+            &.state_A { color: #5B5; }
+            &.state_M { color: @grey; }
+            &.state_D { color: #B55; }
           }
           
           &.status {
