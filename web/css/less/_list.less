@@ -11,7 +11,6 @@
     color: @grey;
     background-color: whitesmoke;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
-    overflow: hidden;
 
     span.title {
       color: @grey;
@@ -108,10 +107,10 @@
           }
           
           &.status {
-            width: 110px;
+            width: 25px;
             line-height: 24px;
             padding: 0 10px;
-            text-align: right;
+            text-align: center;
 
             & > a {
               display: inline-block;
@@ -215,6 +214,50 @@
         font-size: @smallFont;
         color: @grey;
         a { color: @blue; }
+      }
+    }
+  }
+
+  .dropdown-action {
+    font-size: 30px;
+
+    a { text-decoration: none }
+    li.dropdown {
+      width: 30px;
+      text-align: center;
+
+      &.open {
+        color: white;
+        background-color: @grey;
+        .radius-top (3px);
+
+        .dropdown-toggle span {
+          color: white;
+        }
+      }
+
+      .ricon {
+        font-size: 25px;
+        line-height: 30px;
+      }
+
+      &.open {
+        color: white;
+        background-color: @grey;
+        .radius-top (3px);
+
+        .dropdown-toggle { color: white }
+      }
+
+      .dropdown-toggle { color: @grey }
+
+      ul.dropdown-menu {
+        color: white;
+        background-color: @grey;
+        .radius-bottom(3px);
+        .box-shadow(2px, 5px, 10px, 0.4);
+
+        li { cursor: pointer }
       }
     }
   }
