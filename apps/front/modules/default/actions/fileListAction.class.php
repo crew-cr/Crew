@@ -65,7 +65,27 @@ class fileListAction extends sfAction
       $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount)));
     }
 
+    usort($this->files, array('self', 'sortPath'));
     $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $this->repository->getId(), $this->branch->getId());
     $this->commentBoards = CommentPeer::getCommentsForBoard(null, $this->repository->getId(), $this->branch->getId());
+  }
+
+  private static function sortPath($a, $b)
+  {
+    $pathA = dirname($a['Filename']);
+    $fileA = basename($a['Filename']);
+    $pathB = dirname($b['Filename']);
+    $fileB = basename($b['Filename']);
+
+    $cmpPath = strcmp($pathA, $pathB);
+    if($cmpPath === 0)
+    {
+      $cmpFile = strcmp($fileA, $fileB);
+      return $cmpFile;
+    }
+    else
+    {
+      return $cmpPath;
+    }
   }
 }
