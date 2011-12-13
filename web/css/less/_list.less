@@ -16,6 +16,10 @@
     span.title {
       color: @grey;
       font-weight: bold;
+
+      &+span {
+        padding-right: 20px;
+      }
     }
 
     &.icon {
@@ -80,6 +84,16 @@
           td.file_name {
             background: url('../images/review_request.png') 6px 7px no-repeat;
             padding-left: 30px;
+          }
+        }
+
+        &.path_directory {
+          color: @grey;
+          border-top: 2px solid #BBB;
+          background-color: #EBEBEB;
+
+          &:hover {
+            background-color: #EBEBEB;
           }
         }
 
