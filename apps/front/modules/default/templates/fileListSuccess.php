@@ -3,24 +3,46 @@
     <span class="title">File list</span>
     <span class="view_files_info">
        :
-      added <input type="checkbox" checked id="view_files_A" name="view_files_A">,
-      modified <input type="checkbox" checked id="view_files_M" name="view_files_M">,
-      deleted <input type="checkbox" checked id="view_files_D" name="view_files_D">
+      <label for="view_files_A">added</label>
+      <input type="checkbox" checked id="view_files_A" name="view_files_A">,
+      <label for="view_files_M">modified</label>
+      <input type="checkbox" checked id="view_files_M" name="view_files_M">,
+      <label for="view_files_D">deleted</label>
+      <input type="checkbox" checked id="view_files_D" name="view_files_D">
+    </span>
+    <span class="title">View</span>
+    <span class="view_files_info">
+       :
+      <label for="view_files_tree" >tree</label> <input type="checkbox" checked id="view_files_tree" name="view_files_tree">
     </span>
     <div class="right status">
       <button title="Validate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon success like only-icon <?php echo $branch->getStatus() === BranchPeer::OK ? 'enabled' : '' ?>"><?php echo link_to('Validate branch', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
       <button title="Invalidate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon danger dislike only-icon <?php echo $branch->getStatus() === BranchPeer::KO ? 'enabled' : '' ?>"><?php echo link_to('Invalidate branch', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
     </div>
   </div>
+  <?php $pathDirOld = ""; ?>
+  <?php $maxLength = 110; ?>
   <div class="list_body" id="file_list">
     <table>
       <?php foreach ($files as $file): ?>
+      <?php $pathDir = dirname($file['Filename']); ?>
+      <?php $filename = basename($file['Filename']); ?>
+      <?php if($pathDirOld !== $pathDir && $pathDir !== ".") : ?>
+        <tr class="path_directory">
+          <td class="ricon">Ø</td>
+          <td colspan="5"><?php echo $pathDir . '/';?></td>
+        </tr>
+      <?php endif;?>
       <tr class="<?php echo $file['ReviewRequest'] === 1 ? 'review_request':'' ?>">
         <td class="state state_<?php echo $file['State'] ?> ricon" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>">
           <?php echo $file['State'] == 'A' ? '@' : ($file['State'] == 'M' ? '>' : 'A') ?>
         </td>
         <td class="file_name">
-          <h3><?php echo link_to(stringUtils::lshorten($file['Filename'], 80), 'default/file', array('title' => stringUtils::trimTicketInfos($file['LastChangeCommitDesc']), 'query_string' => 'file='.$file['Id'], 'class' => 'tooltip')) ?></h3>
+          <h3>
+            <a class="tooltip" href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
+              <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
+            </a>
+          </h3>
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>
@@ -38,6 +60,7 @@
           <button title="Invalidate file" class="tooltip icon danger dislike only-icon <?php echo $file['Status'] === BranchPeer::KO ? 'enabled' : ''?>"><?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
         </td>
       </tr>
+      <?php $pathDirOld = $pathDir; ?>
       <?php endforeach; ?>
     </table>
   </div>
