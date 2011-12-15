@@ -44,3 +44,8 @@ all:
     # Default secure
     secure_module:          auth
     secure_action:          error403
+
+    standard_helpers:
+      - Partial
+      - Url
+      - CrossApp
