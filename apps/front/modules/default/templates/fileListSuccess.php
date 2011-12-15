@@ -19,20 +19,20 @@
       <ul class="dropdown-action">
         <li class="dropdown">
           <?php if (BranchPeer::OK === $branch->getStatus()): ?>
-            <?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
+            <?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
             <ul class="dropdown-menu">
-              <lI><?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
-              <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon item-status-action tooltip', 'title' => 'To do')); ?></lI>
+              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+              <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
           <?php elseif (BranchPeer::KO === $branch->getStatus()): ?>
-            <?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
+            <?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
             <ul class="dropdown-menu">
-                <lI><?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-                <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon item-status-action tooltip', 'title' => 'To do')); ?></lI>
+                <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
           <?php else: ?>
             <?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'dropdown-toggle ricon todo tooltip', 'title' => 'To do')); ?>
             <ul class="dropdown-menu">
-              <lI><?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-              <lI><?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+              <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
           <?php endif; ?>
           </ul>
         </li>
@@ -78,20 +78,20 @@
           <ul class="dropdown-action">
             <li class="dropdown">
               <?php if (BranchPeer::OK === $file['Status']): ?>
-                <?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
+                <?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
                 <ul class="dropdown-menu">
-                  <lI><?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
-                  <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon item-status-action tooltip', 'title' => 'To do')); ?></lI>
+                  <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+                  <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
               <?php elseif (BranchPeer::KO === $file['Status']): ?>
-                <?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
+                <?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
                 <ul class="dropdown-menu">
-                    <lI><?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-                    <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon item-status-action tooltip', 'title' => 'To do')); ?></lI>
+                    <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                    <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
               <?php else: ?>
                 <?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'dropdown-toggle ricon todo tooltip', 'title' => 'To do')); ?>
                 <ul class="dropdown-menu">
-                  <lI><?php echo link_to('*', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-                  <lI><?php echo link_to('%', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+                  <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                  <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
               <?php endif; ?>
               </ul>
             </li>

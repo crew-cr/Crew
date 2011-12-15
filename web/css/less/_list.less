@@ -234,13 +234,19 @@
       width: 30px;
       text-align: center;
 
+      .dropdown-toggle {
+
+        &.ricon.invalidate { color: red }
+        &.ricon.validate { color: green }
+      }
+
       &.open {
         color: white;
         background-color: @grey;
         .radius-top (3px);
 
-        .dropdown-toggle span {
-          color: white;
+        .dropdown-toggle {
+          &.ricon {color: white;}
         }
       }
 

@@ -170,6 +170,8 @@
   width:30px;
   text-align:center;
 }
+.list .dropdown-action li.dropdown .dropdown-toggle.ricon.invalidate { color:red; }
+.list .dropdown-action li.dropdown .dropdown-toggle.ricon.validate { color:green; }
 .list .dropdown-action li.dropdown.open {
   color:white;
   background-color:#666666;
@@ -180,7 +182,7 @@
   border-top-right-radius:5px;
   border-top-left-radius:5px;
 }
-.list .dropdown-action li.dropdown.open .dropdown-toggle span { color:white; }
+.list .dropdown-action li.dropdown.open .dropdown-toggle.ricon { color:white; }
 .list .dropdown-action li.dropdown .ricon {
   font-size:25px;
   line-height:30px;
