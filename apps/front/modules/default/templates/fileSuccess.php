@@ -1,6 +1,6 @@
 <div class="file_bloc">
   <div class="list">
-    <div class="list_head">
+    <div class="list_head scroll">
       <span class="title">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
@@ -31,8 +31,16 @@
           </ul>
         </li>
       </ul>
-      <div class="right">
-        <button><?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?></button>
+      <div class="actions">
+        <?php if (null !== $previousFileId): ?>
+        <?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
+        <?php endif; ?>
+        <?php if (null !== $nextFileId): ?>
+        <?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
+        <?php endif; ?>
+        <?php if ('D' !== $file->getState()): ?>
+        <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+        <?php endif; ?>
       </div>
     </div>
     <div id="window" class="list_body data">
@@ -70,13 +78,5 @@
     <div id="comment_component" class="comments_holder">
       <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
     </div>
-  </div>
-  <div class="navigation_links">
-    <?php if (null !== $previousFileId): ?>
-      <button><?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?></button>
-    <?php endif; ?>
-    <?php if (null !== $nextFileId): ?>
-      <button class="right"><?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?></button>
-    <?php endif; ?>
   </div>
 </div>

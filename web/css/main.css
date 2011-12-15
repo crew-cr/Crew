@@ -5,22 +5,51 @@
 .list {
   border:1px solid #d8d8d8;
   margin-bottom:20px;
+  position:relative;
 }
 .list .list_head {
   border-bottom:1px solid #cccccc;
   padding:0 5px;
-  height:30px;
+  height:32px;
   line-height:30px;
   font-size:13px;
   color:#666666;
   background-color:whitesmoke;
   text-shadow:0 1px 0 rgba(255,255,255,1);
 }
+.list .list_head img.avatar {
+  vertical-align:top;
+  margin:4px 0 0 0;
+}
+.list .list_head .actions { float:right; }
+.list .list_head .actions > a {
+  margin:0 0 0 5px;
+  padding:0 5px 0 0;
+  border-right:1px solid #cccccc;
+}
+.list .list_head.scroll {
+  position:absolute;
+  top:0;
+  width:1008px;
+  border-color:#cccccc;
+  border-style:solid;
+  border-width:0 1px 1px 0;
+}
+.list .list_head.scroll.fixed {
+  position:fixed;
+  top:0;
+  z-index:1;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  -webkit-box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  -moz-box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
 .list .list_head span.title {
   color:#666666;
   font-weight:bold;
 }
 .list .list_head span.title+span { padding-right:20px; }
+.list .list_head ul.dropdown-action { margin:2px 0 0 5px; }
+.list .list_head ul.dropdown-action .dropdown-toggle { line-height:30px; }
 .list .list_head.icon {
   background-image:url('../images/icons.png');
   background-repeat:no-repeat;
@@ -281,6 +310,7 @@
 .list_body.data {
   border-bottom:1px solid #cccccc;
   overflow:auto;
+  margin-top:33px;
 }
 .list_body.data table tr {
   border:0px;
@@ -806,13 +836,19 @@ html body .site .page {
   line-height:1.4em;
   margin:0 auto 15px auto;
   position:relative;
+  padding-top:32px;
 }
 html body .site .page .avatared {
   color:#4183c4;
   margin-bottom:10px;
   font-weight:bold;
 }
-html body .site .page ul.breadcrumb { font-size:0px; }
+html body .site .page ul.breadcrumb {
+  position:absolute;
+  top:0;
+  z-index:1000;
+  font-size:0px;
+}
 html body .site .page ul.breadcrumb li {
   display:inline-block;
   line-height:31px;

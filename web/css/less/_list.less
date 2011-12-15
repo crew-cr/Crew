@@ -1,16 +1,48 @@
 .list {
   border: 1px solid #d8d8d8;
   margin-bottom: 20px;
+  position: relative;
 
   .list_head {
     border-bottom: 1px solid #ccc;
     padding: 0 5px;
-    height: 30px;
+    height: 32px;
     line-height: 30px;
     font-size: @normalFont;
     color: @grey;
     background-color: whitesmoke;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
+
+    img.avatar {
+      vertical-align: top;
+      margin: 4px 0 0 0;
+    }
+    
+    .actions {
+      float: right;
+
+      & > a {
+        margin: 0 0 0 5px;
+        padding: 0 5px 0 0;
+        border-right: 1px solid #ccc;
+      }
+    }
+
+    &.scroll {
+      position: absolute;
+      top: 0;
+      width: @webWidth - 12px;
+      border-color: #ccc;
+      border-style: solid;
+      border-width: 0 1px 1px 0;
+
+      &.fixed {
+        position: fixed;
+        top: 0;
+        z-index: 1;
+        .box-shadow (0, 2px, 5px, 10%);
+      }
+    }
 
     span.title {
       color: @grey;
@@ -18,6 +50,14 @@
 
       &+span {
         padding-right: 20px;
+      }
+    }
+
+    ul.dropdown-action {
+      margin: 2px 0 0 5px;
+
+      .dropdown-toggle {
+        line-height: 30px;
       }
     }
 
