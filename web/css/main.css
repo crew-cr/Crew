@@ -83,10 +83,7 @@
   font-size:20px;
   text-align:center;
 }
-.list .list_body table tr td.state.state_A, .list .list_body table tr td.state.state_M, .list .list_body table tr td.state.state_D {
-  color:#aaaaaa;
-  text-shadow:0 0 0, 0 1px 1px #777777;
-}
+.list .list_body table tr td.state.state_A, .list .list_body table tr td.state.state_M, .list .list_body table tr td.state.state_D { color:#aaaaaa; }
 .list .list_body table tr td.status {
   width:25px;
   line-height:24px;
