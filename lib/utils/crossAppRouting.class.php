@@ -11,7 +11,7 @@ class crossAppRouting
    */
   public static function getUrls()
   {
-    return static::$urls;
+    return self::$urls;
   }
 
   /**
@@ -27,18 +27,18 @@ class crossAppRouting
    */
   public static function genUrl($app, $url, $absolute = false, $env = null, $initialInstanceName = null)
   {
-    $cacheKey = static::getCacheKey($app, $url, $absolute, $env);
+    $cacheKey = self::getCacheKey($app, $url, $absolute, $env);
 
     // test du tableau statique
-    if(array_key_exists($cacheKey, static::$urls))
+    if(array_key_exists($cacheKey, self::$urls))
     {
-      return static::$urls[$cacheKey];
+      return self::$urls[$cacheKey];
     }
 
-    $crossUrl = static::buildUrl($app, $url, $absolute, $env, $initialInstanceName);
+    $crossUrl = self::buildUrl($app, $url, $absolute, $env, $initialInstanceName);
 
     //cache dans le tableau statique
-    static::$urls[$cacheKey] = $crossUrl;
+    self::$urls[$cacheKey] = $crossUrl;
 
     return $crossUrl;
   }
