@@ -10,7 +10,7 @@
   </head>
   <body onload="">
     <div class="header">
-      <a href="<?php echo url_for('@homepage') ?>" id="crew-logo" title="Crew, code review tool for git projects"><?php echo image_tag('crew-logo.png') ?></a>
+      <a href="<?php echo cross_app_url_for('front', '@homepage') ?>" id="crew-logo" title="Crew, code review tool for git projects"><?php echo image_tag('crew-logo.png') ?></a>
       <?php include_component('default', 'userbox') ?>
     </div>
     <div class="site">
