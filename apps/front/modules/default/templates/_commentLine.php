@@ -11,8 +11,8 @@
           <div class="comment_user">
             <img class="avatar" src="<?php echo $comment->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
             <?php echo sprintf("<span><strong>%s</strong> %s</span>", $comment->getAuthorName(), $comment->getUpdatedAt('d/m/Y H\hi')) ?>
-            <button class="right"><a title="Copy permalink to clipboard" class="clipboard" href="<?php printf("%s#comment-%s", $_SERVER['REQUEST_URI'], $comment->getId()) ?>">Permalink</a></button>
-            <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/commentDeleteLine'), $comment->getId()) : '' ?>
+            - <?php echo link_to('Permalink', url_for('default/file'), array('query_string' => sprintf('file=%s#comment-%s', $comment->getFileId(), $comment->getId()), 'title' => 'Copy permalink to clipboard', 'class' => 'clipboard')) ?>
+           <?php echo $userId === $comment->getUserId() ? sprintf("<button class=\"right delete danger\" data=\"%s?id=%s\">Delete</button>", url_for('default/commentDeleteLine'), $comment->getId()) : '' ?>
           </div>
           <div class="comment_body"><?php echo Markdown($comment->getValue()) ?></div>
         </div>
