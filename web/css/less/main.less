@@ -1,6 +1,7 @@
-@urlCrew: '../images';
-
 @blue: #4183C4;
+@red: #c20000;
+@green: #73ab00;
+
 @grey: #666666;
 @darkGrey: #333333;
 @lightGrey: #999999;
@@ -197,8 +198,6 @@ strong { font-weight: bold; }
     display: none;
     position: absolute;
     min-width: 100%;
-    .radius(5px);
-    .box-shadow(2px, 5px, 10px, 0.4);
 
     & > li {
       width: 100%;
@@ -339,6 +338,8 @@ html {
                 top: 26px;
                 left: -1px;
                 padding: 0;
+                .radius(5px);
+                .box-shadow(2px, 5px, 10px, 0.4);
 
                 & > li {
                   line-height: 24px;

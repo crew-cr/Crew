@@ -11,7 +11,6 @@
     color: @grey;
     background-color: whitesmoke;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 1.0);
-    overflow: hidden;
 
     span.title {
       color: @grey;
@@ -110,16 +109,18 @@
             width: 22px;
             font-size: 20px;
             text-align: center;
-            &.state_A { color: #5B5; }
-            &.state_M { color: @grey; }
-            &.state_D { color: #B55; }
+            &.state_A,
+            &.state_M,
+            &.state_D {
+              color: #aaa;
+            }
           }
           
           &.status {
-            width: 110px;
+            width: 25px;
             line-height: 24px;
             padding: 0 10px;
-            text-align: right;
+            text-align: center;
 
             & > a {
               display: inline-block;
@@ -223,6 +224,60 @@
         font-size: @smallFont;
         color: @grey;
         a { color: @blue; }
+      }
+    }
+  }
+
+  .dropdown-action {
+    font-size: 30px;
+
+    a { text-decoration: none }
+    li.dropdown {
+      width: 30px;
+      text-align: center;
+
+      .dropdown-toggle {
+        &.ricon.invalidate { color: #ff686e }
+        &.ricon.validate { color: #90d48b }
+        &.ricon.todo { color: #aaa; }
+      }
+
+      &.open {
+        color: white;
+        background-color: @grey;
+        .radius-top (3px);
+
+        .dropdown-toggle {
+          &.ricon {color: white;}
+        }
+      }
+
+      .ricon {
+        font-size: 30px;
+        line-height: 30px;
+
+        &.todo {
+          font-size: 20px;
+        }
+      }
+
+      &.open {
+        color: white;
+        background-color: @grey;
+        .radius-top (3px);
+
+        .dropdown-toggle { color: white }
+      }
+
+      .dropdown-toggle { color: @grey }
+
+      ul.dropdown-menu {
+        color: white;
+        background-color: @grey;
+        .radius-bottom(3px);
+        .box-shadow(2px, 5px, 10px, 0.4);
+
+        li { cursor: pointer }
       }
     }
   }

@@ -22,7 +22,7 @@ default:
     - vendor/jquery.qtip.min.js
     - vendor/jquery.mousewheel.min.js
     - vendor/bootstrap-dropdown.js
-    - toggleState.js
+    - itemStatusAction.js
     - context.js
     - commentGlobal.js
     - button.js

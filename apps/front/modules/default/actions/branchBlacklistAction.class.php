@@ -35,6 +35,6 @@ class branchBlacklistAction extends sfAction
     );
     
     $this->getResponse()->setContentType('application/json');
-    return $this->renderText(json_encode(array('toggleState' => 'blacklisted')));
+    return $this->renderText(json_encode(array('status' => 'blacklisted')));
   }
 }

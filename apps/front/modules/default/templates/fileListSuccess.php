@@ -16,8 +16,27 @@
       <label for="view_files_tree" >tree</label> <input type="checkbox" checked id="view_files_tree" name="view_files_tree">
     </span>
     <div class="right status">
-      <button title="Validate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon success like only-icon <?php echo $branch->getStatus() === BranchPeer::OK ? 'enabled' : '' ?>"><?php echo link_to('Validate branch', 'default/branchToggleValidate', array('title' => 'Validate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
-      <button title="Invalidate branch <strong><?php echo $branch->__toString() ?></strong>" class="tooltip icon danger dislike only-icon <?php echo $branch->getStatus() === BranchPeer::KO ? 'enabled' : '' ?>"><?php echo link_to('Invalidate branch', 'default/branchToggleUnvalidate', array('title' => 'Invalidate branch', 'query_string' => 'branch='.$branch->getId(), 'class' => 'toggle')) ?></button>
+      <ul class="dropdown-action">
+        <li class="dropdown">
+          <?php if (BranchPeer::OK === $branch->getStatus()): ?>
+            <?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
+            <ul class="dropdown-menu">
+              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+              <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
+          <?php elseif (BranchPeer::KO === $branch->getStatus()): ?>
+            <?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
+            <ul class="dropdown-menu">
+                <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
+          <?php else: ?>
+            <?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::A_TRAITER), 'class' => 'dropdown-toggle ricon todo tooltip', 'title' => 'To do')); ?>
+            <ul class="dropdown-menu">
+              <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=branch&id=%s&status=%s', $branch->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+          <?php endif; ?>
+          </ul>
+        </li>
+      </ul>
     </div>
   </div>
   <?php $pathDirOld = ""; ?>
@@ -55,9 +74,28 @@
         <td class="file_infos">
         <?php if($file['NbDeletedLines'] > 0): ?><span class="deleted tooltip" title="<?php echo $file['NbDeletedLines'] ?> deleted lines"><?php echo $file['NbDeletedLines'] ?>-</span><?php endif; ?>
         </td>
-        <td class="status minified">
-          <button title="Validate file" class="tooltip icon success like only-icon <?php echo $file['Status'] === BranchPeer::OK ? 'enabled' : ''?>"><?php echo link_to('Valider', 'default/fileToggleValidate', array('title' => 'Validate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
-          <button title="Invalidate file" class="tooltip icon danger dislike only-icon <?php echo $file['Status'] === BranchPeer::KO ? 'enabled' : ''?>"><?php echo link_to('Invalider', 'default/fileToggleUnvalidate', array('title' => 'Invalidate file', 'query_string' => 'file='.$file['Id'], 'class' => 'toggle')) ?></button>
+        <td class="status">
+          <ul class="dropdown-action">
+            <li class="dropdown">
+              <?php if (BranchPeer::OK === $file['Status']): ?>
+                <?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
+                <ul class="dropdown-menu">
+                  <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+                  <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
+              <?php elseif (BranchPeer::KO === $file['Status']): ?>
+                <?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
+                <ul class="dropdown-menu">
+                    <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                    <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
+              <?php else: ?>
+                <?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::A_TRAITER), 'class' => 'dropdown-toggle ricon todo tooltip', 'title' => 'To do')); ?>
+                <ul class="dropdown-menu">
+                  <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
+                  <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file['Id'], BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
+              <?php endif; ?>
+              </ul>
+            </li>
+          </ul>
         </td>
       </tr>
       <?php $pathDirOld = $pathDir; ?>
