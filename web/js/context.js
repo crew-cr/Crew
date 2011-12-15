@@ -2,10 +2,6 @@ $(document).ready(function() {
   $('#context select').bind('change', function() {
     this.form.submit();
   });
-  $('.clipboard').bind('click', function() {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", this.href);
-    return false;
-  });
   $('.tooltip').qtip({
     style: {
       classes: 'tooltip'

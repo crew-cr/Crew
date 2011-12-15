@@ -26,7 +26,7 @@
           <ul class="dropdown-menu">
             <?php foreach ($branchBreadCrumbList as $item): ?>
               <li>
-                <span class="ricon"><?php if($item->getStatus() == 1): ?>Ã<?php elseif($item->getStatus() == 2): ?>Â<?php endif; ?></span>
+                <span class="ricon"><?php if($item->getStatus() == 1): ?>Ã<?php elseif($item->getStatus() == 2): ?>Â<?php else: ?>!<?php endif; ?></span>
                 <?php echo link_to($item, 'default/fileList?branch=' . $item->getId()) ?>
               </li>
             <?php endforeach; ?>
@@ -44,7 +44,7 @@
           <ul class="dropdown-menu">
             <?php foreach ($fileBreadCrumbList as $item): ?>
               <li>
-                <span class="ricon"><?php if($item->getStatus() == 1): ?>Ã<?php elseif($item->getStatus() == 2): ?>Â<?php endif; ?></span>
+                <span class="ricon"><?php if($item->getStatus() == 1): ?>Ã<?php elseif($item->getStatus() == 2): ?>Â<?php else: ?>!<?php endif; ?></span>
                 <?php echo link_to($item, 'default/file?file=' . $item->getId()) ?>
               </li>
             <?php endforeach; ?>
