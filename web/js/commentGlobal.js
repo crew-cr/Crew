@@ -25,4 +25,9 @@ $(document).ready(function() {
       });
     }
   });
+
+  $('#comment_component').delegate('.clipboard', 'click', function(e) {
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", this.href);
+    return false;
+  });
 });
