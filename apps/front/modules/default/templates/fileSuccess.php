@@ -1,6 +1,6 @@
 <div class="file_bloc">
   <div class="list">
-    <div class="list_head">
+    <div class="list_head scroll">
       <span class="title">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
