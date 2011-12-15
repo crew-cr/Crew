@@ -46,8 +46,8 @@
             </span>
           </div>
         </td>
-        <td class="status">
-          <button class="danger"><?php echo link_to('Delete', 'default/projectDelete', array('title' => 'Delete project', 'query_string' => 'id='.$repository['Id'], 'class' => 'status-blacklist')) ?></button>
+        <td class="actions">
+          <?php echo link_to('Delete', 'default/projectDelete', array('title' => 'Delete project', 'query_string' => 'id='.$repository['Id'])) ?>
         </td>
         <td>
         </td>
