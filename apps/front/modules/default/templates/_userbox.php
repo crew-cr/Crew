@@ -5,6 +5,7 @@
       <?php echo link_to($user, url_for('user/view?id='.$user->getId())) ?>
     </li>
     <li><?php echo link_to('Home', '@homepage') ?></li>
+    <li><?php echo cross_app_link_to('Admin', 'admin', '@homepage') ?></li>
     <li><?php echo link_to('Help', 'http://github.com/pmsipilot/Crew/wiki') ?></li>
     <li><?php echo link_to('Log Out', url_for('@sf_guard_signout')) ?></li>
   <?php else: ?>
