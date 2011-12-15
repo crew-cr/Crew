@@ -272,6 +272,7 @@ html {
         line-height: 1.4em;
         margin: 0 auto 15px auto;
         position: relative;
+        padding-top: 32px; /* It's breadcrumb height, because breadcrumb is on absolute position */
 
         .avatared {
           color: @blue;
@@ -280,6 +281,9 @@ html {
         }
 
         ul.breadcrumb {
+          position: absolute;
+          top: 0;
+          z-index: 1000;
           font-size: 0px; /*Hack for inline-block propertie*/
 
           li {

@@ -2,7 +2,7 @@
   <div class="list_head">
     <span class="title">Branch list</span>
     <div class="right">
-      <button class="icon loop"><?php echo link_to('Synchronize', 'default/branchesSynchronize', array('title' => 'Synchronize branches', 'query_string' => 'repository='.$repository->getId(), 'class' => 'branch-sync')) ?></button>
+      <?php echo link_to('Synchronize', 'default/branchesSynchronize', array('title' => 'Synchronize branches', 'query_string' => 'repository='.$repository->getId(), 'class' => 'branch-sync')) ?>
     </div>
   </div>
   <div class="list_body" id="project_list">
