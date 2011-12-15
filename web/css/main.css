@@ -32,12 +32,18 @@
 .list .list_head.scroll.fixed {
   position:fixed;
   top:0;
+  z-index:1;
+  box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  -webkit-box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  -moz-box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
 .list .list_head span.title {
   color:#666666;
   font-weight:bold;
 }
 .list .list_head span.title+span { padding-right:20px; }
+.list .list_head ul.dropdown-action { margin:2px 0 0 5px; }
+.list .list_head ul.dropdown-action .dropdown-toggle { line-height:30px; }
 .list .list_head.icon {
   background-image:url('../images/icons.png');
   background-repeat:no-repeat;

@@ -29,6 +29,8 @@
       &.fixed {
         position: fixed;
         top: 0;
+        z-index: 1;
+        .box-shadow (0, 2px, 5px, 10%);
       }
     }
 
@@ -38,6 +40,14 @@
 
       &+span {
         padding-right: 20px;
+      }
+    }
+
+    ul.dropdown-action {
+      margin: 2px 0 0 5px;
+
+      .dropdown-toggle {
+        line-height: 30px;
       }
     }
 

@@ -32,6 +32,12 @@
         </li>
       </ul>
       <div class="right">
+        <?php if (null !== $previousFileId): ?>
+        <button><?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?></button>
+        <?php endif; ?>
+        <?php if (null !== $nextFileId): ?>
+        <button><?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?></button>
+        <?php endif; ?>
         <button><?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?></button>
       </div>
     </div>
@@ -70,13 +76,5 @@
     <div id="comment_component" class="comments_holder">
       <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
     </div>
-  </div>
-  <div class="navigation_links">
-    <?php if (null !== $previousFileId): ?>
-      <button><?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?></button>
-    <?php endif; ?>
-    <?php if (null !== $nextFileId): ?>
-      <button class="right"><?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?></button>
-    <?php endif; ?>
   </div>
 </div>
