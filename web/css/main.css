@@ -83,9 +83,10 @@
   font-size:20px;
   text-align:center;
 }
-.list .list_body table tr td.state.state_A { color:#55bb55; }
-.list .list_body table tr td.state.state_M { color:#666666; }
-.list .list_body table tr td.state.state_D { color:#bb5555; }
+.list .list_body table tr td.state.state_A, .list .list_body table tr td.state.state_M, .list .list_body table tr td.state.state_D {
+  color:#aaaaaa;
+  text-shadow:0 0 0, 0 1px 1px #777777;
+}
 .list .list_body table tr td.status {
   width:25px;
   line-height:24px;
@@ -170,8 +171,9 @@
   width:30px;
   text-align:center;
 }
-.list .dropdown-action li.dropdown .dropdown-toggle.ricon.invalidate { color:red; }
-.list .dropdown-action li.dropdown .dropdown-toggle.ricon.validate { color:green; }
+.list .dropdown-action li.dropdown .dropdown-toggle.ricon.invalidate { color:#ff686e; }
+.list .dropdown-action li.dropdown .dropdown-toggle.ricon.validate { color:#90d48b; }
+.list .dropdown-action li.dropdown .dropdown-toggle.ricon.todo { color:#aaaaaa; }
 .list .dropdown-action li.dropdown.open {
   color:white;
   background-color:#666666;
@@ -184,9 +186,10 @@
 }
 .list .dropdown-action li.dropdown.open .dropdown-toggle.ricon { color:white; }
 .list .dropdown-action li.dropdown .ricon {
-  font-size:25px;
+  font-size:30px;
   line-height:30px;
 }
+.list .dropdown-action li.dropdown .ricon.todo { font-size:20px; }
 .list .dropdown-action li.dropdown.open {
   color:white;
   background-color:#666666;
