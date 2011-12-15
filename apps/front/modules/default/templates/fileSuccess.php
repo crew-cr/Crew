@@ -31,14 +31,16 @@
           </ul>
         </li>
       </ul>
-      <div class="right">
+      <div class="actions">
         <?php if (null !== $previousFileId): ?>
-        <button><?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?></button>
+        <?php echo link_to('Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
         <?php endif; ?>
         <?php if (null !== $nextFileId): ?>
-        <button><?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?></button>
+        <?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
         <?php endif; ?>
-        <button><?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?></button>
+        <?php if ('D' !== $file->getState()): ?>
+        <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+        <?php endif; ?>
       </div>
     </div>
     <div id="window" class="list_body data">
