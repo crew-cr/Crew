@@ -2,6 +2,7 @@ fileSuccess:
   javascripts:
     - linecom.jquery.js
     - fixedListHead.js
+    - fileNavigation.js
 fileContentSuccess:
   stylesheets:
     - syntaxHighlighter/shCoreDefault.css

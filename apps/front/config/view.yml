@@ -23,8 +23,8 @@ default:
     - vendor/jquery.mousewheel.min.js
     - vendor/bootstrap-dropdown.js
     - itemStatusAction.js
-    - context.js
     - commentGlobal.js
+    - tooltip.js
 
   has_layout:     true
   layout:         layout
