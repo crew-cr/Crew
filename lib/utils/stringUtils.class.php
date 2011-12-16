@@ -58,4 +58,38 @@ class stringUtils {
   {
     return preg_replace('/^refs #(\d)+ (:[ ]*)?/i', '', $str);
   }
+
+  /***
+   * Shorten file path if too long
+   *
+   * if filename (excluding directories) is too long, this will return file[...]name.php
+   * if path directory is too long this will return foo/ba[...]az/filename.php
+   *
+   * @static
+   *
+   * @param string $path   file path to shorten
+   * @param int    $length file path max length
+   * @param string $with
+   * @param int    $at     number of character before splitting with $with
+   *
+   * @return string
+   */
+  public static function shortenFilePath($path, $length = 100, $with = '[...]', $at = 20)
+  {
+    if (strlen($path) < $length)
+    {
+      return $path;
+    }
+
+    $fileName       = basename($path);
+    $fileNameLength = strlen($fileName);
+    if ($fileNameLength > $length)
+    {
+      return sprintf('%s%s%s', substr($fileName, 0, $at), $with, substr($fileName, -($length - strlen($with) - $at)));
+    }
+
+    $dirName = dirname($path);
+
+    return sprintf('%s%s%s%s', substr($dirName, 0, $at), $with, substr($dirName, -($length - $fileNameLength - strlen($with) - $at)), $fileName);
+  }
 }
