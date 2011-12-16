@@ -4,39 +4,12 @@ fileSuccess:
     - fixedListHead.js
     - fileNavigation.js
 fileContentSuccess:
+  layout: highlightFile
+
   stylesheets:
-    - syntaxHighlighter/shCoreDefault.css
+    - vendor/highlight.css
   javascripts:
-    - vendor/syntaxHighlighter/XRegExp.js
-    - vendor/syntaxHighlighter/shCore.js
-    - vendor/syntaxHighlighter/shAutoloader.js
-    - vendor/syntaxHighlighter/brush/shBrushAppleScript.js
-    - vendor/syntaxHighlighter/brush/shBrushAS3.js
-    - vendor/syntaxHighlighter/brush/shBrushBash.js
-    - vendor/syntaxHighlighter/brush/shBrushColdFusion.js
-    - vendor/syntaxHighlighter/brush/shBrushCpp.js
-    - vendor/syntaxHighlighter/brush/shBrushCSharp.js
-    - vendor/syntaxHighlighter/brush/shBrushCss.js
-    - vendor/syntaxHighlighter/brush/shBrushDelphi.js
-    - vendor/syntaxHighlighter/brush/shBrushDiff.js
-    - vendor/syntaxHighlighter/brush/shBrushErlang.js
-    - vendor/syntaxHighlighter/brush/shBrushGroovy.js
-    - vendor/syntaxHighlighter/brush/shBrushJavaFX.js
-    - vendor/syntaxHighlighter/brush/shBrushJava.js
-    - vendor/syntaxHighlighter/brush/shBrushJScript.js
-    - vendor/syntaxHighlighter/brush/shBrushPerl.js
-    - vendor/syntaxHighlighter/brush/shBrushPhp.js
-    - vendor/syntaxHighlighter/brush/shBrushPlain.js
-    - vendor/syntaxHighlighter/brush/shBrushPowerShell.js
-    - vendor/syntaxHighlighter/brush/shBrushPython.js
-    - vendor/syntaxHighlighter/brush/shBrushRuby.js
-    - vendor/syntaxHighlighter/brush/shBrushSass.js
-    - vendor/syntaxHighlighter/brush/shBrushScala.js
-    - vendor/syntaxHighlighter/brush/shBrushSql.js
-    - vendor/syntaxHighlighter/brush/shBrushVb.js
-    - vendor/syntaxHighlighter/brush/shBrushXml.js
-    - syntaxHighlighter/brush/shBrushYaml.js
-    - syntaxHighlighter/brush/shBrushCustomPlain.js
+    - vendor/highlight.pack.js
 fileListSuccess:
   javascripts:
     - viewFilesInfo.js

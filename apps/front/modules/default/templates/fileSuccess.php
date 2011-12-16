@@ -39,7 +39,7 @@
         <?php echo link_to('Next file', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
         <?php endif; ?>
         <?php if ('D' !== $file->getState()): ?>
-        <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId())) ?>
+        <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId(), 'target' => '_blank')) ?>
         <?php endif; ?>
       </div>
     </div>
