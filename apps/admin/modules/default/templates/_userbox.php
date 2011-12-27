@@ -2,7 +2,7 @@
   <?php if ($isAuthenticated) : ?>
     <li class="username">
       <img class="avatar" src="<?php echo $sf_user->getProfile()->getAvatarUrl(20) ?>" />
-      <?php echo link_to($user, url_for('user/view?id='.$user->getId())) ?>
+      <?php echo cross_app_link_to($user, 'front', url_for('user/view?id='.$user->getId())) ?>
     </li>
     <li><?php echo cross_app_link_to('Home', 'front', '@homepage') ?></li>
     <li><?php echo link_to('Admin', '@homepage') ?></li>

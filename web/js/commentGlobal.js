@@ -26,7 +26,7 @@ $(document).ready(function() {
     }
   });
 
-  $('#comment_component').delegate('.clipboard', 'click', function(e) {
+  $('#comment_component').delegate('.clipboard', 'click', function() {
     window.prompt("Copy to clipboard: Ctrl+C, Enter", this.href);
     return false;
   });

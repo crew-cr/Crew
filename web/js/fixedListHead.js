@@ -2,30 +2,27 @@
 
 $(document).ready(function()
 {
-  var top = $('.list_head.scroll').offset().top - parseFloat($('.list_head.scroll').css('marginTop').replace(/auto/, 0));
-  var limit = $('#comment_component').offset().top - parseFloat($('#comment_component').css('marginTop').replace(/auto/, 0)) - $('.list_head.scroll').height();
+  var $header = $('.list_head.scroll');
 
-  $(window).scroll(function (event)
-  {
+  var top     = $header.offset().top - parseFloat($header.css('marginTop').replace(/auto/, 0));
+  var limit   = $('#comment_component').offset().top - parseFloat($('#comment_component').css('marginTop').replace(/auto/, 0)) - $header.height();
+
+  $(window).scroll(function () {
     var y = $(this).scrollTop();
 
-    if (y >= top && !$('.list_head.scroll').hasClass('fixed'))
-    {
-      $('.list_head.scroll').addClass('fixed');
+    if (y >= top && !$header.hasClass('fixed')) {
+      $header.addClass('fixed');
     }
-    else if (y < top && $('.list_head').hasClass('fixed'))
-    {
-      $('.list_head.scroll').removeClass('fixed');
-      $('.list_head.scroll').css({'top' : 0});
+    else if (y < top && $header.hasClass('fixed')){
+      $header.removeClass('fixed');
+      $header.css({'top' : 0});
     }
 
-    if ((y -limit) > 0)
-    {
-      $('.list_head.scroll').css({'top' : (limit - y)});
+    if ((y -limit) > 0)     {
+      $header.css({'top' : (limit - y)});
     }
-    else
-    {
-      $('.list_head.scroll').css({'top' : 0});
+    else {
+      $header.css({'top' : 0});
     }
   });
 });

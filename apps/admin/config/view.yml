@@ -18,8 +18,7 @@ default:
 
   javascripts:
     - vendor/jquery/jquery-1.6.4.min.js
-    - vendor/jquery.fracs.js
-    - context.js
+    - tooltip.js
 
   has_layout:     true
   layout:         layout
