@@ -8,9 +8,12 @@
   <div class="list_body" id="project_list">
     <table>
       <?php foreach ($branches as $branch): ?>
-      <tr class="<?php echo $branch['reviewRequest'] === 1 ? 'review_request':'' ?>">
+      <tr>
         <td class="branch_name">
-          <h3><?php echo link_to($branch['name'], 'default/fileList', array('query_string' => 'branch='.$branch['id'])) ?></h3><br />
+          <h3>
+            <?php if($branch['reviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
+            <?php echo link_to($branch['name'], 'default/fileList', array('query_string' => 'branch='.$branch['id'])) ?>
+          </h3><br />
           <span title="<?php echo $branch['lastCommitDesc'] ?>" class="commit_desc tooltip"><?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['lastCommitDesc']), 105) ?></span>
         </td>
         <td class="file_infos">

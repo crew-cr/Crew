@@ -18,7 +18,7 @@
         <?php endif; ?>
         <form name="commentGlobal" id="commentGlobal" class="comment_form" method="post" action="<?php echo url_for('default/commentAddGlobal?id=' . $id . '&type=' . $type) ?>" >
           <?php echo $form['value']->render(); ?>
-          <button class="right icon comment no-marge" type="submit">Add Branch Note</button>
+          <button class="right no-marge" type="submit">Add Branch Note</button>
         </form>
       </div>
     </td>

@@ -15,8 +15,8 @@
  */
 class Profile extends BaseProfile {
 
-  const DEFAULT_AVATAR_URL = "https://a248.e.akamai.net/assets.github.com/images/gravatars/gravatar-140.png";
-
+  const DEFAULT_AVATAR_URL = "mm";
+  
   public function __toString()
   {
     return ($this->getNickname() != '') ? $this->getNickname() : $this->getsfGuardUser()->getUsername();
