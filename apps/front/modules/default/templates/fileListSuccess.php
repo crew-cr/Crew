@@ -52,12 +52,13 @@
           <td colspan="5"><?php echo $pathDir . '/';?></td>
         </tr>
       <?php endif;?>
-      <tr class="<?php echo $file['ReviewRequest'] === 1 ? 'review_request':'' ?>">
+      <tr>
         <td class="state state_<?php echo $file['State'] ?> ricon" title="<?php echo $file['State'] == 'A' ? 'Added' : ($file['State'] == 'M' ? 'Modified' : 'Deleted') ?>">
           <?php echo $file['State'] == 'A' ? '@' : ($file['State'] == 'M' ? '>' : 'A') ?>
         </td>
         <td class="file_name">
           <h3>
+            <?php if($file['ReviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
             <a class="tooltip" href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
               <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
             </a>
@@ -65,7 +66,7 @@
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>
-            <?php echo link_to($file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'], 'class' => 'icon comment', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
+            <span class="ricon">O</span><?php echo link_to($file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'], 'class' => 'icon', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
           <?php endif; ?>
         </td>
         <td class="file_infos">

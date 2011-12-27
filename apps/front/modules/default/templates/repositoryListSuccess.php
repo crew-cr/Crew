@@ -10,7 +10,7 @@
           <h3><?php echo link_to($repository['Name'], 'default/branchList', array('query_string' => 'repository='.$repository['Id'])) ?></h3>
         </td>
         <td class="view_infos">
-          <?php echo link_to($repository['NbBranches'].' branch(es)', 'default/branchList', array('query_string' => 'repository='.$repository['Id'], 'class' => 'icon branch')) ?>
+          <span class="ricon">.</span><?php echo link_to($repository['NbBranches'].' branch(es)', 'default/branchList', array('query_string' => 'repository='.$repository['Id'], 'class' => 'icon')) ?>
         </td>
       </tr>
       <?php endforeach; ?>

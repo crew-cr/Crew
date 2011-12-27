@@ -1,6 +1,7 @@
 <?php if (sizeof($statusActions) > 0): ?>
 <div class="list notifier">
-  <div class="list_head icon status_action">
+  <div class="list_head">
+    <span class="ricon">@</span>
     <span class="title">Status action list</span>
   </div>
   <div class="list_body scrollable" id="project_list">

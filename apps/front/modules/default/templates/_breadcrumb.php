@@ -38,7 +38,7 @@
       <?php $fileNeedList = sizeof($fileBreadCrumbList) ?>
       <li class="selected<?php echo $fileNeedList ? ' dropdown' : '' ?>">
         <span class="ricon">E</span>
-        <?php echo link_to($currentBreadCrumbFile, 'default/file?file=' . $currentBreadCrumbFile->getId()) ?>
+        <?php echo link_to(stringUtils::shortenFilePath($currentBreadCrumbFile), 'default/file?file=' . $currentBreadCrumbFile->getId(), array('class' => 'tooltip', 'title' => $currentBreadCrumbFile)) ?>
         <?php if($fileNeedList): ?>
           <?php echo link_to('@', '@homepage', array('class' => 'dropdown-toggle')) ?>
           <ul class="dropdown-menu">

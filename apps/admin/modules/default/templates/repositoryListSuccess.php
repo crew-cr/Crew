@@ -41,9 +41,7 @@
         </td>
         <td>
           <div class="view_infos">
-            <span class="icon branch">
-              <?php echo $repository['NbBranches'].' branch(es)' ?>
-            </span>
+            <span class="ricon">.</span><span class="icon"><?php echo $repository['NbBranches'].' branch(es)' ?></span>
           </div>
         </td>
         <td class="actions">

@@ -1,8 +1,6 @@
 <?php use_helper('Markdown') ?>
 <tr class="comment_bloc">
-  <td class="comment_count" colspan="2">
-    <span class="counter"><?php echo sizeof($comments) ?></span>
-  </td>
+  <td class="comment_count" colspan="2"></td>
   <td class="line_comment">
     <div class="clipper">
       <div class="comments_holder">
