@@ -153,11 +153,8 @@ a, span {
   &.icon {
     font-size: @smallFont;
     font-weight: bold;
-    color: #999;
-    padding-left: 18px;
-
-    &.comment { background: url('../images/comment_icon.png') 0 50% no-repeat; }
-    &.branch { background: url('../images/branch_icon.png') 0 50% no-repeat;}
+    color: @lightGrey;
+    padding-left: 5px;
   }
 }
 
@@ -390,13 +387,6 @@ html {
 
     .footer {
       text-align: center;
-      color: #636363;
-      font-size: @normalFont;
-      opacity: 0.3;
-      .transition(opacity, .3s, linear);
-      &:hover {
-         opacity: 1;
-      }
 
       a { color: @blue; }
 
@@ -406,6 +396,13 @@ html {
         padding-left: 80px;
         line-height: 70px;
         background: url('../images/crew-logo.png') 0 22px no-repeat;
+        color: #636363;
+        font-size: @normalFont;
+        opacity: 0.3;
+        .transition(opacity, .3s, linear);
+        &:hover {
+           opacity: 1;
+        }
       }
     }
   }
