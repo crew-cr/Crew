@@ -62,7 +62,24 @@ class fileListAction extends sfAction
         ->count()
       ;
 
-      $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount)));
+      $lastCommentId = 0;
+      if($fileCommentsCount || $lineCommentsCount)
+      {
+        $lastComment = CommentQuery::create()
+          ->filterByFileId($file->getId())
+          ->filterByCommit($file->getLastChangeCommit())
+          ->_or()
+          ->filterByType(CommentPeer::TYPE_FILE)
+          ->orderById(Criteria::DESC)
+          ->findOne()
+        ;
+        if($lastComment)
+        {
+          $lastCommentId = $lastComment->getId();
+        }
+      }
+
+      $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount), 'LastCommentId' => $lastCommentId));
     }
 
     usort($this->files, array('self', 'sortPath'));
