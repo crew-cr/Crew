@@ -24,9 +24,10 @@ class breadcrumbComponent extends sfComponent
         ->findOne()
       ;
 
-      $this->fileBreadCrumbList    = FileQuery::create()
+      $this->fileBreadCrumbList = FileQuery::create()
         ->filterById($fileId, Criteria::NOT_EQUAL)
         ->filterByBranchId($this->currentBreadCrumbFile->getBranchId())
+        ->orderByFilename()
         ->find()
       ;
     }
@@ -44,9 +45,10 @@ class breadcrumbComponent extends sfComponent
         ->findOne()
       ;
 
-      $this->branchBreadCrumbList    = BranchQuery::create()
+      $this->branchBreadCrumbList = BranchQuery::create()
         ->filterById($branchId, Criteria::NOT_EQUAL)
         ->filterByRepositoryId($this->currentBreadCrumbBranch->getRepositoryId())
+        ->orderByName()
         ->find()
       ;
     }
@@ -64,8 +66,9 @@ class breadcrumbComponent extends sfComponent
         ->findOne()
       ;
 
-      $this->repositoryBreadCrumbList    = RepositoryQuery::create()
+      $this->repositoryBreadCrumbList = RepositoryQuery::create()
         ->filterById($repositoryId, Criteria::NOT_EQUAL)
+        ->orderByName()
         ->find()
       ;
     }
