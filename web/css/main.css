@@ -311,9 +311,20 @@
   list-style-position:inside;
   list-style-type:disc;
 }
+.comment_bloc .comment .comment_body ul li ul, .comments_holder .comment .comment_body ul li ul { margin-left:25px; }
 .comment_bloc .comment .comment_body ol li, .comments_holder .comment .comment_body ol li {
   list-style-position:inside;
   list-style-type:decimal;
+}
+.comment_bloc .comment .comment_body code, .comments_holder .comment .comment_body code {
+  background-color:#eeeeee;
+  color:#333333;
+  font-family:monospace;
+  padding:0 3px;
+}
+.comment_bloc .comment .comment_body em, .comments_holder .comment .comment_body em {
+  color:#666666;
+  font-style:italic;
 }
 .list_body.data {
   border-bottom:1px solid #cccccc;
