@@ -51,8 +51,7 @@ abstract class BaseNotifier
   protected function generateUrl($action, $params = array(), $absolute = true)
   {
     $anchor = isset($params['anchor']) ? $params['anchor'] : null;
-    $url = $this->context->getRouting()->generate('' , array('module' => 'default', 'action' => $action) + $params, $absolute);
-    $url = str_replace('api.php', 'index.php', $url);
+    $url = crossAppRouting::genUrl('front', array('module' => 'default', 'action' => $action) + $params, $absolute);
     if(!is_null($anchor))
     {
       $url .= sprintf('#%s', urlencode($anchor));
