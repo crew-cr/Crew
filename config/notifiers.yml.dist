@@ -26,3 +26,19 @@ CampfireNotifier:
       room-id: room-id
       status-type: ['branch', 'file']
       comment-type: ['branch', 'file', 'line']
+XmppNotifier:
+  review-request:
+    enabled: 1
+    message: "New review request for branch %branch%"
+    add-links: 1
+  projects:
+    3:
+      host: jabber
+      port: 5222
+      user: username
+      password: password
+      ressource: xmpphp
+      server: jabber.yourdomain.com
+      to: team-chatroom@conference.jabber.yourdomain.com/Crew
+      type: groupchat
+
