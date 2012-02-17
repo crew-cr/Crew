@@ -10,5 +10,6 @@ class ProjectConfiguration extends sfProjectConfiguration
     $this->enablePlugins('sfPropelORMPlugin');
     $this->enablePlugins('sfGuardPlugin');
     $this->enablePlugins('crewLessPlugin');
+    require_once sfConfig::get('sf_root_dir') . '/lib/vendor/XMPPHP/XMPP.php';
   }
 }
