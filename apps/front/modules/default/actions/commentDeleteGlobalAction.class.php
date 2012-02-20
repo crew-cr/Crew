@@ -8,6 +8,8 @@ class commentDeleteGlobalAction extends sfAction
    */
   public function execute($request)
   {
+    $this->forward404Unless($this->getUser()->isAuthenticated(), 'Your are not authorized to delete this comment');
+
     $con = Propel::getConnection();
     $con->beginTransaction();
 
@@ -25,8 +27,9 @@ class commentDeleteGlobalAction extends sfAction
         ->filterById($id)
         ->findOne()
       ;
-      
+
       $this->forward404Unless($aComment, sprintf('%s Comment Not Found', ucfirst($type)));
+      $this->forward404Unless($aComment->getUserId() == $this->getUser()->getId(), 'Your are not authorized to delete this comment');
 
       // construction of returns array
       switch ($type)
