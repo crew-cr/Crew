@@ -29,14 +29,14 @@ class XmppNotifier extends SimpleNotifier
     $ressource = $configCurrentProject['ressource'];
     $server    = $configCurrentProject['server'];
     $to        = $configCurrentProject['to'];
-    $type      = $configCurrentProject['groupchat'];
+    $type      = $configCurrentProject['type'];
 
     $xmpp = new XMPPHP_XMPP($host, $port, $user, $password, $ressource, $server, false, 4);
     $xmpp->connect();
     $xmpp->processUntil('session_start');
-    $xmpp->presence(null, 'available', $to);
+    $xmpp->presence(null, 'available', $to . '/' . $user);
     $xmpp->message($to, $message, $type);
-    $xmpp->presence(null, 'unavailable', $to);
+    $xmpp->presence(null, 'unavailable', $to . '/' . $user);
     $xmpp->disconnect();
 
     return $this;
