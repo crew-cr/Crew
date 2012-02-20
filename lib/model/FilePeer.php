@@ -26,11 +26,16 @@ class FilePeer extends BaseFilePeer {
   /**
    * @static
    * @param Branch $branch
-   * @return void
+   * @return 0 if succeed
    */
   public static function synchronize(Branch $branch, $lastBranchSynchronizationCommit = null)
   {
     $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getGitDir(), $branch->getCommitReference(), $branch->getLastCommit());
+
+    if(count($filesGit) > sfConfig::get('app_max_number_of_files_to_review', 4096))
+    {
+      return count($filesGit);
+    }
 
     $filesModel = FileQuery::create()
       ->filterByBranchId($branch->getId())
@@ -95,5 +100,7 @@ class FilePeer extends BaseFilePeer {
         ->save()
       ;
     }
+
+    return 0;
   }
 } // FilePeer
