@@ -17,9 +17,9 @@ class stringUtils {
 
     if(strlen($string) > $length)
     {
-
       $length -= min($length, strlen($etc));
       $string = preg_replace('/\s+?(\S+)?$/', '', substr($string, 0, $length+1));
+      $string = preg_replace("/(\r\n|\n|\r)/", " ", $string);
       return substr($string, 0, $length). $etc;
     }
     else
