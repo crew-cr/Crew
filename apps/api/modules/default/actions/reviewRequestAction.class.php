@@ -43,15 +43,18 @@ class reviewRequestAction extends sfAction
       }
 
       file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), sprintf("%s [%s] ReviewRequest = projectId : %s - baseBranchName : %s - branchName : %s - commit : %s\n", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $projectId, $baseBranchName, $branchName, $commit), FILE_APPEND);
-      BranchPeer::synchronize($repository, $branch);
-
-      if(!$branch->isDeleted())
+      if(($nbFiles = BranchPeer::synchronize($repository, $branch)) != 0)
+      {
+        $result['result'] = false;
+        $result['message'] = sprintf("Your branch '%s' has too many files : %s (max : %s)", $branch->__toString(), $nbFiles, sfConfig::get('app_max_number_of_files_to_review', 4096));
+      }
+      elseif(!$branch->isDeleted())
       {
         if(strlen($commit) === 40)
         {
           if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
           {
-            $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', $branch->getStatus());
+            $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', BranchPeer::getLabelStatus($branch->getStatus()));
             $branch->setReviewRequest(1)
               ->setStatus(BranchPeer::A_TRAITER)
               ->setIsBlacklisted(0)

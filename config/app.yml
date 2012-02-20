@@ -3,3 +3,4 @@ all:
     profile_class:      profile
     profile_field_name: sf_guard_user_id
     signin_form:        FormSignin
+  max_number_of_files_to_review: 4096
