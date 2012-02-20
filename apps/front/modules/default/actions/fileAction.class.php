@@ -21,16 +21,16 @@ class fileAction extends sfAction
     $this->previousFileId = FileQuery::create()
       ->select('Id')
       ->filterByBranchId($this->file->getBranchId())
-      ->filterById($this->file->getId(), Criteria::LESS_THAN)
-      ->orderById(Criteria::DESC)
+      ->filterByFilename($this->file->getFilename(), Criteria::LESS_THAN)
+      ->orderByFilename(Criteria::DESC)
       ->findOne()
     ;
 
     $this->nextFileId = FileQuery::create()
       ->select('Id')
       ->filterByBranchId($this->file->getBranchId())
-      ->filterById($this->file->getId(), Criteria::GREATER_THAN)
-      ->orderById(Criteria::ASC)
+      ->filterByFilename($this->file->getFilename(), Criteria::GREATER_THAN)
+      ->orderByFilename(Criteria::ASC)
       ->findOne()
     ;
 

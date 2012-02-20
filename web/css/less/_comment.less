@@ -66,17 +66,30 @@
         text-transform: none;
         color: #555
       }
-      ul{
+      ul {
         li {
           list-style-position: inside;
           list-style-type: disc;
+          ul {
+            margin-left: 25px;
+          }
         }
       }
-      ol{
+      ol {
         li {
           list-style-position: inside;
           list-style-type: decimal;
         }
+      }
+      code {
+        background-color: @lighterGrey;
+        color: @darkGrey;
+        font-family: monospace;
+        padding: 0 3px;
+      }
+      em {
+        color: @grey;
+        font-style: italic;
       }
     }
   }

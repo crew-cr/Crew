@@ -8,6 +8,8 @@ class commentDeleteLineAction extends sfAction
    */
   public function execute($request)
   {
+    $this->forward404Unless($this->getUser()->isAuthenticated(), 'Your are not authorized to delete this comment');
+
     $con = Propel::getConnection();
     $con->beginTransaction();
 
@@ -23,6 +25,7 @@ class commentDeleteLineAction extends sfAction
         ->findOne()
       ;
       $this->forward404Unless($aComment, 'Line Comment Not Found');
+      $this->forward404Unless($aComment->getUserId() == $this->getUser()->getId(), 'Your are not authorized to delete this comment');
 
       $countLineComment = CommentQuery::create()
         ->filterByCommit($aComment->getCommit())

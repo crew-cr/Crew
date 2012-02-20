@@ -17,9 +17,9 @@ class stringUtils {
 
     if(strlen($string) > $length)
     {
-
       $length -= min($length, strlen($etc));
       $string = preg_replace('/\s+?(\S+)?$/', '', substr($string, 0, $length+1));
+      $string = preg_replace("/(\r\n|\n|\r)/", " ", $string);
       return substr($string, 0, $length). $etc;
     }
     else
@@ -74,7 +74,7 @@ class stringUtils {
    *
    * @return string
    */
-  public static function shortenFilePath($path, $length = 100, $with = '[...]', $at = 20)
+  public static function shortenFilePath($path, $length = 80, $with = '[...]', $at = 20)
   {
     if (strlen($path) < $length)
     {
@@ -88,8 +88,6 @@ class stringUtils {
       return sprintf('%s%s%s', substr($fileName, 0, $at), $with, substr($fileName, -($length - strlen($with) - $at)));
     }
 
-    $dirName = dirname($path);
-
-    return sprintf('%s%s%s%s', substr($dirName, 0, $at), $with, substr($dirName, -($length - $fileNameLength - strlen($with) - $at)), $fileName);
+    return sprintf('%s%s%s', substr($path, 0, $at), $with, substr($path, -($length - strlen($with) - $at)));
   }
 }

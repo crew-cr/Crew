@@ -17,7 +17,7 @@
 
               <?php echo $userId === $commentGlobal->getUserId() ? sprintf('<button class="right danger delete" data="%s?id=%s&type=%s">Delete</button>', url_for('default/commentDeleteGlobal'), $commentGlobal->getId(), $type) : '' ?>
             </div>
-            <div class="comment_body"><?php echo Markdown($commentGlobal->getValue()) ?></div>
+            <div class="comment_body"><?php echo Markdown(html_entity_decode($commentGlobal->getValue())) ?></div>
           </div>
           <?php endforeach; ?>
         <?php endif; ?>

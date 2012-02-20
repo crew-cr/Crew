@@ -88,8 +88,10 @@ class BranchPeer extends BaseBranchPeer {
         $branchModel->setLastCommitDesc($branchGit['last_commit_desc']);
         $branchModel->save();
 
-        FilePeer::synchronize($branchModel, $lastSynchronizationCommit);
+        return FilePeer::synchronize($branchModel, $lastSynchronizationCommit);
       }
     }
+
+    return 0;
   }
 } // BranchPeer

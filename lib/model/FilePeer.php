@@ -26,11 +26,16 @@ class FilePeer extends BaseFilePeer {
   /**
    * @static
    * @param Branch $branch
-   * @return void
+   * @return 0 if succeed
    */
   public static function synchronize(Branch $branch, $lastBranchSynchronizationCommit = null)
   {
     $filesGit = GitCommand::getDiffFilesFromBranch($branch->getRepository()->getGitDir(), $branch->getCommitReference(), $branch->getLastCommit());
+
+    if(count($filesGit) > sfConfig::get('app_max_number_of_files_to_review', 4096))
+    {
+      return count($filesGit);
+    }
 
     $filesModel = FileQuery::create()
       ->filterByBranchId($branch->getId())
@@ -45,22 +50,32 @@ class FilePeer extends BaseFilePeer {
     foreach ($filesModel as $fileModel)
     {
       /** @var $fileModel File */
-      if (!array_key_exists($fileModel->getFilename(), $filesGit))
+      if(!array_key_exists($fileModel->getFilename(), $filesGit))
       {
         $fileModel->delete();
       }
       else
       {
         $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getGitDir(), $branch->getName(), $fileModel->getFilename());
-        $fileModel->setStatus(BranchPeer::A_TRAITER)
-          ->setState($filesGit[$fileModel->getFilename()]['state'])
+
+        if(isset($diffFilesFromLastSynch[$fileModel->getFilename()]))
+        {
+          $fileModel->setReviewRequest(true)
+            ->setStatus(BranchPeer::A_TRAITER)
+            ->setCommitStatusChanged($lastChangeCommit)
+          ;
+        }
+        else
+        {
+          $fileModel->setReviewRequest(false);
+        }
+
+        $fileModel->setState($filesGit[$fileModel->getFilename()]['state'])
           ->setLastChangeCommit($lastChangeCommit)
-          ->setCommitStatusChanged($lastChangeCommit)
           ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getGitDir(), $lastChangeCommit, "%ce %s"))
           ->setNbAddedLines($filesGit[$fileModel->getFilename()]['added-lines'])
           ->setNbDeletedLines($filesGit[$fileModel->getFilename()]['deleted-lines'])
           ->setCommitReference($branch->getCommitReference())
-          ->setReviewRequest((isset($diffFilesFromLastSynch[$fileModel->getFilename()])))
           ->save();
         ;
       }
@@ -85,5 +100,7 @@ class FilePeer extends BaseFilePeer {
         ->save()
       ;
     }
+
+    return 0;
   }
 } // FilePeer
