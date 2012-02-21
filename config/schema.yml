@@ -38,6 +38,7 @@ propel:
     branch_id:                        { type: integer, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
     state:                            { type: char, size: '1', required: true }
     filename:                         { type: varchar, size: '255', required: true }
+    is_binary:                        { type: tinyint, size: '1', required: true, defaultValue: '0' }
     commit_reference:                 { type: varchar, size: '50', required: true }
     review_request:                   { type: tinyint, size: '1', required: true, defaultValue: '0' }
     nb_added_lines:                   { type: integer, size: '11', required: false }
