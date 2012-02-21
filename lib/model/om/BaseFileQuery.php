@@ -10,6 +10,7 @@
  * @method     FileQuery orderByBranchId($order = Criteria::ASC) Order by the branch_id column
  * @method     FileQuery orderByState($order = Criteria::ASC) Order by the state column
  * @method     FileQuery orderByFilename($order = Criteria::ASC) Order by the filename column
+ * @method     FileQuery orderByIsBinary($order = Criteria::ASC) Order by the is_binary column
  * @method     FileQuery orderByCommitReference($order = Criteria::ASC) Order by the commit_reference column
  * @method     FileQuery orderByReviewRequest($order = Criteria::ASC) Order by the review_request column
  * @method     FileQuery orderByNbAddedLines($order = Criteria::ASC) Order by the nb_added_lines column
@@ -26,6 +27,7 @@
  * @method     FileQuery groupByBranchId() Group by the branch_id column
  * @method     FileQuery groupByState() Group by the state column
  * @method     FileQuery groupByFilename() Group by the filename column
+ * @method     FileQuery groupByIsBinary() Group by the is_binary column
  * @method     FileQuery groupByCommitReference() Group by the commit_reference column
  * @method     FileQuery groupByReviewRequest() Group by the review_request column
  * @method     FileQuery groupByNbAddedLines() Group by the nb_added_lines column
@@ -65,6 +67,7 @@
  * @method     File findOneByBranchId(int $branch_id) Return the first File filtered by the branch_id column
  * @method     File findOneByState(string $state) Return the first File filtered by the state column
  * @method     File findOneByFilename(string $filename) Return the first File filtered by the filename column
+ * @method     File findOneByIsBinary(int $is_binary) Return the first File filtered by the is_binary column
  * @method     File findOneByCommitReference(string $commit_reference) Return the first File filtered by the commit_reference column
  * @method     File findOneByReviewRequest(int $review_request) Return the first File filtered by the review_request column
  * @method     File findOneByNbAddedLines(int $nb_added_lines) Return the first File filtered by the nb_added_lines column
@@ -81,6 +84,7 @@
  * @method     array findByBranchId(int $branch_id) Return File objects filtered by the branch_id column
  * @method     array findByState(string $state) Return File objects filtered by the state column
  * @method     array findByFilename(string $filename) Return File objects filtered by the filename column
+ * @method     array findByIsBinary(int $is_binary) Return File objects filtered by the is_binary column
  * @method     array findByCommitReference(string $commit_reference) Return File objects filtered by the commit_reference column
  * @method     array findByReviewRequest(int $review_request) Return File objects filtered by the review_request column
  * @method     array findByNbAddedLines(int $nb_added_lines) Return File objects filtered by the nb_added_lines column
@@ -180,7 +184,7 @@ abstract class BaseFileQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `BRANCH_ID`, `STATE`, `FILENAME`, `COMMIT_REFERENCE`, `REVIEW_REQUEST`, `NB_ADDED_LINES`, `NB_DELETED_LINES`, `LAST_CHANGE_COMMIT`, `LAST_CHANGE_COMMIT_DESC`, `LAST_CHANGE_COMMIT_USER`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `file` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `BRANCH_ID`, `STATE`, `FILENAME`, `IS_BINARY`, `COMMIT_REFERENCE`, `REVIEW_REQUEST`, `NB_ADDED_LINES`, `NB_DELETED_LINES`, `LAST_CHANGE_COMMIT`, `LAST_CHANGE_COMMIT_DESC`, `LAST_CHANGE_COMMIT_USER`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `file` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -387,6 +391,46 @@ abstract class BaseFileQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(FilePeer::FILENAME, $filename, $comparison);
+	}
+
+	/**
+	 * Filter the query on the is_binary column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByIsBinary(1234); // WHERE is_binary = 1234
+	 * $query->filterByIsBinary(array(12, 34)); // WHERE is_binary IN (12, 34)
+	 * $query->filterByIsBinary(array('min' => 12)); // WHERE is_binary > 12
+	 * </code>
+	 *
+	 * @param     mixed $isBinary The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    FileQuery The current query, for fluid interface
+	 */
+	public function filterByIsBinary($isBinary = null, $comparison = null)
+	{
+		if (is_array($isBinary)) {
+			$useMinMax = false;
+			if (isset($isBinary['min'])) {
+				$this->addUsingAlias(FilePeer::IS_BINARY, $isBinary['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($isBinary['max'])) {
+				$this->addUsingAlias(FilePeer::IS_BINARY, $isBinary['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(FilePeer::IS_BINARY, $isBinary, $comparison);
 	}
 
 	/**

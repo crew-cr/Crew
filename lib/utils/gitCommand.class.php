@@ -66,7 +66,7 @@ class GitCommand
 
     if($withDetails)
     {
-      $lineResults = GitCommand::exec(sprintf('git --git-dir="%s" diff %s..%s --numstat | grep "^[0-9]" | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit));
+      $lineResults = GitCommand::exec(sprintf('git --git-dir="%s" diff %s..%s --numstat | sed "s/\t/ /g"', $gitDir,  $referenceCommit, $lastCommit));
 
       $linesInfos = array();
       foreach($lineResults as $line)
@@ -91,8 +91,9 @@ class GitCommand
 
       if($withDetails)
       {
-        $diffFiles[$filename]['added-lines'] = (isset($linesInfos[$filename])) ? $linesInfos[$filename][0] : '';
-        $diffFiles[$filename]['deleted-lines'] = (isset($linesInfos[$filename])) ? $linesInfos[$filename][1] : '';
+        $diffFiles[$filename]['added-lines']    = (isset($linesInfos[$filename])) ? $linesInfos[$filename][0] : '';
+        $diffFiles[$filename]['deleted-lines']  = (isset($linesInfos[$filename])) ? $linesInfos[$filename][1] : '';
+        $diffFiles[$filename]['is-binary']      = ($diffFiles[$filename]['added-lines'] == '-' && $diffFiles[$filename]['deleted-lines'] == '-');
       }
     }
 

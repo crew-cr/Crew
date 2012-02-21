@@ -26,13 +26,13 @@ abstract class BaseFilePeer {
 	const TM_CLASS = 'FileTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 15;
+	const NUM_COLUMNS = 16;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 15;
+	const NUM_HYDRATE_COLUMNS = 16;
 
 	/** the column name for the ID field */
 	const ID = 'file.ID';
@@ -45,6 +45,9 @@ abstract class BaseFilePeer {
 
 	/** the column name for the FILENAME field */
 	const FILENAME = 'file.FILENAME';
+
+	/** the column name for the IS_BINARY field */
+	const IS_BINARY = 'file.IS_BINARY';
 
 	/** the column name for the COMMIT_REFERENCE field */
 	const COMMIT_REFERENCE = 'file.COMMIT_REFERENCE';
@@ -98,12 +101,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'CommitReference', 'ReviewRequest', 'NbAddedLines', 'NbDeletedLines', 'LastChangeCommit', 'LastChangeCommitDesc', 'LastChangeCommitUser', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'commitReference', 'reviewRequest', 'nbAddedLines', 'nbDeletedLines', 'lastChangeCommit', 'lastChangeCommitDesc', 'lastChangeCommitUser', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::COMMIT_REFERENCE, self::REVIEW_REQUEST, self::NB_ADDED_LINES, self::NB_DELETED_LINES, self::LAST_CHANGE_COMMIT, self::LAST_CHANGE_COMMIT_DESC, self::LAST_CHANGE_COMMIT_USER, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'COMMIT_REFERENCE', 'REVIEW_REQUEST', 'NB_ADDED_LINES', 'NB_DELETED_LINES', 'LAST_CHANGE_COMMIT', 'LAST_CHANGE_COMMIT_DESC', 'LAST_CHANGE_COMMIT_USER', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'commit_reference', 'review_request', 'nb_added_lines', 'nb_deleted_lines', 'last_change_commit', 'last_change_commit_desc', 'last_change_commit_user', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'BranchId', 'State', 'Filename', 'IsBinary', 'CommitReference', 'ReviewRequest', 'NbAddedLines', 'NbDeletedLines', 'LastChangeCommit', 'LastChangeCommitDesc', 'LastChangeCommitUser', 'Status', 'CommitStatusChanged', 'UserStatusChanged', 'DateStatusChanged', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'branchId', 'state', 'filename', 'isBinary', 'commitReference', 'reviewRequest', 'nbAddedLines', 'nbDeletedLines', 'lastChangeCommit', 'lastChangeCommitDesc', 'lastChangeCommitUser', 'status', 'commitStatusChanged', 'userStatusChanged', 'dateStatusChanged', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::BRANCH_ID, self::STATE, self::FILENAME, self::IS_BINARY, self::COMMIT_REFERENCE, self::REVIEW_REQUEST, self::NB_ADDED_LINES, self::NB_DELETED_LINES, self::LAST_CHANGE_COMMIT, self::LAST_CHANGE_COMMIT_DESC, self::LAST_CHANGE_COMMIT_USER, self::STATUS, self::COMMIT_STATUS_CHANGED, self::USER_STATUS_CHANGED, self::DATE_STATUS_CHANGED, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'BRANCH_ID', 'STATE', 'FILENAME', 'IS_BINARY', 'COMMIT_REFERENCE', 'REVIEW_REQUEST', 'NB_ADDED_LINES', 'NB_DELETED_LINES', 'LAST_CHANGE_COMMIT', 'LAST_CHANGE_COMMIT_DESC', 'LAST_CHANGE_COMMIT_USER', 'STATUS', 'COMMIT_STATUS_CHANGED', 'USER_STATUS_CHANGED', 'DATE_STATUS_CHANGED', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'branch_id', 'state', 'filename', 'is_binary', 'commit_reference', 'review_request', 'nb_added_lines', 'nb_deleted_lines', 'last_change_commit', 'last_change_commit_desc', 'last_change_commit_user', 'status', 'commit_status_changed', 'user_status_changed', 'date_status_changed', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -113,12 +116,12 @@ abstract class BaseFilePeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'CommitReference' => 4, 'ReviewRequest' => 5, 'NbAddedLines' => 6, 'NbDeletedLines' => 7, 'LastChangeCommit' => 8, 'LastChangeCommitDesc' => 9, 'LastChangeCommitUser' => 10, 'Status' => 11, 'CommitStatusChanged' => 12, 'UserStatusChanged' => 13, 'DateStatusChanged' => 14, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'commitReference' => 4, 'reviewRequest' => 5, 'nbAddedLines' => 6, 'nbDeletedLines' => 7, 'lastChangeCommit' => 8, 'lastChangeCommitDesc' => 9, 'lastChangeCommitUser' => 10, 'status' => 11, 'commitStatusChanged' => 12, 'userStatusChanged' => 13, 'dateStatusChanged' => 14, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::COMMIT_REFERENCE => 4, self::REVIEW_REQUEST => 5, self::NB_ADDED_LINES => 6, self::NB_DELETED_LINES => 7, self::LAST_CHANGE_COMMIT => 8, self::LAST_CHANGE_COMMIT_DESC => 9, self::LAST_CHANGE_COMMIT_USER => 10, self::STATUS => 11, self::COMMIT_STATUS_CHANGED => 12, self::USER_STATUS_CHANGED => 13, self::DATE_STATUS_CHANGED => 14, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'COMMIT_REFERENCE' => 4, 'REVIEW_REQUEST' => 5, 'NB_ADDED_LINES' => 6, 'NB_DELETED_LINES' => 7, 'LAST_CHANGE_COMMIT' => 8, 'LAST_CHANGE_COMMIT_DESC' => 9, 'LAST_CHANGE_COMMIT_USER' => 10, 'STATUS' => 11, 'COMMIT_STATUS_CHANGED' => 12, 'USER_STATUS_CHANGED' => 13, 'DATE_STATUS_CHANGED' => 14, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'commit_reference' => 4, 'review_request' => 5, 'nb_added_lines' => 6, 'nb_deleted_lines' => 7, 'last_change_commit' => 8, 'last_change_commit_desc' => 9, 'last_change_commit_user' => 10, 'status' => 11, 'commit_status_changed' => 12, 'user_status_changed' => 13, 'date_status_changed' => 14, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'BranchId' => 1, 'State' => 2, 'Filename' => 3, 'IsBinary' => 4, 'CommitReference' => 5, 'ReviewRequest' => 6, 'NbAddedLines' => 7, 'NbDeletedLines' => 8, 'LastChangeCommit' => 9, 'LastChangeCommitDesc' => 10, 'LastChangeCommitUser' => 11, 'Status' => 12, 'CommitStatusChanged' => 13, 'UserStatusChanged' => 14, 'DateStatusChanged' => 15, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'branchId' => 1, 'state' => 2, 'filename' => 3, 'isBinary' => 4, 'commitReference' => 5, 'reviewRequest' => 6, 'nbAddedLines' => 7, 'nbDeletedLines' => 8, 'lastChangeCommit' => 9, 'lastChangeCommitDesc' => 10, 'lastChangeCommitUser' => 11, 'status' => 12, 'commitStatusChanged' => 13, 'userStatusChanged' => 14, 'dateStatusChanged' => 15, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::BRANCH_ID => 1, self::STATE => 2, self::FILENAME => 3, self::IS_BINARY => 4, self::COMMIT_REFERENCE => 5, self::REVIEW_REQUEST => 6, self::NB_ADDED_LINES => 7, self::NB_DELETED_LINES => 8, self::LAST_CHANGE_COMMIT => 9, self::LAST_CHANGE_COMMIT_DESC => 10, self::LAST_CHANGE_COMMIT_USER => 11, self::STATUS => 12, self::COMMIT_STATUS_CHANGED => 13, self::USER_STATUS_CHANGED => 14, self::DATE_STATUS_CHANGED => 15, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'BRANCH_ID' => 1, 'STATE' => 2, 'FILENAME' => 3, 'IS_BINARY' => 4, 'COMMIT_REFERENCE' => 5, 'REVIEW_REQUEST' => 6, 'NB_ADDED_LINES' => 7, 'NB_DELETED_LINES' => 8, 'LAST_CHANGE_COMMIT' => 9, 'LAST_CHANGE_COMMIT_DESC' => 10, 'LAST_CHANGE_COMMIT_USER' => 11, 'STATUS' => 12, 'COMMIT_STATUS_CHANGED' => 13, 'USER_STATUS_CHANGED' => 14, 'DATE_STATUS_CHANGED' => 15, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'branch_id' => 1, 'state' => 2, 'filename' => 3, 'is_binary' => 4, 'commit_reference' => 5, 'review_request' => 6, 'nb_added_lines' => 7, 'nb_deleted_lines' => 8, 'last_change_commit' => 9, 'last_change_commit_desc' => 10, 'last_change_commit_user' => 11, 'status' => 12, 'commit_status_changed' => 13, 'user_status_changed' => 14, 'date_status_changed' => 15, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, )
 	);
 
 	/**
@@ -194,6 +197,7 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn(FilePeer::BRANCH_ID);
 			$criteria->addSelectColumn(FilePeer::STATE);
 			$criteria->addSelectColumn(FilePeer::FILENAME);
+			$criteria->addSelectColumn(FilePeer::IS_BINARY);
 			$criteria->addSelectColumn(FilePeer::COMMIT_REFERENCE);
 			$criteria->addSelectColumn(FilePeer::REVIEW_REQUEST);
 			$criteria->addSelectColumn(FilePeer::NB_ADDED_LINES);
@@ -210,6 +214,7 @@ abstract class BaseFilePeer {
 			$criteria->addSelectColumn($alias . '.BRANCH_ID');
 			$criteria->addSelectColumn($alias . '.STATE');
 			$criteria->addSelectColumn($alias . '.FILENAME');
+			$criteria->addSelectColumn($alias . '.IS_BINARY');
 			$criteria->addSelectColumn($alias . '.COMMIT_REFERENCE');
 			$criteria->addSelectColumn($alias . '.REVIEW_REQUEST');
 			$criteria->addSelectColumn($alias . '.NB_ADDED_LINES');

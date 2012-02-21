@@ -22,6 +22,7 @@ class fileAction extends sfAction
       ->select('Id')
       ->filterByBranchId($this->file->getBranchId())
       ->filterByFilename($this->file->getFilename(), Criteria::LESS_THAN)
+      ->filterByIsBinary(false)
       ->orderByFilename(Criteria::DESC)
       ->findOne()
     ;
@@ -30,6 +31,7 @@ class fileAction extends sfAction
       ->select('Id')
       ->filterByBranchId($this->file->getBranchId())
       ->filterByFilename($this->file->getFilename(), Criteria::GREATER_THAN)
+      ->filterByIsBinary(false)
       ->orderByFilename(Criteria::ASC)
       ->findOne()
     ;
