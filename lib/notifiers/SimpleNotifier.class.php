@@ -155,7 +155,7 @@ abstract class SimpleNotifier extends BaseNotifier
     {
       $message = $configEvent[$type.'_message'];
       $message = str_replace('%branch%',  $comment->getBranch()->__toString(), $message);
-      $message = str_replace('%message%', stringUtils::shorten($comment->getValue(), 40), $message);
+      $message = str_replace('%message%', stringUtils::shorten($comment->getValue(), 40, '...', true), $message);
       $message = str_replace('%date%',    date('d/m/Y H:i'), $message);
       $message = str_replace('%author%',  $this->subject->getUser()->__toString(), $message);
 
