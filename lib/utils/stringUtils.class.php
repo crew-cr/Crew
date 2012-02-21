@@ -6,26 +6,27 @@ class stringUtils {
    * @param string $string
    * @param int $length
    * @param string $etc
+   * @param bool $removeLineBreaks
    * @return mixed|string
    */
-  public static function shorten($string, $length = 75, $etc = '...')
+  public static function shorten($string, $length = 75, $etc = '...', $removeLineBreaks = false)
   {
     if($length == 0)
     {
-      return '';
+      $shortenedString = '';
     }
-
-    if(strlen($string) > $length)
+    elseif(strlen($string) > $length)
     {
       $length -= min($length, strlen($etc));
       $string = preg_replace('/\s+?(\S+)?$/', '', substr($string, 0, $length+1));
-      $string = preg_replace("/(\r\n|\n|\r)/", " ", $string);
-      return substr($string, 0, $length). $etc;
+      $shortenedString = substr($string, 0, $length). $etc;
     }
     else
     {
-      return $string;
+      $shortenedString = $string;
     }
+
+    return ($removeLineBreaks) ? preg_replace("/(\r\n|\n|\r)/", " ", $shortenedString) : $shortenedString;
   }
 
   /**
