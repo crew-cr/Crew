@@ -8,8 +8,6 @@ class commentDeleteGlobalAction extends sfAction
    */
   public function execute($request)
   {
-    $this->forward404Unless($this->getUser()->isAuthenticated(), 'Your are not authorized to delete this comment');
-
     $con = Propel::getConnection();
     $con->beginTransaction();
 
