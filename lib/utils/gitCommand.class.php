@@ -130,13 +130,22 @@ class GitCommand
    * @param string $currentCommit
    * @param string $referenceCommit
    * @param string $filename
+   * @param array $options
    * @return string
    */
-  public static function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename)
+  public static function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename, $options = array())
   {
     self::fetch($gitDir);
 
-    $cmd = sprintf('git --git-dir="%s" diff -U9999 %s..%s -- %s', $gitDir, $referenceCommit, $currentCommit, $filename);
+    $gitDiffOptions = array(
+      '-U9999'
+    );
+    if (isset($options['ignore-all-space']) && $options['ignore-all-space'])
+    {
+      $gitDiffOptions[] = '-w';
+    }
+    
+    $cmd = sprintf('git --git-dir="%s" diff %s %s..%s -- %s', $gitDir, implode(' ', $gitDiffOptions), $referenceCommit, $currentCommit, $filename);
     exec($cmd, $currentContentLinesResults);
 
     $patternFinded = false;
