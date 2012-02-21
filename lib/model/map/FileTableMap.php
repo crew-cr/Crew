@@ -42,6 +42,7 @@ class FileTableMap extends TableMap
 		$this->addForeignKey('BRANCH_ID', 'BranchId', 'INTEGER', 'branch', 'ID', true, 11, null);
 		$this->addColumn('STATE', 'State', 'CHAR', true, 1, null);
 		$this->addColumn('FILENAME', 'Filename', 'VARCHAR', true, 255, null);
+		$this->addColumn('IS_BINARY', 'IsBinary', 'TINYINT', true, 1, 0);
 		$this->addColumn('COMMIT_REFERENCE', 'CommitReference', 'VARCHAR', true, 50, null);
 		$this->addColumn('REVIEW_REQUEST', 'ReviewRequest', 'TINYINT', true, 1, 0);
 		$this->addColumn('NB_ADDED_LINES', 'NbAddedLines', 'INTEGER', false, 11, null);

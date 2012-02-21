@@ -70,11 +70,22 @@ class FilePeer extends BaseFilePeer {
           $fileModel->setReviewRequest(false);
         }
 
+        if($filesGit[$fileModel->getFilename()]['is-binary'])
+        {
+          $fileModel->setIsBinary(true)
+            ->setNbAddedLines(0)
+            ->setNbDeletedLines(0);
+        }
+        else
+        {
+          $fileModel->setIsBinary(false)
+            ->setNbAddedLines($filesGit[$fileModel->getFilename()]['added-lines'])
+            ->setNbDeletedLines($filesGit[$fileModel->getFilename()]['deleted-lines']);
+        }
+
         $fileModel->setState($filesGit[$fileModel->getFilename()]['state'])
           ->setLastChangeCommit($lastChangeCommit)
           ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getGitDir(), $lastChangeCommit, "%ce %s"))
-          ->setNbAddedLines($filesGit[$fileModel->getFilename()]['added-lines'])
-          ->setNbDeletedLines($filesGit[$fileModel->getFilename()]['deleted-lines'])
           ->setCommitReference($branch->getCommitReference())
           ->save();
         ;
@@ -87,14 +98,26 @@ class FilePeer extends BaseFilePeer {
     {
       $lastChangeCommit = GitCommand::getLastModificationCommit($branch->getRepository()->getGitDir(), $branch->getName(), $fileGit['filename']);
       $file = new File();
+
+      if($fileGit['is-binary'])
+      {
+        $file->setIsBinary(true)
+          ->setNbAddedLines(0)
+          ->setNbDeletedLines(0);
+      }
+      else
+      {
+        $file->setIsBinary(false)
+          ->setNbAddedLines($fileGit['added-lines'])
+          ->setNbDeletedLines($fileGit['deleted-lines']);
+      }
+
       $file->setFilename($fileGit['filename'])
         ->setStatus(BranchPeer::A_TRAITER)
         ->setState($fileGit['state'])
         ->setBranchId($branch->getId())
         ->setLastChangeCommit($lastChangeCommit)
         ->setCommitInfos(GitCommand::getCommitInfos($branch->getRepository()->getGitDir(), $lastChangeCommit, "%ce %s"))
-        ->setNbAddedLines($fileGit['added-lines'])
-        ->setNbDeletedLines($fileGit['deleted-lines'])
         ->setCommitReference($branch->getCommitReference())
         ->setReviewRequest(true)
         ->save()

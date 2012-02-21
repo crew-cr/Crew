@@ -78,8 +78,12 @@
   width:100%;
   color:#4183c4;
 }
-.list .list_body table h3 { display:inline-block; }
-.list .list_body table h3 a { font-family:'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace; }
+.list .list_body table h3 {
+  display:inline-block;
+  font-family:'Bitstream Vera Sans Mono', 'DejaVu Sans Mono', 'Courier New', monospace;
+  color:#666666;
+}
+.list .list_body table h3 a { color:#4183c4; }
 .list .list_body table tr {
   vertical-align:middle;
   border-bottom:1px solid #ebebeb;

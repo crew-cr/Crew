@@ -59,9 +59,9 @@
         <td class="file_name">
           <h3>
             <?php if($file['ReviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
-            <a class="tooltip" href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
+            <?php if(!$file['IsBinary']):?><a class="tooltip" href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>"><?php endif; ?>
               <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
-            </a>
+            <?php if($file['IsBinary']):?></a><?php endif; ?>
           </h3>
         </td>
         <td class="view_infos">
