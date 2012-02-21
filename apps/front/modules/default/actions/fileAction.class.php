@@ -40,11 +40,18 @@ class fileAction extends sfAction
     $this->repository = RepositoryPeer::retrieveByPK($this->branch->getRepositoryId());
     $this->forward404Unless($this->repository, "Repository not found");
 
+    $options = array();
+    if ($request->getParameter('s', false))
+    {
+      $options['ignore-all-space'] = true;
+    }
+    
     $this->fileContentLines = GitCommand::getShowFileFromBranch(
       $this->repository->getGitDir(),
       $this->branch->getCommitReference(),
       $this->file->getLastChangeCommit(),
-      $this->file->getFilename()
+      $this->file->getFilename(),
+      $options
     );
 
     $fileLineCommentsModel = CommentQuery::create()

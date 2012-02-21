@@ -39,6 +39,6 @@ XmppNotifier:
       password: password
       ressource: xmpphp
       server: jabber.yourdomain.com
-      to: team-chatroom@conference.jabber.yourdomain.com/Crew
+      to: team-chatroom@conference.jabber.yourdomain.com
       type: groupchat
 
