@@ -16,7 +16,7 @@
           </h3><br />
           <span title="<?php echo $branch['lastCommitDesc'] ?>" class="commit_desc tooltip"><?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['lastCommitDesc']), 105) ?></span>
         </td>
-        <td class="file_infos">
+        <td class="branch_infos">
           <?php echo $branch['total'].' files' ?>
           <?php if($branch['added']): ?><span class="added tooltip" title="<?php echo $branch['added'].' added file(s)'; ?>"><?php echo $branch['added'].'+'; ?></span><?php endif; ?>
           <?php if($branch['modified']): ?><span class="modified tooltip" title="<?php echo $branch['modified'].' modified file(s)'; ?>"><?php echo $branch['modified'].'*'; ?></span><?php endif; ?>

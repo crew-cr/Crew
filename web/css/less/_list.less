@@ -121,7 +121,6 @@
 
         &.path_directory {
           color: @grey;
-          border-top: 2px solid #BBB;
           background-color: #EBEBEB;
 
           &:hover {
@@ -191,11 +190,41 @@
 
           &.file_infos {
             color: #777;
+            text-align: center;
+            font-size: @smallFont;
+            background-color: #f5f5f5;
+            width: 48px;
+
+            span {
+              display: inline-block;
+              line-height: 12px;
+              width: 34px;
+              font-weight: bold;
+              background-color: white;
+              border: 1px solid #ccc;
+              .box-shadow (0, 0, 1px, 0.2);
+              padding: 2px 5px;
+              .radius (3px);
+
+              &.added { color: #73ab00; }
+              &.modified { color: #4183C4; }
+              &.deleted { color: #c20000; }
+            }
+          }
+
+          &.branch_infos {
+            color: #777;
             text-align: right;
             font-size: @smallFont;
             background-color: #f5f5f5;
+            width: 200px;
+            padding-right: 10px;
 
             span {
+              display: inline-block;
+              text-align: center;
+              line-height: 12px;
+              width: 34px;
               font-weight: bold;
               background-color: white;
               border: 1px solid #ccc;
