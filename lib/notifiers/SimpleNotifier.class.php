@@ -150,6 +150,7 @@ abstract class SimpleNotifier extends BaseNotifier
   protected function createCommentNotificationMessage($type, $comment)
   {
     $configEvent = $this->getEventConfig('comment');
+    $message = '';
 
     if(isset($configEvent[$type.'_message']))
     {
@@ -184,9 +185,9 @@ abstract class SimpleNotifier extends BaseNotifier
 
         $message .= $link;
       }
-
-      $this->send($message);
     }
+
+      return $message;
   }
 
 }
