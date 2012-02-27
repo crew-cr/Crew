@@ -34,6 +34,10 @@ $(document).ready(function() {
 
   $(document)
     .keydown(function(e) {
+      if (e.target.type == 'textarea')
+      {
+        return true;
+      }
       var code = e.keyCode || e.which;
       switch (code) {
         case 16: //shift
