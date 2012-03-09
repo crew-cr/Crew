@@ -11,11 +11,13 @@ class authLDAP
   public static function checkPassword($username, $password)
   {
     $ldapHost   = Configuration::get('ldap_host', false);
-    $ldapDomain = Configuration::get('ldap_domain', false);
+    $ldapVersion = Configuration::get('ldap_version', 2);
+    $ldapRDNFormat  = Configuration::get('ldap_rdn_format', false);
 
     $ldap = new LDAP();
     $ldap->setHost($ldapHost);
-    $ldap->setDomain($ldapDomain);
+    $ldap->setVersion($ldapVersion);
+    $ldap->setRDNFormat($ldapRDNFormat);
         
     return $ldap->checkPassword($username, $password);
   }
