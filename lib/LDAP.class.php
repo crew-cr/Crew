@@ -6,11 +6,16 @@ class LDAP
    * @var 
    */
   private $host;
+    
+  /**
+   * @var
+   */
+  private $version;
   
   /**
-   * @var 
+   * @var
    */
-  private $domain;
+  private $RDNFormat;
   
   /**
    * 
@@ -37,37 +42,21 @@ class LDAP
       throw new sfException("Empty LDAP host");
     }
 
-    if (!$this->getDomain())
-    {
-      throw new sfException("Empty LDAP domain");
-    }
-
     $handle = @ldap_connect(sprintf('ldap://%s/', $this->getHost()));
     if (!$handle)
     {
       throw new sfException(sprintf("Unable to connect to LDAP server %s", $this->getHost()));
     }
-
-    return @ldap_bind($handle, $username.'@'.$this->getDomain(), $password);
+    
+    if (!ldap_set_option($handle, LDAP_OPT_PROTOCOL_VERSION, $this->getVersion())) 
+    {
+        throw new sfException(sprintf("Unable to set version on LDAP server %s", $this->getHost()));
+    }
+    
+    $rdn = sprintf($this->getRDNFormat(), $username);
+    return ldap_bind($handle, $rdn, $password);
   }
 
-  /**
-   * @param $domain
-   * @return LDAP
-   */
-  public function setDomain($domain)
-  {
-    $this->domain = $domain;
-    return $this;
-  }
-
-  /**
-   * @return 
-   */
-  public function getDomain()
-  {
-    return $this->domain;
-  }
 
   /**
    * @param $host
@@ -86,4 +75,41 @@ class LDAP
   {
     return $this->host;
   }
+  
+  /**
+   * @param $version
+   * @return LDAP
+   */
+  public function setVersion($version)
+  {
+    $this->version = $version;
+    return $this;
+  }
+
+  /**
+   * @return 
+   */
+  public function getVersion()
+  {
+    return $this->version;
+  }
+
+    /**
+   * @param $RNDFormat
+   * @return LDAP
+   */
+  public function setRDNFormat($RDNFormat)
+  {
+    $this->RDNFormat = $RDNFormat;
+    return $this;
+  }
+
+  /**
+   * @return 
+   */
+  public function getRDNFormat()
+  {
+    return $this->RDNFormat;
+  }
+
 }
