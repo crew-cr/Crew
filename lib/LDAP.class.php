@@ -54,6 +54,10 @@ class LDAP
     }
     
     $rdn = sprintf($this->getRDNFormat(), $username);
+    if (!strlen($rdn))
+    {
+      throw new sfException("Bind RDN value cannot be empty");
+    }
     return ldap_bind($handle, $rdn, $password);
   }
 
