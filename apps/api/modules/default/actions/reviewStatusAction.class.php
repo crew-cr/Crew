@@ -10,7 +10,7 @@ class reviewStatusAction extends sfAction
   {
     $projectId  = $request->getParameter('project-id');
     $branchName = $request->getParameter('branch');
-    $commit     = $request->getParameter('commit'); // Dernier commit effectué en local
+    $commit     = $request->getParameter('commit'); // Dernier commit effectué en local (optionel)
 
     $branch = BranchQuery::create()
       ->filterByName($branchName)
@@ -21,7 +21,7 @@ class reviewStatusAction extends sfAction
     $result = array();
     if($branch)
     {
-      if($branch->getCommitStatusChanged() == $commit)
+      if(!strlen($commit) || $branch->getCommitStatusChanged() == $commit)
       {
         $result['result'] = $branch->getStatus();
         $result['message'] = "Status: ".$branch->getStatus();
