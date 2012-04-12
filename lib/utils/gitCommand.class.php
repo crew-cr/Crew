@@ -173,7 +173,7 @@ class GitCommand
   public static function cloneRepository($repositoryReadOnlyUrl, $path)
   {
     $status = 0;
-    GitCommand::exec(sprintf('git clone --mirror %s %s', $repositoryReadOnlyUrl, $path), $status);
+    GitCommand::exec(sprintf('git clone --mirror %s %s', $repositoryReadOnlyUrl, escapeshellarg($path)), $status);
     return $status;
   }
 
