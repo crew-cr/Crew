@@ -59,14 +59,14 @@ class projectAddAction extends sfAction
           if(!is_dir($repository))
           {
             $cloneStatus = GitCommand::cloneRepository($remote, $repository);
-            if($cloneStatus == 0)
+            if($cloneStatus === 0)
             {
               $message .= sprintf(" and remote '%s' is correctly cloned in '%s'", $remote, $repository);
               $this->getUser()->setFlash('notice', $message);
             }
             else
             {
-              $message .= sprintf(" but remote '%s' is not cloned in '%s' [status : %s]", $remote, $repository, $cloneStatus);
+              $message .= sprintf(" but remote '%s' is not cloned in '%s' [status : %s]", $remote, $repository, ($cloneStatus === null ? 'NULL' : $cloneStatus));
               throw new Exception($message);
             }
           }
