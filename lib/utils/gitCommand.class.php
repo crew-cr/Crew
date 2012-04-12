@@ -194,8 +194,6 @@ class GitCommand
 
     $cmd = vsprintf($cmd, $arguments);
 
-	file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), $cmd . PHP_EOL, FILE_APPEND);
-
     exec($cmd, $internOutput, $internStatus);
 
     $debug = sprintf("%s [%s] %s : %s\n%s result", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $internStatus, $cmd, count($internOutput));
