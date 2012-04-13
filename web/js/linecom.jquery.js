@@ -58,6 +58,7 @@
         event.preventDefault();
         $('.comment_add', base.bloc).hide();
         $('.comment_form', base.bloc).show();
+        base.bloc.find('textarea').focus();
       });
 
       $('.delete', base.bloc).bind('click', function(event) {
@@ -95,6 +96,7 @@
             ;
           }
 
+          base.bloc.find('textarea').focus();
           base.bindingBloc();
         }
       });
