@@ -193,6 +193,12 @@
 .list .list_body table tr td.branch_infos span.added { color:#73ab00; }
 .list .list_body table tr td.branch_infos span.modified { color:#4183c4; }
 .list .list_body table tr td.branch_infos span.deleted { color:#c20000; }
+.list .list_body table tr td.branch_ago {
+  color:#999999;
+  font-size:11px;
+  text-align:right;
+  padding-right:8px;
+}
 .list .list_body table tr td.view_infos { text-align:right; }
 .list .list_body table tr td.view_infos .ricon { color:#666666; }
 .list .list_body table tr td.file_name .ricon {
@@ -201,10 +207,13 @@
   margin-right:3px;
 }
 .list .list_body table tr td.branch_name { white-space:nowrap; }
-.list .list_body table tr td.branch_name .ricon {
-  color:#44aa33;
-  font-size:21px;
-  margin-right:3px;
+.list .list_body table tr td.branch_name .new {
+  background-color:#4183c4;
+  color:#ffffff;
+  padding:3px 7px;
+  border-radius:15px;
+  -webkit-border-radius:15px;
+  -moz-border-radius:15px;
 }
 .list #file_list h3 {
   font-weight:normal;

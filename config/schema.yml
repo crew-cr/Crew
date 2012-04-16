@@ -17,6 +17,8 @@ propel:
     commit_status_changed:            { type: varchar, size: '50', required: false }
     user_status_changed:              { type: integer, foreignTable: sf_guard_user, foreignReference: id }
     date_status_changed:              { type: timestamp, required: false }
+    created_at:                       { type: timestamp, required: true}
+    updated_at:                       { type: timestamp, required: true}
   comment:
     _attributes:
     id:                               ~

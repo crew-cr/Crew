@@ -29,14 +29,32 @@ class File extends BaseFile
 
   public function changeStatus($newStatus, $user, $con = null)
   {
-    $this
-      ->setStatus($newStatus)
-      ->setCommitStatusChanged($this->getLastChangeCommit())
-      ->setUserStatusChanged($user)
-      ->setDateStatusChanged(time())
-      ->setReviewRequest(false)
-      ->save($con)
-    ;
+    $con = (is_null($con)) ? Propel::getConnection() : $con;
+    $con->beginTransaction();
+
+    try
+    {
+      $this
+        ->setStatus($newStatus)
+        ->setCommitStatusChanged($this->getLastChangeCommit())
+        ->setUserStatusChanged($user)
+        ->setDateStatusChanged(time())
+        ->setReviewRequest(false)
+        ->save($con)
+      ;
+
+      if($newStatus != BranchPeer::A_TRAITER)
+      {
+        $this->getBranch()->setReviewRequest(false)->save();
+      }
+
+      $con->commit();
+    }
+    catch (Exception $e)
+    {
+      $con->rollBack();
+      throw new $e;
+    }
   }
 
   /**
@@ -56,13 +74,13 @@ class File extends BaseFile
     {
       return 0;
     }
-
+    
     $file = FileQuery::create()->filterById($fileId)->findOne();
     if(!$file)
     {
       return false;
     }
-
+    
     $statusAction = new StatusAction();
     return $statusAction
       ->setUserId($userId)

@@ -19,6 +19,8 @@
  * @method     BranchQuery orderByCommitStatusChanged($order = Criteria::ASC) Order by the commit_status_changed column
  * @method     BranchQuery orderByUserStatusChanged($order = Criteria::ASC) Order by the user_status_changed column
  * @method     BranchQuery orderByDateStatusChanged($order = Criteria::ASC) Order by the date_status_changed column
+ * @method     BranchQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
+ * @method     BranchQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
  * @method     BranchQuery groupById() Group by the id column
  * @method     BranchQuery groupByRepositoryId() Group by the repository_id column
@@ -33,6 +35,8 @@
  * @method     BranchQuery groupByCommitStatusChanged() Group by the commit_status_changed column
  * @method     BranchQuery groupByUserStatusChanged() Group by the user_status_changed column
  * @method     BranchQuery groupByDateStatusChanged() Group by the date_status_changed column
+ * @method     BranchQuery groupByCreatedAt() Group by the created_at column
+ * @method     BranchQuery groupByUpdatedAt() Group by the updated_at column
  *
  * @method     BranchQuery leftJoin($relation) Adds a LEFT JOIN clause to the query
  * @method     BranchQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
@@ -74,6 +78,8 @@
  * @method     Branch findOneByCommitStatusChanged(string $commit_status_changed) Return the first Branch filtered by the commit_status_changed column
  * @method     Branch findOneByUserStatusChanged(int $user_status_changed) Return the first Branch filtered by the user_status_changed column
  * @method     Branch findOneByDateStatusChanged(string $date_status_changed) Return the first Branch filtered by the date_status_changed column
+ * @method     Branch findOneByCreatedAt(string $created_at) Return the first Branch filtered by the created_at column
+ * @method     Branch findOneByUpdatedAt(string $updated_at) Return the first Branch filtered by the updated_at column
  *
  * @method     array findById(int $id) Return Branch objects filtered by the id column
  * @method     array findByRepositoryId(int $repository_id) Return Branch objects filtered by the repository_id column
@@ -88,6 +94,8 @@
  * @method     array findByCommitStatusChanged(string $commit_status_changed) Return Branch objects filtered by the commit_status_changed column
  * @method     array findByUserStatusChanged(int $user_status_changed) Return Branch objects filtered by the user_status_changed column
  * @method     array findByDateStatusChanged(string $date_status_changed) Return Branch objects filtered by the date_status_changed column
+ * @method     array findByCreatedAt(string $created_at) Return Branch objects filtered by the created_at column
+ * @method     array findByUpdatedAt(string $updated_at) Return Branch objects filtered by the updated_at column
  *
  * @package    propel.generator.lib.model.om
  */
@@ -176,7 +184,7 @@ abstract class BaseBranchQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `REPOSITORY_ID`, `NAME`, `BASE_BRANCH_NAME`, `COMMIT_REFERENCE`, `LAST_COMMIT`, `LAST_COMMIT_DESC`, `IS_BLACKLISTED`, `REVIEW_REQUEST`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED` FROM `branch` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `REPOSITORY_ID`, `NAME`, `BASE_BRANCH_NAME`, `COMMIT_REFERENCE`, `LAST_COMMIT`, `LAST_COMMIT_DESC`, `IS_BLACKLISTED`, `REVIEW_REQUEST`, `STATUS`, `COMMIT_STATUS_CHANGED`, `USER_STATUS_CHANGED`, `DATE_STATUS_CHANGED`, `CREATED_AT`, `UPDATED_AT` FROM `branch` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -699,6 +707,90 @@ abstract class BaseBranchQuery extends ModelCriteria
 			}
 		}
 		return $this->addUsingAlias(BranchPeer::DATE_STATUS_CHANGED, $dateStatusChanged, $comparison);
+	}
+
+	/**
+	 * Filter the query on the created_at column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCreatedAt('2011-03-14'); // WHERE created_at = '2011-03-14'
+	 * $query->filterByCreatedAt('now'); // WHERE created_at = '2011-03-14'
+	 * $query->filterByCreatedAt(array('max' => 'yesterday')); // WHERE created_at > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $createdAt The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterByCreatedAt($createdAt = null, $comparison = null)
+	{
+		if (is_array($createdAt)) {
+			$useMinMax = false;
+			if (isset($createdAt['min'])) {
+				$this->addUsingAlias(BranchPeer::CREATED_AT, $createdAt['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($createdAt['max'])) {
+				$this->addUsingAlias(BranchPeer::CREATED_AT, $createdAt['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::CREATED_AT, $createdAt, $comparison);
+	}
+
+	/**
+	 * Filter the query on the updated_at column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByUpdatedAt('2011-03-14'); // WHERE updated_at = '2011-03-14'
+	 * $query->filterByUpdatedAt('now'); // WHERE updated_at = '2011-03-14'
+	 * $query->filterByUpdatedAt(array('max' => 'yesterday')); // WHERE updated_at > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $updatedAt The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterByUpdatedAt($updatedAt = null, $comparison = null)
+	{
+		if (is_array($updatedAt)) {
+			$useMinMax = false;
+			if (isset($updatedAt['min'])) {
+				$this->addUsingAlias(BranchPeer::UPDATED_AT, $updatedAt['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($updatedAt['max'])) {
+				$this->addUsingAlias(BranchPeer::UPDATED_AT, $updatedAt['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(BranchPeer::UPDATED_AT, $updatedAt, $comparison);
 	}
 
 	/**

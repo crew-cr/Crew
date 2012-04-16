@@ -238,6 +238,13 @@
             }
           }
 
+          &.branch_ago {
+            color: @lightGrey;
+            font-size: @smallFont;
+            text-align: right;
+            padding-right: 8px;
+          }
+
           &.view_infos {
             text-align: right;
 
@@ -257,10 +264,11 @@
           &.branch_name {
             white-space: nowrap;
 
-            .ricon {
-              color: #4a3;
-              font-size: 21px;
-              margin-right: 3px;
+            .new {
+              background-color: #4183c4;
+              color: #fff;
+              padding: 3px 7px;
+              .radius(15px);
             }
           }
         }

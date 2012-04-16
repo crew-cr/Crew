@@ -51,9 +51,20 @@ class commentAddGlobalAction extends sfAction
         break;
     }
 
-    $aComment
-      ->save()
-    ;
+    $con = Propel::getConnection();
+    $con->beginTransaction();
+
+    try
+    {
+      $aComment->save();
+      $aComment->getBranch()->setReviewRequest(false)->save();
+      $con->commit();
+    }
+    catch (Exception $e)
+    {
+      $con->rollBack();
+      throw new $e;
+    }
 
     $this->dispatcher->notify(new sfEvent($this, 'notification.comment', array('project-id' => $aComment->getBranch()->getRepositoryId(), 'type' => ($type == CommentPeer::TYPE_BRANCH) ? 'branch' : 'file', 'object' => $aComment)));
 

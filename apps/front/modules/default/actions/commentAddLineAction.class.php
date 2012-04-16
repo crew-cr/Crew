@@ -66,6 +66,8 @@ class commentAddLineAction extends sfAction
           ->save($con)
         ;
 
+        $lineComment->getBranch()->setReviewRequest(false)->save();
+
         $datas = array_merge($datas, array('form_visible' => false));
 
         $con->commit();

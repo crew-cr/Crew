@@ -22,6 +22,8 @@ class branchListAction extends sfAction
     $branches = BranchQuery::create()
       ->filterByIsBlacklisted(false)
       ->filterByRepositoryId($this->repository->getId())
+      ->orderByReviewRequest(Criteria::DESC)
+      ->orderByCreatedAt(Criteria::DESC)
       ->find()
     ;
     $this->branches = array();
@@ -40,7 +42,8 @@ class branchListAction extends sfAction
         'total' => $addedFilesCount + $modifiedFilesCount + $deletedFilesCount,
         'added' => $addedFilesCount,
         'modified' => $modifiedFilesCount,
-        'deleted' => $deletedFilesCount
+        'deleted' => $deletedFilesCount,
+        'ago' => stringUtils::ago($branch->getCreatedAt('U'))
       );
     }
 

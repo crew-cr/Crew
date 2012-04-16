@@ -91,4 +91,29 @@ class stringUtils {
 
     return sprintf('%s%s%s', substr($path, 0, $at), $with, substr($path, -($length - strlen($with) - $at)));
   }
+
+  /**
+   * Returns human readable interval from now
+   * From last comment of http://css-tricks.com/snippets/php/time-ago-function/
+   * 
+   * @static
+   * @param $i past timestamp
+   * @return string
+   */
+  public static function ago($i)
+  {
+    $m = time() - $i;
+    $o = 'just now';
+    $t = array('year'=>31556926,'month'=>2629744,'week'=>604800, 'day'=>86400,'hour'=>3600,'minute'=>60,'second'=>1);
+    foreach($t as $u=>$s)
+    {
+        if($s<=$m)
+        {
+          $v=floor($m/$s);
+          $o="$v $u".($v==1?'':'s').' ago';
+          break;
+        }
+    }
+    return $o;
+  }
 }

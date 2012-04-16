@@ -27,6 +27,8 @@ abstract class BaseBranchForm extends BaseFormPropel
       'commit_status_changed' => new sfWidgetFormInputText(),
       'user_status_changed'   => new sfWidgetFormPropelChoice(array('model' => 'sfGuardUser', 'add_empty' => true)),
       'date_status_changed'   => new sfWidgetFormDateTime(),
+      'created_at'            => new sfWidgetFormDateTime(),
+      'updated_at'            => new sfWidgetFormDateTime(),
     ));
 
     $this->setValidators(array(
@@ -43,6 +45,8 @@ abstract class BaseBranchForm extends BaseFormPropel
       'commit_status_changed' => new sfValidatorString(array('max_length' => 50, 'required' => false)),
       'user_status_changed'   => new sfValidatorPropelChoice(array('model' => 'sfGuardUser', 'column' => 'id', 'required' => false)),
       'date_status_changed'   => new sfValidatorDateTime(array('required' => false)),
+      'created_at'            => new sfValidatorDateTime(),
+      'updated_at'            => new sfValidatorDateTime(),
     ));
 
     $this->widgetSchema->setNameFormat('branch[%s]');
