@@ -63,7 +63,7 @@ class commentAddGlobalAction extends sfAction
     catch (Exception $e)
     {
       $con->rollBack();
-      throw new $e;
+      throw $e;
     }
 
     $this->dispatcher->notify(new sfEvent($this, 'notification.comment', array('project-id' => $aComment->getBranch()->getRepositoryId(), 'type' => ($type == CommentPeer::TYPE_BRANCH) ? 'branch' : 'file', 'object' => $aComment)));

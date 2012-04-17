@@ -1,3 +1,4 @@
+<?php use_helper('Date'); ?>
 <div class="list">
   <div class="list_head">
     <span class="title">Branch list</span>
@@ -16,7 +17,7 @@
           </h3><br />
           <span title="<?php echo $branch['lastCommitDesc'] ?>" class="commit_desc tooltip"><?php echo stringUtils::shorten(stringUtils::trimTicketInfos($branch['lastCommitDesc']), 105) ?></span>
         </td>
-        <td class="branch_ago"><?php echo $branch['ago'] ?></td>
+        <td class="branch_ago"><?php echo time_ago_in_words($branch['created']) ?> ago</td>
         <td class="branch_infos">
           <?php echo $branch['total'].' files' ?>
           <?php if($branch['added']): ?><span class="added tooltip" title="<?php echo $branch['added'].' added file(s)'; ?>"><?php echo $branch['added'].'+'; ?></span><?php endif; ?>

@@ -77,7 +77,7 @@ class commentAddLineAction extends sfAction
       catch (Exception $e)
       {
         $con->rollBack();
-        throw new $e;
+        throw $e;
       }
     }
 
