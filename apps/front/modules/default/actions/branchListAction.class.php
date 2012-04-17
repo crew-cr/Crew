@@ -43,7 +43,7 @@ class branchListAction extends sfAction
         'added' => $addedFilesCount,
         'modified' => $modifiedFilesCount,
         'deleted' => $deletedFilesCount,
-        'ago' => stringUtils::ago($branch->getCreatedAt('U'))
+        'created' => $branch->getCreatedAt('U')
       );
     }
 

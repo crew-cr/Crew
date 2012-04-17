@@ -53,7 +53,7 @@ class File extends BaseFile
     catch (Exception $e)
     {
       $con->rollBack();
-      throw new $e;
+      throw $e;
     }
   }
 
