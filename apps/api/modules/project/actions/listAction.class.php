@@ -1,6 +1,6 @@
 <?php
  
-class projectsAction extends sfAction
+class listAction extends sfAction
 {
   /**
    * @param sfWebRequest $request
@@ -8,6 +8,8 @@ class projectsAction extends sfAction
    */
   public function execute($request)
   {
+    file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), sprintf("%s [%s] list projects\n", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR']), FILE_APPEND);
+
     $repositories = RepositoryQuery::create()
       ->find()
     ;
@@ -24,6 +26,7 @@ class projectsAction extends sfAction
       );
     }
 
+    $this->getResponse()->setStatusCode('200');
     $this->getResponse()->setContentType('application/json');
     return $this->renderText(json_encode($result));
   }

@@ -1,9 +1,63 @@
 # You can find more information about this file on the symfony website:
 # http://www.symfony-project.org/reference/1_4/en/10-Routing
 
-default_index:
-  url:   /:action
-  param: { module: default }
+#------------
+# Project API
+#------------
+list_projects:
+  url: /projects
+  class: sfRequestRoute
+  param: { module: project, action: list }
+  requirements:
+    sf_method: [get]
 
-default:
-  url:   /:module/:action/*
+get_project:
+  url: /projects/:project_id
+  class: sfRequestRoute
+  param: { module: project, action: get }
+  requirements:
+    project_id: \d+
+    sf_method: [get]
+
+clean_project:
+  url: /projects/:project_id/clean
+  class: sfRequestRoute
+  param: { module: project, action: clean }
+  requirements:
+    project_id: \d+
+    sf_method: [put]
+
+#-----------
+# Review API
+#-----------
+list_reviews:
+  url: /projects/:project_id/reviews
+  class: sfRequestRoute
+  param: { module: review, action: list }
+  requirements:
+    project_id: \d+
+    sf_method: [get]
+
+get_review:
+  url: /projects/:project_id/reviews/:branch
+  class: sfRequestRoute
+  param: { module: review, action: get }
+  requirements:
+    project_id: \d+
+    sf_method: [get]
+
+set_review:
+  url: /projects/:project_id/reviews
+  class: sfRequestRoute
+  param: { module: review, action: set }
+  requirements:
+    project_id: \d+
+    sf_method: [post]
+
+delete_review:
+  url: /projects/:project_id/reviews/:branch
+  class: sfRequestRoute
+  param: { module: review, action: delete }
+  requirements:
+    project_id: \d+
+    sf_method: [delete]

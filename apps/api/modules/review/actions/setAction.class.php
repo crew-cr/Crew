@@ -1,6 +1,6 @@
 <?php
  
-class reviewRequestAction extends sfAction
+class setAction extends sfAction
 {
   /**
    * @param sfWebRequest $request
@@ -8,17 +8,19 @@ class reviewRequestAction extends sfAction
    */
   public function execute($request)
   {
-    $projectId      = $request->getParameter('project-id');
-    $baseBranchName = $request->getParameter('base-branch');
+    $projectId      = $request->getParameter('project_id');
+    $baseBranchName = $request->getParameter('base_branch');
     $branchName     = $request->getParameter('branch');
-    $commit         = (string)$request->getParameter('commit'); //Dernier commit
+    $commit         = (string)$request->getParameter('commit'); // Last commit
+    $result         = array();
+
+    file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), sprintf("%s [%s] set review = projectId : %s - baseBranchName : %s - branchName : %s - commit : %s\n", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $projectId, $baseBranchName, $branchName, $commit), FILE_APPEND);
 
     $repository = RepositoryQuery::create()
       ->filterById($projectId)
       ->findOne()
     ;
 
-    $result = array();
     if($repository)
     {
       $branch = BranchQuery::create()
@@ -42,11 +44,10 @@ class reviewRequestAction extends sfAction
         $branch->setBaseBranchName($baseBranchName)->save();
       }
 
-      file_put_contents(sprintf("%s/api.log", sfConfig::get('sf_log_dir')), sprintf("%s [%s] ReviewRequest = projectId : %s - baseBranchName : %s - branchName : %s - commit : %s\n", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $projectId, $baseBranchName, $branchName, $commit), FILE_APPEND);
       if(($nbFiles = BranchPeer::synchronize($repository, $branch)) != 0)
       {
-        $result['result'] = false;
         $result['message'] = sprintf("Your branch '%s' has too many files : %s (max : %s)", $branch->__toString(), $nbFiles, sfConfig::get('app_max_number_of_files_to_review', 4096));
+        $this->getResponse()->setStatusCode('500');
       }
       elseif(!$branch->isDeleted())
       {
@@ -60,31 +61,31 @@ class reviewRequestAction extends sfAction
               ->setIsBlacklisted(0)
               ->save()
             ;
-            $result['result'] = true;
+            $this->getResponse()->setStatusCode('201');
             $this->dispatcher->notify(new sfEvent($this, 'notification.review-request', array('project-id' => $branch->getRepositoryId(), 'object' => $branch)));
           }
           else
           {
-            $result['result'] = true;
             $result['message'] = sprintf("Commit already used : '%s'", $commit);
+            $this->getResponse()->setStatusCode('200');
           }
         }
         else
         {
-          $result['result'] = false;
           $result['message'] = sprintf("No valid commit '%s'", $commit);
+          $this->getResponse()->setStatusCode('422');
         }
       }
       else
       {
-        $result['result'] = false;
-        $result['message'] = sprintf("Unknown branch '%s' in project '%s'", $branch->__toString(), $repository->getName());
+        $result['message'] = sprintf("Unknown branch '%s' in project '%s'", $branchName, $repository->getName());
+        $this->getResponse()->setStatusCode('404');
       }
     }
     else
     {
-      $result['result'] = false;
       $result['message'] = sprintf("No valid project '%s'", $projectId);
+      $this->getResponse()->setStatusCode('400');
     }
 
     $this->getResponse()->setContentType('application/json');

@@ -1,7 +1,7 @@
 #! /bin/bash
 
 SCRIPT_NAME="Review request"
-SCRIPT_VERSION="0.1"
+SCRIPT_VERSION="0.2"
 SCRIPT_SHORT_DESC="simple script to request a review with Crew (http://pmsipilot.github.com/Crew)"
 CUR_DIR=`pwd`
 
@@ -71,6 +71,6 @@ echo "Do you want to request a review ? (y/N)"
 
 read REQUEST;
 if [ "$REQUEST" = "y" ]; then
-  curl -X POST --data "project-id=$CREW_PROJECT_ID&base-branch=master&branch=$BRANCH_TO_REVIEW&commit=$LAST_COMMIT" "$CREW_SERVER/api.php/reviewRequest"
+  curl -X POST --data "base_branch=master&branch=$BRANCH_TO_REVIEW&commit=$LAST_COMMIT" "$CREW_SERVER/api.php/projects/$CREW_PROJECT_ID/reviews"
   printf "\n"
 fi
