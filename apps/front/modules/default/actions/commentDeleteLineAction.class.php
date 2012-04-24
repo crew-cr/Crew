@@ -1,6 +1,6 @@
 <?php
 
-class commentDeleteLineAction extends sfAction
+class commentDeleteLineAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

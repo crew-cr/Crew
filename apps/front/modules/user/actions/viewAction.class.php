@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class viewAction extends sfAction
+class viewAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

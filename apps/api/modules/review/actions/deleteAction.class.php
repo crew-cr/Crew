@@ -1,6 +1,6 @@
 <?php
  
-class deleteAction extends sfAction
+class deleteAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

@@ -2,14 +2,20 @@
 
 class GitCommand
 {
+  protected $logger;
+
+  public function __construct(GitLogger $logger)
+  {
+    $this->logger = $logger;
+  }
+  
   /**
-   * @static
    * @param string $gitDir
    * @return string
    */
-  public static function getRemote($gitDir)
+  public function getRemote($gitDir)
   {
-    $remote = GitCommand::exec("git --git-dir=%s remote -v | head -n1 | tr -d '\t' | cut -d' ' -f1", array($gitDir));
+    $remote = $this->exec("git --git-dir=%s remote -v | head -n1 | tr -d '\t' | cut -d' ' -f1", array($gitDir));
     return (count($remote)) ? $remote[0] : '';
   }
 
@@ -18,21 +24,22 @@ class GitCommand
    * @param string $gitDir
    * @return void
    */
-  public static function fetch($gitDir)
+  public function fetch($gitDir)
   {
-    GitCommand::exec('git --git-dir=%s fetch -p origin', array($gitDir));
+    $this->exec('git --git-dir=%s fetch -p origin', array($gitDir));
   }
 
   /**
-   * @static
    * @param string $gitDir
+   * @param string $baseBranch
+   * @param string $branch
    * @return array
    */
-  public static function getNoMergedBranchInfos($gitDir, $baseBranch, $branch)
+  public function getNoMergedBranchInfos($gitDir, $baseBranch, $branch)
   {
     self::fetch($gitDir);
 
-    $result = GitCommand::exec('git --git-dir=%s branch --no-merged %s | grep %s | sed "s/ //g"', array($gitDir, $baseBranch, $branch));
+    $result = $this->exec('git --git-dir=%s branch --no-merged %s | grep %s | sed "s/ //g"', array($gitDir, $baseBranch, $branch));
     if(count($result) == 0 || strpos($result[0], '->') !== false || $result[0] != $branch)
     {
       return null;
@@ -40,10 +47,10 @@ class GitCommand
 
     $noMergedBranchInfos = array();
 
-    $commitRef = GitCommand::exec('git --git-dir=%s merge-base %s %s | head -1', array($gitDir, $baseBranch, $branch));
+    $commitRef = $this->exec('git --git-dir=%s merge-base %s %s | head -1', array($gitDir, $baseBranch, $branch));
     $noMergedBranchInfos['commit_reference'] = (count($commitRef)) ? $commitRef[0] : '';
 
-    $commitStatus = GitCommand::exec('git --git-dir=%s rev-parse --verify %s', array($gitDir, $branch));
+    $commitStatus = $this->exec('git --git-dir=%s rev-parse --verify %s', array($gitDir, $branch));
     $noMergedBranchInfos['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
 
     $noMergedBranchInfos['last_commit_desc'] = self::getCommitInfos($gitDir, $branch, '%s');
@@ -52,21 +59,21 @@ class GitCommand
   }
 
   /**
-   * @static
    * @param string $gitDir
    * @param string $referenceCommit
    * @param string $lastCommit
+   * @param bool $withDetails
    * @return array
    */
-  public static function getDiffFilesFromBranch($gitDir, $referenceCommit, $lastCommit, $withDetails = true)
+  public function getDiffFilesFromBranch($gitDir, $referenceCommit, $lastCommit, $withDetails = true)
   {
     self::fetch($gitDir);
 
-    $results = GitCommand::exec('git --git-dir=%s diff %s..%s --name-status', array($gitDir,  $referenceCommit, $lastCommit));
+    $results = $this->exec('git --git-dir=%s diff %s..%s --name-status', array($gitDir,  $referenceCommit, $lastCommit));
 
     if($withDetails)
     {
-      $lineResults = GitCommand::exec('git --git-dir=%s diff %s..%s --numstat | sed "s/\t/ /g"', array($gitDir,  $referenceCommit, $lastCommit));
+      $lineResults = $this->exec('git --git-dir=%s diff %s..%s --numstat | sed "s/\t/ /g"', array($gitDir,  $referenceCommit, $lastCommit));
 
       $linesInfos = array();
       foreach($lineResults as $line)
@@ -101,24 +108,21 @@ class GitCommand
   }
 
   /**
-   * @static
    * @param string $gitDir
    * @param string $currentCommit
-   * @param string $referenceCommit
    * @param string $filename
    * @return string
    */
-  public static function getShowFile($gitDir, $currentCommit, $filename)
+  public function getShowFile($gitDir, $currentCommit, $filename)
   {
     self::fetch($gitDir);
 
-    $fileContent = GitCommand::exec('git --git-dir=%s show %s:%s', array($gitDir, $currentCommit, $filename));
+    $fileContent = $this->exec('git --git-dir=%s show %s:%s', array($gitDir, $currentCommit, $filename));
 
     return implode(PHP_EOL, $fileContent);
   }
 
   /**
-   * @static
    * @param string $gitDir
    * @param string $currentCommit
    * @param string $referenceCommit
@@ -126,7 +130,7 @@ class GitCommand
    * @param array $options
    * @return string
    */
-  public static function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename, $options = array())
+  public function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename, $options = array())
   {
     self::fetch($gitDir);
 
@@ -138,7 +142,7 @@ class GitCommand
       $gitDiffOptions[] = '-w';
     }
 
-    $currentContentLinesResults = GitCommand::exec('git --git-dir=%s diff %s %s..%s -- %s', array($gitDir, implode(' ', $gitDiffOptions), $referenceCommit, $currentCommit, $filename));
+    $currentContentLinesResults = $this->exec('git --git-dir=%s diff %s %s..%s -- %s', array($gitDir, implode(' ', $gitDiffOptions), $referenceCommit, $currentCommit, $filename));
 
     $patternFinded = false;
     $fileLines = $currentContentLinesResults;
@@ -157,69 +161,49 @@ class GitCommand
     return $fileLines;
   }
 
-  public static function getLastModificationCommit($gitDir, $branch, $filename)
+  public function getLastModificationCommit($gitDir, $branch, $filename)
   {
-    $return = GitCommand::exec('git --git-dir=%s log %s --format="%%H" -- %s | head -n1', array($gitDir, $branch, $filename));
+    $return = $this->exec('git --git-dir=%s log %s --format="%%H" -- %s | head -n1', array($gitDir, $branch, $filename));
     return (count($return)) ? $return[0] : false;
   }
 
   /**
-   * @static
    * @param $repositoryReadOnlyUrl
    * @param $path
    * @return int
    */
-  public static function cloneRepository($repositoryReadOnlyUrl, $path)
+  public function cloneRepository($repositoryReadOnlyUrl, $path)
   {
     $status = 0;
-    GitCommand::exec('git clone --mirror %s %s', array($repositoryReadOnlyUrl, $path), $status);
+    $this->exec('git clone --mirror %s %s', array($repositoryReadOnlyUrl, $path), $status);
     return $status;
   }
 
-  public static function commitIsInHistory($gitDir, $commit, $searchedCommit)
+  public function commitIsInHistory($gitDir, $commit, $searchedCommit)
   {
-    $return = GitCommand::exec('git --git-dir=%s log %s | grep %s', array($gitDir, $commit, $searchedCommit));
+    $return = $this->exec('git --git-dir=%s log %s | grep %s', array($gitDir, $commit, $searchedCommit));
     return (count($return) > 0);
   }
 
-  public static function getCommitInfos($gitDir, $commit, $format)
+  public function getCommitInfos($gitDir, $commit, $format)
   {
-    $return = GitCommand::exec('git --git-dir=%s log %s --format=%s -n1', array($gitDir, $commit, $format));
+    $return = $this->exec('git --git-dir=%s log %s --format=%s -n1', array($gitDir, $commit, $format));
     return (count($return)) ? $return[0] : '';
   }
 
-  public static function exec($cmd, array $arguments = array(), &$status = null)
+  public function exec($cmd, array $arguments = array(), &$status = null)
   {
     array_walk($arguments, 'escapeshellarg');
 
     $cmd = vsprintf($cmd, $arguments);
+    $cmd.= ' 2>&1';
 
     exec($cmd, $internOutput, $internStatus);
 
-    $debug = sprintf("%s [%s] %s : %s\n%s result", date('d/m/Y H:i:s'), $_SERVER['REMOTE_ADDR'], $internStatus, $cmd, count($internOutput));
-    if(count($internOutput) == 0)
+    if($this->logger !== null)
     {
-      $debug .= ".\n";
+      $this->logger->log($cmd, $internStatus, implode("\n", $internOutput));
     }
-    elseif(count($internOutput) == 1)
-    {
-      $debug .= " : ".$internOutput[0]."\n";
-    }
-    elseif(count($internOutput) > 1)
-    {
-      $debug .= "s :\n";
-      $output = array_slice($internOutput, 0, 10);
-      foreach($output as $line)
-      {
-        $debug .= $line."\n";
-      }
-      if(count($internOutput) > 10)
-      {
-        $debug .= (count($internOutput) - 10)." more..\n";
-      }
-    }
-    $debug .= "----\n";
-    file_put_contents(sprintf("%s/git.log", sfConfig::get('sf_log_dir')), $debug, FILE_APPEND);
 
     if(!is_null($status))
     {

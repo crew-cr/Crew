@@ -80,3 +80,10 @@ propel:
     name:                             { type: varchar, size: '50', required: true }
     value:                            { type: longvarchar}
     _uniques:                         { name: [name] }
+  log_git:
+    _attributes:
+    id:                               ~
+    command:                          { type: varchar, size: '512', required: true }
+    code:                             { type: integer, size: '11', required: true }
+    message:                          { type: longvarchar, required: true }
+    created_at:                       { type: timestamp, required: true}

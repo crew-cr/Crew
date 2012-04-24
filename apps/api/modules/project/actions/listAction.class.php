@@ -1,6 +1,6 @@
 <?php
  
-class listAction extends sfAction
+class listAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

@@ -1,6 +1,6 @@
 <?php
 
-class projectAddAction extends sfAction
+class projectAddAction extends crewAction
 {
   /**
    * @throws Exception
@@ -58,7 +58,7 @@ class projectAddAction extends sfAction
 
           if(!is_dir($repository))
           {
-            $cloneStatus = GitCommand::cloneRepository($remote, $repository);
+            $cloneStatus = $this->gitCommand->cloneRepository($remote, $repository);
             if($cloneStatus === 0)
             {
               $message .= sprintf(" and remote '%s' is correctly cloned in '%s'", $remote, $repository);
@@ -94,7 +94,7 @@ class projectAddAction extends sfAction
    */
   public function checkLocalRepository($repository, $remote)
   {
-    return (!is_dir($repository) || GitCommand::getRemote($repository) === $remote);
+    return (!is_dir($repository) || $this->gitCommand->getRemote($repository) === $remote);
   }
 
   /**
