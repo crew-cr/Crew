@@ -1,6 +1,6 @@
 <?php
  
-class cleanAction extends sfAction
+class cleanAction extends crewAction
 {
   /**
    * @param sfWebRequest $request
@@ -29,7 +29,7 @@ class cleanAction extends sfAction
       {
         foreach($branches as $branch)
         {
-          BranchPeer::synchronize($repository, $branch, true);
+          BranchPeer::synchronize($this->gitCommand, $repository, $branch, true);
         }
       }
       $this->getResponse()->setStatusCode('200');

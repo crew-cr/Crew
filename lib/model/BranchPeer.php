@@ -60,13 +60,15 @@ class BranchPeer extends BaseBranchPeer {
 
   /**
    * @static
+   * @param GitCommand $gitCommand
    * @param Repository $repository
-   * @param $branch
+   * @param Branch $branch
+   * @param bool $deleteOnly
    * @return void
    */
-  public static function synchronize(Repository $repository, Branch $branch, $deleteOnly = false)
+  public static function synchronize(GitCommand $gitCommand, Repository $repository, Branch $branch, $deleteOnly = false)
   {
-    $branchGit = GitCommand::getNoMergedBranchInfos($repository->getGitDir(), $branch->getBaseBranchName(), $branch->getName());
+    $branchGit = $gitCommand->getNoMergedBranchInfos($repository->getGitDir(), $branch->getBaseBranchName(), $branch->getName());
 
     $branchModel = BranchQuery::create()
       ->filterByRepositoryId($repository->getId())
@@ -88,7 +90,7 @@ class BranchPeer extends BaseBranchPeer {
         $branchModel->setLastCommitDesc($branchGit['last_commit_desc']);
         $branchModel->save();
 
-        return FilePeer::synchronize($branchModel, $lastSynchronizationCommit);
+        return FilePeer::synchronize($gitCommand, $branchModel, $lastSynchronizationCommit);
       }
     }
 

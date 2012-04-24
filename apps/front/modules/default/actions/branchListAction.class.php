@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class branchListAction extends sfAction
+class branchListAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

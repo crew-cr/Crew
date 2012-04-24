@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class commentAddGlobalAction extends sfAction
+class commentAddGlobalAction extends crewAction
 {
   /**
    * @param sfWebRequest $request

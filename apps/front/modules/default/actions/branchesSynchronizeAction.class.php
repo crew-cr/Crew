@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class branchesSynchronizeAction extends sfAction
+class branchesSynchronizeAction extends crewAction
 {
   /**
    * @param sfWebRequest $request
@@ -26,7 +26,7 @@ class branchesSynchronizeAction extends sfAction
 
     foreach($branches as $branch)
     {
-      BranchPeer::synchronize($repository, $branch, true);
+      BranchPeer::synchronize($this->gitCommand, $repository, $branch, true);
     }
 
     $this->redirect('default/branchList?repository='.$repository->getId());

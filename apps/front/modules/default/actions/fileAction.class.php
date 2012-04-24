@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class fileAction extends sfAction
+class fileAction extends crewAction
 {
   /**
    * @param sfWebRequest $request
@@ -47,8 +47,8 @@ class fileAction extends sfAction
     {
       $options['ignore-all-space'] = true;
     }
-    
-    $this->fileContentLines = GitCommand::getShowFileFromBranch(
+
+    $this->fileContentLines = $this->gitCommand->getShowFileFromBranch(
       $this->repository->getGitDir(),
       $this->branch->getCommitReference(),
       $this->file->getLastChangeCommit(),

@@ -1,6 +1,6 @@
 <?php
 
-class projectDeleteAction extends sfAction
+class projectDeleteAction extends crewAction
 {
   /**
    * @throws Exception
