@@ -14,7 +14,6 @@ And patch your MySql database with the following SQL commands.
     ALTER TABLE `branch` ADD `created_at` datetime NOT NULL AFTER `date_status_changed`;
     ALTER TABLE `branch` ADD `updated_at` datetime NOT NULL AFTER `created_at`;
 
-    SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
     CREATE TABLE IF NOT EXISTS `log_git` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `command` varchar(512) NOT NULL,

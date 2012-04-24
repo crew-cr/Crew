@@ -1,4 +1,3 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 CREATE TABLE IF NOT EXISTS `log_git` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `command` varchar(512) NOT NULL,
