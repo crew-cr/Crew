@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class repositoryListAction extends sfAction
+class repositoryListAction extends crewAction
 {
   public function execute($request)
   {

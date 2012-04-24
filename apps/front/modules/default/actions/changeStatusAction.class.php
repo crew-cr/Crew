@@ -7,7 +7,7 @@
  * @subpackage repository
  * @author     Your name here
  */
-class changeStatusAction extends sfAction
+class changeStatusAction extends crewAction
 {
   const TYPE_BRANCH = 'branch';
   const TYPE_FILE   = 'file';

@@ -1,6 +1,6 @@
 <?php
  
-class setAction extends sfAction
+class setAction extends crewAction
 {
   /**
    * @param sfWebRequest $request
@@ -44,7 +44,7 @@ class setAction extends sfAction
         $branch->setBaseBranchName($baseBranchName)->save();
       }
 
-      if(($nbFiles = BranchPeer::synchronize($repository, $branch)) != 0)
+      if(($nbFiles = BranchPeer::synchronize($this->gitCommand, $repository, $branch)) != 0)
       {
         $result['message'] = sprintf("Your branch '%s' has too many files : %s (max : %s)", $branch->__toString(), $nbFiles, sfConfig::get('app_max_number_of_files_to_review', 4096));
         $this->getResponse()->setStatusCode('500');
@@ -53,7 +53,7 @@ class setAction extends sfAction
       {
         if(strlen($commit) === 40)
         {
-          if(!gitCommand::commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
+          if(!$this->gitCommand->commitIsInHistory($repository->getValue(), $branch->getCommitStatusChanged(), $commit))
           {
             $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', BranchPeer::getLabelStatus($branch->getStatus()));
             $branch->setReviewRequest(1)
