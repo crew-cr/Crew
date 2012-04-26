@@ -187,7 +187,7 @@ class GitCommand
 
   public function getCommitInfos($gitDir, $commit, $format)
   {
-    $return = $this->exec('git --git-dir=%s log %s --format=%s -n1', array($gitDir, $commit, $format));
+    $return = $this->exec('git --git-dir=%s log %s --format="%s" -n1', array($gitDir, $commit, $format));
     return (count($return)) ? $return[0] : '';
   }
 
