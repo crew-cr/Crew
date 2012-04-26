@@ -37,7 +37,7 @@ class GitCommand
    */
   public function getNoMergedBranchInfos($gitDir, $baseBranch, $branch)
   {
-    self::fetch($gitDir);
+    $this->fetch($gitDir);
 
     $result = $this->exec('git --git-dir=%s branch --no-merged %s | grep %s | sed "s/ //g"', array($gitDir, $baseBranch, $branch));
     if(count($result) == 0 || strpos($result[0], '->') !== false || $result[0] != $branch)
@@ -53,7 +53,7 @@ class GitCommand
     $commitStatus = $this->exec('git --git-dir=%s rev-parse --verify %s', array($gitDir, $branch));
     $noMergedBranchInfos['last_commit'] = (count($commitStatus)) ? $commitStatus[0] : '';
 
-    $noMergedBranchInfos['last_commit_desc'] = self::getCommitInfos($gitDir, $branch, '%s');
+    $noMergedBranchInfos['last_commit_desc'] = $this->getCommitInfos($gitDir, $branch, '%s');
 
     return $noMergedBranchInfos;
   }
@@ -67,7 +67,7 @@ class GitCommand
    */
   public function getDiffFilesFromBranch($gitDir, $referenceCommit, $lastCommit, $withDetails = true)
   {
-    self::fetch($gitDir);
+    $this->fetch($gitDir);
 
     $results = $this->exec('git --git-dir=%s diff %s..%s --name-status', array($gitDir,  $referenceCommit, $lastCommit));
 
@@ -115,7 +115,7 @@ class GitCommand
    */
   public function getShowFile($gitDir, $currentCommit, $filename)
   {
-    self::fetch($gitDir);
+    $this->fetch($gitDir);
 
     $fileContent = $this->exec('git --git-dir=%s show %s:%s', array($gitDir, $currentCommit, $filename));
 
@@ -132,7 +132,7 @@ class GitCommand
    */
   public function getShowFileFromBranch($gitDir, $referenceCommit, $currentCommit, $filename, $options = array())
   {
-    self::fetch($gitDir);
+    $this->fetch($gitDir);
 
     $gitDiffOptions = array(
       '-U9999'
@@ -187,7 +187,7 @@ class GitCommand
 
   public function getCommitInfos($gitDir, $commit, $format)
   {
-    $return = $this->exec('git --git-dir=%s log %s --format=%s -n1', array($gitDir, $commit, $format));
+    $return = $this->exec('git --git-dir=%s log %s --format="%s" -n1', array($gitDir, $commit, $format));
     return (count($return)) ? $return[0] : '';
   }
 
