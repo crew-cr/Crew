@@ -53,7 +53,7 @@ class setAction extends crewAction
       {
         if(strlen($commit) === 40)
         {
-          if(!$this->gitCommand->commitIsInHistory($repository->getRemote(), $branch->getCommitStatusChanged(), $commit))
+          if(!$this->gitCommand->commitIsInHistory($repository->getGitDir(), $branch->getCommitStatusChanged(), $commit))
           {
             $result['message'] = sprintf("Review has been %sengaged [old status : %s]", $branch->getReviewRequest() ? 're' : '', BranchPeer::getLabelStatus($branch->getStatus()));
             $branch->setReviewRequest(1)
