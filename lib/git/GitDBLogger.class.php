@@ -12,6 +12,16 @@ class GitDBLogger implements GitLogger
   public function log($command, $code, $message)
   {
     $log = new LogGit();
-    $log->setCommand($command)->setCode($code)->setMessage($message)->save($this->connection);
+
+    $this->connection->beginTransaction();
+    try
+    {
+      $log->setCommand($command)->setCode($code)->setMessage($message)->save($this->connection);
+      $this->connection->commit();
+    }
+    catch (Exception $e)
+    {
+      $this->connection->rollBack();
+    }
   }
 }
