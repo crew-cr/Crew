@@ -193,7 +193,7 @@ class GitCommand
 
   public function exec($cmd, array $arguments = array(), &$status = null)
   {
-    array_walk($arguments, 'escapeshellarg');
+    array_map('escapeshellarg', $arguments);
 
     $cmd = vsprintf($cmd, $arguments);
     $cmd.= ' 2>&1';
