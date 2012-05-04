@@ -310,6 +310,7 @@
   color:#999999;
   margin-left:310px;
 }
+.comment_bloc .comment_form#commentGlobal .markdown, .comments_holder .comment_form#commentGlobal .markdown { margin-left:461px; }
 .comment_bloc .comment, .comments_holder .comment {
   display:block;
   border:1px solid #cccccc;
