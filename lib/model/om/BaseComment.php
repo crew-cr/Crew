@@ -85,6 +85,18 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	protected $root_comment_id;
 
 	/**
+	 * The value for the check_user_id field.
+	 * @var        int
+	 */
+	protected $check_user_id;
+
+	/**
+	 * The value for the checked_at field.
+	 * @var        string
+	 */
+	protected $checked_at;
+
+	/**
 	 * The value for the created_at field.
 	 * @var        string
 	 */
@@ -99,7 +111,7 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	/**
 	 * @var        sfGuardUser
 	 */
-	protected $asfGuardUser;
+	protected $asfGuardUserRelatedByUserId;
 
 	/**
 	 * @var        Branch
@@ -110,6 +122,11 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	 * @var        File
 	 */
 	protected $aFile;
+
+	/**
+	 * @var        sfGuardUser
+	 */
+	protected $asfGuardUserRelatedByCheckUserId;
 
 	/**
 	 * Flag to prevent endless save loop, if this object is referenced
@@ -233,6 +250,54 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Get the [check_user_id] column value.
+	 * 
+	 * @return     int
+	 */
+	public function getCheckUserId()
+	{
+		return $this->check_user_id;
+	}
+
+	/**
+	 * Get the [optionally formatted] temporal [checked_at] column value.
+	 * 
+	 *
+	 * @param      string $format The date/time format string (either date()-style or strftime()-style).
+	 *							If format is NULL, then the raw DateTime object will be returned.
+	 * @return     mixed Formatted date/time value as string or DateTime object (if format is NULL), NULL if column is NULL, and 0 if column value is 0000-00-00 00:00:00
+	 * @throws     PropelException - if unable to parse/validate the date/time value.
+	 */
+	public function getCheckedAt($format = 'Y-m-d H:i:s')
+	{
+		if ($this->checked_at === null) {
+			return null;
+		}
+
+
+		if ($this->checked_at === '0000-00-00 00:00:00') {
+			// while technically this is not a default value of NULL,
+			// this seems to be closest in meaning.
+			return null;
+		} else {
+			try {
+				$dt = new DateTime($this->checked_at);
+			} catch (Exception $x) {
+				throw new PropelException("Internally stored date/time/timestamp value could not be converted to DateTime: " . var_export($this->checked_at, true), $x);
+			}
+		}
+
+		if ($format === null) {
+			// Because propel.useDateTimeClass is TRUE, we return a DateTime object.
+			return $dt;
+		} elseif (strpos($format, '%') !== false) {
+			return strftime($format, $dt->format('U'));
+		} else {
+			return $dt->format($format);
+		}
+	}
+
+	/**
 	 * Get the [optionally formatted] temporal [created_at] column value.
 	 * 
 	 *
@@ -345,8 +410,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$this->modifiedColumns[] = CommentPeer::USER_ID;
 		}
 
-		if ($this->asfGuardUser !== null && $this->asfGuardUser->getId() !== $v) {
-			$this->asfGuardUser = null;
+		if ($this->asfGuardUserRelatedByUserId !== null && $this->asfGuardUserRelatedByUserId->getId() !== $v) {
+			$this->asfGuardUserRelatedByUserId = null;
 		}
 
 		return $this;
@@ -525,6 +590,52 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	} // setRootCommentId()
 
 	/**
+	 * Set the value of [check_user_id] column.
+	 * 
+	 * @param      int $v new value
+	 * @return     Comment The current object (for fluent API support)
+	 */
+	public function setCheckUserId($v)
+	{
+		if ($v !== null) {
+			$v = (int) $v;
+		}
+
+		if ($this->check_user_id !== $v) {
+			$this->check_user_id = $v;
+			$this->modifiedColumns[] = CommentPeer::CHECK_USER_ID;
+		}
+
+		if ($this->asfGuardUserRelatedByCheckUserId !== null && $this->asfGuardUserRelatedByCheckUserId->getId() !== $v) {
+			$this->asfGuardUserRelatedByCheckUserId = null;
+		}
+
+		return $this;
+	} // setCheckUserId()
+
+	/**
+	 * Sets the value of [checked_at] column to a normalized version of the date/time value specified.
+	 * 
+	 * @param      mixed $v string, integer (timestamp), or DateTime value.
+	 *               Empty strings are treated as NULL.
+	 * @return     Comment The current object (for fluent API support)
+	 */
+	public function setCheckedAt($v)
+	{
+		$dt = PropelDateTime::newInstance($v, null, 'DateTime');
+		if ($this->checked_at !== null || $dt !== null) {
+			$currentDateAsString = ($this->checked_at !== null && $tmpDt = new DateTime($this->checked_at)) ? $tmpDt->format('Y-m-d H:i:s') : null;
+			$newDateAsString = $dt ? $dt->format('Y-m-d H:i:s') : null;
+			if ($currentDateAsString !== $newDateAsString) {
+				$this->checked_at = $newDateAsString;
+				$this->modifiedColumns[] = CommentPeer::CHECKED_AT;
+			}
+		} // if either are not null
+
+		return $this;
+	} // setCheckedAt()
+
+	/**
 	 * Sets the value of [created_at] column to a normalized version of the date/time value specified.
 	 * 
 	 * @param      mixed $v string, integer (timestamp), or DateTime value.
@@ -610,8 +721,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$this->commit = ($row[$startcol + 7] !== null) ? (string) $row[$startcol + 7] : null;
 			$this->value = ($row[$startcol + 8] !== null) ? (string) $row[$startcol + 8] : null;
 			$this->root_comment_id = ($row[$startcol + 9] !== null) ? (int) $row[$startcol + 9] : null;
-			$this->created_at = ($row[$startcol + 10] !== null) ? (string) $row[$startcol + 10] : null;
-			$this->updated_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->check_user_id = ($row[$startcol + 10] !== null) ? (int) $row[$startcol + 10] : null;
+			$this->checked_at = ($row[$startcol + 11] !== null) ? (string) $row[$startcol + 11] : null;
+			$this->created_at = ($row[$startcol + 12] !== null) ? (string) $row[$startcol + 12] : null;
+			$this->updated_at = ($row[$startcol + 13] !== null) ? (string) $row[$startcol + 13] : null;
 			$this->resetModified();
 
 			$this->setNew(false);
@@ -620,7 +733,7 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				$this->ensureConsistency();
 			}
 
-			return $startcol + 12; // 12 = CommentPeer::NUM_HYDRATE_COLUMNS.
+			return $startcol + 14; // 14 = CommentPeer::NUM_HYDRATE_COLUMNS.
 
 		} catch (Exception $e) {
 			throw new PropelException("Error populating Comment object", $e);
@@ -643,14 +756,17 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	public function ensureConsistency()
 	{
 
-		if ($this->asfGuardUser !== null && $this->user_id !== $this->asfGuardUser->getId()) {
-			$this->asfGuardUser = null;
+		if ($this->asfGuardUserRelatedByUserId !== null && $this->user_id !== $this->asfGuardUserRelatedByUserId->getId()) {
+			$this->asfGuardUserRelatedByUserId = null;
 		}
 		if ($this->aBranch !== null && $this->branch_id !== $this->aBranch->getId()) {
 			$this->aBranch = null;
 		}
 		if ($this->aFile !== null && $this->file_id !== $this->aFile->getId()) {
 			$this->aFile = null;
+		}
+		if ($this->asfGuardUserRelatedByCheckUserId !== null && $this->check_user_id !== $this->asfGuardUserRelatedByCheckUserId->getId()) {
+			$this->asfGuardUserRelatedByCheckUserId = null;
 		}
 	} // ensureConsistency
 
@@ -691,9 +807,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 
 		if ($deep) {  // also de-associate any related objects?
 
-			$this->asfGuardUser = null;
+			$this->asfGuardUserRelatedByUserId = null;
 			$this->aBranch = null;
 			$this->aFile = null;
+			$this->asfGuardUserRelatedByCheckUserId = null;
 		} // if (deep)
 	}
 
@@ -852,11 +969,11 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->asfGuardUser !== null) {
-				if ($this->asfGuardUser->isModified() || $this->asfGuardUser->isNew()) {
-					$affectedRows += $this->asfGuardUser->save($con);
+			if ($this->asfGuardUserRelatedByUserId !== null) {
+				if ($this->asfGuardUserRelatedByUserId->isModified() || $this->asfGuardUserRelatedByUserId->isNew()) {
+					$affectedRows += $this->asfGuardUserRelatedByUserId->save($con);
 				}
-				$this->setsfGuardUser($this->asfGuardUser);
+				$this->setsfGuardUserRelatedByUserId($this->asfGuardUserRelatedByUserId);
 			}
 
 			if ($this->aBranch !== null) {
@@ -871,6 +988,13 @@ abstract class BaseComment extends BaseObject  implements Persistent
 					$affectedRows += $this->aFile->save($con);
 				}
 				$this->setFile($this->aFile);
+			}
+
+			if ($this->asfGuardUserRelatedByCheckUserId !== null) {
+				if ($this->asfGuardUserRelatedByCheckUserId->isModified() || $this->asfGuardUserRelatedByCheckUserId->isNew()) {
+					$affectedRows += $this->asfGuardUserRelatedByCheckUserId->save($con);
+				}
+				$this->setsfGuardUserRelatedByCheckUserId($this->asfGuardUserRelatedByCheckUserId);
 			}
 
 			if ($this->isNew() || $this->isModified()) {
@@ -939,6 +1063,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(CommentPeer::ROOT_COMMENT_ID)) {
 			$modifiedColumns[':p' . $index++]  = '`ROOT_COMMENT_ID`';
 		}
+		if ($this->isColumnModified(CommentPeer::CHECK_USER_ID)) {
+			$modifiedColumns[':p' . $index++]  = '`CHECK_USER_ID`';
+		}
+		if ($this->isColumnModified(CommentPeer::CHECKED_AT)) {
+			$modifiedColumns[':p' . $index++]  = '`CHECKED_AT`';
+		}
 		if ($this->isColumnModified(CommentPeer::CREATED_AT)) {
 			$modifiedColumns[':p' . $index++]  = '`CREATED_AT`';
 		}
@@ -985,6 +1115,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 						break;
 					case '`ROOT_COMMENT_ID`':
 						$stmt->bindValue($identifier, $this->root_comment_id, PDO::PARAM_INT);
+						break;
+					case '`CHECK_USER_ID`':
+						$stmt->bindValue($identifier, $this->check_user_id, PDO::PARAM_INT);
+						break;
+					case '`CHECKED_AT`':
+						$stmt->bindValue($identifier, $this->checked_at, PDO::PARAM_STR);
 						break;
 					case '`CREATED_AT`':
 						$stmt->bindValue($identifier, $this->created_at, PDO::PARAM_STR);
@@ -1089,9 +1225,9 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			// method.  This object relates to these object(s) by a
 			// foreign key reference.
 
-			if ($this->asfGuardUser !== null) {
-				if (!$this->asfGuardUser->validate($columns)) {
-					$failureMap = array_merge($failureMap, $this->asfGuardUser->getValidationFailures());
+			if ($this->asfGuardUserRelatedByUserId !== null) {
+				if (!$this->asfGuardUserRelatedByUserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->asfGuardUserRelatedByUserId->getValidationFailures());
 				}
 			}
 
@@ -1104,6 +1240,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			if ($this->aFile !== null) {
 				if (!$this->aFile->validate($columns)) {
 					$failureMap = array_merge($failureMap, $this->aFile->getValidationFailures());
+				}
+			}
+
+			if ($this->asfGuardUserRelatedByCheckUserId !== null) {
+				if (!$this->asfGuardUserRelatedByCheckUserId->validate($columns)) {
+					$failureMap = array_merge($failureMap, $this->asfGuardUserRelatedByCheckUserId->getValidationFailures());
 				}
 			}
 
@@ -1177,9 +1319,15 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				return $this->getRootCommentId();
 				break;
 			case 10:
-				return $this->getCreatedAt();
+				return $this->getCheckUserId();
 				break;
 			case 11:
+				return $this->getCheckedAt();
+				break;
+			case 12:
+				return $this->getCreatedAt();
+				break;
+			case 13:
 				return $this->getUpdatedAt();
 				break;
 			default:
@@ -1221,18 +1369,23 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$keys[7] => $this->getCommit(),
 			$keys[8] => $this->getValue(),
 			$keys[9] => $this->getRootCommentId(),
-			$keys[10] => $this->getCreatedAt(),
-			$keys[11] => $this->getUpdatedAt(),
+			$keys[10] => $this->getCheckUserId(),
+			$keys[11] => $this->getCheckedAt(),
+			$keys[12] => $this->getCreatedAt(),
+			$keys[13] => $this->getUpdatedAt(),
 		);
 		if ($includeForeignObjects) {
-			if (null !== $this->asfGuardUser) {
-				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			if (null !== $this->asfGuardUserRelatedByUserId) {
+				$result['sfGuardUserRelatedByUserId'] = $this->asfGuardUserRelatedByUserId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aBranch) {
 				$result['Branch'] = $this->aBranch->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 			if (null !== $this->aFile) {
 				$result['File'] = $this->aFile->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->asfGuardUserRelatedByCheckUserId) {
+				$result['sfGuardUserRelatedByCheckUserId'] = $this->asfGuardUserRelatedByCheckUserId->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
 			}
 		}
 		return $result;
@@ -1300,9 +1453,15 @@ abstract class BaseComment extends BaseObject  implements Persistent
 				$this->setRootCommentId($value);
 				break;
 			case 10:
-				$this->setCreatedAt($value);
+				$this->setCheckUserId($value);
 				break;
 			case 11:
+				$this->setCheckedAt($value);
+				break;
+			case 12:
+				$this->setCreatedAt($value);
+				break;
+			case 13:
 				$this->setUpdatedAt($value);
 				break;
 		} // switch()
@@ -1339,8 +1498,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if (array_key_exists($keys[7], $arr)) $this->setCommit($arr[$keys[7]]);
 		if (array_key_exists($keys[8], $arr)) $this->setValue($arr[$keys[8]]);
 		if (array_key_exists($keys[9], $arr)) $this->setRootCommentId($arr[$keys[9]]);
-		if (array_key_exists($keys[10], $arr)) $this->setCreatedAt($arr[$keys[10]]);
-		if (array_key_exists($keys[11], $arr)) $this->setUpdatedAt($arr[$keys[11]]);
+		if (array_key_exists($keys[10], $arr)) $this->setCheckUserId($arr[$keys[10]]);
+		if (array_key_exists($keys[11], $arr)) $this->setCheckedAt($arr[$keys[11]]);
+		if (array_key_exists($keys[12], $arr)) $this->setCreatedAt($arr[$keys[12]]);
+		if (array_key_exists($keys[13], $arr)) $this->setUpdatedAt($arr[$keys[13]]);
 	}
 
 	/**
@@ -1362,6 +1523,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if ($this->isColumnModified(CommentPeer::COMMIT)) $criteria->add(CommentPeer::COMMIT, $this->commit);
 		if ($this->isColumnModified(CommentPeer::VALUE)) $criteria->add(CommentPeer::VALUE, $this->value);
 		if ($this->isColumnModified(CommentPeer::ROOT_COMMENT_ID)) $criteria->add(CommentPeer::ROOT_COMMENT_ID, $this->root_comment_id);
+		if ($this->isColumnModified(CommentPeer::CHECK_USER_ID)) $criteria->add(CommentPeer::CHECK_USER_ID, $this->check_user_id);
+		if ($this->isColumnModified(CommentPeer::CHECKED_AT)) $criteria->add(CommentPeer::CHECKED_AT, $this->checked_at);
 		if ($this->isColumnModified(CommentPeer::CREATED_AT)) $criteria->add(CommentPeer::CREATED_AT, $this->created_at);
 		if ($this->isColumnModified(CommentPeer::UPDATED_AT)) $criteria->add(CommentPeer::UPDATED_AT, $this->updated_at);
 
@@ -1435,6 +1598,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		$copyObj->setCommit($this->getCommit());
 		$copyObj->setValue($this->getValue());
 		$copyObj->setRootCommentId($this->getRootCommentId());
+		$copyObj->setCheckUserId($this->getCheckUserId());
+		$copyObj->setCheckedAt($this->getCheckedAt());
 		$copyObj->setCreatedAt($this->getCreatedAt());
 		$copyObj->setUpdatedAt($this->getUpdatedAt());
 		if ($makeNew) {
@@ -1488,7 +1653,7 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	 * @return     Comment The current object (for fluent API support)
 	 * @throws     PropelException
 	 */
-	public function setsfGuardUser(sfGuardUser $v = null)
+	public function setsfGuardUserRelatedByUserId(sfGuardUser $v = null)
 	{
 		if ($v === null) {
 			$this->setUserId(NULL);
@@ -1496,12 +1661,12 @@ abstract class BaseComment extends BaseObject  implements Persistent
 			$this->setUserId($v->getId());
 		}
 
-		$this->asfGuardUser = $v;
+		$this->asfGuardUserRelatedByUserId = $v;
 
 		// Add binding for other direction of this n:n relationship.
 		// If this object has already been added to the sfGuardUser object, it will not be re-added.
 		if ($v !== null) {
-			$v->addComment($this);
+			$v->addCommentRelatedByUserId($this);
 		}
 
 		return $this;
@@ -1515,19 +1680,19 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	 * @return     sfGuardUser The associated sfGuardUser object.
 	 * @throws     PropelException
 	 */
-	public function getsfGuardUser(PropelPDO $con = null)
+	public function getsfGuardUserRelatedByUserId(PropelPDO $con = null)
 	{
-		if ($this->asfGuardUser === null && ($this->user_id !== null)) {
-			$this->asfGuardUser = sfGuardUserQuery::create()->findPk($this->user_id, $con);
+		if ($this->asfGuardUserRelatedByUserId === null && ($this->user_id !== null)) {
+			$this->asfGuardUserRelatedByUserId = sfGuardUserQuery::create()->findPk($this->user_id, $con);
 			/* The following can be used additionally to
 				guarantee the related object contains a reference
 				to this object.  This level of coupling may, however, be
 				undesirable since it could result in an only partially populated collection
 				in the referenced object.
-				$this->asfGuardUser->addComments($this);
+				$this->asfGuardUserRelatedByUserId->addCommentsRelatedByUserId($this);
 			 */
 		}
-		return $this->asfGuardUser;
+		return $this->asfGuardUserRelatedByUserId;
 	}
 
 	/**
@@ -1629,6 +1794,55 @@ abstract class BaseComment extends BaseObject  implements Persistent
 	}
 
 	/**
+	 * Declares an association between this object and a sfGuardUser object.
+	 *
+	 * @param      sfGuardUser $v
+	 * @return     Comment The current object (for fluent API support)
+	 * @throws     PropelException
+	 */
+	public function setsfGuardUserRelatedByCheckUserId(sfGuardUser $v = null)
+	{
+		if ($v === null) {
+			$this->setCheckUserId(NULL);
+		} else {
+			$this->setCheckUserId($v->getId());
+		}
+
+		$this->asfGuardUserRelatedByCheckUserId = $v;
+
+		// Add binding for other direction of this n:n relationship.
+		// If this object has already been added to the sfGuardUser object, it will not be re-added.
+		if ($v !== null) {
+			$v->addCommentRelatedByCheckUserId($this);
+		}
+
+		return $this;
+	}
+
+
+	/**
+	 * Get the associated sfGuardUser object
+	 *
+	 * @param      PropelPDO Optional Connection object.
+	 * @return     sfGuardUser The associated sfGuardUser object.
+	 * @throws     PropelException
+	 */
+	public function getsfGuardUserRelatedByCheckUserId(PropelPDO $con = null)
+	{
+		if ($this->asfGuardUserRelatedByCheckUserId === null && ($this->check_user_id !== null)) {
+			$this->asfGuardUserRelatedByCheckUserId = sfGuardUserQuery::create()->findPk($this->check_user_id, $con);
+			/* The following can be used additionally to
+				guarantee the related object contains a reference
+				to this object.  This level of coupling may, however, be
+				undesirable since it could result in an only partially populated collection
+				in the referenced object.
+				$this->asfGuardUserRelatedByCheckUserId->addCommentsRelatedByCheckUserId($this);
+			 */
+		}
+		return $this->asfGuardUserRelatedByCheckUserId;
+	}
+
+	/**
 	 * Clears the current object and sets all attributes to their default values
 	 */
 	public function clear()
@@ -1643,6 +1857,8 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		$this->commit = null;
 		$this->value = null;
 		$this->root_comment_id = null;
+		$this->check_user_id = null;
+		$this->checked_at = null;
 		$this->created_at = null;
 		$this->updated_at = null;
 		$this->alreadyInSave = false;
@@ -1667,9 +1883,10 @@ abstract class BaseComment extends BaseObject  implements Persistent
 		if ($deep) {
 		} // if ($deep)
 
-		$this->asfGuardUser = null;
+		$this->asfGuardUserRelatedByUserId = null;
 		$this->aBranch = null;
 		$this->aFile = null;
+		$this->asfGuardUserRelatedByCheckUserId = null;
 	}
 
 	/**

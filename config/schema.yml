@@ -31,6 +31,8 @@ propel:
     commit:                           { type: varchar, size: '50', required: true }
     value:                            { type: longvarchar, required: true }
     root_comment_id:                  { type: integer, size: '11', required: false }
+    check_user_id:                    { type: integer, foreignTable: sf_guard_user, foreignReference: id }
+    checked_at:                       { type: timestamp}
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
     _indexes:                         { branch_comment_FI_1: [user_id], branch_comment_FI_2: [branch_id] }

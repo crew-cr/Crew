@@ -34,9 +34,13 @@
  * @method     sfGuardUserQuery rightJoinBranch($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Branch relation
  * @method     sfGuardUserQuery innerJoinBranch($relationAlias = null) Adds a INNER JOIN clause to the query using the Branch relation
  *
- * @method     sfGuardUserQuery leftJoinComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Comment relation
- * @method     sfGuardUserQuery rightJoinComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Comment relation
- * @method     sfGuardUserQuery innerJoinComment($relationAlias = null) Adds a INNER JOIN clause to the query using the Comment relation
+ * @method     sfGuardUserQuery leftJoinCommentRelatedByUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CommentRelatedByUserId relation
+ * @method     sfGuardUserQuery rightJoinCommentRelatedByUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CommentRelatedByUserId relation
+ * @method     sfGuardUserQuery innerJoinCommentRelatedByUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the CommentRelatedByUserId relation
+ *
+ * @method     sfGuardUserQuery leftJoinCommentRelatedByCheckUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the CommentRelatedByCheckUserId relation
+ * @method     sfGuardUserQuery rightJoinCommentRelatedByCheckUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the CommentRelatedByCheckUserId relation
+ * @method     sfGuardUserQuery innerJoinCommentRelatedByCheckUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the CommentRelatedByCheckUserId relation
  *
  * @method     sfGuardUserQuery leftJoinFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the File relation
  * @method     sfGuardUserQuery rightJoinFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the File relation
@@ -612,33 +616,33 @@ abstract class BasesfGuardUserQuery extends ModelCriteria
 	 *
 	 * @return    sfGuardUserQuery The current query, for fluid interface
 	 */
-	public function filterByComment($comment, $comparison = null)
+	public function filterByCommentRelatedByUserId($comment, $comparison = null)
 	{
 		if ($comment instanceof Comment) {
 			return $this
 				->addUsingAlias(sfGuardUserPeer::ID, $comment->getUserId(), $comparison);
 		} elseif ($comment instanceof PropelCollection) {
 			return $this
-				->useCommentQuery()
+				->useCommentRelatedByUserIdQuery()
 				->filterByPrimaryKeys($comment->getPrimaryKeys())
 				->endUse();
 		} else {
-			throw new PropelException('filterByComment() only accepts arguments of type Comment or PropelCollection');
+			throw new PropelException('filterByCommentRelatedByUserId() only accepts arguments of type Comment or PropelCollection');
 		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the Comment relation
+	 * Adds a JOIN clause to the query using the CommentRelatedByUserId relation
 	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    sfGuardUserQuery The current query, for fluid interface
 	 */
-	public function joinComment($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function joinCommentRelatedByUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('Comment');
+		$relationMap = $tableMap->getRelation('CommentRelatedByUserId');
 
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
@@ -653,14 +657,14 @@ abstract class BasesfGuardUserQuery extends ModelCriteria
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'Comment');
+			$this->addJoinObject($join, 'CommentRelatedByUserId');
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Use the Comment relation Comment object
+	 * Use the CommentRelatedByUserId relation Comment object
 	 *
 	 * @see       useQuery()
 	 *
@@ -670,11 +674,84 @@ abstract class BasesfGuardUserQuery extends ModelCriteria
 	 *
 	 * @return    CommentQuery A secondary query class using the current class as primary query
 	 */
-	public function useCommentQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function useCommentRelatedByUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		return $this
-			->joinComment($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'Comment', 'CommentQuery');
+			->joinCommentRelatedByUserId($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'CommentRelatedByUserId', 'CommentQuery');
+	}
+
+	/**
+	 * Filter the query by a related Comment object
+	 *
+	 * @param     Comment $comment  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    sfGuardUserQuery The current query, for fluid interface
+	 */
+	public function filterByCommentRelatedByCheckUserId($comment, $comparison = null)
+	{
+		if ($comment instanceof Comment) {
+			return $this
+				->addUsingAlias(sfGuardUserPeer::ID, $comment->getCheckUserId(), $comparison);
+		} elseif ($comment instanceof PropelCollection) {
+			return $this
+				->useCommentRelatedByCheckUserIdQuery()
+				->filterByPrimaryKeys($comment->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByCommentRelatedByCheckUserId() only accepts arguments of type Comment or PropelCollection');
+		}
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the CommentRelatedByCheckUserId relation
+	 *
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    sfGuardUserQuery The current query, for fluid interface
+	 */
+	public function joinCommentRelatedByCheckUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('CommentRelatedByCheckUserId');
+
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'CommentRelatedByCheckUserId');
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Use the CommentRelatedByCheckUserId relation Comment object
+	 *
+	 * @see       useQuery()
+	 *
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    CommentQuery A secondary query class using the current class as primary query
+	 */
+	public function useCommentRelatedByCheckUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		return $this
+			->joinCommentRelatedByCheckUserId($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'CommentRelatedByCheckUserId', 'CommentQuery');
 	}
 
 	/**

@@ -306,11 +306,17 @@
 .comment_bloc .comment_form ul, .comments_holder .comment_form ul { margin-left:10px; }
 .comment_bloc .comment_form button.close, .comments_holder .comment_form button.close { margin-left:0; }
 .comment_bloc .comment_form button.right, .comments_holder .comment_form button.right { margin-right:0; }
+.comment_bloc .comment_form .markdown, .comments_holder .comment_form .markdown {
+  color:#999999;
+  margin-left:310px;
+}
+.comment_bloc .comment_form#commentGlobal .markdown, .comments_holder .comment_form#commentGlobal .markdown { margin-left:461px; }
 .comment_bloc .comment, .comments_holder .comment {
   display:block;
   border:1px solid #cccccc;
   margin-bottom:10px;
 }
+.comment_bloc .comment.done, .comments_holder .comment.done { opacity:0.4; }
 .comment_bloc .comment .comment_user, .comments_holder .comment .comment_user {
   height:33px;
   line-height:26px;
@@ -414,12 +420,9 @@
   font-size:13px;
   min-width:26px;
   padding:0 4px;
-  cursor:pointer;
+  cursor:default;
 }
-.list_body.data table .line_numbers:hover {
-  text-decoration:underline;
-  color:#999999;
-}
+.list_body.data table .line_numbers:hover { color:#999999; }
 .list_body.data table .comment_count {
   overflow:hidden;
   padding:0 !important;

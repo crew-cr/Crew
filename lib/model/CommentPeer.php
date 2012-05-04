@@ -49,7 +49,7 @@ class CommentPeer extends BaseCommentPeer {
         'ProjectId'   => $comment->getBranch()->getRepositoryId(),
         'UserName'    => $comment->getAuthorName(),
         'UserId'      => $comment->getUserId(),
-        'UserEmail'   => $comment->getsfGuardUser()->getProfile()->getEmail(),
+        'UserEmail'   => $comment->getsfGuardUserRelatedByUserId()->getProfile()->getEmail(),
         'BranchName'  => $comment->getBranch(),
         'BranchId'    => $comment->getBranchId(),
         'FileName'    => $comment->getFile(),

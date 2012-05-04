@@ -20,6 +20,30 @@ class Comment extends BaseComment
    */
   public function getAuthorName()
   {
-    return $this->getsfGuardUser()->getProfile()->__toString();
+    return $this->getsfGuardUserRelatedByUserId()->getProfile()->__toString();
   }
+
+  /**
+   * @return string
+   */
+  public function getAuthorAvatar()
+  {
+    return $this->getsfGuardUserRelatedByUserId()->getProfile()->getAvatarUrl();
+  }
+
+  /**
+   * @return string
+   */
+  public function getCheckMessage()
+  {
+    if($this->getCheckedAt())
+    {
+      return sprintf('Done by %s %s', $this->getsfGuardUserRelatedByCheckUserId()->getProfile()->__toString(), $this->getCheckedAt('d/m/Y H:i'));
+    }
+    else
+    {
+      return 'Done';
+    }
+  }
+
 } // Comment

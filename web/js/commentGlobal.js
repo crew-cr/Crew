@@ -30,4 +30,29 @@ $(document).ready(function() {
     window.prompt("Copy to clipboard: Ctrl+C, Enter", this.href);
     return false;
   });
+
+  $('.list').click(function(event) {
+    if($(event.target).hasClass('todo'))
+    {
+      var input = $(event.target);
+      $.ajax({
+        type: "POST",
+        url: input.attr('data-url'),
+        data: ({comment_id: input.attr('data-id'), status: (input.is(':checked')) ? 1 : 0}),
+        dataType: "json",
+        cache: false,
+        success: function(json) {
+          var info = "";
+          if(json != undefined && (info = eval(json)) != undefined) {
+            if(info.status) {
+              $('#comment-' + info.id).addClass('done');
+            } else {
+              $('#comment-' + info.id).removeClass('done');
+            }
+            $('#comment-' + info.id + ' .todo').prev().text(info.message);
+          }
+        }
+      });
+    }
+  });
 });
