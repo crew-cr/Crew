@@ -16,6 +16,8 @@
  * @method     CommentQuery orderByCommit($order = Criteria::ASC) Order by the commit column
  * @method     CommentQuery orderByValue($order = Criteria::ASC) Order by the value column
  * @method     CommentQuery orderByRootCommentId($order = Criteria::ASC) Order by the root_comment_id column
+ * @method     CommentQuery orderByCheckUserId($order = Criteria::ASC) Order by the check_user_id column
+ * @method     CommentQuery orderByCheckedAt($order = Criteria::ASC) Order by the checked_at column
  * @method     CommentQuery orderByCreatedAt($order = Criteria::ASC) Order by the created_at column
  * @method     CommentQuery orderByUpdatedAt($order = Criteria::ASC) Order by the updated_at column
  *
@@ -29,6 +31,8 @@
  * @method     CommentQuery groupByCommit() Group by the commit column
  * @method     CommentQuery groupByValue() Group by the value column
  * @method     CommentQuery groupByRootCommentId() Group by the root_comment_id column
+ * @method     CommentQuery groupByCheckUserId() Group by the check_user_id column
+ * @method     CommentQuery groupByCheckedAt() Group by the checked_at column
  * @method     CommentQuery groupByCreatedAt() Group by the created_at column
  * @method     CommentQuery groupByUpdatedAt() Group by the updated_at column
  *
@@ -36,9 +40,9 @@
  * @method     CommentQuery rightJoin($relation) Adds a RIGHT JOIN clause to the query
  * @method     CommentQuery innerJoin($relation) Adds a INNER JOIN clause to the query
  *
- * @method     CommentQuery leftJoinsfGuardUser($relationAlias = null) Adds a LEFT JOIN clause to the query using the sfGuardUser relation
- * @method     CommentQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
- * @method     CommentQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
+ * @method     CommentQuery leftJoinsfGuardUserRelatedByUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the sfGuardUserRelatedByUserId relation
+ * @method     CommentQuery rightJoinsfGuardUserRelatedByUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUserRelatedByUserId relation
+ * @method     CommentQuery innerJoinsfGuardUserRelatedByUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUserRelatedByUserId relation
  *
  * @method     CommentQuery leftJoinBranch($relationAlias = null) Adds a LEFT JOIN clause to the query using the Branch relation
  * @method     CommentQuery rightJoinBranch($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Branch relation
@@ -47,6 +51,10 @@
  * @method     CommentQuery leftJoinFile($relationAlias = null) Adds a LEFT JOIN clause to the query using the File relation
  * @method     CommentQuery rightJoinFile($relationAlias = null) Adds a RIGHT JOIN clause to the query using the File relation
  * @method     CommentQuery innerJoinFile($relationAlias = null) Adds a INNER JOIN clause to the query using the File relation
+ *
+ * @method     CommentQuery leftJoinsfGuardUserRelatedByCheckUserId($relationAlias = null) Adds a LEFT JOIN clause to the query using the sfGuardUserRelatedByCheckUserId relation
+ * @method     CommentQuery rightJoinsfGuardUserRelatedByCheckUserId($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUserRelatedByCheckUserId relation
+ * @method     CommentQuery innerJoinsfGuardUserRelatedByCheckUserId($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUserRelatedByCheckUserId relation
  *
  * @method     Comment findOne(PropelPDO $con = null) Return the first Comment matching the query
  * @method     Comment findOneOrCreate(PropelPDO $con = null) Return the first Comment matching the query, or a new Comment object populated from the query conditions when no match is found
@@ -61,6 +69,8 @@
  * @method     Comment findOneByCommit(string $commit) Return the first Comment filtered by the commit column
  * @method     Comment findOneByValue(string $value) Return the first Comment filtered by the value column
  * @method     Comment findOneByRootCommentId(int $root_comment_id) Return the first Comment filtered by the root_comment_id column
+ * @method     Comment findOneByCheckUserId(int $check_user_id) Return the first Comment filtered by the check_user_id column
+ * @method     Comment findOneByCheckedAt(string $checked_at) Return the first Comment filtered by the checked_at column
  * @method     Comment findOneByCreatedAt(string $created_at) Return the first Comment filtered by the created_at column
  * @method     Comment findOneByUpdatedAt(string $updated_at) Return the first Comment filtered by the updated_at column
  *
@@ -74,6 +84,8 @@
  * @method     array findByCommit(string $commit) Return Comment objects filtered by the commit column
  * @method     array findByValue(string $value) Return Comment objects filtered by the value column
  * @method     array findByRootCommentId(int $root_comment_id) Return Comment objects filtered by the root_comment_id column
+ * @method     array findByCheckUserId(int $check_user_id) Return Comment objects filtered by the check_user_id column
+ * @method     array findByCheckedAt(string $checked_at) Return Comment objects filtered by the checked_at column
  * @method     array findByCreatedAt(string $created_at) Return Comment objects filtered by the created_at column
  * @method     array findByUpdatedAt(string $updated_at) Return Comment objects filtered by the updated_at column
  *
@@ -164,7 +176,7 @@ abstract class BaseCommentQuery extends ModelCriteria
 	 */
 	protected function findPkSimple($key, $con)
 	{
-		$sql = 'SELECT `ID`, `USER_ID`, `BRANCH_ID`, `FILE_ID`, `POSITION`, `LINE`, `TYPE`, `COMMIT`, `VALUE`, `ROOT_COMMENT_ID`, `CREATED_AT`, `UPDATED_AT` FROM `comment` WHERE `ID` = :p0';
+		$sql = 'SELECT `ID`, `USER_ID`, `BRANCH_ID`, `FILE_ID`, `POSITION`, `LINE`, `TYPE`, `COMMIT`, `VALUE`, `ROOT_COMMENT_ID`, `CHECK_USER_ID`, `CHECKED_AT`, `CREATED_AT`, `UPDATED_AT` FROM `comment` WHERE `ID` = :p0';
 		try {
 			$stmt = $con->prepare($sql);
 			$stmt->bindValue(':p0', $key, PDO::PARAM_INT);
@@ -285,7 +297,7 @@ abstract class BaseCommentQuery extends ModelCriteria
 	 * $query->filterByUserId(array('min' => 12)); // WHERE user_id > 12
 	 * </code>
 	 *
-	 * @see       filterBysfGuardUser()
+	 * @see       filterBysfGuardUserRelatedByUserId()
 	 *
 	 * @param     mixed $userId The value to use as filter.
 	 *              Use scalar values for equality.
@@ -610,6 +622,90 @@ abstract class BaseCommentQuery extends ModelCriteria
 	}
 
 	/**
+	 * Filter the query on the check_user_id column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCheckUserId(1234); // WHERE check_user_id = 1234
+	 * $query->filterByCheckUserId(array(12, 34)); // WHERE check_user_id IN (12, 34)
+	 * $query->filterByCheckUserId(array('min' => 12)); // WHERE check_user_id > 12
+	 * </code>
+	 *
+	 * @see       filterBysfGuardUserRelatedByCheckUserId()
+	 *
+	 * @param     mixed $checkUserId The value to use as filter.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function filterByCheckUserId($checkUserId = null, $comparison = null)
+	{
+		if (is_array($checkUserId)) {
+			$useMinMax = false;
+			if (isset($checkUserId['min'])) {
+				$this->addUsingAlias(CommentPeer::CHECK_USER_ID, $checkUserId['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($checkUserId['max'])) {
+				$this->addUsingAlias(CommentPeer::CHECK_USER_ID, $checkUserId['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(CommentPeer::CHECK_USER_ID, $checkUserId, $comparison);
+	}
+
+	/**
+	 * Filter the query on the checked_at column
+	 *
+	 * Example usage:
+	 * <code>
+	 * $query->filterByCheckedAt('2011-03-14'); // WHERE checked_at = '2011-03-14'
+	 * $query->filterByCheckedAt('now'); // WHERE checked_at = '2011-03-14'
+	 * $query->filterByCheckedAt(array('max' => 'yesterday')); // WHERE checked_at > '2011-03-13'
+	 * </code>
+	 *
+	 * @param     mixed $checkedAt The value to use as filter.
+	 *              Values can be integers (unix timestamps), DateTime objects, or strings.
+	 *              Empty strings are treated as NULL.
+	 *              Use scalar values for equality.
+	 *              Use array values for in_array() equivalent.
+	 *              Use associative array('min' => $minValue, 'max' => $maxValue) for intervals.
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function filterByCheckedAt($checkedAt = null, $comparison = null)
+	{
+		if (is_array($checkedAt)) {
+			$useMinMax = false;
+			if (isset($checkedAt['min'])) {
+				$this->addUsingAlias(CommentPeer::CHECKED_AT, $checkedAt['min'], Criteria::GREATER_EQUAL);
+				$useMinMax = true;
+			}
+			if (isset($checkedAt['max'])) {
+				$this->addUsingAlias(CommentPeer::CHECKED_AT, $checkedAt['max'], Criteria::LESS_EQUAL);
+				$useMinMax = true;
+			}
+			if ($useMinMax) {
+				return $this;
+			}
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+		}
+		return $this->addUsingAlias(CommentPeer::CHECKED_AT, $checkedAt, $comparison);
+	}
+
+	/**
 	 * Filter the query on the created_at column
 	 *
 	 * Example usage:
@@ -701,7 +797,7 @@ abstract class BaseCommentQuery extends ModelCriteria
 	 *
 	 * @return    CommentQuery The current query, for fluid interface
 	 */
-	public function filterBysfGuardUser($sfGuardUser, $comparison = null)
+	public function filterBysfGuardUserRelatedByUserId($sfGuardUser, $comparison = null)
 	{
 		if ($sfGuardUser instanceof sfGuardUser) {
 			return $this
@@ -713,22 +809,22 @@ abstract class BaseCommentQuery extends ModelCriteria
 			return $this
 				->addUsingAlias(CommentPeer::USER_ID, $sfGuardUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
 		} else {
-			throw new PropelException('filterBysfGuardUser() only accepts arguments of type sfGuardUser or PropelCollection');
+			throw new PropelException('filterBysfGuardUserRelatedByUserId() only accepts arguments of type sfGuardUser or PropelCollection');
 		}
 	}
 
 	/**
-	 * Adds a JOIN clause to the query using the sfGuardUser relation
+	 * Adds a JOIN clause to the query using the sfGuardUserRelatedByUserId relation
 	 *
 	 * @param     string $relationAlias optional alias for the relation
 	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
 	 *
 	 * @return    CommentQuery The current query, for fluid interface
 	 */
-	public function joinsfGuardUser($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function joinsfGuardUserRelatedByUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		$tableMap = $this->getTableMap();
-		$relationMap = $tableMap->getRelation('sfGuardUser');
+		$relationMap = $tableMap->getRelation('sfGuardUserRelatedByUserId');
 
 		// create a ModelJoin object for this join
 		$join = new ModelJoin();
@@ -743,14 +839,14 @@ abstract class BaseCommentQuery extends ModelCriteria
 			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
 			$this->addJoinObject($join, $relationAlias);
 		} else {
-			$this->addJoinObject($join, 'sfGuardUser');
+			$this->addJoinObject($join, 'sfGuardUserRelatedByUserId');
 		}
 
 		return $this;
 	}
 
 	/**
-	 * Use the sfGuardUser relation sfGuardUser object
+	 * Use the sfGuardUserRelatedByUserId relation sfGuardUser object
 	 *
 	 * @see       useQuery()
 	 *
@@ -760,11 +856,11 @@ abstract class BaseCommentQuery extends ModelCriteria
 	 *
 	 * @return    sfGuardUserQuery A secondary query class using the current class as primary query
 	 */
-	public function usesfGuardUserQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	public function usesfGuardUserRelatedByUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
 	{
 		return $this
-			->joinsfGuardUser($relationAlias, $joinType)
-			->useQuery($relationAlias ? $relationAlias : 'sfGuardUser', 'sfGuardUserQuery');
+			->joinsfGuardUserRelatedByUserId($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'sfGuardUserRelatedByUserId', 'sfGuardUserQuery');
 	}
 
 	/**
@@ -913,6 +1009,80 @@ abstract class BaseCommentQuery extends ModelCriteria
 		return $this
 			->joinFile($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'File', 'FileQuery');
+	}
+
+	/**
+	 * Filter the query by a related sfGuardUser object
+	 *
+	 * @param     sfGuardUser|PropelCollection $sfGuardUser The related object(s) to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function filterBysfGuardUserRelatedByCheckUserId($sfGuardUser, $comparison = null)
+	{
+		if ($sfGuardUser instanceof sfGuardUser) {
+			return $this
+				->addUsingAlias(CommentPeer::CHECK_USER_ID, $sfGuardUser->getId(), $comparison);
+		} elseif ($sfGuardUser instanceof PropelCollection) {
+			if (null === $comparison) {
+				$comparison = Criteria::IN;
+			}
+			return $this
+				->addUsingAlias(CommentPeer::CHECK_USER_ID, $sfGuardUser->toKeyValue('PrimaryKey', 'Id'), $comparison);
+		} else {
+			throw new PropelException('filterBysfGuardUserRelatedByCheckUserId() only accepts arguments of type sfGuardUser or PropelCollection');
+		}
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the sfGuardUserRelatedByCheckUserId relation
+	 *
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    CommentQuery The current query, for fluid interface
+	 */
+	public function joinsfGuardUserRelatedByCheckUserId($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('sfGuardUserRelatedByCheckUserId');
+
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'sfGuardUserRelatedByCheckUserId');
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Use the sfGuardUserRelatedByCheckUserId relation sfGuardUser object
+	 *
+	 * @see       useQuery()
+	 *
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    sfGuardUserQuery A secondary query class using the current class as primary query
+	 */
+	public function usesfGuardUserRelatedByCheckUserIdQuery($relationAlias = null, $joinType = Criteria::LEFT_JOIN)
+	{
+		return $this
+			->joinsfGuardUserRelatedByCheckUserId($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'sfGuardUserRelatedByCheckUserId', 'sfGuardUserQuery');
 	}
 
 	/**

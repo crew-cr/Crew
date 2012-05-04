@@ -17,7 +17,7 @@ default:
     - main.css
 
   javascripts:
-    - vendor/jquery/jquery-1.6.4.min.js
+    - vendor/jquery-1.6.4.min.js
     - tooltip.js
 
   has_layout:     true

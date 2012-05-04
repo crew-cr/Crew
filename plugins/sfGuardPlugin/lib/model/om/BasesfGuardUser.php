@@ -89,7 +89,12 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	/**
 	 * @var        array Comment[] Collection to store aggregation of Comment objects.
 	 */
-	protected $collComments;
+	protected $collCommentsRelatedByUserId;
+
+	/**
+	 * @var        array Comment[] Collection to store aggregation of Comment objects.
+	 */
+	protected $collCommentsRelatedByCheckUserId;
 
 	/**
 	 * @var        array File[] Collection to store aggregation of File objects.
@@ -145,7 +150,13 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * An array of objects scheduled for deletion.
 	 * @var		array
 	 */
-	protected $commentsScheduledForDeletion = null;
+	protected $commentsRelatedByUserIdScheduledForDeletion = null;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $commentsRelatedByCheckUserIdScheduledForDeletion = null;
 
 	/**
 	 * An array of objects scheduled for deletion.
@@ -677,7 +688,9 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 
 			$this->collBranchs = null;
 
-			$this->collComments = null;
+			$this->collCommentsRelatedByUserId = null;
+
+			$this->collCommentsRelatedByCheckUserId = null;
 
 			$this->collFiles = null;
 
@@ -867,17 +880,34 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
-			if ($this->commentsScheduledForDeletion !== null) {
-				if (!$this->commentsScheduledForDeletion->isEmpty()) {
+			if ($this->commentsRelatedByUserIdScheduledForDeletion !== null) {
+				if (!$this->commentsRelatedByUserIdScheduledForDeletion->isEmpty()) {
 					CommentQuery::create()
-						->filterByPrimaryKeys($this->commentsScheduledForDeletion->getPrimaryKeys(false))
+						->filterByPrimaryKeys($this->commentsRelatedByUserIdScheduledForDeletion->getPrimaryKeys(false))
 						->delete($con);
-					$this->commentsScheduledForDeletion = null;
+					$this->commentsRelatedByUserIdScheduledForDeletion = null;
 				}
 			}
 
-			if ($this->collComments !== null) {
-				foreach ($this->collComments as $referrerFK) {
+			if ($this->collCommentsRelatedByUserId !== null) {
+				foreach ($this->collCommentsRelatedByUserId as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
+			}
+
+			if ($this->commentsRelatedByCheckUserIdScheduledForDeletion !== null) {
+				if (!$this->commentsRelatedByCheckUserIdScheduledForDeletion->isEmpty()) {
+					CommentQuery::create()
+						->filterByPrimaryKeys($this->commentsRelatedByCheckUserIdScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->commentsRelatedByCheckUserIdScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collCommentsRelatedByCheckUserId !== null) {
+				foreach ($this->collCommentsRelatedByCheckUserId as $referrerFK) {
 					if (!$referrerFK->isDeleted()) {
 						$affectedRows += $referrerFK->save($con);
 					}
@@ -1181,8 +1211,16 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					}
 				}
 
-				if ($this->collComments !== null) {
-					foreach ($this->collComments as $referrerFK) {
+				if ($this->collCommentsRelatedByUserId !== null) {
+					foreach ($this->collCommentsRelatedByUserId as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
+				if ($this->collCommentsRelatedByCheckUserId !== null) {
+					foreach ($this->collCommentsRelatedByCheckUserId as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
 							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
 						}
@@ -1340,8 +1378,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			if (null !== $this->collBranchs) {
 				$result['Branchs'] = $this->collBranchs->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
-			if (null !== $this->collComments) {
-				$result['Comments'] = $this->collComments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			if (null !== $this->collCommentsRelatedByUserId) {
+				$result['CommentsRelatedByUserId'] = $this->collCommentsRelatedByUserId->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
+			}
+			if (null !== $this->collCommentsRelatedByCheckUserId) {
+				$result['CommentsRelatedByCheckUserId'] = $this->collCommentsRelatedByCheckUserId->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 			if (null !== $this->collFiles) {
 				$result['Files'] = $this->collFiles->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1554,9 +1595,15 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 				}
 			}
 
-			foreach ($this->getComments() as $relObj) {
+			foreach ($this->getCommentsRelatedByUserId() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
-					$copyObj->addComment($relObj->copy($deepCopy));
+					$copyObj->addCommentRelatedByUserId($relObj->copy($deepCopy));
+				}
+			}
+
+			foreach ($this->getCommentsRelatedByCheckUserId() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addCommentRelatedByCheckUserId($relObj->copy($deepCopy));
 				}
 			}
 
@@ -1656,8 +1703,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 		if ('Branch' == $relationName) {
 			return $this->initBranchs();
 		}
-		if ('Comment' == $relationName) {
-			return $this->initComments();
+		if ('CommentRelatedByUserId' == $relationName) {
+			return $this->initCommentsRelatedByUserId();
+		}
+		if ('CommentRelatedByCheckUserId' == $relationName) {
+			return $this->initCommentsRelatedByCheckUserId();
 		}
 		if ('File' == $relationName) {
 			return $this->initFiles();
@@ -1853,23 +1903,23 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	}
 
 	/**
-	 * Clears out the collComments collection
+	 * Clears out the collCommentsRelatedByUserId collection
 	 *
 	 * This does not modify the database; however, it will remove any associated objects, causing
 	 * them to be refetched by subsequent calls to accessor method.
 	 *
 	 * @return     void
-	 * @see        addComments()
+	 * @see        addCommentsRelatedByUserId()
 	 */
-	public function clearComments()
+	public function clearCommentsRelatedByUserId()
 	{
-		$this->collComments = null; // important to set this to NULL since that means it is uninitialized
+		$this->collCommentsRelatedByUserId = null; // important to set this to NULL since that means it is uninitialized
 	}
 
 	/**
-	 * Initializes the collComments collection.
+	 * Initializes the collCommentsRelatedByUserId collection.
 	 *
-	 * By default this just sets the collComments collection to an empty array (like clearcollComments());
+	 * By default this just sets the collCommentsRelatedByUserId collection to an empty array (like clearcollCommentsRelatedByUserId());
 	 * however, you may wish to override this method in your stub class to provide setting appropriate
 	 * to your application -- for example, setting the initial array to the values stored in database.
 	 *
@@ -1878,13 +1928,13 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 *
 	 * @return     void
 	 */
-	public function initComments($overrideExisting = true)
+	public function initCommentsRelatedByUserId($overrideExisting = true)
 	{
-		if (null !== $this->collComments && !$overrideExisting) {
+		if (null !== $this->collCommentsRelatedByUserId && !$overrideExisting) {
 			return;
 		}
-		$this->collComments = new PropelObjectCollection();
-		$this->collComments->setModel('Comment');
+		$this->collCommentsRelatedByUserId = new PropelObjectCollection();
+		$this->collCommentsRelatedByUserId->setModel('Comment');
 	}
 
 	/**
@@ -1901,47 +1951,47 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 * @throws     PropelException
 	 */
-	public function getComments($criteria = null, PropelPDO $con = null)
+	public function getCommentsRelatedByUserId($criteria = null, PropelPDO $con = null)
 	{
-		if(null === $this->collComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collComments) {
+		if(null === $this->collCommentsRelatedByUserId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collCommentsRelatedByUserId) {
 				// return empty collection
-				$this->initComments();
+				$this->initCommentsRelatedByUserId();
 			} else {
-				$collComments = CommentQuery::create(null, $criteria)
-					->filterBysfGuardUser($this)
+				$collCommentsRelatedByUserId = CommentQuery::create(null, $criteria)
+					->filterBysfGuardUserRelatedByUserId($this)
 					->find($con);
 				if (null !== $criteria) {
-					return $collComments;
+					return $collCommentsRelatedByUserId;
 				}
-				$this->collComments = $collComments;
+				$this->collCommentsRelatedByUserId = $collCommentsRelatedByUserId;
 			}
 		}
-		return $this->collComments;
+		return $this->collCommentsRelatedByUserId;
 	}
 
 	/**
-	 * Sets a collection of Comment objects related by a one-to-many relationship
+	 * Sets a collection of CommentRelatedByUserId objects related by a one-to-many relationship
 	 * to the current object.
 	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
 	 * and new objects from the given Propel collection.
 	 *
-	 * @param      PropelCollection $comments A Propel collection.
+	 * @param      PropelCollection $commentsRelatedByUserId A Propel collection.
 	 * @param      PropelPDO $con Optional connection object
 	 */
-	public function setComments(PropelCollection $comments, PropelPDO $con = null)
+	public function setCommentsRelatedByUserId(PropelCollection $commentsRelatedByUserId, PropelPDO $con = null)
 	{
-		$this->commentsScheduledForDeletion = $this->getComments(new Criteria(), $con)->diff($comments);
+		$this->commentsRelatedByUserIdScheduledForDeletion = $this->getCommentsRelatedByUserId(new Criteria(), $con)->diff($commentsRelatedByUserId);
 
-		foreach ($comments as $comment) {
+		foreach ($commentsRelatedByUserId as $commentRelatedByUserId) {
 			// Fix issue with collection modified by reference
-			if ($comment->isNew()) {
-				$comment->setsfGuardUser($this);
+			if ($commentRelatedByUserId->isNew()) {
+				$commentRelatedByUserId->setsfGuardUserRelatedByUserId($this);
 			}
-			$this->addComment($comment);
+			$this->addCommentRelatedByUserId($commentRelatedByUserId);
 		}
 
-		$this->collComments = $comments;
+		$this->collCommentsRelatedByUserId = $commentsRelatedByUserId;
 	}
 
 	/**
@@ -1953,10 +2003,10 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @return     int Count of related Comment objects.
 	 * @throws     PropelException
 	 */
-	public function countComments(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	public function countCommentsRelatedByUserId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
 	{
-		if(null === $this->collComments || null !== $criteria) {
-			if ($this->isNew() && null === $this->collComments) {
+		if(null === $this->collCommentsRelatedByUserId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collCommentsRelatedByUserId) {
 				return 0;
 			} else {
 				$query = CommentQuery::create(null, $criteria);
@@ -1964,11 +2014,11 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					$query->distinct();
 				}
 				return $query
-					->filterBysfGuardUser($this)
+					->filterBysfGuardUserRelatedByUserId($this)
 					->count($con);
 			}
 		} else {
-			return count($this->collComments);
+			return count($this->collCommentsRelatedByUserId);
 		}
 	}
 
@@ -1979,25 +2029,25 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @param      Comment $l Comment
 	 * @return     sfGuardUser The current object (for fluent API support)
 	 */
-	public function addComment(Comment $l)
+	public function addCommentRelatedByUserId(Comment $l)
 	{
-		if ($this->collComments === null) {
-			$this->initComments();
+		if ($this->collCommentsRelatedByUserId === null) {
+			$this->initCommentsRelatedByUserId();
 		}
-		if (!$this->collComments->contains($l)) { // only add it if the **same** object is not already associated
-			$this->doAddComment($l);
+		if (!$this->collCommentsRelatedByUserId->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddCommentRelatedByUserId($l);
 		}
 
 		return $this;
 	}
 
 	/**
-	 * @param	Comment $comment The comment object to add.
+	 * @param	CommentRelatedByUserId $commentRelatedByUserId The commentRelatedByUserId object to add.
 	 */
-	protected function doAddComment($comment)
+	protected function doAddCommentRelatedByUserId($commentRelatedByUserId)
 	{
-		$this->collComments[]= $comment;
-		$comment->setsfGuardUser($this);
+		$this->collCommentsRelatedByUserId[]= $commentRelatedByUserId;
+		$commentRelatedByUserId->setsfGuardUserRelatedByUserId($this);
 	}
 
 
@@ -2006,7 +2056,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this sfGuardUser is new, it will return
 	 * an empty collection; or if this sfGuardUser has previously
-	 * been saved, it will retrieve related Comments from storage.
+	 * been saved, it will retrieve related CommentsRelatedByUserId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
@@ -2017,12 +2067,12 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
 	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 */
-	public function getCommentsJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getCommentsRelatedByUserIdJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$query = CommentQuery::create(null, $criteria);
 		$query->joinWith('Branch', $join_behavior);
 
-		return $this->getComments($query, $con);
+		return $this->getCommentsRelatedByUserId($query, $con);
 	}
 
 
@@ -2031,7 +2081,7 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * an identical criteria, it returns the collection.
 	 * Otherwise if this sfGuardUser is new, it will return
 	 * an empty collection; or if this sfGuardUser has previously
-	 * been saved, it will retrieve related Comments from storage.
+	 * been saved, it will retrieve related CommentsRelatedByUserId from storage.
 	 *
 	 * This method is protected by default in order to keep the public
 	 * api reasonable.  You can provide public methods for those you
@@ -2042,12 +2092,210 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
 	 * @return     PropelCollection|array Comment[] List of Comment objects
 	 */
-	public function getCommentsJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public function getCommentsRelatedByUserIdJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$query = CommentQuery::create(null, $criteria);
 		$query->joinWith('File', $join_behavior);
 
-		return $this->getComments($query, $con);
+		return $this->getCommentsRelatedByUserId($query, $con);
+	}
+
+	/**
+	 * Clears out the collCommentsRelatedByCheckUserId collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addCommentsRelatedByCheckUserId()
+	 */
+	public function clearCommentsRelatedByCheckUserId()
+	{
+		$this->collCommentsRelatedByCheckUserId = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collCommentsRelatedByCheckUserId collection.
+	 *
+	 * By default this just sets the collCommentsRelatedByCheckUserId collection to an empty array (like clearcollCommentsRelatedByCheckUserId());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
+	 * @return     void
+	 */
+	public function initCommentsRelatedByCheckUserId($overrideExisting = true)
+	{
+		if (null !== $this->collCommentsRelatedByCheckUserId && !$overrideExisting) {
+			return;
+		}
+		$this->collCommentsRelatedByCheckUserId = new PropelObjectCollection();
+		$this->collCommentsRelatedByCheckUserId->setModel('Comment');
+	}
+
+	/**
+	 * Gets an array of Comment objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this sfGuardUser is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array Comment[] List of Comment objects
+	 * @throws     PropelException
+	 */
+	public function getCommentsRelatedByCheckUserId($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collCommentsRelatedByCheckUserId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collCommentsRelatedByCheckUserId) {
+				// return empty collection
+				$this->initCommentsRelatedByCheckUserId();
+			} else {
+				$collCommentsRelatedByCheckUserId = CommentQuery::create(null, $criteria)
+					->filterBysfGuardUserRelatedByCheckUserId($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collCommentsRelatedByCheckUserId;
+				}
+				$this->collCommentsRelatedByCheckUserId = $collCommentsRelatedByCheckUserId;
+			}
+		}
+		return $this->collCommentsRelatedByCheckUserId;
+	}
+
+	/**
+	 * Sets a collection of CommentRelatedByCheckUserId objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $commentsRelatedByCheckUserId A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setCommentsRelatedByCheckUserId(PropelCollection $commentsRelatedByCheckUserId, PropelPDO $con = null)
+	{
+		$this->commentsRelatedByCheckUserIdScheduledForDeletion = $this->getCommentsRelatedByCheckUserId(new Criteria(), $con)->diff($commentsRelatedByCheckUserId);
+
+		foreach ($commentsRelatedByCheckUserId as $commentRelatedByCheckUserId) {
+			// Fix issue with collection modified by reference
+			if ($commentRelatedByCheckUserId->isNew()) {
+				$commentRelatedByCheckUserId->setsfGuardUserRelatedByCheckUserId($this);
+			}
+			$this->addCommentRelatedByCheckUserId($commentRelatedByCheckUserId);
+		}
+
+		$this->collCommentsRelatedByCheckUserId = $commentsRelatedByCheckUserId;
+	}
+
+	/**
+	 * Returns the number of related Comment objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Comment objects.
+	 * @throws     PropelException
+	 */
+	public function countCommentsRelatedByCheckUserId(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collCommentsRelatedByCheckUserId || null !== $criteria) {
+			if ($this->isNew() && null === $this->collCommentsRelatedByCheckUserId) {
+				return 0;
+			} else {
+				$query = CommentQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterBysfGuardUserRelatedByCheckUserId($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collCommentsRelatedByCheckUserId);
+		}
+	}
+
+	/**
+	 * Method called to associate a Comment object to this object
+	 * through the Comment foreign key attribute.
+	 *
+	 * @param      Comment $l Comment
+	 * @return     sfGuardUser The current object (for fluent API support)
+	 */
+	public function addCommentRelatedByCheckUserId(Comment $l)
+	{
+		if ($this->collCommentsRelatedByCheckUserId === null) {
+			$this->initCommentsRelatedByCheckUserId();
+		}
+		if (!$this->collCommentsRelatedByCheckUserId->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddCommentRelatedByCheckUserId($l);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	CommentRelatedByCheckUserId $commentRelatedByCheckUserId The commentRelatedByCheckUserId object to add.
+	 */
+	protected function doAddCommentRelatedByCheckUserId($commentRelatedByCheckUserId)
+	{
+		$this->collCommentsRelatedByCheckUserId[]= $commentRelatedByCheckUserId;
+		$commentRelatedByCheckUserId->setsfGuardUserRelatedByCheckUserId($this);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfGuardUser is new, it will return
+	 * an empty collection; or if this sfGuardUser has previously
+	 * been saved, it will retrieve related CommentsRelatedByCheckUserId from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfGuardUser.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Comment[] List of Comment objects
+	 */
+	public function getCommentsRelatedByCheckUserIdJoinBranch($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = CommentQuery::create(null, $criteria);
+		$query->joinWith('Branch', $join_behavior);
+
+		return $this->getCommentsRelatedByCheckUserId($query, $con);
+	}
+
+
+	/**
+	 * If this collection has already been initialized with
+	 * an identical criteria, it returns the collection.
+	 * Otherwise if this sfGuardUser is new, it will return
+	 * an empty collection; or if this sfGuardUser has previously
+	 * been saved, it will retrieve related CommentsRelatedByCheckUserId from storage.
+	 *
+	 * This method is protected by default in order to keep the public
+	 * api reasonable.  You can provide public methods for those you
+	 * actually need in sfGuardUser.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @param      string $join_behavior optional join type to use (defaults to Criteria::LEFT_JOIN)
+	 * @return     PropelCollection|array Comment[] List of Comment objects
+	 */
+	public function getCommentsRelatedByCheckUserIdJoinFile($criteria = null, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$query = CommentQuery::create(null, $criteria);
+		$query->joinWith('File', $join_behavior);
+
+		return $this->getCommentsRelatedByCheckUserId($query, $con);
 	}
 
 	/**
@@ -3128,8 +3376,13 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 					$o->clearAllReferences($deep);
 				}
 			}
-			if ($this->collComments) {
-				foreach ($this->collComments as $o) {
+			if ($this->collCommentsRelatedByUserId) {
+				foreach ($this->collCommentsRelatedByUserId as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
+			if ($this->collCommentsRelatedByCheckUserId) {
+				foreach ($this->collCommentsRelatedByCheckUserId as $o) {
 					$o->clearAllReferences($deep);
 				}
 			}
@@ -3169,10 +3422,14 @@ abstract class BasesfGuardUser extends BaseObject  implements Persistent
 			$this->collBranchs->clearIterator();
 		}
 		$this->collBranchs = null;
-		if ($this->collComments instanceof PropelCollection) {
-			$this->collComments->clearIterator();
+		if ($this->collCommentsRelatedByUserId instanceof PropelCollection) {
+			$this->collCommentsRelatedByUserId->clearIterator();
 		}
-		$this->collComments = null;
+		$this->collCommentsRelatedByUserId = null;
+		if ($this->collCommentsRelatedByCheckUserId instanceof PropelCollection) {
+			$this->collCommentsRelatedByCheckUserId->clearIterator();
+		}
+		$this->collCommentsRelatedByCheckUserId = null;
 		if ($this->collFiles instanceof PropelCollection) {
 			$this->collFiles->clearIterator();
 		}

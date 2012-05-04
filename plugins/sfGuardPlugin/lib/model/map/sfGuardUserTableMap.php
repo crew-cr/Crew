@@ -56,7 +56,8 @@ class sfGuardUserTableMap extends TableMap
 	public function buildRelations()
 	{
 		$this->addRelation('Branch', 'Branch', RelationMap::ONE_TO_MANY, array('id' => 'user_status_changed', ), null, null, 'Branchs');
-		$this->addRelation('Comment', 'Comment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'Comments');
+		$this->addRelation('CommentRelatedByUserId', 'Comment', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'CommentsRelatedByUserId');
+		$this->addRelation('CommentRelatedByCheckUserId', 'Comment', RelationMap::ONE_TO_MANY, array('id' => 'check_user_id', ), null, null, 'CommentsRelatedByCheckUserId');
 		$this->addRelation('File', 'File', RelationMap::ONE_TO_MANY, array('id' => 'last_change_commit_user', ), null, null, 'Files');
 		$this->addRelation('Profile', 'Profile', RelationMap::ONE_TO_MANY, array('id' => 'sf_guard_user_id', ), 'CASCADE', null, 'Profiles');
 		$this->addRelation('StatusAction', 'StatusAction', RelationMap::ONE_TO_MANY, array('id' => 'user_id', ), null, null, 'StatusActions');

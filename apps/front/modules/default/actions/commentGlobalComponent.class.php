@@ -32,7 +32,7 @@ class commentGlobalComponent extends sfComponent
         $this->commentGlobals = CommentQuery::create()
           ->filterByType($this->type)
           ->filterByBranchId($this->id)
-          ->leftJoin('sfGuardUser')
+          ->leftJoin('sfGuardUserRelatedByUserId')
           ->find()
         ;
         break;
@@ -49,7 +49,7 @@ class commentGlobalComponent extends sfComponent
         $this->commentGlobals = CommentQuery::create()
           ->filterByType($this->type)
           ->filterByFileId($this->id)
-          ->leftJoin('sfGuardUser')
+          ->leftJoin('sfGuardUserRelatedByUserId')
           ->find()
         ;
         break;
