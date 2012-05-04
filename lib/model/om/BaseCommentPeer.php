@@ -26,13 +26,13 @@ abstract class BaseCommentPeer {
 	const TM_CLASS = 'CommentTableMap';
 
 	/** The total number of columns. */
-	const NUM_COLUMNS = 12;
+	const NUM_COLUMNS = 14;
 
 	/** The number of lazy-loaded columns. */
 	const NUM_LAZY_LOAD_COLUMNS = 0;
 
 	/** The number of columns to hydrate (NUM_COLUMNS - NUM_LAZY_LOAD_COLUMNS) */
-	const NUM_HYDRATE_COLUMNS = 12;
+	const NUM_HYDRATE_COLUMNS = 14;
 
 	/** the column name for the ID field */
 	const ID = 'comment.ID';
@@ -64,6 +64,12 @@ abstract class BaseCommentPeer {
 	/** the column name for the ROOT_COMMENT_ID field */
 	const ROOT_COMMENT_ID = 'comment.ROOT_COMMENT_ID';
 
+	/** the column name for the CHECK_USER_ID field */
+	const CHECK_USER_ID = 'comment.CHECK_USER_ID';
+
+	/** the column name for the CHECKED_AT field */
+	const CHECKED_AT = 'comment.CHECKED_AT';
+
 	/** the column name for the CREATED_AT field */
 	const CREATED_AT = 'comment.CREATED_AT';
 
@@ -94,12 +100,12 @@ abstract class BaseCommentPeer {
 	 * e.g. self::$fieldNames[self::TYPE_PHPNAME][0] = 'Id'
 	 */
 	protected static $fieldNames = array (
-		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'BranchId', 'FileId', 'Position', 'Line', 'Type', 'Commit', 'Value', 'RootCommentId', 'CreatedAt', 'UpdatedAt', ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'branchId', 'fileId', 'position', 'line', 'type', 'commit', 'value', 'rootCommentId', 'createdAt', 'updatedAt', ),
-		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::BRANCH_ID, self::FILE_ID, self::POSITION, self::LINE, self::TYPE, self::COMMIT, self::VALUE, self::ROOT_COMMENT_ID, self::CREATED_AT, self::UPDATED_AT, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'BRANCH_ID', 'FILE_ID', 'POSITION', 'LINE', 'TYPE', 'COMMIT', 'VALUE', 'ROOT_COMMENT_ID', 'CREATED_AT', 'UPDATED_AT', ),
-		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'branch_id', 'file_id', 'position', 'line', 'type', 'commit', 'value', 'root_comment_id', 'created_at', 'updated_at', ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+		BasePeer::TYPE_PHPNAME => array ('Id', 'UserId', 'BranchId', 'FileId', 'Position', 'Line', 'Type', 'Commit', 'Value', 'RootCommentId', 'CheckUserId', 'CheckedAt', 'CreatedAt', 'UpdatedAt', ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id', 'userId', 'branchId', 'fileId', 'position', 'line', 'type', 'commit', 'value', 'rootCommentId', 'checkUserId', 'checkedAt', 'createdAt', 'updatedAt', ),
+		BasePeer::TYPE_COLNAME => array (self::ID, self::USER_ID, self::BRANCH_ID, self::FILE_ID, self::POSITION, self::LINE, self::TYPE, self::COMMIT, self::VALUE, self::ROOT_COMMENT_ID, self::CHECK_USER_ID, self::CHECKED_AT, self::CREATED_AT, self::UPDATED_AT, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID', 'USER_ID', 'BRANCH_ID', 'FILE_ID', 'POSITION', 'LINE', 'TYPE', 'COMMIT', 'VALUE', 'ROOT_COMMENT_ID', 'CHECK_USER_ID', 'CHECKED_AT', 'CREATED_AT', 'UPDATED_AT', ),
+		BasePeer::TYPE_FIELDNAME => array ('id', 'user_id', 'branch_id', 'file_id', 'position', 'line', 'type', 'commit', 'value', 'root_comment_id', 'check_user_id', 'checked_at', 'created_at', 'updated_at', ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
 	);
 
 	/**
@@ -109,12 +115,12 @@ abstract class BaseCommentPeer {
 	 * e.g. self::$fieldNames[BasePeer::TYPE_PHPNAME]['Id'] = 0
 	 */
 	protected static $fieldKeys = array (
-		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'BranchId' => 2, 'FileId' => 3, 'Position' => 4, 'Line' => 5, 'Type' => 6, 'Commit' => 7, 'Value' => 8, 'RootCommentId' => 9, 'CreatedAt' => 10, 'UpdatedAt' => 11, ),
-		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'branchId' => 2, 'fileId' => 3, 'position' => 4, 'line' => 5, 'type' => 6, 'commit' => 7, 'value' => 8, 'rootCommentId' => 9, 'createdAt' => 10, 'updatedAt' => 11, ),
-		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::BRANCH_ID => 2, self::FILE_ID => 3, self::POSITION => 4, self::LINE => 5, self::TYPE => 6, self::COMMIT => 7, self::VALUE => 8, self::ROOT_COMMENT_ID => 9, self::CREATED_AT => 10, self::UPDATED_AT => 11, ),
-		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'BRANCH_ID' => 2, 'FILE_ID' => 3, 'POSITION' => 4, 'LINE' => 5, 'TYPE' => 6, 'COMMIT' => 7, 'VALUE' => 8, 'ROOT_COMMENT_ID' => 9, 'CREATED_AT' => 10, 'UPDATED_AT' => 11, ),
-		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'branch_id' => 2, 'file_id' => 3, 'position' => 4, 'line' => 5, 'type' => 6, 'commit' => 7, 'value' => 8, 'root_comment_id' => 9, 'created_at' => 10, 'updated_at' => 11, ),
-		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, )
+		BasePeer::TYPE_PHPNAME => array ('Id' => 0, 'UserId' => 1, 'BranchId' => 2, 'FileId' => 3, 'Position' => 4, 'Line' => 5, 'Type' => 6, 'Commit' => 7, 'Value' => 8, 'RootCommentId' => 9, 'CheckUserId' => 10, 'CheckedAt' => 11, 'CreatedAt' => 12, 'UpdatedAt' => 13, ),
+		BasePeer::TYPE_STUDLYPHPNAME => array ('id' => 0, 'userId' => 1, 'branchId' => 2, 'fileId' => 3, 'position' => 4, 'line' => 5, 'type' => 6, 'commit' => 7, 'value' => 8, 'rootCommentId' => 9, 'checkUserId' => 10, 'checkedAt' => 11, 'createdAt' => 12, 'updatedAt' => 13, ),
+		BasePeer::TYPE_COLNAME => array (self::ID => 0, self::USER_ID => 1, self::BRANCH_ID => 2, self::FILE_ID => 3, self::POSITION => 4, self::LINE => 5, self::TYPE => 6, self::COMMIT => 7, self::VALUE => 8, self::ROOT_COMMENT_ID => 9, self::CHECK_USER_ID => 10, self::CHECKED_AT => 11, self::CREATED_AT => 12, self::UPDATED_AT => 13, ),
+		BasePeer::TYPE_RAW_COLNAME => array ('ID' => 0, 'USER_ID' => 1, 'BRANCH_ID' => 2, 'FILE_ID' => 3, 'POSITION' => 4, 'LINE' => 5, 'TYPE' => 6, 'COMMIT' => 7, 'VALUE' => 8, 'ROOT_COMMENT_ID' => 9, 'CHECK_USER_ID' => 10, 'CHECKED_AT' => 11, 'CREATED_AT' => 12, 'UPDATED_AT' => 13, ),
+		BasePeer::TYPE_FIELDNAME => array ('id' => 0, 'user_id' => 1, 'branch_id' => 2, 'file_id' => 3, 'position' => 4, 'line' => 5, 'type' => 6, 'commit' => 7, 'value' => 8, 'root_comment_id' => 9, 'check_user_id' => 10, 'checked_at' => 11, 'created_at' => 12, 'updated_at' => 13, ),
+		BasePeer::TYPE_NUM => array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, )
 	);
 
 	/** The enumerated values for this table */
@@ -224,6 +230,8 @@ abstract class BaseCommentPeer {
 			$criteria->addSelectColumn(CommentPeer::COMMIT);
 			$criteria->addSelectColumn(CommentPeer::VALUE);
 			$criteria->addSelectColumn(CommentPeer::ROOT_COMMENT_ID);
+			$criteria->addSelectColumn(CommentPeer::CHECK_USER_ID);
+			$criteria->addSelectColumn(CommentPeer::CHECKED_AT);
 			$criteria->addSelectColumn(CommentPeer::CREATED_AT);
 			$criteria->addSelectColumn(CommentPeer::UPDATED_AT);
 		} else {
@@ -237,6 +245,8 @@ abstract class BaseCommentPeer {
 			$criteria->addSelectColumn($alias . '.COMMIT');
 			$criteria->addSelectColumn($alias . '.VALUE');
 			$criteria->addSelectColumn($alias . '.ROOT_COMMENT_ID');
+			$criteria->addSelectColumn($alias . '.CHECK_USER_ID');
+			$criteria->addSelectColumn($alias . '.CHECKED_AT');
 			$criteria->addSelectColumn($alias . '.CREATED_AT');
 			$criteria->addSelectColumn($alias . '.UPDATED_AT');
 		}
@@ -538,7 +548,7 @@ abstract class BaseCommentPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related sfGuardUser table
+	 * Returns the number of rows matching criteria, joining the related sfGuardUserRelatedByUserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -546,7 +556,7 @@ abstract class BaseCommentPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinsfGuardUser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinsfGuardUserRelatedByUserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -706,6 +716,62 @@ abstract class BaseCommentPeer {
 
 
 	/**
+	 * Returns the number of rows matching criteria, joining the related sfGuardUserRelatedByCheckUserId table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinsfGuardUserRelatedByCheckUserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CommentPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CommentPeer::addSelectColumns($criteria);
+		}
+
+		$criteria->clearOrderByColumns(); // ORDER BY won't ever affect the count
+
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CommentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseCommentPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
 	 * Selects a collection of Comment objects pre-filled with their sfGuardUser objects.
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -714,7 +780,7 @@ abstract class BaseCommentPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinsfGuardUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinsfGuardUserRelatedByUserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -766,7 +832,7 @@ abstract class BaseCommentPeer {
 				} // if obj2 already loaded
 
 				// Add the $obj1 (Comment) to $obj2 (sfGuardUser)
-				$obj2->addComment($obj1);
+				$obj2->addCommentRelatedByUserId($obj1);
 
 			} // if joined row was not null
 
@@ -922,6 +988,78 @@ abstract class BaseCommentPeer {
 
 
 	/**
+	 * Selects a collection of Comment objects pre-filled with their sfGuardUser objects.
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Comment objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinsfGuardUserRelatedByCheckUserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CommentPeer::addSelectColumns($criteria);
+		$startcol = CommentPeer::NUM_HYDRATE_COLUMNS;
+		sfGuardUserPeer::addSelectColumns($criteria);
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseCommentPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CommentPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CommentPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+
+				$cls = CommentPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CommentPeer::addInstanceToPool($obj1, $key1);
+			} // if $obj1 already loaded
+
+			$key2 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol);
+			if ($key2 !== null) {
+				$obj2 = sfGuardUserPeer::getInstanceFromPool($key2);
+				if (!$obj2) {
+
+					$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol);
+					sfGuardUserPeer::addInstanceToPool($obj2, $key2);
+				} // if obj2 already loaded
+
+				// Add the $obj1 (Comment) to $obj2 (sfGuardUser)
+				$obj2->addCommentRelatedByCheckUserId($obj1);
+
+			} // if joined row was not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
 	 * Returns the number of rows matching criteria, joining all related tables
 	 *
 	 * @param      Criteria $criteria
@@ -962,6 +1100,8 @@ abstract class BaseCommentPeer {
 		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1011,11 +1151,16 @@ abstract class BaseCommentPeer {
 		FilePeer::addSelectColumns($criteria);
 		$startcol5 = $startcol4 + FilePeer::NUM_HYDRATE_COLUMNS;
 
+		sfGuardUserPeer::addSelectColumns($criteria);
+		$startcol6 = $startcol5 + sfGuardUserPeer::NUM_HYDRATE_COLUMNS;
+
 		$criteria->addJoin(CommentPeer::USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1055,7 +1200,7 @@ abstract class BaseCommentPeer {
 				} // if obj2 loaded
 
 				// Add the $obj1 (Comment) to the collection in $obj2 (sfGuardUser)
-				$obj2->addComment($obj1);
+				$obj2->addCommentRelatedByUserId($obj1);
 			} // if joined row not null
 
 			// Add objects for joined Branch rows
@@ -1094,6 +1239,24 @@ abstract class BaseCommentPeer {
 				$obj4->addComment($obj1);
 			} // if joined row not null
 
+			// Add objects for joined sfGuardUser rows
+
+			$key5 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol5);
+			if ($key5 !== null) {
+				$obj5 = sfGuardUserPeer::getInstanceFromPool($key5);
+				if (!$obj5) {
+
+					$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj5 = new $cls();
+					$obj5->hydrate($row, $startcol5);
+					sfGuardUserPeer::addInstanceToPool($obj5, $key5);
+				} // if obj5 loaded
+
+				// Add the $obj1 (Comment) to the collection in $obj5 (sfGuardUser)
+				$obj5->addCommentRelatedByCheckUserId($obj1);
+			} // if joined row not null
+
 			$results[] = $obj1;
 		}
 		$stmt->closeCursor();
@@ -1102,7 +1265,7 @@ abstract class BaseCommentPeer {
 
 
 	/**
-	 * Returns the number of rows matching criteria, joining the related sfGuardUser table
+	 * Returns the number of rows matching criteria, joining the related sfGuardUserRelatedByUserId table
 	 *
 	 * @param      Criteria $criteria
 	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
@@ -1110,7 +1273,7 @@ abstract class BaseCommentPeer {
 	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
 	 * @return     int Number of matching rows.
 	 */
-	public static function doCountJoinAllExceptsfGuardUser(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doCountJoinAllExceptsfGuardUserRelatedByUserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		// we're going to modify criteria, so copy it first
 		$criteria = clone $criteria;
@@ -1199,6 +1362,8 @@ abstract class BaseCommentPeer {
 
 		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
 
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
+
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
@@ -1257,6 +1422,8 @@ abstract class BaseCommentPeer {
 
 		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
 
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
+
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
 		{
@@ -1276,7 +1443,65 @@ abstract class BaseCommentPeer {
 
 
 	/**
-	 * Selects a collection of Comment objects pre-filled with all related objects except sfGuardUser.
+	 * Returns the number of rows matching criteria, joining the related sfGuardUserRelatedByCheckUserId table
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct Whether to select only distinct columns; deprecated: use Criteria->setDistinct() instead.
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     int Number of matching rows.
+	 */
+	public static function doCountJoinAllExceptsfGuardUserRelatedByCheckUserId(Criteria $criteria, $distinct = false, PropelPDO $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		// we're going to modify criteria, so copy it first
+		$criteria = clone $criteria;
+
+		// We need to set the primary table name, since in the case that there are no WHERE columns
+		// it will be impossible for the BasePeer::createSelectSql() method to determine which
+		// tables go into the FROM clause.
+		$criteria->setPrimaryTableName(CommentPeer::TABLE_NAME);
+
+		if ($distinct && !in_array(Criteria::DISTINCT, $criteria->getSelectModifiers())) {
+			$criteria->setDistinct();
+		}
+
+		if (!$criteria->hasSelectClause()) {
+			CommentPeer::addSelectColumns($criteria);
+		}
+
+		$criteria->clearOrderByColumns(); // ORDER BY should not affect count
+
+		// Set the correct dbName
+		$criteria->setDbName(self::DATABASE_NAME);
+
+		if ($con === null) {
+			$con = Propel::getConnection(CommentPeer::DATABASE_NAME, Propel::CONNECTION_READ);
+		}
+	
+		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseCommentPeer', $criteria, $con);
+		}
+
+		$stmt = BasePeer::doCount($criteria, $con);
+
+		if ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$count = (int) $row[0];
+		} else {
+			$count = 0; // no rows returned; we infer that means 0 matches.
+		}
+		$stmt->closeCursor();
+		return $count;
+	}
+
+
+	/**
+	 * Selects a collection of Comment objects pre-filled with all related objects except sfGuardUserRelatedByUserId.
 	 *
 	 * @param      Criteria  $criteria
 	 * @param      PropelPDO $con
@@ -1285,7 +1510,7 @@ abstract class BaseCommentPeer {
 	 * @throws     PropelException Any exceptions caught during processing will be
 	 *		 rethrown wrapped into a PropelException.
 	 */
-	public static function doSelectJoinAllExceptsfGuardUser(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	public static function doSelectJoinAllExceptsfGuardUserRelatedByUserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
 	{
 		$criteria = clone $criteria;
 
@@ -1408,9 +1633,14 @@ abstract class BaseCommentPeer {
 		FilePeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + FilePeer::NUM_HYDRATE_COLUMNS;
 
+		sfGuardUserPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + sfGuardUserPeer::NUM_HYDRATE_COLUMNS;
+
 		$criteria->addJoin(CommentPeer::USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1451,7 +1681,7 @@ abstract class BaseCommentPeer {
 				} // if $obj2 already loaded
 
 				// Add the $obj1 (Comment) to the collection in $obj2 (sfGuardUser)
-				$obj2->addComment($obj1);
+				$obj2->addCommentRelatedByUserId($obj1);
 
 			} // if joined row is not null
 
@@ -1471,6 +1701,25 @@ abstract class BaseCommentPeer {
 
 				// Add the $obj1 (Comment) to the collection in $obj3 (File)
 				$obj3->addComment($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined sfGuardUser rows
+
+				$key4 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = sfGuardUserPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					sfGuardUserPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Comment) to the collection in $obj4 (sfGuardUser)
+				$obj4->addCommentRelatedByCheckUserId($obj1);
 
 			} // if joined row is not null
 
@@ -1511,9 +1760,14 @@ abstract class BaseCommentPeer {
 		BranchPeer::addSelectColumns($criteria);
 		$startcol4 = $startcol3 + BranchPeer::NUM_HYDRATE_COLUMNS;
 
+		sfGuardUserPeer::addSelectColumns($criteria);
+		$startcol5 = $startcol4 + sfGuardUserPeer::NUM_HYDRATE_COLUMNS;
+
 		$criteria->addJoin(CommentPeer::USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::CHECK_USER_ID, sfGuardUserPeer::ID, $join_behavior);
 
 		// symfony_behaviors behavior
 		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
@@ -1554,7 +1808,7 @@ abstract class BaseCommentPeer {
 				} // if $obj2 already loaded
 
 				// Add the $obj1 (Comment) to the collection in $obj2 (sfGuardUser)
-				$obj2->addComment($obj1);
+				$obj2->addCommentRelatedByUserId($obj1);
 
 			} // if joined row is not null
 
@@ -1573,6 +1827,128 @@ abstract class BaseCommentPeer {
 				} // if $obj3 already loaded
 
 				// Add the $obj1 (Comment) to the collection in $obj3 (Branch)
+				$obj3->addComment($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined sfGuardUser rows
+
+				$key4 = sfGuardUserPeer::getPrimaryKeyHashFromRow($row, $startcol4);
+				if ($key4 !== null) {
+					$obj4 = sfGuardUserPeer::getInstanceFromPool($key4);
+					if (!$obj4) {
+	
+						$cls = sfGuardUserPeer::getOMClass(false);
+
+					$obj4 = new $cls();
+					$obj4->hydrate($row, $startcol4);
+					sfGuardUserPeer::addInstanceToPool($obj4, $key4);
+				} // if $obj4 already loaded
+
+				// Add the $obj1 (Comment) to the collection in $obj4 (sfGuardUser)
+				$obj4->addCommentRelatedByCheckUserId($obj1);
+
+			} // if joined row is not null
+
+			$results[] = $obj1;
+		}
+		$stmt->closeCursor();
+		return $results;
+	}
+
+
+	/**
+	 * Selects a collection of Comment objects pre-filled with all related objects except sfGuardUserRelatedByCheckUserId.
+	 *
+	 * @param      Criteria  $criteria
+	 * @param      PropelPDO $con
+	 * @param      String    $join_behavior the type of joins to use, defaults to Criteria::LEFT_JOIN
+	 * @return     array Array of Comment objects.
+	 * @throws     PropelException Any exceptions caught during processing will be
+	 *		 rethrown wrapped into a PropelException.
+	 */
+	public static function doSelectJoinAllExceptsfGuardUserRelatedByCheckUserId(Criteria $criteria, $con = null, $join_behavior = Criteria::LEFT_JOIN)
+	{
+		$criteria = clone $criteria;
+
+		// Set the correct dbName if it has not been overridden
+		// $criteria->getDbName() will return the same object if not set to another value
+		// so == check is okay and faster
+		if ($criteria->getDbName() == Propel::getDefaultDB()) {
+			$criteria->setDbName(self::DATABASE_NAME);
+		}
+
+		CommentPeer::addSelectColumns($criteria);
+		$startcol2 = CommentPeer::NUM_HYDRATE_COLUMNS;
+
+		BranchPeer::addSelectColumns($criteria);
+		$startcol3 = $startcol2 + BranchPeer::NUM_HYDRATE_COLUMNS;
+
+		FilePeer::addSelectColumns($criteria);
+		$startcol4 = $startcol3 + FilePeer::NUM_HYDRATE_COLUMNS;
+
+		$criteria->addJoin(CommentPeer::BRANCH_ID, BranchPeer::ID, $join_behavior);
+
+		$criteria->addJoin(CommentPeer::FILE_ID, FilePeer::ID, $join_behavior);
+
+		// symfony_behaviors behavior
+		foreach (sfMixer::getCallables(self::getMixerPreSelectHook(__FUNCTION__)) as $sf_hook)
+		{
+		  call_user_func($sf_hook, 'BaseCommentPeer', $criteria, $con);
+		}
+
+
+		$stmt = BasePeer::doSelect($criteria, $con);
+		$results = array();
+
+		while ($row = $stmt->fetch(PDO::FETCH_NUM)) {
+			$key1 = CommentPeer::getPrimaryKeyHashFromRow($row, 0);
+			if (null !== ($obj1 = CommentPeer::getInstanceFromPool($key1))) {
+				// We no longer rehydrate the object, since this can cause data loss.
+				// See http://www.propelorm.org/ticket/509
+				// $obj1->hydrate($row, 0, true); // rehydrate
+			} else {
+				$cls = CommentPeer::getOMClass(false);
+
+				$obj1 = new $cls();
+				$obj1->hydrate($row);
+				CommentPeer::addInstanceToPool($obj1, $key1);
+			} // if obj1 already loaded
+
+				// Add objects for joined Branch rows
+
+				$key2 = BranchPeer::getPrimaryKeyHashFromRow($row, $startcol2);
+				if ($key2 !== null) {
+					$obj2 = BranchPeer::getInstanceFromPool($key2);
+					if (!$obj2) {
+	
+						$cls = BranchPeer::getOMClass(false);
+
+					$obj2 = new $cls();
+					$obj2->hydrate($row, $startcol2);
+					BranchPeer::addInstanceToPool($obj2, $key2);
+				} // if $obj2 already loaded
+
+				// Add the $obj1 (Comment) to the collection in $obj2 (Branch)
+				$obj2->addComment($obj1);
+
+			} // if joined row is not null
+
+				// Add objects for joined File rows
+
+				$key3 = FilePeer::getPrimaryKeyHashFromRow($row, $startcol3);
+				if ($key3 !== null) {
+					$obj3 = FilePeer::getInstanceFromPool($key3);
+					if (!$obj3) {
+	
+						$cls = FilePeer::getOMClass(false);
+
+					$obj3 = new $cls();
+					$obj3->hydrate($row, $startcol3);
+					FilePeer::addInstanceToPool($obj3, $key3);
+				} // if $obj3 already loaded
+
+				// Add the $obj1 (Comment) to the collection in $obj3 (File)
 				$obj3->addComment($obj1);
 
 			} // if joined row is not null

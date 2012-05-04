@@ -24,7 +24,7 @@ class commentLineComponent extends sfComponent
       ->filterByFileId($this->file_id)
       ->filterByPosition($this->position)
       ->filterByLine($this->line)
-      ->leftJoin('sfGuardUser')
+      ->leftJoin('sfGuardUserRelatedByUserId')
       ->find()
     ;
 

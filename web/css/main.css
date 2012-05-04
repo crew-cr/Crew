@@ -316,6 +316,7 @@
   border:1px solid #cccccc;
   margin-bottom:10px;
 }
+.comment_bloc .comment.done, .comments_holder .comment.done { opacity:0.4; }
 .comment_bloc .comment .comment_user, .comments_holder .comment .comment_user {
   height:33px;
   line-height:26px;
