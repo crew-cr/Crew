@@ -54,6 +54,13 @@ class fileListAction extends crewAction
         ->filterByType(CommentPeer::TYPE_FILE)
         ->count()
       ;
+
+      $fileCommentsCountNotChecked = CommentQuery::create()
+        ->filterByFileId($file->getId())
+        ->filterByType(CommentPeer::TYPE_FILE)
+        ->filterByCheckUserId(null)
+        ->count()
+      ;
       
       $lineCommentsCount = CommentQuery::create()
         ->filterByFileId($file->getId())
@@ -61,6 +68,15 @@ class fileListAction extends crewAction
         ->filterByType(CommentPeer::TYPE_LINE)
         ->count()
       ;
+
+      $lineCommentsCountNotChecked = CommentQuery::create()
+        ->filterByFileId($file->getId())
+        ->filterByCommit($file->getLastChangeCommit())
+        ->filterByType(CommentPeer::TYPE_LINE)
+        ->filterByCheckUserId(null)
+        ->count()
+      ;
+      
 
       $lastCommentId = 0;
       if($fileCommentsCount || $lineCommentsCount)
@@ -79,7 +95,11 @@ class fileListAction extends crewAction
         }
       }
 
-      $this->files[] = array_merge($file->toArray(), array('NbFileComments' => ($fileCommentsCount + $lineCommentsCount), 'LastCommentId' => $lastCommentId));
+      $this->files[] = array_merge($file->toArray(), array(
+        'NbFileComments'           => ($fileCommentsCount + $lineCommentsCount),
+        'NbFileCommentsNotChecked' => $fileCommentsCountNotChecked + $lineCommentsCountNotChecked,
+        'LastCommentId'            => $lastCommentId
+      ));
     }
 
     usort($this->files, array('self', 'sortPath'));

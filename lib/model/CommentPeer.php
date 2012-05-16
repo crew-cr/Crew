@@ -57,7 +57,8 @@ class CommentPeer extends BaseCommentPeer {
         'Position'    => $comment->getPosition(),
         'Line'        => $comment->getLine(),
         'Message'     => $comment->getValue(),
-        'CreatedAt'   => $comment->getCreatedAt('d/m/Y H:i:s')
+        'CreatedAt'   => $comment->getCreatedAt('d/m/Y H:i:s'), 
+        'CheckedBy'   => $comment->getCheckUserId()
       );
     }
 

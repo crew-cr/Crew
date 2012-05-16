@@ -66,7 +66,7 @@
         </td>
         <td class="view_infos">
           <?php if($file['NbFileComments']): ?>
-            <span class="ricon">O</span><?php echo link_to($file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'].'#comment-'.$file['LastCommentId'], 'class' => 'icon', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
+            <span class="ricon<?php $file['NbFileCommentsNotChecked']==0 && print ' ricon0'; ?>">O</span><?php echo link_to($file['NbFileCommentsNotChecked'] . ' / ' . $file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'].'#comment-'.$file['LastCommentId'], 'class' => 'icon', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
           <?php endif; ?>
         </td>
         <td class="file_infos">
