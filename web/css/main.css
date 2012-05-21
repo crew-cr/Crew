@@ -97,6 +97,7 @@
   background-color:#ebebeb;
 }
 .list .list_body table tr.path_directory:hover { background-color:#ebebeb; }
+.list .list_body table tr.done { opacity:0.4; }
 .list .list_body table tr td { padding:3px 5px; }
 .list .list_body table tr td.padding-left { padding-left:10px; }
 .list .list_body table tr td.padding-right { padding-right:10px; }
@@ -201,6 +202,7 @@
 }
 .list .list_body table tr td.view_infos { text-align:right; }
 .list .list_body table tr td.view_infos .ricon { color:#666666; }
+.list .list_body table tr td.view_infos .ricon0 { color:#cccccc; }
 .list .list_body table tr td.file_name .ricon {
   color:#44aa33;
   font-size:21px;

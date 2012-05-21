@@ -7,7 +7,7 @@
   <div class="list_body scrollable" id="comment_list">
     <table>
       <?php foreach ($commentBoards as $commentBoard): ?>
-      <tr>
+      <tr class="<?php $commentBoard['CheckedBy'] && print 'done'; ?>">
         <td class="status_info">
           <img class="avatar" src="<?php echo Profile::getAvatarUrlFromEmail($commentBoard['UserEmail'], 18) ?>" />
           <?php echo link_to($commentBoard['UserName'], 'user/view', array('query_string' => 'id=' . $commentBoard['UserId'])) ?><br/>
