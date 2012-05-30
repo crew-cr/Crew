@@ -56,10 +56,10 @@
             <?php $addedLinesCounter += substr($fileContentLine, 0, 1) == '-' ? 0 : 1; ?>
             <tr id="position_<?php echo $position ?>">
               <td class="line_numbers"><?php echo substr($fileContentLine, 0, 1) == '+' ? '' :
-                link_to($deleledLinesCounter, sprintf('phpide://_PROJECTROOT_/%s@%d', esc_specialchars($file->getFilename()), $deleledLinesCounter))
+                sprintf('<a href="crewide://%s@%s@%d">%d</a>', urlencode($repository->getName()), urlencode($file->getFilename()), $deleledLinesCounter, $deleledLinesCounter)
               ?></td>
               <td class="line_numbers"><?php echo substr($fileContentLine, 0, 1) == '-' ? '' :
-                link_to($addedLinesCounter, sprintf('phpide://_PROJECTROOT_/%s@%d', esc_specialchars($file->getFilename()), $addedLinesCounter))
+                sprintf('<a href="crewide://%s@%s@%d">%d</a>', urlencode($repository->getName()), urlencode($file->getFilename()), $addedLinesCounter, $addedLinesCounter)
               ?></td>
               <td style="width: 100%" class="line <?php echo substr($fileContentLine, 0, 1) == '-' ? 'deleted' : (substr($fileContentLine, 0, 1) == '+' ? 'added' : '') ?>">
                 <strong class="add_bubble <?php echo array_key_exists($position, $sf_data->getRaw('fileLineComments')) ? 'disabled' : 'enabled'; ?><?php echo !empty($fileLineComments[$position]) && sizeof($fileLineComments[$position]) >= 1 ? ' commented' : ''; ?>" data="<?php echo url_for('default/commentAddLine') ?>?commit=<?php echo $file->getLastChangeCommit() ?>&fileId=<?php echo $file->getId() ?>&position=<?php echo $position ?>&line=<?php echo substr($fileContentLine, 0, 1) == '-' ? $deleledLinesCounter : $addedLinesCounter ?>"><span class="ricon">P</span> <span class="ricon">@</span></strong>
