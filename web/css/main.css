@@ -377,6 +377,7 @@
   color:#666666;
   font-style:italic;
 }
+.comment_bloc .comment .comment_body a, .comments_holder .comment .comment_body a { color:#4183c4; }
 .list_body.data {
   border-bottom:1px solid #cccccc;
   overflow:auto;
