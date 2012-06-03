@@ -388,11 +388,21 @@
   list-style-position:inside;
   list-style-type:decimal;
 }
+.comment_bloc .comment .comment_body pre, .comments_holder .comment .comment_body pre {
+  background-color:#eeeeee;
+  border-radius:5px;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  color:#333333;
+  font-family:monospace;
+  margin:8px 5px;
+  padding:8px;
+}
 .comment_bloc .comment .comment_body code, .comments_holder .comment .comment_body code {
   background-color:#eeeeee;
   color:#333333;
   font-family:monospace;
-  padding:0 3px;
+  padding:2px 3px;
 }
 .comment_bloc .comment .comment_body em, .comments_holder .comment .comment_body em {
   color:#666666;

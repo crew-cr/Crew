@@ -76,7 +76,8 @@ function Markdown($text) {
 	$text = preg_replace($pattern, '[$1]($1)', $text);
 
 	# Generate line breaks (2 spaces are no more needed)
-	$text = preg_replace('/\s*\n/', "\n\r", $text);
+	$text = preg_replace('/\r/', '', $text);
+	$text = preg_replace('/\n/', "  \n", $text);
 
 	# Transform text using parser.
 	return $parser->transform($text);
@@ -1125,7 +1126,6 @@ class Markdown_Parser {
 		$codeblock = $matches[1];
 
 		$codeblock = $this->outdent($codeblock);
-		$codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
 
 		# trim leading newlines and trailing newlines
 		$codeblock = preg_replace('/\A\n+|\n+\z/', '', $codeblock);
@@ -1139,7 +1139,7 @@ class Markdown_Parser {
 	#
 	# Create a code span markup for $code. Called from handleSpanToken.
 	#
-		$code = htmlspecialchars(trim($code), ENT_NOQUOTES);
+		$code = trim($code);
 		return $this->hashPart("<code>$code</code>");
 	}
 
@@ -2688,7 +2688,6 @@ class MarkdownExtra_Parser extends Markdown_Parser {
 	}
 	function _doFencedCodeBlocks_callback($matches) {
 		$codeblock = $matches[2];
-		$codeblock = htmlspecialchars($codeblock, ENT_NOQUOTES);
 		$codeblock = preg_replace_callback('/^\n+/',
 			array(&$this, '_doFencedCodeBlocks_newlines'), $codeblock);
 		$codeblock = "<pre><code>$codeblock</code></pre>";
