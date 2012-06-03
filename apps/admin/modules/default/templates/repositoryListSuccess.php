@@ -54,3 +54,5 @@
     </table>
   </div>
 </div>
+
+<?php include_component('default', 'logGit') ?>
