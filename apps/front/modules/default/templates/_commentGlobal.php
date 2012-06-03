@@ -17,7 +17,7 @@
               - <label for="todo-comment-<?php echo $commentGlobal->getId()?>"><?php echo $commentGlobal->getCheckMessage() ?></label> <input type="checkbox" id="todo-comment-<?php echo $commentGlobal->getId()?>" class="todo" data-id="<?php echo $commentGlobal->getId()?>" data-url="<?php echo url_for('default/commentToggle') ?>" <?php if ($commentGlobal->getCheckedAt()) :?>checked="checked"<?php endif; ?> />
               <?php echo $userId === $commentGlobal->getUserId() ? sprintf('<button class="right danger delete" data="%s?id=%s&type=%s">Delete</button>', url_for('default/commentDeleteGlobal'), $commentGlobal->getId(), $type) : '' ?>
             </div>
-            <div class="comment_body"><?php echo Markdown(html_entity_decode($commentGlobal->getValue())) ?></div>
+            <div class="comment_body"><?php echo Markdown($commentGlobal->getValue()) ?></div>
           </div>
           <?php endforeach; ?>
         <?php endif; ?>
