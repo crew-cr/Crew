@@ -283,6 +283,46 @@
     }
   }
 
+  .list_footer {
+    background-color: whitesmoke;
+    color: @grey;
+    font-size: @normalFont;
+    height: 32px;
+    line-height: 30px;
+    padding: 0 5px;
+    text-align: center;
+
+    a {
+      color: @blue;
+    }
+  }
+
+  #log {
+    td {
+      color: @grey;
+      &.code {
+        cursor: help;
+      }
+      &.date {
+        color: @lightGrey;
+        width: 130px;
+      }
+    }
+
+    tr {
+      &.error {
+        .command,
+        .date {
+          background-color: #fcd;
+        }
+        .code {
+          color: @red + #222;
+          font-weight: bold;
+        }
+      }
+    }
+  }
+
   #file_list {
     h3 {
       font-weight: normal;

@@ -15,9 +15,11 @@ default:
   stylesheets:
     - reset.min.css
     - main.css
+    - vendor/jquery.qtip.min.css
 
   javascripts:
     - vendor/jquery-1.6.4.min.js
+    - vendor/jquery.qtip.min.js
     - tooltip.js
 
   has_layout:     true
