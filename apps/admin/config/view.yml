@@ -18,7 +18,7 @@ default:
     - vendor/jquery.qtip.min.css
 
   javascripts:
-    - vendor/jquery-1.6.4.min.js
+    - vendor/jquery-1.7.2.min.js
     - vendor/jquery.qtip.min.js
     - tooltip.js
 
