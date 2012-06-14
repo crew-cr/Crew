@@ -6,7 +6,7 @@ default:
     content-type: text/html
 
   metas:
-    title:        Code review tool for git projects > Crew
+    title:        Crew CR
     #description:  symfony project
     #keywords:     symfony, project
     #language:     en

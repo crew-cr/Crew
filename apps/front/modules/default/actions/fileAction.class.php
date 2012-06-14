@@ -17,6 +17,7 @@ class fileAction extends crewAction
   {
     $this->file = FilePeer::retrieveByPK($request->getParameter('file'));
     $this->forward404Unless($this->file, "File not found");
+    $this->getResponse()->setTitle(basename($this->file->getFilename()));
 
     $this->previousFileId = FileQuery::create()
       ->select('Id')
