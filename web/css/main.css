@@ -736,6 +736,81 @@ button.safe:active, button.safe.active {
   background-image:-o-linear-gradient(#767676,#767676);
   background-image:linear-gradient(#767676,#767676);
 }
+.modal-bg {
+  background-color:#333333;
+  left:0;
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:99;
+}
+.modal {
+  background-color:#ffffff;
+  border:4px solid #888888;
+  display:blok;
+  padding-bottom:15px;
+  position:absolute;
+  border-radius:7px;
+  -webkit-border-radius:7px;
+  -moz-border-radius:7px;
+  overflow:hidden;
+  z-index:100;
+}
+.modal h2 {
+  border-bottom:1px solid #eeeeee;
+  font-size:16px;
+  font-weight:bold;
+  margin:15px 0 10px;
+  padding:0 10px 10px 14px;
+  text-transform:none;
+  width:100%;
+}
+.modal h3 {
+  color:#333333;
+  margin-bottom:5px;
+}
+.modal h3.single { margin-left:17px; }
+.modal .rule {
+  width:100%;
+  padding:0 10px;
+  margin-left:-10px;
+  clear:both;
+  margin:15px 0;
+  height:0;
+  overflow:hidden;
+  border:none;
+  background:transparent;
+  border-bottom:1px solid #dddddd;
+}
+.modal .mod { overflow:hidden; }
+.modal .mod .col {
+  float:left;
+  margin:0 7px;
+  overflow:hidden;
+  padding:0 10px;
+  width:270px;
+}
+.modal .mod .col p {
+  color:#999999;
+  margin-top:16px;
+}
+.modal pre {
+  background-color:#eeeeee;
+  border:1px solid #dddddd;
+  color:#333333;
+  font-family:monospace;
+  margin:8px 0;
+  padding:8px;
+  border-radius:3px;
+  -webkit-border-radius:3px;
+  -moz-border-radius:3px;
+}
+.modal code {
+  background-color:#eeeeee;
+  color:#333333;
+  font-family:monospace;
+  padding:2px 3px;
+}
 .flashMessage {
   line-height:2em;
   padding:0 0.8em;
