@@ -15,10 +15,10 @@ class branchListAction extends crewAction
    */
   public function execute($request)
   {
-    $repository = RepositoryPeer::retrieveByPK($request->getParameter('repository'));
-    $this->forward404Unless($repository, "Repository Not Found");
+    $this->repository = RepositoryPeer::retrieveByPK($request->getParameter('repository'));
+    $this->forward404Unless($this->repository, "Repository Not Found");
+    $this->getResponse()->setTitle($this->repository->getName());
 
-    $this->repository = $repository;
     $branches = BranchQuery::create()
       ->filterByIsBlacklisted(false)
       ->filterByRepositoryId($this->repository->getId())
@@ -47,7 +47,7 @@ class branchListAction extends crewAction
       );
     }
 
-    $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $repository->getId());
-    $this->commentBoards = CommentPeer::getCommentsForBoard(null, $repository->getId());
+    $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $this->repository->getId());
+    $this->commentBoards = CommentPeer::getCommentsForBoard(null, $this->repository->getId());
   }
 }

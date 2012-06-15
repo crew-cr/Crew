@@ -65,6 +65,11 @@
         event.preventDefault();
         base.deleteComment(this);
       });
+
+      $('.popup', base.bloc).bind('click', function(event) {
+        modalPopup("http://crew.local/index.php/default/cimeHelp");
+        return false;
+      });
     };
 
     base.displayLineCommentForm = function() {

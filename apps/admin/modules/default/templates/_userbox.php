@@ -4,7 +4,7 @@
       <img class="avatar" src="<?php echo $sf_user->getProfile()->getAvatarUrl(20) ?>" />
       <?php echo cross_app_link_to($user, 'front', url_for('user/view?id='.$user->getId())) ?>
     </li>
-    <li><?php echo cross_app_link_to('Home', 'front', '@homepage') ?></li>
+    <li><?php echo cross_app_link_to('Projects', 'front', '@homepage') ?></li>
     <li><?php echo link_to('Admin', '@homepage') ?></li>
     <li><?php echo link_to('Help', 'http://github.com/pmsipilot/Crew/wiki') ?></li>
     <li><?php echo link_to('Log Out', url_for('@sf_guard_signout')) ?></li>
