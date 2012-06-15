@@ -1,0 +1,86 @@
+.modal-bg {
+  background-color: @darkGrey;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 99;
+}
+
+.modal {
+  background-color: #fff;
+  border: 4px solid @lightGrey - #111;
+  display: blok;
+  padding-bottom: 15px;
+  position: absolute;
+  .radius(7px);
+  overflow: hidden;
+  z-index: 100;
+
+  h2 {
+    border-bottom: 1px solid @lighterGrey;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 15px 0 10px;
+    padding: 0 10px 10px 14px;
+    text-transform: none;
+    width: 100%;
+  }
+
+  h3 {
+    color: @darkGrey;
+    margin-bottom: 5px;
+
+    &.single {
+      margin-left: 17px;
+    }
+  }
+
+  .rule {
+    width: 100%;
+    padding: 0 10px;
+    margin-left: -10px;
+    clear: both;
+    margin: 15px 0;
+    height: 0;
+    overflow: hidden;
+    border: none;
+    background: 
+    transparent;
+    border-bottom: 1px solid #DDD;
+  }
+
+  .mod {
+    overflow: hidden;
+
+    .col {
+      float: left;
+      margin: 0 7px;
+      overflow: hidden;
+      padding: 0 10px;
+      width: 270px;
+
+      p {
+        color: @lightGrey;
+        margin-top: 16px;
+      }
+    }
+  }
+
+  pre {
+    background-color: @lighterGrey;
+    border: 1px solid @lightGrey + #444;
+    color: @darkGrey;
+    font-family: monospace;
+    margin: 8px 0;
+    padding: 8px;
+    .radius(3px);
+  }
+
+  code {
+    background-color: @lighterGrey;
+    color: @darkGrey;
+    font-family: monospace;
+    padding: 2px 3px;
+  }
+}

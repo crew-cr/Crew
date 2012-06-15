@@ -71,10 +71,6 @@ function Markdown($text) {
 		$parser = new $parser_class;
 	}
 
-	# Generate Markdwon links from urls
-	$pattern = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
-	$text = preg_replace($pattern, '[$1]($1)', $text);
-
 	# Generate line breaks (2 spaces are no more needed)
 	$text = preg_replace('/\r/', '', $text);
 	$text = preg_replace('/\n/', "  \n", $text);
@@ -689,6 +685,10 @@ class Markdown_Parser {
 	#
 		if ($this->in_anchor) return $text;
 		$this->in_anchor = true;
+
+		# Generate Markdwon links from urls
+		$pattern = "/(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))/";
+		$text = preg_replace($pattern, '[$1]($1)', $text);
 
 		#
 		# First, handle reference-style links: [link text] [id]

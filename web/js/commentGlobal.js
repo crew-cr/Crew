@@ -55,4 +55,15 @@ $(document).ready(function() {
       });
     }
   });
+
+  $(".popup").click(function() {
+    modalPopup("http://crew.local/index.php/default/cimeHelp");
+    return false;
+  });
+
+  $(document).keyup(function(e) {
+    if (e.keyCode == 27) {
+      closePopup();
+    }
+  });
 });

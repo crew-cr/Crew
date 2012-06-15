@@ -23,7 +23,7 @@
         <?php endif; ?>
         <form name="commentGlobal" id="commentGlobal" class="comment_form" method="post" action="<?php echo url_for('default/commentAddGlobal?id=' . $id . '&type=' . $type) ?>" >
           <?php echo $form['value']->render(); ?>
-          <a href="http://michelf.com/projects/php-markdown/concepts/" title="Markdown help" class="markdown">Markdown help</a>
+          <a href="#" title="CIME Cheat Sheet" class="markdown popup">Markdown help</a>
           <button class="right no-marge" type="submit"><?php echo $type === CommentPeer::TYPE_BRANCH ? 'Add Branch Note' : 'Add File Note' ?></button>
         </form>
       </div>

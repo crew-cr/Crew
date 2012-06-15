@@ -13,3 +13,5 @@ fileContentSuccess:
 fileListSuccess:
   javascripts:
     - viewFilesInfo.js
+cimeHelpSuccess:
+  has_layout: false

@@ -37,6 +37,7 @@ class fileListAction extends crewAction
       $this->branch = BranchPeer::retrieveByPK($request->getParameter('branch'));
     }
     $this->forward404Unless($this->branch, "Branch not found");
+    $this->getResponse()->setTitle($this->branch->getName());
 
     $this->repository = RepositoryPeer::retrieveByPK($this->branch->getRepositoryId());
     $this->forward404Unless($this->repository, "Repository not found");

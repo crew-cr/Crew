@@ -6,7 +6,7 @@ default:
     content-type: text/html
 
   metas:
-    title:        Code review tool for git projects > Crew
+    title:        Crew CR
     #description:  symfony project
     #keywords:     symfony, project
     #language:     en
@@ -18,7 +18,8 @@ default:
     - main.css
 
   javascripts:
-    - vendor/jquery-1.6.4.min.js
+    - vendor/jquery-1.7.2.min.js
+    - vendor/modal.popup.js
     - vendor/jquery.qtip.min.js
     - vendor/jquery.mousewheel.min.js
     - vendor/bootstrap-dropdown.js

@@ -21,7 +21,7 @@
             <?php echo $form->renderHiddenFields(); ?>
             <?php echo $form['value']->render(); ?>
             <button class="close safe" type="button">Close Form</button>
-            <a href="http://michelf.com/projects/php-markdown/concepts/" title="Markdown help" class="markdown">Markdown help</a>
+            <a href="#" title="CIME Cheat Sheet" class="markdown popup">Markdown help</a>
             <button class="right good" type="submit">Add Line Note</button>
           </form>
         </div>
