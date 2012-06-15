@@ -388,6 +388,7 @@
   list-style-position:inside;
   list-style-type:decimal;
 }
+.comment_bloc .comment .comment_body ol li ul, .comments_holder .comment .comment_body ol li ul { margin-left:25px; }
 .comment_bloc .comment .comment_body pre, .comments_holder .comment .comment_body pre {
   background-color:#eeeeee;
   border-radius:5px;
