@@ -57,7 +57,7 @@ $(document).ready(function() {
   });
 
   $(".popup").click(function() {
-    modalPopup("http://crew.local/index.php/default/cimeHelp");
+    modalPopup(url('default/cimeHelp'));
     return false;
   });
 

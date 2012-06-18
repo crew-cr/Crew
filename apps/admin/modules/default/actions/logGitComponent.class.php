@@ -13,7 +13,7 @@ class logGitComponent extends sfComponent
     $nbLog = $request->getParameter('gitlog', self::DISPLAY_COUNT);
 
     $this->logs = LogGitQuery::create()
-      ->orderById(Criteria::ASC)
+      ->orderById(Criteria::DESC)
       ->limit($nbLog)
       ->find()
     ;
