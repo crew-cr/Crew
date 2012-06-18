@@ -67,7 +67,7 @@
       });
 
       $('.popup', base.bloc).bind('click', function(event) {
-        modalPopup("http://crew.local/index.php/default/cimeHelp");
+        modalPopup(url('default/cimeHelp'));
         return false;
       });
     };
