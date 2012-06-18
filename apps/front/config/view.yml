@@ -26,6 +26,7 @@ default:
     - itemStatusAction.js
     - commentGlobal.js
     - tooltip.js
+    - url.js
 
   has_layout:     true
   layout:         layout
