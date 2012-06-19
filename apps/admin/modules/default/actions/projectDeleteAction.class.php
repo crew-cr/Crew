@@ -29,7 +29,7 @@ class projectDeleteAction extends crewAction
         $repository->delete($con);
         if(is_dir($gitDir))
         {
-          exec('rm -rf '.$gitDir);
+          exec('rm -rf '.escapeshellarg($gitDir));
         }
       }
       $con->commit();
