@@ -2,14 +2,25 @@ $(document).ready(function() {
   $('#comment_component').delegate('#commentGlobal', 'submit', function(e) {
     e.preventDefault();
     var $this = $(this);
-    $.ajax({
-      type: "POST",
-      url: $this.attr('action'),
-      data:$this.serialize(),
-      success: function(json) {
-        $('#comment_component').html(json.html);
-      }
-    });
+
+    if (this.comment_value.value == '')
+    {
+      $(this.comment_value).css({'background-color': '#FDD', 'border': '1px solid #FAA'});
+      $(this.comment_value).bind('click', function() {
+        $(this).css({'background-color': '#FFF', 'border': '1px solid #DEDEDE'});
+      });
+    }
+    else
+    {
+      $.ajax({
+        type: "POST",
+        url: $this.attr('action'),
+        data:$this.serialize(),
+        success: function(json) {
+          $('#comment_component').html(json.html);
+        }
+      });
+    }
   });
 
   $('#comment_component').delegate('.delete', 'click', function(e) {
