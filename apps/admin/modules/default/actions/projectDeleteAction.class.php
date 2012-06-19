@@ -23,9 +23,14 @@ class projectDeleteAction extends crewAction
         ->filterById($id)
         ->findOne($con);
       if($repository){
-        $name = $repository->getName();
-        $value = $repository->getValue();
+        $name   = $repository->getName();
+        $value  = $repository->getValue();
+        $gitDir = $repository->getGitDir();
         $repository->delete($con);
+        if(is_dir($gitDir))
+        {
+          exec('rm -rf '.$gitDir);
+        }
       }
       $con->commit();
       $this->getUser()->setFlash('notice', sprintf("The project '%s' has been deleted successfully. Remember to delete the directory %s.", $name, $value));
