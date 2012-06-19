@@ -45,7 +45,7 @@
           </div>
         </td>
         <td class="actions">
-          <?php echo link_to('Delete', 'default/projectDelete', array('title' => 'Delete project', 'query_string' => 'id='.$repository['Id'])) ?>
+          <?php echo link_to('Delete', 'default/projectDelete?id='.$repository['Id'], array('title' => 'Delete project', 'post' => true, 'confirm' => 'Are you sure ?')) ?>
         </td>
         <td>
         </td>
