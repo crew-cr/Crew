@@ -33,7 +33,7 @@ class projectDeleteAction extends crewAction
         }
       }
       $con->commit();
-      $this->getUser()->setFlash('notice', sprintf("The project '%s' has been deleted successfully. Remember to delete the directory %s.", $name, $value));
+      $this->getUser()->setFlash('notice', sprintf("The project '%s' has been deleted successfully.", $name));
     }
     catch (Exception $e)
     {
