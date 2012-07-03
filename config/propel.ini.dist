@@ -3,10 +3,10 @@ propel.packageObjectModel  = true
 propel.project             = crew
 propel.database            = mysql
 propel.database.driver     = mysql
-propel.database.url        = mysql:host=localhost;dbname=crew
+propel.database.url        = mysql:host=%db-host%;dbname=%db-name%
 propel.database.creole.url = ${propel.database.url}
-propel.database.user       = root
-propel.database.password   = 
+propel.database.user       = %db-user%
+propel.database.password   = %db-password%
 
 
 ; mysql options
@@ -31,7 +31,7 @@ propel.emulateForeignKeyConstraints = true
 
 ; directories
 propel.home                    = .
-propel.output.dir              = /home/mbrunot/Workspace/crew
+propel.output.dir              = /
 propel.schema.dir              = ${propel.output.dir}/config
 propel.conf.dir                = ${propel.output.dir}/config
 propel.phpconf.dir             = ${propel.output.dir}/config

@@ -12,9 +12,9 @@ all:
     class: sfPropelDatabase
     param:
       classname: PropelPDO
-      dsn: 'mysql:host=localhost;dbname=crew'
-      username: root
-      password: null
+      dsn: 'mysql:host=%db-host%;dbname=%db-name%'
+      username: '%db-user%'
+      password: '%db-password%'
       encoding: utf8
       persistent: true
       pooling: true
