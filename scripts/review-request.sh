@@ -1,7 +1,7 @@
 #! /bin/bash
 
 SCRIPT_NAME="Review request"
-SCRIPT_VERSION="0.2"
+SCRIPT_VERSION="0.3"
 SCRIPT_SHORT_DESC="simple script to request a review with Crew (http://pmsipilot.github.com/Crew)"
 CUR_DIR=`pwd`
 
@@ -12,11 +12,14 @@ fi
 
 CREW_PROJECT_ID=1
 BRANCH_TO_REVIEW=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+BASE_BRANCH=master
 CREW_SERVER=http://crew
+
 
 function usage {
   echo "$SCRIPT_NAME ($SCRIPT_VERSION), $SCRIPT_SHORT_DESC."
   echo "-b <branch to review> (default: current branch)"
+  echo "-f <base branch> "
   echo "-p <crew project id> (default: 1)"
   echo "-s <crew server url> (default: http://crew)"
   echo "-h : this help"
@@ -24,7 +27,7 @@ function usage {
   exit 0
 }
 
-while getopts ":s:p:b:hv" opt; do
+while getopts ":s:p:b:f:hv" opt; do
   case $opt in
     h)
       usage
@@ -41,6 +44,9 @@ while getopts ":s:p:b:hv" opt; do
       ;;
     b)
       BRANCH_TO_REVIEW=$OPTARG
+      ;;
+    f)
+      BASE_BRANCH=$OPTARG
       ;;
     \?)
       echo "Invalid option: -$OPTARG"
@@ -62,15 +68,16 @@ if [ "$LAST_COMMIT" = "" ]; then
   exit 1
 fi
 
-printf "\033[0;36m%-16s\033[0m : %s\n" "Crew server" "$CREW_SERVER"
-printf "\033[0;36m%-16s\033[0m : %s\n" "Crew project id" "$CREW_PROJECT_ID"
-printf "\033[0;36m%-16s\033[0m : %s\n" "Branch to review" "$BRANCH_TO_REVIEW"
-printf "\033[0;36m%-16s\033[0m : %s\n" "Last commit" "$LAST_COMMIT"
+printf "\033[0;36m%-18s\033[0m : %s\n" "Crew server" "$CREW_SERVER"
+printf "\033[0;36m%-18s\033[0m : %s\n" "Crew project id" "$CREW_PROJECT_ID"
+printf "\033[0;36m%-18s\033[0m : %s\n" "Branch to review" "$BRANCH_TO_REVIEW"
+printf "\033[0;36m%-18s\033[0m : %s\n" "Base branch review" "$BASE_BRANCH"
+printf "\033[0;36m%-18s\033[0m : %s\n" "Last commit" "$LAST_COMMIT"
 
 echo "Do you want to request a review ? (y/N)"
 
 read REQUEST;
 if [ "$REQUEST" = "y" ]; then
-  curl -X POST --data "base_branch=master&branch=$BRANCH_TO_REVIEW&commit=$LAST_COMMIT" "$CREW_SERVER/api.php/projects/$CREW_PROJECT_ID/reviews"
+  curl -X POST --data "base_branch=$BASE_BRANCH&branch=$BRANCH_TO_REVIEW&commit=$LAST_COMMIT" "$CREW_SERVER/api.php/projects/$CREW_PROJECT_ID/reviews"
   printf "\n"
 fi
