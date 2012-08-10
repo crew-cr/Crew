@@ -8,7 +8,7 @@
           <div class="comment <?php if ($commentGlobal->getCheckedAt()) :?>done<?php endif; ?>" id="comment-<?php echo $commentGlobal->getId()?>">
             <div class="comment_user">
               <img class="avatar" src="<?php echo $commentGlobal->getAuthorAvatar() ?>" />
-              <?php echo sprintf("<span><strong>%s</strong> %s</span>", $commentGlobal->getAuthorName(), $commentGlobal->getUpdatedAt('d/m/Y H\hi')) ?>
+              <?php echo sprintf("<span><strong>%s</strong> %s</span>", $commentGlobal->getAuthorName(), $commentGlobal->getCreatedAt('d/m/Y H\hi')) ?>
               <?php if(CommentPeer::TYPE_BRANCH === $type): ?>
                 - <?php echo link_to('Permalink', url_for('default/fileList'), array('query_string' => sprintf('branch=%s#comment-%s', $id, $commentGlobal->getId()), 'title' => 'Copy permalink to clipboard', 'class' => 'clipboard')) ?>
               <?php elseif(CommentPeer::TYPE_FILE === $type): ?>
