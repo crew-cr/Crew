@@ -80,7 +80,7 @@ class fileListAction extends crewAction
       
 
       $lastCommentId = 0;
-      if($fileCommentsCount || $lineCommentsCount)
+      if ($fileCommentsCount || $lineCommentsCount)
       {
         $lastComment = CommentQuery::create()
           ->filterByFileId($file->getId())
@@ -90,7 +90,7 @@ class fileListAction extends crewAction
           ->orderById(Criteria::DESC)
           ->findOne()
         ;
-        if($lastComment)
+        if ($lastComment)
         {
           $lastCommentId = $lastComment->getId();
         }
@@ -116,7 +116,7 @@ class fileListAction extends crewAction
     $fileB = basename($b['Filename']);
 
     $cmpPath = strcmp($pathA, $pathB);
-    if($cmpPath === 0)
+    if ($cmpPath === 0)
     {
       $cmpFile = strcmp($fileA, $fileB);
       return $cmpFile;

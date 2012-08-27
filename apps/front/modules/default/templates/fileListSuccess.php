@@ -46,7 +46,7 @@
       <?php foreach ($files as $file): ?>
       <?php $pathDir = dirname($file['Filename']); ?>
       <?php $filename = basename($file['Filename']); ?>
-      <?php if($pathDirOld !== $pathDir && $pathDir !== ".") : ?>
+      <?php if ($pathDirOld !== $pathDir && $pathDir !== ".") : ?>
         <tr class="path_directory">
           <td class="ricon">Ø</td>
           <td colspan="5"><?php echo $pathDir . '/';?></td>
@@ -58,22 +58,29 @@
         </td>
         <td class="file_name">
           <h3>
-            <?php if($file['ReviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
-            <?php if(!$file['IsBinary']):?><a class="tooltip" href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>"><?php endif; ?>
-              <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
-            <?php if($file['IsBinary']):?></a><?php endif; ?>
+            <?php if ($file['ReviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
+            <?php if (!$file['IsBinary']):?>
+              <a 
+                class="tooltip" 
+                href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" 
+                title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
+            <?php endif; ?>
+            <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
+            <?php if ($file['IsBinary']):?>
+              </a>
+            <?php endif; ?>
           </h3>
         </td>
         <td class="view_infos">
-          <?php if($file['NbFileComments']): ?>
+          <?php if ($file['NbFileComments']): ?>
             <span class="ricon<?php $file['NbFileCommentsNotChecked']==0 && print ' ricon0'; ?>">O</span><?php echo link_to($file['NbFileCommentsNotChecked'] . ' / ' . $file['NbFileComments'], 'default/file', array('query_string' => 'file='.$file['Id'].'#comment-'.$file['LastCommentId'], 'class' => 'icon', 'title' => $file['NbFileComments'] . ' comment(s)')) ?>
           <?php endif; ?>
         </td>
         <td class="file_infos">
-          <?php if($file['NbAddedLines'] > 0): ?><span class="added tooltip" title="<?php echo $file['NbAddedLines'] ?> added lines"><?php echo $file['NbAddedLines'] ?>+</span><?php endif; ?>
+          <?php if ($file['NbAddedLines'] > 0): ?><span class="added tooltip" title="<?php echo $file['NbAddedLines'] ?> added lines"><?php echo $file['NbAddedLines'] ?>+</span><?php endif; ?>
         </td>
         <td class="file_infos">
-        <?php if($file['NbDeletedLines'] > 0): ?><span class="deleted tooltip" title="<?php echo $file['NbDeletedLines'] ?> deleted lines"><?php echo $file['NbDeletedLines'] ?>-</span><?php endif; ?>
+        <?php if ($file['NbDeletedLines'] > 0): ?><span class="deleted tooltip" title="<?php echo $file['NbDeletedLines'] ?> deleted lines"><?php echo $file['NbDeletedLines'] ?>-</span><?php endif; ?>
         </td>
         <td class="status">
           <ul class="dropdown-action">
