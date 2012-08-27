@@ -16,11 +16,15 @@
         <?php endif; ?>
       </li>
     <?php endif; ?>
+    <?php $defaultParametersUrlFile = array(
+      'from' => $commit_from,
+      'to'   => $commit_to,
+    ); ?>
     <?php if ($currentBreadCrumbBranch): ?>
       <?php $branchNeedList = sizeof($branchBreadCrumbList) ?>
       <li class="<?php echo !$currentBreadCrumbFile ? 'selected' : '' ?> <?php echo $branchNeedList ? 'dropdown' : '' ?>">
         <span class="ricon">.</span>
-        <?php echo link_to($currentBreadCrumbBranch, 'default/fileList?branch=' . $currentBreadCrumbBranch->getId()) ?>
+        <?php echo link_to($currentBreadCrumbBranch, 'default/fileList?' . http_build_query(array_merge($defaultParametersUrlFile, array('branch' => $currentBreadCrumbBranch->getId())))) ?>
         <?php if($branchNeedList): ?>
           <?php echo link_to('@', '@homepage', array('class' => 'dropdown-toggle')) ?>
           <ul class="dropdown-menu">
@@ -38,14 +42,14 @@
       <?php $fileNeedList = sizeof($fileBreadCrumbList) ?>
       <li class="selected<?php echo $fileNeedList ? ' dropdown' : '' ?>">
         <span class="ricon">E</span>
-        <?php echo link_to(stringUtils::shortenFilePath($currentBreadCrumbFile), 'default/file?file=' . $currentBreadCrumbFile->getId(), array('class' => 'tooltip', 'title' => $currentBreadCrumbFile)) ?>
+        <?php echo link_to(stringUtils::shortenFilePath($currentBreadCrumbFile), 'default/file?' . http_build_query(array_merge($defaultParametersUrlFile, array('file' => $currentBreadCrumbFile->getId()))), array('class' => 'tooltip', 'title' => $currentBreadCrumbFile)) ?>
         <?php if($fileNeedList): ?>
           <?php echo link_to('@', '@homepage', array('class' => 'dropdown-toggle')) ?>
           <ul class="dropdown-menu">
             <?php foreach ($fileBreadCrumbList as $item): ?>
               <li>
                 <span class="ricon"><?php if($item->getStatus() == 1): ?>Ã<?php elseif($item->getStatus() == 2): ?>Â<?php else: ?>!<?php endif; ?></span>
-                <?php echo link_to($item, 'default/file?file=' . $item->getId()) ?>
+                <?php echo link_to($item, 'default/file?' . http_build_query(array_merge($defaultParametersUrlFile, array('file' => $item->getId())))) ?>
               </li>
             <?php endforeach; ?>
           </ul>

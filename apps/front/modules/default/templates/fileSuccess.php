@@ -32,14 +32,18 @@
         </li>
       </ul>
       <div class="actions">
+        <?php $defaultParametersUrlFile = array(
+          'from' => $commit_from,
+          'to'   => $commit_to,
+        ); ?>
         <?php if ('D' !== $file->getState() && !$file->getIsBinary()): ?>
-          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId(), 'target' => '_blank')) ?>
+          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $file->getId()))), 'target' => '_blank')) ?>
         <?php endif; ?>
         <?php if (null !== $previousFileId): ?>
-          <?php echo link_to('<< Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
+          <?php echo link_to('<< Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $previousFileId))), 'class' => 'previous')) ?>
         <?php endif; ?>
         <?php if (null !== $nextFileId): ?>
-          <?php echo link_to('Next file >>', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
+          <?php echo link_to('Next file >>', 'default/file', array('title' => 'Next file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $nextFileId))), 'class' => 'next')) ?>
         <?php endif; ?>
       </div>
     </div>

@@ -41,6 +41,10 @@
   </div>
   <?php $pathDirOld = ""; ?>
   <?php $maxLength = 110; ?>
+  <?php $defaultParametersUrlFile = array(
+    'from' => $commit_from,
+    'to'   => $commit_to,
+  ); ?>
   <div class="list_body" id="file_list">
     <table>
       <?php foreach ($files as $file): ?>
@@ -62,7 +66,7 @@
             <?php if (!$file['IsBinary']):?>
               <a 
                 class="tooltip" 
-                href="<?php echo url_for("default/file")?>?file=<?php echo $file['Id']?>" 
+                href="<?php echo url_for("default/file?" . http_build_query(array_merge($defaultParametersUrlFile, array('file' => $file['Id'])))); ?>" 
                 title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
             <?php endif; ?>
             <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
