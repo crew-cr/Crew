@@ -17,7 +17,7 @@ class breadcrumbComponent extends sfComponent
     $this->branchBreadCrumbList        = array();
     $this->repositoryBreadCrumbList    = array();
     
-    $gitCommand = new GitCommand(new GitDBLogger(PropelPDOFactory::instanciate('logger')));
+    $gitCommand = $this->getContext()->getGitCommand();;
     $commitFrom = null;
     $commitTo   = null;
     
