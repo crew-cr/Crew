@@ -53,15 +53,18 @@ class fileAction extends crewAction
     $commitFrom = $request->getParameter('from', $this->branch->getCommitReference());
     $commitTo   = $request->getParameter('to', $this->branch->getLastCommit());
     $this->commit_from = null;
-    $this->commit_to = null;
+    $this->commit_to   = null;
+    $this->readonly    = false;
     if ($request->hasParameter('from'))
     {
       $this->commit_from = $commitFrom;
+      $this->readonly    = true;
     }
 
     if ($request->hasParameter('to'))
     {
       $this->commit_to = $commitTo;
+      $this->readonly    = true;
     }
 
     $modifiedFiles = $this->gitCommand->getDiffFilesFromBranch(
