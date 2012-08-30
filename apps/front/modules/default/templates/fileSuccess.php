@@ -76,10 +76,10 @@
         <div class="flashMessage error">This is a binary file.</div>
       <?php endif; ?>
     </div>
-    <?php if (!$readonly): ?>
-      <div id="comment_component" class="comments_holder">
+    <div id="comment_component" class="comments_holder">
+      <?php if (!$readonly): ?>
         <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
-      </div>
-    <?php endif; ?>
+      <?php endif; ?>
+    </div>
   </div>
 </div>
