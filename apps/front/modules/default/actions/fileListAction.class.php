@@ -15,8 +15,6 @@ class fileListAction extends crewAction
    */
   public function execute($request)
   {
-    
-    
     $this->branch = null;
     if ($request->hasParameter('name') && $request->hasParameter('repository'))
     {

@@ -36,6 +36,7 @@ class selectorDiffRangeForm extends sfForm
     
     $branch = $this->findCurrentBranch($this->getOption('type'), $this->getOption('id'));
     $commits = $this->getGitCommand()->getCommits($branch->getRepository()->getGitDir(), $branch->getBaseBranchName(), $branch->getLastCommit());
+    $commits[$branch->getCommitReference()] = $branch->getBaseBranchName();
     
     $this->setWidget('from', new sfWidgetFormSelect(array('choices' => array_reverse($commits))));
     $this->setWidget('to', new sfWidgetFormSelect(array('choices' => $commits)));
