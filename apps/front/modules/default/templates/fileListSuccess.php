@@ -1,5 +1,6 @@
 <div class="list">
   <div class="list_head">
+    <span class="ricon vertical-text toggle-diff-range tooltip" title="Click to see the diff range selector">: </span>
     <span class="title">File list</span>
     <span class="view_files_info">
        :
@@ -19,7 +20,7 @@
       <?php include_partial('default/dropdownStatus', array('id' => $branch->getId(), 'status' => $branch->getStatus(), 'readonly' => $readonly, 'type' => 'branch')); ?>
     </div>
   </div>
-  <div class="list_head">
+  <div class="list_head diff-range">
     <?php include_component('default', 'selectorDiffRange', array('type' => 'branch', 'id' => $branch->getId())); ?>
   </div>
   <?php $pathDirOld = ""; ?>

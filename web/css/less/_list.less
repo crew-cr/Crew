@@ -28,6 +28,14 @@
       }
     }
 
+    &.diff-range {
+      display: none;
+      background-color: #ECECEC;
+      select {
+        width: 350px;
+      }
+    }
+  
     &.scroll {
       position: absolute;
       top: 0;
@@ -44,11 +52,8 @@
       }
     }
 
-    .selector-diff-range {
-      select {
-        width: 350px;
-      }
-    }
+  
+    
     
     span.title {
       color: @grey;
@@ -76,6 +81,9 @@
       font-size: 30px;
       color: #aaa;
       margin-right: 5px;
+      &.toggle-diff-range {
+        font-size: 20px;
+      }
     }
 
     .status {
