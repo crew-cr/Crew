@@ -31,6 +31,7 @@
   display:none;
   background-color:#ececec;
 }
+.list .list_head.diff-range.displayed { display:block; }
 .list .list_head.diff-range select { width:350px; }
 .list .list_head.scroll {
   position:absolute;

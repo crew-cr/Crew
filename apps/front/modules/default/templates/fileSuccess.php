@@ -29,7 +29,7 @@
       </div>
     </div>
     <div id="window" class="list_body data">
-      <div class="list_head diff-range">
+      <div class="list_head diff-range<?php $readonly && print " displayed"; ?>">
         <?php include_component('default', 'selectorDiffRange', array('type' => 'file', 'id' => $file->getId())); ?>
       </div>
       <?php if(!$file->getIsBinary()): ?>

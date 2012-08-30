@@ -20,7 +20,7 @@
       <?php include_partial('default/dropdownStatus', array('id' => $branch->getId(), 'status' => $branch->getStatus(), 'readonly' => $readonly, 'type' => 'branch')); ?>
     </div>
   </div>
-  <div class="list_head diff-range">
+  <div class="list_head diff-range<?php $readonly && print " displayed"; ?>">
     <?php include_component('default', 'selectorDiffRange', array('type' => 'branch', 'id' => $branch->getId())); ?>
   </div>
   <?php $pathDirOld = ""; ?>
