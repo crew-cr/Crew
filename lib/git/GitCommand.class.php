@@ -161,6 +161,27 @@ class GitCommand
     return $fileLines;
   }
 
+  /**
+   * @param string $gitDir
+   * @param string $referenceCommit
+   * @param string $currentCommit
+   *
+   * @return array
+   */
+  public function getCommits($gitDir, $referenceCommit, $currentCommit)
+  {
+    $result = $this->exec('git --git-dir=%s log %s...%s --oneline', array($gitDir, $referenceCommit, $currentCommit));
+    
+    $commits = array();
+    foreach ($result as $commit)
+    {
+      list($sha, $message) = explode(' ', $commit, 2);
+      $commits[$sha] = $message;
+    }
+
+    return $commits;
+  }
+
   public function getLastModificationCommit($gitDir, $branch, $filename)
   {
     $return = $this->exec('git --git-dir=%s log %s --format="%%H" -- %s | head -n1', array($gitDir, $branch, $filename));

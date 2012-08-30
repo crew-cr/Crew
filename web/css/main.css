@@ -43,6 +43,7 @@
   -webkit-box-shadow:0 2px 5px rgba(0,0,0,0.1);
   -moz-box-shadow:0 2px 5px rgba(0,0,0,0.1);
 }
+.list .list_head .selector-diff-range select { width:350px; }
 .list .list_head span.title {
   color:#666666;
   font-weight:bold;
