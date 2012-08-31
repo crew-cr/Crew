@@ -128,6 +128,11 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	protected $asfGuardUser;
 
 	/**
+	 * @var        array Request[] Collection to store aggregation of Request objects.
+	 */
+	protected $collRequests;
+
+	/**
 	 * @var        array Comment[] Collection to store aggregation of Comment objects.
 	 */
 	protected $collComments;
@@ -155,6 +160,12 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 * @var        boolean
 	 */
 	protected $alreadyInValidation = false;
+
+	/**
+	 * An array of objects scheduled for deletion.
+	 * @var		array
+	 */
+	protected $requestsScheduledForDeletion = null;
 
 	/**
 	 * An array of objects scheduled for deletion.
@@ -882,6 +893,8 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 
 			$this->aRepository = null;
 			$this->asfGuardUser = null;
+			$this->collRequests = null;
+
 			$this->collComments = null;
 
 			$this->collFiles = null;
@@ -1069,6 +1082,23 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 				}
 				$affectedRows += 1;
 				$this->resetModified();
+			}
+
+			if ($this->requestsScheduledForDeletion !== null) {
+				if (!$this->requestsScheduledForDeletion->isEmpty()) {
+					RequestQuery::create()
+						->filterByPrimaryKeys($this->requestsScheduledForDeletion->getPrimaryKeys(false))
+						->delete($con);
+					$this->requestsScheduledForDeletion = null;
+				}
+			}
+
+			if ($this->collRequests !== null) {
+				foreach ($this->collRequests as $referrerFK) {
+					if (!$referrerFK->isDeleted()) {
+						$affectedRows += $referrerFK->save($con);
+					}
+				}
 			}
 
 			if ($this->commentsScheduledForDeletion !== null) {
@@ -1363,6 +1393,14 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 
 
+				if ($this->collRequests !== null) {
+					foreach ($this->collRequests as $referrerFK) {
+						if (!$referrerFK->validate($columns)) {
+							$failureMap = array_merge($failureMap, $referrerFK->getValidationFailures());
+						}
+					}
+				}
+
 				if ($this->collComments !== null) {
 					foreach ($this->collComments as $referrerFK) {
 						if (!$referrerFK->validate($columns)) {
@@ -1516,6 +1554,9 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 			if (null !== $this->asfGuardUser) {
 				$result['sfGuardUser'] = $this->asfGuardUser->toArray($keyType, $includeLazyLoadColumns,  $alreadyDumpedObjects, true);
+			}
+			if (null !== $this->collRequests) {
+				$result['Requests'] = $this->collRequests->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
 			}
 			if (null !== $this->collComments) {
 				$result['Comments'] = $this->collComments->toArray(null, true, $keyType, $includeLazyLoadColumns, $alreadyDumpedObjects);
@@ -1749,6 +1790,12 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			// the getter/setter methods for fkey referrer objects.
 			$copyObj->setNew(false);
 
+			foreach ($this->getRequests() as $relObj) {
+				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
+					$copyObj->addRequest($relObj->copy($deepCopy));
+				}
+			}
+
 			foreach ($this->getComments() as $relObj) {
 				if ($relObj !== $this) {  // ensure that we don't try to copy a reference to ourselves
 					$copyObj->addComment($relObj->copy($deepCopy));
@@ -1922,6 +1969,9 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	 */
 	public function initRelation($relationName)
 	{
+		if ('Request' == $relationName) {
+			return $this->initRequests();
+		}
 		if ('Comment' == $relationName) {
 			return $this->initComments();
 		}
@@ -1931,6 +1981,154 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 		if ('StatusAction' == $relationName) {
 			return $this->initStatusActions();
 		}
+	}
+
+	/**
+	 * Clears out the collRequests collection
+	 *
+	 * This does not modify the database; however, it will remove any associated objects, causing
+	 * them to be refetched by subsequent calls to accessor method.
+	 *
+	 * @return     void
+	 * @see        addRequests()
+	 */
+	public function clearRequests()
+	{
+		$this->collRequests = null; // important to set this to NULL since that means it is uninitialized
+	}
+
+	/**
+	 * Initializes the collRequests collection.
+	 *
+	 * By default this just sets the collRequests collection to an empty array (like clearcollRequests());
+	 * however, you may wish to override this method in your stub class to provide setting appropriate
+	 * to your application -- for example, setting the initial array to the values stored in database.
+	 *
+	 * @param      boolean $overrideExisting If set to true, the method call initializes
+	 *                                        the collection even if it is not empty
+	 *
+	 * @return     void
+	 */
+	public function initRequests($overrideExisting = true)
+	{
+		if (null !== $this->collRequests && !$overrideExisting) {
+			return;
+		}
+		$this->collRequests = new PropelObjectCollection();
+		$this->collRequests->setModel('Request');
+	}
+
+	/**
+	 * Gets an array of Request objects which contain a foreign key that references this object.
+	 *
+	 * If the $criteria is not null, it is used to always fetch the results from the database.
+	 * Otherwise the results are fetched from the database the first time, then cached.
+	 * Next time the same method is called without $criteria, the cached collection is returned.
+	 * If this Branch is new, it will return
+	 * an empty collection or the current collection; the criteria is ignored on a new object.
+	 *
+	 * @param      Criteria $criteria optional Criteria object to narrow the query
+	 * @param      PropelPDO $con optional connection object
+	 * @return     PropelCollection|array Request[] List of Request objects
+	 * @throws     PropelException
+	 */
+	public function getRequests($criteria = null, PropelPDO $con = null)
+	{
+		if(null === $this->collRequests || null !== $criteria) {
+			if ($this->isNew() && null === $this->collRequests) {
+				// return empty collection
+				$this->initRequests();
+			} else {
+				$collRequests = RequestQuery::create(null, $criteria)
+					->filterByBranch($this)
+					->find($con);
+				if (null !== $criteria) {
+					return $collRequests;
+				}
+				$this->collRequests = $collRequests;
+			}
+		}
+		return $this->collRequests;
+	}
+
+	/**
+	 * Sets a collection of Request objects related by a one-to-many relationship
+	 * to the current object.
+	 * It will also schedule objects for deletion based on a diff between old objects (aka persisted)
+	 * and new objects from the given Propel collection.
+	 *
+	 * @param      PropelCollection $requests A Propel collection.
+	 * @param      PropelPDO $con Optional connection object
+	 */
+	public function setRequests(PropelCollection $requests, PropelPDO $con = null)
+	{
+		$this->requestsScheduledForDeletion = $this->getRequests(new Criteria(), $con)->diff($requests);
+
+		foreach ($requests as $request) {
+			// Fix issue with collection modified by reference
+			if ($request->isNew()) {
+				$request->setBranch($this);
+			}
+			$this->addRequest($request);
+		}
+
+		$this->collRequests = $requests;
+	}
+
+	/**
+	 * Returns the number of related Request objects.
+	 *
+	 * @param      Criteria $criteria
+	 * @param      boolean $distinct
+	 * @param      PropelPDO $con
+	 * @return     int Count of related Request objects.
+	 * @throws     PropelException
+	 */
+	public function countRequests(Criteria $criteria = null, $distinct = false, PropelPDO $con = null)
+	{
+		if(null === $this->collRequests || null !== $criteria) {
+			if ($this->isNew() && null === $this->collRequests) {
+				return 0;
+			} else {
+				$query = RequestQuery::create(null, $criteria);
+				if($distinct) {
+					$query->distinct();
+				}
+				return $query
+					->filterByBranch($this)
+					->count($con);
+			}
+		} else {
+			return count($this->collRequests);
+		}
+	}
+
+	/**
+	 * Method called to associate a Request object to this object
+	 * through the Request foreign key attribute.
+	 *
+	 * @param      Request $l Request
+	 * @return     Branch The current object (for fluent API support)
+	 */
+	public function addRequest(Request $l)
+	{
+		if ($this->collRequests === null) {
+			$this->initRequests();
+		}
+		if (!$this->collRequests->contains($l)) { // only add it if the **same** object is not already associated
+			$this->doAddRequest($l);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param	Request $request The request object to add.
+	 */
+	protected function doAddRequest($request)
+	{
+		$this->collRequests[]= $request;
+		$request->setBranch($this);
 	}
 
 	/**
@@ -2593,6 +2791,11 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 	public function clearAllReferences($deep = false)
 	{
 		if ($deep) {
+			if ($this->collRequests) {
+				foreach ($this->collRequests as $o) {
+					$o->clearAllReferences($deep);
+				}
+			}
 			if ($this->collComments) {
 				foreach ($this->collComments as $o) {
 					$o->clearAllReferences($deep);
@@ -2610,6 +2813,10 @@ abstract class BaseBranch extends BaseObject  implements Persistent
 			}
 		} // if ($deep)
 
+		if ($this->collRequests instanceof PropelCollection) {
+			$this->collRequests->clearIterator();
+		}
+		$this->collRequests = null;
 		if ($this->collComments instanceof PropelCollection) {
 			$this->collComments->clearIterator();
 		}
