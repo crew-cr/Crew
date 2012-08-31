@@ -61,6 +61,13 @@ class setAction extends crewAction
               ->setIsBlacklisted(0)
               ->save()
             ;
+            
+            $request = new Request();
+            $request
+              ->setBranch($branch)
+              ->setCommit($commit)
+              ->save();
+            
             $this->getResponse()->setStatusCode('201');
             $this->dispatcher->notify(new sfEvent($this, 'notification.review-request', array('project-id' => $branch->getRepositoryId(), 'object' => $branch)));
           }
