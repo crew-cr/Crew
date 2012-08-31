@@ -28,18 +28,19 @@ class selectorDiffRangeForm extends sfForm
 
     parent::__construct($defaults, $options, $CSRFSecret);
   }
-  
-  
+
+
   public function configure()
   {
-    $this->widgetSchema->setNameFormat('selector_diff[%s]');
-    
     $branch = $this->findCurrentBranch($this->getOption('type'), $this->getOption('id'));
-    $commits = $this->getGitCommand()->getCommits($branch->getRepository()->getGitDir(), $branch->getBaseBranchName(), $branch->getLastCommit());
-    $commits[$branch->getCommitReference()] = $branch->getBaseBranchName();
+    $this->widgetSchema->setNameFormat('selector_diff[%s]');
+    $commits = $this->buildCommits($branch);
     
-    $this->setWidget('from', new sfWidgetFormSelect(array('choices' => array_reverse($commits))));
-    $this->setWidget('to', new sfWidgetFormSelect(array('choices' => $commits)));
+    end($commits);
+    $defaultFrom = key($commits);
+
+    $this->setWidget('from', new crewWidgetCommitSelect(array('choices' => $commits, 'default' => $defaultFrom)));
+    $this->setWidget('to', new crewWidgetCommitSelect(array('choices' => $commits)));
     $this->setWidget('type', new sfWidgetFormInputHidden());
     $this->setWidget('id', new sfWidgetFormInputHidden());
 
@@ -50,8 +51,43 @@ class selectorDiffRangeForm extends sfForm
   }
 
   /**
+   * @param Branch $branch
+   *
+   * @return array
+   */
+  private function buildCommits(Branch $branch)
+  {
+    $commits = $this->getGitCommand()->getCommits(
+      $branch->getRepository()->getGitDir(), 
+      $branch->getBaseBranchName(), 
+      $branch->getLastCommit()
+    );
+    $commits[$branch->getCommitReference()] = $branch->getBaseBranchName();
+
+    $requests         = $branch->getRequests();
+    $requestsByCommit = array();
+    foreach ($requests as $request)
+    {
+      $requestsByCommit[$request->getCommit()] = $request;
+    }
+
+    $commitsWithParams = array();
+    foreach ($commits as $commit => $message)
+    {
+      $commitsWithParams[$commit] = array('content' => $message);
+      if (isset($requestsByCommit[$commit]))
+      {
+        $commitsWithParams[$commit]['data-review-request'] = 1;
+      }
+    }
+
+    return $commitsWithParams;
+  }
+
+
+  /**
    * @param string $type
-   * @param id $id
+   * @param id     $id
    *
    * @throws Exception
    * @internal param \sfRequest $request
@@ -64,21 +100,19 @@ class selectorDiffRangeForm extends sfForm
     {
       case 'branch':
         $branch = BranchQuery::create()
-          ->findOneById($id)
-        ;
+          ->findOneById($id);
         break;
       case 'file':
         $branch = BranchQuery::create()
           ->useFileQuery()
-            ->filterById($id)
+          ->filterById($id)
           ->endUse()
-          ->findOne()
-        ;
+          ->findOne();
         break;
       default:
         throw new Exception("Unkown type '%s'", $type);
     }
-    
+
     if (null === $branch)
     {
       throw new Exception('Unable to find a valid branch');
@@ -94,6 +128,5 @@ class selectorDiffRangeForm extends sfForm
   {
     return $this->getOption('git_command');
   }
-  
 
 }

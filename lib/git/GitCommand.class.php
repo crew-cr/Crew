@@ -170,7 +170,7 @@ class GitCommand
    */
   public function getCommits($gitDir, $referenceCommit, $currentCommit)
   {
-    $result = $this->exec('git --git-dir=%s log %s...%s --oneline', array($gitDir, $referenceCommit, $currentCommit));
+    $result = $this->exec('git --git-dir=%s log %s...%s --pretty=oneline', array($gitDir, $referenceCommit, $currentCommit));
     
     $commits = array();
     foreach ($result as $commit)

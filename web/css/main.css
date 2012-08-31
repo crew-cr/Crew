@@ -28,6 +28,7 @@
   border-right:1px solid #cccccc;
 }
 .list .list_head.diff-range {
+  padding-top:5px;
   display:none;
   background-color:#ececec;
 }
@@ -1122,6 +1123,7 @@ html body .footer .logoCrew:hover { opacity:1; }
   clear:both;
   overflow:auto;
 }
+.select2-drop .ricon { font-size:inherit; }
 #sfWebDebugBar[id] {
   positino:absolute;
   bottom:0;
