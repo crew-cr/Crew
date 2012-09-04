@@ -1130,4 +1130,5 @@ html body .footer .logoCrew:hover { opacity:1; }
   right:0;
   top:auto;
 }
+.clickable { cursor:pointer; }
 #admin_project_add { width:510px; }
