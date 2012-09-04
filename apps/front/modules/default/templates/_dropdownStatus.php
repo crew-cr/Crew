@@ -16,7 +16,7 @@ $cssByStatus   = array(
 $titleByStatus = array(
   BranchPeer::OK        => 'Validated',
   BranchPeer::KO        => 'Invalidated',
-  BranchPeer::A_TRAITER => 'Validated',
+  BranchPeer::A_TRAITER => 'Todo',
 ); 
 ?>
 <?php if ($readonly): ?>
