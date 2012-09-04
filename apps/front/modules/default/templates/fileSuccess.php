@@ -1,7 +1,7 @@
 <div class="file_bloc">
   <div class="list">
     <div class="list_head scroll">
-      <span class="ricon vertical-text toggle-diff-range tooltip" title="Click to see the diff range selector">: </span>
+      <span class="icon-caret-<?php echo $readonly ? 'up' : 'down'; ?> tooltip toggle-diff-range" title="Click to see the diff range selector"></span>
       <span class="title">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
