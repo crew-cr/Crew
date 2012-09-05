@@ -49,9 +49,9 @@ class fileAction extends crewAction
       ->find()
     ;
 
-    
-    $commitFrom = $request->getParameter('from', $this->branch->getCommitReference());
-    $commitTo   = $request->getParameter('to', $this->branch->getLastCommit());
+
+    $commitFrom        = $request->getParameter('from', $this->branch->getCommitReference());
+    $commitTo          = $request->getParameter('to', $this->branch->getLastCommit());
     $this->commit_from = null;
     $this->commit_to   = null;
     $this->readonly    = false;
@@ -64,7 +64,7 @@ class fileAction extends crewAction
     if ($request->hasParameter('to'))
     {
       $this->commit_to = $commitTo;
-      $this->readonly    = true;
+      $this->readonly  = true;
     }
 
     $modifiedFiles = $this->gitCommand->getDiffFilesFromBranch(
@@ -73,7 +73,6 @@ class fileAction extends crewAction
       $commitTo,
       false
     );
-
     
     $this->previousFileId = $this->findClosestFileId($previousFiles, $modifiedFiles);
     $this->nextFileId     = $this->findClosestFileId($nextFiles, $modifiedFiles);
