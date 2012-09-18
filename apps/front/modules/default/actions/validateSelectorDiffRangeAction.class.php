@@ -24,16 +24,14 @@ class validateSelectorDiffRangeAction extends crewAction
 
     $form = new selectorDiffRangeForm(array(), $options);
     $form->bind($redirectParameters);
-    $redirectParameters = array(
-      'branch' => 9
-    );
+
+    $redirectParameters = array();
     if ($form->isValid())
     {
       $redirectParameters['from'] = $form->getValue('from');
       $redirectParameters['to']   = $form->getValue('to');
       $type                       = $form->getValue('type');
       $id                         = $form->getValue('id');
-
     }
 
     switch ($type)
@@ -47,8 +45,9 @@ class validateSelectorDiffRangeAction extends crewAction
         $parameterName = 'file';
         break;
       default:
-        throw new InvalidArgumentException("Invalid type " . $form->getValue('type'));
+        throw new InvalidArgumentException("Invalid type " . $type);
     }
+  
     $redirectParameters[$parameterName] = $id;
 
     $this->redirect($url . '?' . http_build_query($redirectParameters));
