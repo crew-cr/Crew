@@ -1,6 +1,7 @@
 <div class="file_bloc">
   <div class="list">
     <div class="list_head scroll">
+      <span class="clickable icon-caret-<?php echo $readonly ? 'up' : 'down'; ?> tooltip toggle-diff-range" title="Click to see the diff range selector"></span>
       <span class="title">
         <?php if($file->getsfGuardUser()):?>
           <img class="avatar" src="<?php echo $file->getsfGuardUser()->getProfile()->getAvatarUrl() ?>" />
@@ -10,40 +11,27 @@
       <span class="tooltip" title="<?php echo stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()) ?>">
         <?php echo stringUtils::shorten(stringUtils::trimTicketInfos($file->getLastChangeCommitDesc()), 65) ?>
       </span>
-      <ul class="right dropdown-action">
-        <li class="dropdown">
-          <?php if (BranchPeer::OK === $file->getStatus()): ?>
-            <?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::OK), 'class' => 'dropdown-toggle ricon validate tooltip', 'title' => 'Validated')); ?>
-            <ul class="dropdown-menu">
-              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
-              <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
-          <?php elseif (BranchPeer::KO === $file->getStatus()): ?>
-            <?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::KO), 'class' => 'dropdown-toggle ricon invalidate tooltip', 'title' => 'Invalidated')); ?>
-            <ul class="dropdown-menu">
-                <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-                <lI><?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::A_TRAITER), 'class' => 'ricon todo item-status-action tooltip', 'title' => 'To do')); ?></lI>
-          <?php else: ?>
-            <?php echo link_to('!', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::A_TRAITER), 'class' => 'dropdown-toggle ricon todo tooltip', 'title' => 'To do')); ?>
-            <ul class="dropdown-menu">
-              <lI><?php echo link_to('Ã', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::OK), 'class' => 'ricon validate item-status-action tooltip', 'title' => 'Validated')); ?></lI>
-              <lI><?php echo link_to('Â', 'default/changeStatus', array('query_string' => sprintf('type=file&id=%s&status=%s', $file->getId(), BranchPeer::KO), 'class' => 'ricon invalidate item-status-action tooltip', 'title' => 'Invalidated')); ?></lI>
-          <?php endif; ?>
-          </ul>
-        </li>
-      </ul>
+      <?php include_partial('default/dropdownStatus', array('id' => $file->getId(), 'status' => $file->getStatus(), 'readonly' => $readonly, 'type' => 'file')); ?>
       <div class="actions">
+        <?php $defaultParametersUrlFile = array(
+          'from' => $commit_from,
+          'to'   => $commit_to,
+        ); ?>
         <?php if ('D' !== $file->getState() && !$file->getIsBinary()): ?>
-          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => 'file='.$file->getId(), 'target' => '_blank')) ?>
+          <?php echo link_to('View file', 'default/fileContent', array('title' => 'View entire file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $file->getId()))), 'target' => '_blank')) ?>
         <?php endif; ?>
         <?php if (null !== $previousFileId): ?>
-          <?php echo link_to('<< Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => 'file='.$previousFileId, 'class' => 'previous')) ?>
+          <?php echo link_to('<< Previous file', 'default/file', array('title' => 'Previous file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $previousFileId))), 'class' => 'previous')) ?>
         <?php endif; ?>
         <?php if (null !== $nextFileId): ?>
-          <?php echo link_to('Next file >>', 'default/file', array('title' => 'Next file', 'query_string' => 'file='.$nextFileId, 'class' => 'next')) ?>
+          <?php echo link_to('Next file >>', 'default/file', array('title' => 'Next file', 'query_string' => http_build_query(array_merge($defaultParametersUrlFile, array('file' => $nextFileId))), 'class' => 'next')) ?>
         <?php endif; ?>
       </div>
     </div>
     <div id="window" class="list_body data">
+      <div class="list_head diff-range<?php $readonly && print " displayed"; ?>">
+        <?php include_component('default', 'selectorDiffRange', array('type' => 'file', 'id' => $file->getId())); ?>
+      </div>
       <?php if(!$file->getIsBinary()): ?>
         <table>
           <tbody>
@@ -62,7 +50,16 @@
                 sprintf('<a href="crewide://%s@%s@%d">%d</a>', urlencode($repository->getName()), urlencode($file->getFilename()), $addedLinesCounter, $addedLinesCounter)
               ?></td>
               <td style="width: 100%" class="line <?php echo substr($fileContentLine, 0, 1) == '-' ? 'deleted' : (substr($fileContentLine, 0, 1) == '+' ? 'added' : '') ?>">
-                <strong class="add_bubble <?php echo array_key_exists($position, $sf_data->getRaw('fileLineComments')) ? 'disabled' : 'enabled'; ?><?php echo !empty($fileLineComments[$position]) && sizeof($fileLineComments[$position]) >= 1 ? ' commented' : ''; ?>" data="<?php echo url_for('default/commentAddLine') ?>?commit=<?php echo $file->getLastChangeCommit() ?>&fileId=<?php echo $file->getId() ?>&position=<?php echo $position ?>&line=<?php echo substr($fileContentLine, 0, 1) == '-' ? $deleledLinesCounter : $addedLinesCounter ?>"><span class="ricon">P</span> <span class="ricon">@</span></strong>
+                <?php if (!$readonly): ?>
+                  <strong 
+                    class="add_bubble 
+                          <?php echo array_key_exists($position, $sf_data->getRaw('fileLineComments')) ? 'disabled' : 'enabled'; ?>
+                          <?php echo !empty($fileLineComments[$position]) && sizeof($fileLineComments[$position]) >= 1 ? ' commented' : ''; ?>" 
+                    data="<?php echo url_for('default/commentAddLine') ?>?commit=<?php echo $file->getLastChangeCommit() ?>&fileId=<?php echo $file->getId() ?>&position=<?php echo $position ?>&line=<?php echo substr($fileContentLine, 0, 1) == '-' ? $deleledLinesCounter : $addedLinesCounter ?>">
+                    <span class="ricon">P</span>
+                    <span class="ricon">@</span> 
+                  </strong>
+                <?php endif; ?>
                 <pre><?php echo sprintf(" <strong>%s</strong> %s", substr($fileContentLine, 0, 1), substr($fileContentLine, 1)); ?></pre>
               </td>
             </tr>
@@ -84,7 +81,9 @@
       <?php endif; ?>
     </div>
     <div id="comment_component" class="comments_holder">
-      <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
+      <?php if (!$readonly): ?>
+        <?php include_component('default', 'commentGlobal', array('id' => $file->getId(), 'type' => CommentPeer::TYPE_FILE)); ?>
+      <?php endif; ?>
     </div>
   </div>
 </div>

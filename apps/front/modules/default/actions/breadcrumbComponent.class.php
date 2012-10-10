@@ -16,7 +16,11 @@ class breadcrumbComponent extends sfComponent
     $this->fileBreadCrumbList          = array();
     $this->branchBreadCrumbList        = array();
     $this->repositoryBreadCrumbList    = array();
-
+    
+    $gitCommand = $this->getContext()->getGitCommand();;
+    $commitFrom = null;
+    $commitTo   = null;
+    
     if ($fileId = $request->getParameter('file'))
     {
       $this->currentBreadCrumbFile = FileQuery::create()
@@ -24,13 +28,37 @@ class breadcrumbComponent extends sfComponent
         ->findOne()
       ;
 
-      $this->fileBreadCrumbList = FileQuery::create()
+      $fileBreadCrumbList = FileQuery::create()
         ->filterById($fileId, Criteria::NOT_EQUAL)
         ->filterByBranchId($this->currentBreadCrumbFile->getBranchId())
         ->filterByIsBinary(false)
         ->orderByFilename()
         ->find()
       ;
+
+      $branch = $this->currentBreadCrumbFile->getBranch();
+      $commitFrom = $request->getParameter('from', $branch->getCommitReference());
+      $commitTo   = $request->getParameter('to', $branch->getLastCommit());
+
+      $branch = $this->currentBreadCrumbFile->getBranch();
+      $modifiedFiles = $gitCommand->getDiffFilesFromBranch(
+        $branch->getRepository()->getGitDir(),
+        $commitFrom,
+        $commitTo,
+        false
+      );
+
+      foreach ($fileBreadCrumbList as $file)
+      {
+        /** @var File $file */
+        if (!isset($modifiedFiles[$file->getFilename()]))
+        {
+          continue;
+        }
+        
+        $this->fileBreadCrumbList[] = $file;
+      }
+
     }
 
     $branchId = $request->getParameter('branch');
@@ -38,7 +66,6 @@ class breadcrumbComponent extends sfComponent
     {
       $branchId = null != $this->currentBreadCrumbFile ? $this->currentBreadCrumbFile->getBranchId() : null;
     }
-
     if (null !== $branchId)
     {
       $this->currentBreadCrumbBranch = BranchQuery::create()
@@ -72,6 +99,18 @@ class breadcrumbComponent extends sfComponent
         ->orderByName()
         ->find()
       ;
+    }
+
+    $this->commit_from = null;
+    $this->commit_to = null;
+    if ($request->hasParameter('from'))
+    {
+      $this->commit_from = $commitFrom;
+    }
+
+    if ($request->hasParameter('to'))
+    {
+      $this->commit_to = $commitTo;
     }
   }
 }

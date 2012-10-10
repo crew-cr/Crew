@@ -46,10 +46,40 @@ class fileListAction extends crewAction
       ->filterByBranchId($this->branch->getId())
       ->find()
     ;
+    
+    $commitFrom = $request->getParameter('from', $this->branch->getCommitReference());
+    $commitTo   = $request->getParameter('to', $this->branch->getLastCommit());
+    $this->commit_from = null;
+    $this->commit_to   = null;
+    $this->readonly    = false;
+    if ($request->hasParameter('from')) 
+    {
+      $this->commit_from = $commitFrom;
+      $this->readonly    = true;
+    }
 
+    if ($request->hasParameter('to'))
+    {
+      $this->commit_to = $commitTo;
+      $this->readonly    = true;
+    }
+    
+    $modifiedFiles = $this->gitCommand->getDiffFilesFromBranch(
+      $this->repository->getGitDir(),
+      $commitFrom,
+      $commitTo, 
+      false
+    );
+    
     $this->files = array();
     foreach ($files as $file)
     {
+      /** @var File $file  */
+      if (!isset($modifiedFiles[$file->getFilename()]))
+      {
+        continue;
+      }
+      
       $fileCommentsCount = CommentQuery::create()
         ->filterByFileId($file->getId())
         ->filterByType(CommentPeer::TYPE_FILE)
@@ -80,7 +110,7 @@ class fileListAction extends crewAction
       
 
       $lastCommentId = 0;
-      if($fileCommentsCount || $lineCommentsCount)
+      if ($fileCommentsCount || $lineCommentsCount)
       {
         $lastComment = CommentQuery::create()
           ->filterByFileId($file->getId())
@@ -90,7 +120,7 @@ class fileListAction extends crewAction
           ->orderById(Criteria::DESC)
           ->findOne()
         ;
-        if($lastComment)
+        if ($lastComment)
         {
           $lastCommentId = $lastComment->getId();
         }
@@ -106,6 +136,7 @@ class fileListAction extends crewAction
     usort($this->files, array('self', 'sortPath'));
     $this->statusActions = StatusActionPeer::getStatusActionsForBoard(null, $this->repository->getId(), $this->branch->getId());
     $this->commentBoards = CommentPeer::getCommentsForBoard(null, $this->repository->getId(), $this->branch->getId());
+    
   }
 
   private static function sortPath($a, $b)
@@ -116,7 +147,7 @@ class fileListAction extends crewAction
     $fileB = basename($b['Filename']);
 
     $cmpPath = strcmp($pathA, $pathB);
-    if($cmpPath === 0)
+    if ($cmpPath === 0)
     {
       $cmpFile = strcmp($fileA, $fileB);
       return $cmpFile;

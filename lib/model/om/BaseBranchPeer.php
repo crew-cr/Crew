@@ -426,6 +426,9 @@ abstract class BaseBranchPeer {
 	 */
 	public static function clearRelatedInstancePool()
 	{
+		// Invalidate objects in RequestPeer instance pool,
+		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
+		RequestPeer::clearInstancePool();
 		// Invalidate objects in CommentPeer instance pool,
 		// since one or more of them may be deleted by ON DELETE CASCADE/SETNULL rule.
 		CommentPeer::clearInstancePool();
@@ -1448,6 +1451,12 @@ abstract class BaseBranchPeer {
 		$objects = BranchPeer::doSelect($criteria, $con);
 		foreach ($objects as $obj) {
 
+
+			// delete related Request objects
+			$criteria = new Criteria(RequestPeer::DATABASE_NAME);
+			
+			$criteria->add(RequestPeer::BRANCH_ID, $obj->getId());
+			$affectedRows += RequestPeer::doDelete($criteria, $con);
 
 			// delete related Comment objects
 			$criteria = new Criteria(CommentPeer::DATABASE_NAME);

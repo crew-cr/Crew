@@ -28,6 +28,18 @@
       }
     }
 
+    &.diff-range {
+      padding-top: 5px;
+      display: none;
+      &.displayed {
+        display: block;
+      }
+      background-color: #ECECEC;
+      select {
+        width: 350px;
+      }
+    }
+  
     &.scroll {
       position: absolute;
       top: 0;
@@ -53,7 +65,7 @@
       }
     }
 
-    ul.dropdown-action {
+    ul.dropdown-status {
       margin: 2px 0 0 5px;
 
       .dropdown-toggle {
@@ -70,6 +82,9 @@
       font-size: 30px;
       color: #aaa;
       margin-right: 5px;
+      &.toggle-diff-range {
+        font-size: 20px;
+      }
     }
 
     .status {
@@ -361,7 +376,7 @@
     }
   }
 
-  .dropdown-action {
+  .dropdown-status {
     font-size: 30px;
 
     a { text-decoration: none }

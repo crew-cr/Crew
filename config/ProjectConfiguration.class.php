@@ -11,5 +11,18 @@ class ProjectConfiguration extends sfProjectConfiguration
     $this->enablePlugins('sfGuardPlugin');
     $this->enablePlugins('crewLessPlugin');
     require_once sfConfig::get('sf_root_dir') . '/lib/vendor/XMPPHP/XMPP.php';
+
+    $this->dispatcher->connect('context.load_factories', array($this, 'listenLoadFactoriesEvent'));
   }
+
+  /**
+   * @param sfEvent $event
+   */
+  public function listenLoadFactoriesEvent(sfEvent $event)
+  {
+    /** @var $context sfContext */
+    $context = $event->getSubject();
+    $context->setGitCommand(new GitCommand(new GitDBLogger(PropelPDOFactory::instanciate('logger'))));
+  }
+  
 }

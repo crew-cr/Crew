@@ -27,6 +27,13 @@
   padding:0 5px 0 0;
   border-right:1px solid #cccccc;
 }
+.list .list_head.diff-range {
+  padding-top:5px;
+  display:none;
+  background-color:#ececec;
+}
+.list .list_head.diff-range.displayed { display:block; }
+.list .list_head.diff-range select { width:350px; }
 .list .list_head.scroll {
   position:absolute;
   top:0;
@@ -48,9 +55,9 @@
   font-weight:bold;
 }
 .list .list_head span.title+span { padding-right:20px; }
-.list .list_head ul.dropdown-action { margin:2px 0 0 5px; }
-.list .list_head ul.dropdown-action .dropdown-toggle { line-height:30px; }
-.list .list_head ul.dropdown-action .ricon {
+.list .list_head ul.dropdown-status { margin:2px 0 0 5px; }
+.list .list_head ul.dropdown-status .dropdown-toggle { line-height:30px; }
+.list .list_head ul.dropdown-status .ricon {
   color:#ffffff;
   margin:0;
 }
@@ -59,6 +66,7 @@
   color:#aaaaaa;
   margin-right:5px;
 }
+.list .list_head .ricon.toggle-diff-range { font-size:20px; }
 .list .list_head .status { margin-right:5px; }
 .list .list_head .status > a {
   display:inline-block;
@@ -261,16 +269,16 @@
   color:#666666;
 }
 .list.notifier .status_content .path a { color:#4183c4; }
-.list .dropdown-action { font-size:30px; }
-.list .dropdown-action a { text-decoration:none; }
-.list .dropdown-action li.dropdown {
+.list .dropdown-status { font-size:30px; }
+.list .dropdown-status a { text-decoration:none; }
+.list .dropdown-status li.dropdown {
   width:30px;
   text-align:center;
 }
-.list .dropdown-action li.dropdown .dropdown-toggle.ricon.invalidate { color:#ff686e; }
-.list .dropdown-action li.dropdown .dropdown-toggle.ricon.validate { color:#90d48b; }
-.list .dropdown-action li.dropdown .dropdown-toggle.ricon.todo { color:#aaaaaa; }
-.list .dropdown-action li.dropdown.open {
+.list .dropdown-status li.dropdown .dropdown-toggle.ricon.invalidate { color:#ff686e; }
+.list .dropdown-status li.dropdown .dropdown-toggle.ricon.validate { color:#90d48b; }
+.list .dropdown-status li.dropdown .dropdown-toggle.ricon.todo { color:#aaaaaa; }
+.list .dropdown-status li.dropdown.open {
   color:white;
   background-color:#666666;
   -webkit-border-top-right-radius:5px;
@@ -280,13 +288,13 @@
   border-top-right-radius:5px;
   border-top-left-radius:5px;
 }
-.list .dropdown-action li.dropdown.open .dropdown-toggle.ricon { color:white; }
-.list .dropdown-action li.dropdown .ricon {
+.list .dropdown-status li.dropdown.open .dropdown-toggle.ricon { color:white; }
+.list .dropdown-status li.dropdown .ricon {
   font-size:30px;
   line-height:30px;
 }
-.list .dropdown-action li.dropdown .ricon.todo { font-size:20px; }
-.list .dropdown-action li.dropdown.open {
+.list .dropdown-status li.dropdown .ricon.todo { font-size:20px; }
+.list .dropdown-status li.dropdown.open {
   color:white;
   background-color:#666666;
   -webkit-border-top-right-radius:5px;
@@ -296,9 +304,9 @@
   border-top-right-radius:5px;
   border-top-left-radius:5px;
 }
-.list .dropdown-action li.dropdown.open .dropdown-toggle { color:white; }
-.list .dropdown-action li.dropdown .dropdown-toggle { color:#666666; }
-.list .dropdown-action li.dropdown ul.dropdown-menu {
+.list .dropdown-status li.dropdown.open .dropdown-toggle { color:white; }
+.list .dropdown-status li.dropdown .dropdown-toggle { color:#666666; }
+.list .dropdown-status li.dropdown ul.dropdown-menu {
   color:white;
   background-color:#666666;
   -webkit-border-bottom-right-radius:5px;
@@ -311,7 +319,7 @@
   -webkit-box-shadow:2px 5px 10px rgba(0,0,0,0.4);
   -moz-box-shadow:2px 5px 10px rgba(0,0,0,0.4);
 }
-.list .dropdown-action li.dropdown ul.dropdown-menu li { cursor:pointer; }
+.list .dropdown-status li.dropdown ul.dropdown-menu li { cursor:pointer; }
 .comment_bloc, .comments_holder {
   overflow:auto;
   padding:10px;
@@ -842,6 +850,14 @@ button.safe:active, button.safe.active {
   text-decoration:none;
   vertical-align:bottom;
 }
+.vertical-text {
+  writing-mode:tb-rl;
+  -webkit-transform:rotate(90deg);
+  -moz-transform:rotate(90deg);
+  -o-transform:rotate(90deg);
+  display:block;
+  float:left;
+}
 h2 {
   color:#333333;
   font-size:16px;
@@ -1107,10 +1123,12 @@ html body .footer .logoCrew:hover { opacity:1; }
   clear:both;
   overflow:auto;
 }
+.select2-drop .ricon { font-size:inherit; }
 #sfWebDebugBar[id] {
   positino:absolute;
   bottom:0;
   right:0;
   top:auto;
 }
+.clickable { cursor:pointer; }
 #admin_project_add { width:510px; }
