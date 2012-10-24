@@ -3,6 +3,7 @@ fileSuccess:
     - linecom.jquery.js
     - fixedListHead.js
     - fileNavigation.js
+    - toggleDiffRange.js
 fileContentSuccess:
   layout: highlightFile
 
@@ -13,5 +14,6 @@ fileContentSuccess:
 fileListSuccess:
   javascripts:
     - viewFilesInfo.js
+    - toggleDiffRange.js
 cimeHelpSuccess:
   has_layout: false

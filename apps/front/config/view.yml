@@ -14,7 +14,10 @@ default:
 
   stylesheets:
     - reset.min.css
+    - font-awesome.css
+    - font-awesome-ie7.css
     - vendor/jquery.qtip.min.css
+    - ../select2/select2.css
     - main.css
 
   javascripts:
@@ -23,6 +26,7 @@ default:
     - vendor/jquery.qtip.min.js
     - vendor/jquery.mousewheel.min.js
     - vendor/bootstrap-dropdown.js
+    - ../select2/select2.js
     - itemStatusAction.js
     - commentGlobal.js
     - tooltip.js

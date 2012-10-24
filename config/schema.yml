@@ -19,6 +19,11 @@ propel:
     date_status_changed:              { type: timestamp, required: false }
     created_at:                       { type: timestamp, required: true}
     updated_at:                       { type: timestamp, required: true}
+  request:
+    id:                               ~
+    branch_id:                        { type: integer, size: '11', required: true, foreignTable: branch, foreignReference: id, onDelete: cascade, onUpdate: restrict }
+    commit:                           { type: varchar, size: '50', required: true }
+    created_at:                       { type: timestamp, required: true}
   comment:
     _attributes:
     id:                               ~
