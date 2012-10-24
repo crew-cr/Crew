@@ -50,6 +50,10 @@
  * @method     BranchQuery rightJoinsfGuardUser($relationAlias = null) Adds a RIGHT JOIN clause to the query using the sfGuardUser relation
  * @method     BranchQuery innerJoinsfGuardUser($relationAlias = null) Adds a INNER JOIN clause to the query using the sfGuardUser relation
  *
+ * @method     BranchQuery leftJoinRequest($relationAlias = null) Adds a LEFT JOIN clause to the query using the Request relation
+ * @method     BranchQuery rightJoinRequest($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Request relation
+ * @method     BranchQuery innerJoinRequest($relationAlias = null) Adds a INNER JOIN clause to the query using the Request relation
+ *
  * @method     BranchQuery leftJoinComment($relationAlias = null) Adds a LEFT JOIN clause to the query using the Comment relation
  * @method     BranchQuery rightJoinComment($relationAlias = null) Adds a RIGHT JOIN clause to the query using the Comment relation
  * @method     BranchQuery innerJoinComment($relationAlias = null) Adds a INNER JOIN clause to the query using the Comment relation
@@ -939,6 +943,79 @@ abstract class BaseBranchQuery extends ModelCriteria
 		return $this
 			->joinsfGuardUser($relationAlias, $joinType)
 			->useQuery($relationAlias ? $relationAlias : 'sfGuardUser', 'sfGuardUserQuery');
+	}
+
+	/**
+	 * Filter the query by a related Request object
+	 *
+	 * @param     Request $request  the related object to use as filter
+	 * @param     string $comparison Operator to use for the column comparison, defaults to Criteria::EQUAL
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function filterByRequest($request, $comparison = null)
+	{
+		if ($request instanceof Request) {
+			return $this
+				->addUsingAlias(BranchPeer::ID, $request->getBranchId(), $comparison);
+		} elseif ($request instanceof PropelCollection) {
+			return $this
+				->useRequestQuery()
+				->filterByPrimaryKeys($request->getPrimaryKeys())
+				->endUse();
+		} else {
+			throw new PropelException('filterByRequest() only accepts arguments of type Request or PropelCollection');
+		}
+	}
+
+	/**
+	 * Adds a JOIN clause to the query using the Request relation
+	 *
+	 * @param     string $relationAlias optional alias for the relation
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    BranchQuery The current query, for fluid interface
+	 */
+	public function joinRequest($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		$tableMap = $this->getTableMap();
+		$relationMap = $tableMap->getRelation('Request');
+
+		// create a ModelJoin object for this join
+		$join = new ModelJoin();
+		$join->setJoinType($joinType);
+		$join->setRelationMap($relationMap, $this->useAliasInSQL ? $this->getModelAlias() : null, $relationAlias);
+		if ($previousJoin = $this->getPreviousJoin()) {
+			$join->setPreviousJoin($previousJoin);
+		}
+
+		// add the ModelJoin to the current object
+		if($relationAlias) {
+			$this->addAlias($relationAlias, $relationMap->getRightTable()->getName());
+			$this->addJoinObject($join, $relationAlias);
+		} else {
+			$this->addJoinObject($join, 'Request');
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Use the Request relation Request object
+	 *
+	 * @see       useQuery()
+	 *
+	 * @param     string $relationAlias optional alias for the relation,
+	 *                                   to be used as main alias in the secondary query
+	 * @param     string $joinType Accepted values are null, 'left join', 'right join', 'inner join'
+	 *
+	 * @return    RequestQuery A secondary query class using the current class as primary query
+	 */
+	public function useRequestQuery($relationAlias = null, $joinType = Criteria::INNER_JOIN)
+	{
+		return $this
+			->joinRequest($relationAlias, $joinType)
+			->useQuery($relationAlias ? $relationAlias : 'Request', 'RequestQuery');
 	}
 
 	/**

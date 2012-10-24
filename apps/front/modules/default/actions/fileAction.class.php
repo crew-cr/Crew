@@ -19,24 +19,6 @@ class fileAction extends crewAction
     $this->forward404Unless($this->file, "File not found");
     $this->getResponse()->setTitle(basename($this->file->getFilename()));
 
-    $this->previousFileId = FileQuery::create()
-      ->select('Id')
-      ->filterByBranchId($this->file->getBranchId())
-      ->filterByFilename($this->file->getFilename(), Criteria::LESS_THAN)
-      ->filterByIsBinary(false)
-      ->orderByFilename(Criteria::DESC)
-      ->findOne()
-    ;
-
-    $this->nextFileId = FileQuery::create()
-      ->select('Id')
-      ->filterByBranchId($this->file->getBranchId())
-      ->filterByFilename($this->file->getFilename(), Criteria::GREATER_THAN)
-      ->filterByIsBinary(false)
-      ->orderByFilename(Criteria::ASC)
-      ->findOne()
-    ;
-
     $this->branch = BranchPeer::retrieveByPK($this->file->getBranchId());
     $this->forward404Unless($this->branch, "Branch not found");
 
@@ -49,10 +31,56 @@ class fileAction extends crewAction
       $options['ignore-all-space'] = true;
     }
 
+    $previousFiles = FileQuery::create()
+      ->select(array('Id', 'Filename'))
+      ->filterByBranchId($this->file->getBranchId())
+      ->filterByFilename($this->file->getFilename(), Criteria::LESS_THAN)
+      ->filterByIsBinary(false)
+      ->orderByFilename(Criteria::DESC)
+      ->find()
+    ;
+
+    $nextFiles = FileQuery::create()
+      ->select(array('Id', 'Filename'))
+      ->filterByBranchId($this->file->getBranchId())
+      ->filterByFilename($this->file->getFilename(), Criteria::GREATER_THAN)
+      ->filterByIsBinary(false)
+      ->orderByFilename(Criteria::ASC)
+      ->find()
+    ;
+
+
+    $commitFrom        = $request->getParameter('from', $this->branch->getCommitReference());
+    $commitTo          = $request->getParameter('to', $this->branch->getLastCommit());
+    $this->commit_from = null;
+    $this->commit_to   = null;
+    $this->readonly    = false;
+    if ($request->hasParameter('from'))
+    {
+      $this->commit_from = $commitFrom;
+      $this->readonly    = true;
+    }
+
+    if ($request->hasParameter('to'))
+    {
+      $this->commit_to = $commitTo;
+      $this->readonly  = true;
+    }
+
+    $modifiedFiles = $this->gitCommand->getDiffFilesFromBranch(
+      $this->repository->getGitDir(),
+      $commitFrom,
+      $commitTo,
+      false
+    );
+    
+    $this->previousFileId = $this->findClosestFileId($previousFiles, $modifiedFiles);
+    $this->nextFileId     = $this->findClosestFileId($nextFiles, $modifiedFiles);
+
     $this->fileContentLines = $this->gitCommand->getShowFileFromBranch(
       $this->repository->getGitDir(),
-      $this->branch->getCommitReference(),
-      $this->file->getLastChangeCommit(),
+      $commitFrom,
+      $commitTo,
       $this->file->getFilename(),
       $options
     );
@@ -72,4 +100,25 @@ class fileAction extends crewAction
       $this->fileLineComments[$fileLineCommentModel->getPosition()][] = $fileLineCommentModel;
     }
   }
+
+  /**
+   * @param Traversable $files
+   * @param array       $modifiedFiles
+   *
+   * @return null
+   */
+  private function findClosestFileId(Traversable $files, array $modifiedFiles)
+  {
+    $fileId = null;
+    foreach ($files as $file)
+    {
+      if (isset($modifiedFiles[$file['Filename']]))
+      {
+        return $file['Id'];
+      }
+    }
+    
+    return null;
+  }
+  
 }

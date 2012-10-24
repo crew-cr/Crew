@@ -24,7 +24,11 @@ class fileContentAction extends crewAction
     $this->repository = RepositoryPeer::retrieveByPK($this->branch->getRepositoryId());
     $this->forward404Unless($this->repository, "Repository not found");
 
-    $this->fileContent = $this->gitCommand->getShowFile($this->repository->getGitDir(), $this->file->getLastChangeCommit(), $this->file->getFilename());
+    $this->fileContent = $this->gitCommand->getShowFile(
+      $this->repository->getGitDir(), 
+      $request->getParameter('from', $this->file->getLastChangeCommit()), 
+      $this->file->getFilename()
+    );
 
     $this->fileExtension = pathinfo($this->file->getFilename(), PATHINFO_EXTENSION);
   }
