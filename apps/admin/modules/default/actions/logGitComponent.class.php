@@ -18,6 +18,17 @@ class logGitComponent extends sfComponent
       ->find()
     ;
 
-    $this->moreLogs = $nbLog + self::DISPLAY_COUNT;
+    $total = LogGitQuery::create()
+      ->count()
+    ;
+
+    if (count($this->logs) < self::DISPLAY_COUNT || $nbLog > $total)
+    {
+      $this->moreLogs = 0;
+    }
+    else
+    {
+      $this->moreLogs = $nbLog + self::DISPLAY_COUNT;
+    }
   }
 }

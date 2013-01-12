@@ -13,7 +13,9 @@
       <?php endforeach; ?>
     </table>
   </div>
-  <div class="list_footer">
-    <?php echo link_to('More...', 'default/repositoryList', array('title' => 'More...', 'query_string' => 'gitlog='.$moreLogs)) ?>
-  </div>
+  <?php if ($moreLogs > 0): ?>
+    <div class="list_footer">
+      <?php echo link_to('More...', 'default/repositoryList', array('title' => 'More...', 'query_string' => 'gitlog='.$moreLogs)) ?>
+    </div>
+  <?php endif; ?>
 </div>
