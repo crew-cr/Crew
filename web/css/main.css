@@ -216,6 +216,7 @@
   font-size:21px;
   margin-right:3px;
 }
+.list .list_body table tr td.file_name .ricon.binary { color:#999999; }
 .list .list_body table tr td.branch_name { white-space:nowrap; }
 .list .list_body table tr td.branch_name .new {
   background-color:#4183c4;
@@ -486,6 +487,15 @@
   font-size:12px;
 }
 .list_body.data table .line_comment .clipper { width:925px; }
+.list_body.data .imageDiff {
+  float:left;
+  margin:20px;
+  width:46%;
+}
+.list_body.data .imageDiff img {
+  border:1px solid #ff99aa;
+  max-width:100%;
+}
 .form {
   display:inline-block;
   width:auto;
