@@ -61,3 +61,16 @@ delete_review:
   requirements:
     project_id: \d+
     sf_method: [delete]
+    
+#------------
+# Comment API
+#------------
+
+list_comments:
+  url: /branch/:branch_id/comments
+  class: sfRequestRoute
+  param: { module: comment, action: list }
+  requirements:
+    branch_id: \d+
+    sf_method: [get]
+    
