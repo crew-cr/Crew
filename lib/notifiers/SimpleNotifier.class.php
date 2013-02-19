@@ -165,10 +165,16 @@ abstract class SimpleNotifier extends BaseNotifier
     if(isset($configEvent[$type.'_message']))
     {
       $message = $configEvent[$type.'_message'];
+      
+      $maxLength = 40;
+      if (isset($configEvent['message-max-length']))
+      {
+        $maxLength = (int)$configEvent['message-max-length'];
+      }
 
       $messageFields = array(
         '%branch%'  => (string)$comment->getBranch(),
-        '%message%' => stringUtils::shorten($comment->getValue(), 40, '...', true),
+        '%message%' => $maxLength ? stringUtils::shorten($comment->getValue(), $maxLength, '...', true) : $comment->getValue(),
         '%date%'    => date('d/m/Y H:i'),
         '%author%'  => (string)$this->subject->getUser(),
         '%project%' => (string)$comment->getBranch()->getRepository(),
