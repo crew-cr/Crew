@@ -135,8 +135,9 @@ abstract class SimpleNotifier extends BaseNotifier
     $message = $configEvent['message'];
 
     $messageFields = array(
-      '%branch%' => (string)$branch,
-      '%date%'   => date('d/m/Y H:i'),
+      '%project%' => (string)$branch->getRepository(),
+      '%branch%'  => (string)$branch,
+      '%date%'    => date('d/m/Y H:i'),
     );
 
     $message = str_replace(array_keys($messageFields), array_values($messageFields), $message);
