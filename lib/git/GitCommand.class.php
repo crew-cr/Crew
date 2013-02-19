@@ -142,7 +142,7 @@ class GitCommand
       $gitDiffOptions[] = '-w';
     }
 
-    $currentContentLinesResults = $this->exec('git --git-dir=%s diff %s %s..%s -- %s', array($gitDir, implode(' ', $gitDiffOptions), $referenceCommit, $currentCommit, $filename));
+    $currentContentLinesResults = $this->exec('git --git-dir=%s diff '.implode(' ', $gitDiffOptions).' %s..%s -- %s', array($gitDir, $referenceCommit, $currentCommit, $filename));
 
     $patternFinded = false;
     $fileLines = $currentContentLinesResults;
