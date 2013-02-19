@@ -39,53 +39,56 @@ abstract class SimpleNotifier extends BaseNotifier
       return true;
     }
 
-    switch($this->arguments['type'])
+    if (in_array($this->arguments['type'], array('file', 'branch')) && isset($configEvent[$this->arguments['type'].'_message']))
     {
-      case 'file':
-        $file       = $this->arguments['object'];
-        $oldStatus  = $this->arguments['old'];
+      $oldStatus  = $this->arguments['old'];
+      $message    = $configEvent[$this->arguments['type'].'_message'];
 
-        if(isset($configEvent['file_message']))
-        {
-          $message = $configEvent['file_message'];
-          $message = str_replace('%file%',        $file->getFilename(), $message);
-          $message = str_replace('%branch%',      $file->getBranch()->__toString(), $message);
-          $message = str_replace('%old-status%',  $this->getLabelStatus($oldStatus), $message);
-          $message = str_replace('%status%',      $this->getLabelStatus($file->getStatus()), $message);
-          $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
-          $message = str_replace('%author%',      $this->subject->getUser()->__toString(), $message);
+      $messageFields = array(
+        '%old-status%' => $this->getLabelStatus($oldStatus),
+        '%status%'     => $this->getLabelStatus($this->arguments['object']->getStatus()),
+        '%date%'       => $this->getLabelStatus(date('d/m/Y H:i')),
+        '%author%'     => (string)$this->subject->getUser(),
+      );
 
-          if(isset($configEvent['add-links']) && $configEvent['add-links'])
-          {
-            $message .= " : ".$this->generateUrl('file', array('file' => $file->getId()));
-          }
+      $linkConfig = null;
+      
+      if ('file' == $this->arguments['type'])
+      {
+        $file = $this->arguments['object'];
+        
+        $messageFields['%file%']    = $file->getFilename();
+        $messageFields['%branch%']  = (string)$file->getBranch();
+        $messageFields['%project%'] = (string)$file->getBranch()->getRepository();
 
-          $this->send($message);
-        }
-        break;
+        $linkConfig = array(
+          'action' => 'file',
+          'params' => array('file' => $file->getId()),
+        );
+      }
+      elseif('branch' == $this->arguments['type'])
+      {
+        $branch = $this->arguments['object'];
 
-      case 'branch':
-        $branch     = $this->arguments['object'];
-        $oldStatus  = $this->arguments['old'];
+        $messageFields['%branch%']  = (string)$branch;
+        $messageFields['%project%'] = (string)$branch->getRepository();
 
-        if(isset($configEvent['branch_message']))
-        {
-          $message = $configEvent['branch_message'];
-          $message = str_replace('%branch%',      $branch->__toString(), $message);
-          $message = str_replace('%old-status%',  $this->getLabelStatus($oldStatus), $message);
-          $message = str_replace('%status%',      $this->getLabelStatus($branch->getStatus()), $message);
-          $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
-          $message = str_replace('%author%',      $this->subject->getUser()->__toString(), $message);
-
-          if(isset($configEvent['add-links']) && $configEvent['add-links'])
-          {
-            $message .= " : ".$this->generateUrl('fileList', array('branch' => $branch->getId()));
-          }
-
-          $this->send($message);
-        }
-        break;
+        $linkConfig = array(
+          'action' => 'fileList',
+          'params' => array('branch' => $branch->getId()),
+        );
+      }
+      
+      $message = str_replace(array_keys($messageFields), array_values($messageFields), $message);
+      
+      if(isset($configEvent['add-links']) && $configEvent['add-links'] && $linkConfig !== null)
+      {
+        $message .= " : ".$this->generateUrl($linkConfig['action'], $linkConfig['params']);
+      }
+      
+      $this->send($message);
     }
+    
     return true;
   }
 
@@ -130,8 +133,13 @@ abstract class SimpleNotifier extends BaseNotifier
     $branch      = $this->arguments['object'];
 
     $message = $configEvent['message'];
-    $message = str_replace('%branch%',      $branch->__toString(), $message);
-    $message = str_replace('%date%',        date('d/m/Y H:i'), $message);
+
+    $messageFields = array(
+      '%branch%' => (string)$branch,
+      '%date%'   => date('d/m/Y H:i'),
+    );
+
+    $message = str_replace(array_keys($messageFields), array_values($messageFields), $message);
 
     if(isset($configEvent['add-links']) && $configEvent['add-links'])
     {
@@ -144,50 +152,71 @@ abstract class SimpleNotifier extends BaseNotifier
   }
 
   /**
-   * @param string $type
-   * @param string $comment
+   * @param $type
+   * @param $comment
+   * @return mixed|string
    */
   protected function createCommentNotificationMessage($type, $comment)
   {
     $configEvent = $this->getEventConfig('comment');
+    
     $message = '';
 
     if(isset($configEvent[$type.'_message']))
     {
       $message = $configEvent[$type.'_message'];
-      $message = str_replace('%branch%',  $comment->getBranch()->__toString(), $message);
-      $message = str_replace('%message%', stringUtils::shorten($comment->getValue(), 40, '...', true), $message);
-      $message = str_replace('%date%',    date('d/m/Y H:i'), $message);
-      $message = str_replace('%author%',  $this->subject->getUser()->__toString(), $message);
+
+      $messageFields = array(
+        '%branch%'  => (string)$comment->getBranch(),
+        '%message%' => stringUtils::shorten($comment->getValue(), 40, '...', true),
+        '%date%'    => date('d/m/Y H:i'),
+        '%author%'  => (string)$this->subject->getUser(),
+        '%project%' => (string)$comment->getBranch()->getRepository(),
+      );
+
+      $linkConfig = null;
 
       switch($type)
       {
         case 'line':
-          $message = str_replace('%line%', $comment->getLine(), $message);
+          $messageFields['%line%']    = $comment->getLine();
+
+          $linkConfig = array(
+            'action' => 'file',
+            'params' => array('file' => $comment->getFileId()),
+          );
+          break;
 
         case 'file':
-          $message = str_replace('%file%', $comment->getFile()->getFilename(), $message);
+          $messageFields['%file%'] = $comment->getFile()->getFilename();
+
+          $linkConfig = array(
+            'action' => 'file',
+            'params' => array('file' => $comment->getFileId()),
+          );
+          break;
+
+        case 'branch':
+          $linkConfig = array(
+            'action' => 'fileList',
+            'params' => array('branch' => $comment->getBranch()->getId()),
+          );
+          break;
       }
-
-      if(isset($configEvent['add-links']) && $configEvent['add-links'])
+      
+      if (null !== $linkConfig)
       {
-        switch($type)
-        {
-          case 'branch':
-            $link = " : ".$this->generateUrl('fileList', array('branch' => $comment->getBranch()->getId(), 'anchor' => 'comment-'.$comment->getId()));
-            break;
+        $linkConfig['params']['anchor'] = 'comment-'.$comment->getId();
+      }
+      
+      $message = str_replace(array_keys($messageFields), array_values($messageFields), $message);
 
-          case 'file':
-          case 'line':
-            $link = " : ".$this->generateUrl('file', array('file' => $comment->getFileId(), 'anchor' => 'comment-'.$comment->getId()));
-            break;
-        }
-
-        $message .= $link;
+      if(isset($configEvent['add-links']) && $configEvent['add-links'] && null !== $linkConfig)
+      {
+        $message .= $this->generateUrl($linkConfig['action'], $linkConfig['params']);
       }
     }
 
-      return $message;
+    return $message;
   }
-
 }
