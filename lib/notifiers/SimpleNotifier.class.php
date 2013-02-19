@@ -213,7 +213,7 @@ abstract class SimpleNotifier extends BaseNotifier
 
       if(isset($configEvent['add-links']) && $configEvent['add-links'] && null !== $linkConfig)
       {
-        $message .= $this->generateUrl($linkConfig['action'], $linkConfig['params']);
+        $message .= " : ".$this->generateUrl($linkConfig['action'], $linkConfig['params']);
       }
     }
 
