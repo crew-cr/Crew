@@ -38,6 +38,17 @@
           <?php $deleledLinesCounter = 0; ?>
           <?php $addedLinesCounter = 0; ?>
           <?php $position = 0; ?>
+          <?php
+          $isFileUTF8 = sfToolkit::isUTF8(implode("\n", $fileContentLines->getRawValue()));
+          
+          if (!$isFileUTF8) {
+            $previousSfCharset = sfConfig::get('sf_charset');
+            
+            // If file isn't detected as UTF-8, we fallback to ISO-8859-1 to prevent symfony escaping from blowing up $fileContentLines
+            // Could be improved with better encoding detection and not only 2 values to choose from
+            sfConfig::set('sf_charset', 'ISO-8859-1');
+          }
+          ?>
           <?php foreach ($fileContentLines as $fileContentLine): ?>
             <?php $position++; ?>
             <?php $deleledLinesCounter += substr($fileContentLine, 0, 1) == '+' ? 0 : 1; ?>
@@ -74,6 +85,7 @@
                 )); ?>
             <?php endif; ?>
             <?php endforeach; ?>
+            <?php if (isset($previousSfCharset)) sfConfig::set('sf_charset', $previousSfCharset); ?>
           </tbody>
         </table>
       <?php else: ?>
