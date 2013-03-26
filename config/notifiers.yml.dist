@@ -41,4 +41,24 @@ XmppNotifier:
       server: jabber.yourdomain.com
       to: team-chatroom@conference.jabber.yourdomain.com
       type: groupchat
-
+EmailNotifier:
+  status:
+    enabled: 1
+    file_message: "[Crew] message with %file% %branch% %old-status% %status% %author% %date%"
+    branch_message: "[Crew] message with %branch% %old-status% %status% %author% %date%"
+    add-links: 1
+  comment:
+    enabled: 1
+    branch_message: "[Crew] message with %branch% %message% %author% %date%"
+    file_message: "[Crew] message with %file% %branch% %message% %author% %date%"
+    line_message: "[Crew] message with %line% %file% %branch% %message% %author% %date%"
+    add-links: 1
+  review-request:
+    enabled: 1
+    message: "[Crew] message with %branch% and %date%"
+    add-links: 1
+  projects:
+    *:
+      status-type: ['branch', 'file']
+      comment-type: ['branch', 'file', 'line']
+      group-email: username@domain.com
