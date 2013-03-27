@@ -27,7 +27,8 @@ class EmailNotifier extends SimpleNotifier
     }
 
     $groupEmail      = $configCurrentProject['group-email'];
-    mail($groupEmail, 'There is a new activity on Crew', $message);
+    $emailSubject    = $configCurrentProject['email-subject'];
+    mail($groupEmail, $emailSubject, $message);
 
     return true;
   }

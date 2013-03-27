@@ -21,8 +21,8 @@ CampfireNotifier:
     message: "[Crew] message with %branch% and %date%"
     add-links: 1
   projects:
-# Specific project ID configurations
-# The values here override the ones from the global configurations below
+    # Specific project ID configurations
+    # The values here override the ones from the global configurations below
     <your-project-id>:
       base-url: campfire-url
       api-token: campfire-api-token
@@ -42,8 +42,8 @@ XmppNotifier:
     message: "New review request for branch %branch%"
     add-links: 1
   projects:
-# Specific project ID configurations
-# The values here override the ones from the global configurations below
+    # Specific project ID configurations
+    # The values here override the ones from the global configurations below
     <your-project-id>:
       host: jabber
       port: 5222
@@ -53,7 +53,7 @@ XmppNotifier:
       server: jabber.yourdomain.com
       to: team-chatroom@conference.jabber.yourdomain.com
       type: groupchat
-# Global project configuration
+    # Global project configuration
     *:
       host: jabber
       port: 5222
@@ -81,14 +81,16 @@ EmailNotifier:
     message: "[Crew] message with %branch% and %date%"
     add-links: 1
   projects:
-# Specific project ID configurations
-# The values here override the ones from the global configurations below
+    # Specific project ID configurations
+    # The values here override the ones from the global configurations below
     <your-project-id>:
       status-type: ['branch', 'file']
       comment-type: ['branch', 'file', 'line']
       group-email: username@domain.com
-# Global project configuration
+    # Global project configuration
     *:
       status-type: ['branch', 'file']
       comment-type: ['branch', 'file', 'line']
-      group-email: username@domain.com
+      # one or multiple coma separated email address(es)
+      group-email: username@domain.com,username2@domain.com
+      email-subject: "[Crew] There is a new activity"
