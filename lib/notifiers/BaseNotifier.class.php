@@ -28,9 +28,13 @@ abstract class BaseNotifier
   {
     $config = array();
     if(isset($this->config['projects'][$this->arguments['project-id']]))
+    {
         $config = $this->config['projects'][$this->arguments['project-id']];
+    }
     elseif(isset($this->config['projects']['*']))
+    {
         $config = $this->config['projects']['*'];
+    }
     return $config;
   }
 
@@ -38,7 +42,9 @@ abstract class BaseNotifier
   {
     $enabled = isset($this->config['projects'][$this->arguments['project-id']]) || !isset($this->config['projects']);
     if(!$enabled)
+    {
 	$enabled = isset($this->config['projects']['*']) || !isset($this->config['projects']);
+    }
     return $enabled;
   }
 
