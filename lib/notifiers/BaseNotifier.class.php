@@ -26,12 +26,26 @@ abstract class BaseNotifier
 
   public function getCurrentProjectConfig()
   {
-    return (isset($this->config['projects'][$this->arguments['project-id']])) ? $this->config['projects'][$this->arguments['project-id']] : array();
+    $config = array();
+    if(isset($this->config['projects'][$this->arguments['project-id']]))
+    {
+        $config = $this->config['projects'][$this->arguments['project-id']];
+    }
+    elseif(isset($this->config['projects']['*']))
+    {
+        $config = $this->config['projects']['*'];
+    }
+    return $config;
   }
 
   protected function isEnabledForCurrentProject()
   {
-    return isset($this->config['projects'][$this->arguments['project-id']]) || !isset($this->config['projects']);
+    $enabled = isset($this->config['projects'][$this->arguments['project-id']]) || !isset($this->config['projects']);
+    if(!$enabled)
+    {
+	$enabled = isset($this->config['projects']['*']) || !isset($this->config['projects']);
+    }
+    return $enabled;
   }
 
   protected function configure(sfEvent $event)
