@@ -2,6 +2,8 @@
 
 class EmailNotifier extends SimpleNotifier
 {
+  protected $emailSubject;
+
   /**
    * @param int $statusId
    *
@@ -10,6 +12,57 @@ class EmailNotifier extends SimpleNotifier
   protected function getLabelStatus($statusId)
   {
     return BranchPeer::getBasecampLabelStatus($statusId);
+  }
+
+  /**
+   * @param sfEvent $event
+   */
+  public function notifyReviewRequest(sfEvent $event)
+  {
+    $configCurrentProject = $this->getCurrentProjectConfig();
+
+    if(count($configCurrentProject) == 0)
+    {
+      return false;
+    }
+
+    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Review Request";
+    
+    parent::notifyReviewRequest($event);
+  }
+
+  /**
+   * @param sfEvent $event
+   */
+  public function notifyStatus(sfEvent $event)
+  {
+    $configCurrentProject = $this->getCurrentProjectConfig();
+
+    if(count($configCurrentProject) == 0)
+    {
+      return false;
+    }
+
+    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Status Change";
+
+    parent::notifyComment($event);
+  }
+
+  /**
+   * @param sfEvent $event
+   */
+  public function notifyComment(sfEvent $event)
+  {
+    $configCurrentProject = $this->getCurrentProjectConfig();
+
+    if(count($configCurrentProject) == 0)
+    {
+      return false;
+    }
+
+    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Comment";
+
+    parent::notifyComment($event);
   }
 
   /**
@@ -27,8 +80,8 @@ class EmailNotifier extends SimpleNotifier
     }
 
     $groupEmail      = $configCurrentProject['group-email'];
-    $emailSubject    = $configCurrentProject['email-subject'];
-    mail($groupEmail, $emailSubject, $message);
+
+    mail($groupEmail, $this->emailSubject, $message);
 
     return true;
   }
