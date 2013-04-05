@@ -26,7 +26,7 @@ class EmailNotifier extends SimpleNotifier
       return false;
     }
 
-    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Review Request";
+    $this->emailSubject = $configCurrentProject['email-subject'] ." - Review Request";
     
     parent::notifyReviewRequest($event);
   }
@@ -43,9 +43,9 @@ class EmailNotifier extends SimpleNotifier
       return false;
     }
 
-    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Status Change";
+    $this->emailSubject = $configCurrentProject['email-subject'] ." - Status Change";
 
-    parent::notifyComment($event);
+    parent::notifyStatus($event);
   }
 
   /**
@@ -60,7 +60,7 @@ class EmailNotifier extends SimpleNotifier
       return false;
     }
 
-    $this->emailSubject         = $configCurrentProject['email-subject'] ." - Comment";
+    $this->emailSubject = $configCurrentProject['email-subject'] ." - Comment";
 
     parent::notifyComment($event);
   }
