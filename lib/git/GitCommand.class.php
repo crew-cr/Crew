@@ -137,6 +137,7 @@ class GitCommand
     $gitDiffOptions = array(
       '-U9999'
     );
+
     if (isset($options['ignore-all-space']) && $options['ignore-all-space'])
     {
       $gitDiffOptions[] = '-w';
@@ -144,20 +145,17 @@ class GitCommand
 
     $currentContentLinesResults = $this->exec('git --git-dir=%s diff '.implode(' ', $gitDiffOptions).' %s..%s -- %s', array($gitDir, $referenceCommit, $currentCommit, $filename));
 
-    $patternFinded = false;
     $fileLines = $currentContentLinesResults;
 
     foreach($currentContentLinesResults as $key => $currentContentLinesResult)
     {
-      if($patternFinded === false)
+      unset($fileLines[$key]);
+      if(substr($currentContentLinesResult, 0, 2) == "@@")
       {
-        unset($fileLines[$key]);
-        if(substr($currentContentLinesResult, 0, 2) == "@@")
-        {
-          break;
-        }
+        break;
       }
     }
+
     return $fileLines;
   }
 

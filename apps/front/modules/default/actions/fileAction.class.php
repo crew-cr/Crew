@@ -35,7 +35,6 @@ class fileAction extends crewAction
       ->select(array('Id', 'Filename'))
       ->filterByBranchId($this->file->getBranchId())
       ->filterByFilename($this->file->getFilename(), Criteria::LESS_THAN)
-      ->filterByIsBinary(false)
       ->orderByFilename(Criteria::DESC)
       ->find()
     ;
@@ -44,11 +43,9 @@ class fileAction extends crewAction
       ->select(array('Id', 'Filename'))
       ->filterByBranchId($this->file->getBranchId())
       ->filterByFilename($this->file->getFilename(), Criteria::GREATER_THAN)
-      ->filterByIsBinary(false)
       ->orderByFilename(Criteria::ASC)
       ->find()
     ;
-
 
     $commitFrom        = $request->getParameter('from', $this->branch->getCommitReference());
     $commitTo          = $request->getParameter('to', $this->branch->getLastCommit());
@@ -77,28 +74,53 @@ class fileAction extends crewAction
     $this->previousFileId = $this->findClosestFileId($previousFiles, $modifiedFiles);
     $this->nextFileId     = $this->findClosestFileId($nextFiles, $modifiedFiles);
 
-    $this->fileContentLines = $this->gitCommand->getShowFileFromBranch(
-      $this->repository->getGitDir(),
-      $commitFrom,
-      $commitTo,
-      $this->file->getFilename(),
-      $options
-    );
+    if ($this->file->getIsBinary())
+    {
+        $oldBinaryContent = $this->gitCommand->getShowFile(
+          $this->repository->getGitDir(),
+          $commitFrom,
+          $this->file->getFilename()
+        );
 
-    $fileLineCommentsModel = CommentQuery::create()
-      ->filterByFileId($this->file->getId())
-      ->filterByCommit($this->file->getLastChangeCommit())
-      ->filterByType(CommentPeer::TYPE_LINE)
-      ->find()
-    ;
+        $this->oldImageExists  = !(strpos($oldBinaryContent, 'fatal: Path') === 0);
+        $this->oldImageType    = ImageUtils::getImageTypeFromContent($oldBinaryContent);
+        $this->oldImageContent = base64_encode($oldBinaryContent);
+
+        $newBinaryContent = $this->gitCommand->getShowFile(
+          $this->repository->getGitDir(),
+          $commitTo,
+          $this->file->getFilename()
+        );
+
+        $this->newImageExists  = !(strpos($newBinaryContent, 'fatal: Path') === 0);
+        $this->newImageType    = ImageUtils::getImageTypeFromContent($newBinaryContent);
+        $this->newImageContent = base64_encode($newBinaryContent);
+    }
+    else
+    {
+      $this->fileContentLines = $this->gitCommand->getShowFileFromBranch(
+        $this->repository->getGitDir(),
+        $commitFrom,
+        $commitTo,
+        $this->file->getFilename(),
+        $options
+      );
+
+      $fileLineCommentsModel = CommentQuery::create()
+        ->filterByFileId($this->file->getId())
+        ->filterByCommit($this->file->getLastChangeCommit())
+        ->filterByType(CommentPeer::TYPE_LINE)
+        ->find()
+      ;
+
+      $this->fileLineComments = array();
+      foreach ($fileLineCommentsModel as $fileLineCommentModel)
+      {
+        $this->fileLineComments[$fileLineCommentModel->getPosition()][] = $fileLineCommentModel;
+      }
+    }
 
     $this->userId = $this->getUser()->getId();
-
-    $this->fileLineComments = array();
-    foreach ($fileLineCommentsModel as $fileLineCommentModel)
-    {
-      $this->fileLineComments[$fileLineCommentModel->getPosition()][] = $fileLineCommentModel;
-    }
   }
 
   /**

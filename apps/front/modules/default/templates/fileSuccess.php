@@ -89,7 +89,20 @@
           </tbody>
         </table>
       <?php else: ?>
-        <div class="flashMessage error">This is a binary file.</div>
+        <div>
+          <div class="imageDiff old">
+            <?php if (!$oldImageExists): ?><div class="flashMessage notice">No binary file in this revision.</div>
+            <?php elseif (is_null($oldImageType)): ?><div class="flashMessage error">This is an unknown type binary file.</div>
+            <?php else: ?><img src="data:image/<?php echo $oldImageType ?>;base64,<?php echo $oldImageContent ?>" title="<?php echo $file->getFilename() ?>" />
+            <?php endif;?>
+          </div>
+          <div class="imageDiff new">
+            <?php if (!$newImageExists): ?><div class="flashMessage notice">No binary file in this revision.</div>
+            <?php elseif (is_null($newImageType)): ?><div class="flashMessage error">This is an unknown type binary file.</div>
+            <?php else: ?><img src="data:image/<?php echo $newImageType ?>;base64,<?php echo $newImageContent ?>" title="<?php echo $file->getFilename() ?>" />
+            <?php endif;?>
+          </div>
+        </div>
       <?php endif; ?>
     </div>
     <div id="comment_component" class="comments_holder">
