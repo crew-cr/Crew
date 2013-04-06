@@ -73,12 +73,12 @@ class GitCommand
 
     if($withDetails)
     {
-      $lineResults = $this->exec("git --git-dir=%s diff %s..%s --numstat | sed 's/\'$'\t''/ /g'", array($gitDir,  $referenceCommit, $lastCommit));
+      $lineResults = $this->exec("git --git-dir=%s diff %s..%s --numstat", array($gitDir,  $referenceCommit, $lastCommit));
 
       $linesInfos = array();
       foreach($lineResults as $line)
       {
-        $infos = explode(' ', $line);
+        $infos = explode("\t", $line);
         if(count($infos) == 3)
         {
           $linesInfos[$infos[2]] = array($infos[0], $infos[1]);
