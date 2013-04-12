@@ -4,7 +4,7 @@ class listAction extends crewAction
 {
   /**
 * @param sfWebRequest $request
-* @return void
+* @return string
 */
   public function execute($request)
   {
