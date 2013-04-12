@@ -33,25 +33,9 @@ class listAction extends crewAction
       $comments = $branch->getComments();
       if($comments)
       {
-        $totalComments = $uncheckedComments = $comments->count();
-        
-        foreach ($comments as $comment) 
-        {
-          //Decrement checked commentt
-          if (null !== $comment->getCheckUserId())
-          {
-              $uncheckedComments--;
-          }
-        }
-        
-        $result = array(
-          'counters'  => array (
-            'total'     => $totalComments,
-            'unchecked' => $uncheckedComments
-          ),
-          'list'  => $comments->toArray()
-        );
+        $result = $comments->toArray();
       }
+      
       $this->getResponse()->setStatusCode('200');
     }
     else
