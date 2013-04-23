@@ -47,15 +47,14 @@
         <td class="file_name">
           <h3>
             <?php if ($file['ReviewRequest'] == 1): ?><span class="ricon">i</span><?php endif; ?>
-            <?php if (!$file['IsBinary']):?>
-              <a 
-                class="tooltip" 
-                href="<?php echo url_for("default/file?" . http_build_query(array_merge($defaultParametersUrlFile, array('file' => $file['Id'])))); ?>" 
-                title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
-            <?php endif; ?>
-            <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
+            <a
+              class="tooltip"
+              href="<?php echo url_for("default/file?" . http_build_query(array_merge($defaultParametersUrlFile, array('file' => $file['Id'])))); ?>" 
+              title="<?php echo stringUtils::trimTicketInfos($file['LastChangeCommitDesc'])?>">
+              <span style="display: none;"><?php echo ($pathDir !== ".")?stringUtils::lshorten($pathDir . '/', $maxLength - strlen($filename)):''; ?></span><?php echo stringUtils::lshorten($filename, $maxLength); ?>
+            </a>
             <?php if ($file['IsBinary']):?>
-              </a>
+              <span class="ricon binary" title="Binary file">Ñ</span>
             <?php endif; ?>
           </h3>
         </td>

@@ -31,7 +31,6 @@ class breadcrumbComponent extends sfComponent
       $fileBreadCrumbList = FileQuery::create()
         ->filterById($fileId, Criteria::NOT_EQUAL)
         ->filterByBranchId($this->currentBreadCrumbFile->getBranchId())
-        ->filterByIsBinary(false)
         ->orderByFilename()
         ->find()
       ;

@@ -73,12 +73,12 @@ class GitCommand
 
     if($withDetails)
     {
-      $lineResults = $this->exec("git --git-dir=%s diff %s..%s --numstat | sed 's/\'$'\t''/ /g'", array($gitDir,  $referenceCommit, $lastCommit));
+      $lineResults = $this->exec("git --git-dir=%s diff %s..%s --numstat", array($gitDir,  $referenceCommit, $lastCommit));
 
       $linesInfos = array();
       foreach($lineResults as $line)
       {
-        $infos = explode(' ', $line);
+        $infos = explode("\t", $line);
         if(count($infos) == 3)
         {
           $linesInfos[$infos[2]] = array($infos[0], $infos[1]);
@@ -117,9 +117,7 @@ class GitCommand
   {
     $this->fetch($gitDir);
 
-    $fileContent = $this->exec('git --git-dir=%s show %s:%s', array($gitDir, $currentCommit, $filename));
-
-    return implode(PHP_EOL, $fileContent);
+    return $this->execReturnRaw('git --git-dir=%s show %s:%s', array($gitDir, $currentCommit, $filename));
   }
 
   /**
@@ -137,6 +135,7 @@ class GitCommand
     $gitDiffOptions = array(
       '-U9999'
     );
+
     if (isset($options['ignore-all-space']) && $options['ignore-all-space'])
     {
       $gitDiffOptions[] = '-w';
@@ -144,20 +143,17 @@ class GitCommand
 
     $currentContentLinesResults = $this->exec('git --git-dir=%s diff '.implode(' ', $gitDiffOptions).' %s..%s -- %s', array($gitDir, $referenceCommit, $currentCommit, $filename));
 
-    $patternFinded = false;
     $fileLines = $currentContentLinesResults;
 
     foreach($currentContentLinesResults as $key => $currentContentLinesResult)
     {
-      if($patternFinded === false)
+      unset($fileLines[$key]);
+      if(substr($currentContentLinesResult, 0, 2) == "@@")
       {
-        unset($fileLines[$key]);
-        if(substr($currentContentLinesResult, 0, 2) == "@@")
-        {
-          break;
-        }
+        break;
       }
     }
+
     return $fileLines;
   }
 
@@ -233,4 +229,44 @@ class GitCommand
 
     return $internOutput;
   }
+
+  /**
+   * Executes a command, and returns the raw output as a string
+   * Absolutely no operation is done on the command's output.
+   *
+   * @param string $cmd
+   * @param array  $arguments
+   * @param int    & $status
+   *
+   * @return string
+   */
+  public function execReturnRaw($cmd, array $arguments = array(), &$status = null)
+  {
+    $arguments = array_map('escapeshellarg', $arguments);
+
+    $cmd = vsprintf($cmd, $arguments);
+    $cmd.= ' 2>&1';
+
+    // exec() returns an array of strings, but quoting http://www.php.net/manual/en/function.exec.php :
+    //   "Trailing whitespace, such as \n, is not included in this array."
+    // So, exec() will break the output -- especially when working with binary files.
+    // passthru() doesn't do that ; but writes on stdout ; which explains the need for output buffering.
+    ob_start();
+    passthru($cmd, $internStatus);
+    $internOutput = ob_get_contents();
+    ob_end_clean();
+
+    if($this->logger !== null)
+    {
+      $this->logger->log($cmd, $internStatus, $internOutput);
+    }
+
+    if(!is_null($status))
+    {
+      $status = $internStatus;
+    }
+
+    return $internOutput;
+  }
+
 }
