@@ -41,4 +41,23 @@ XmppNotifier:
       server: jabber.yourdomain.com
       to: team-chatroom@conference.jabber.yourdomain.com
       type: groupchat
+HipchatNotifier:
+  review-request:
+    enabled: 1
+    message: "New review request for branch %branch%"
+    add-links: 1
+    notify: 0
+    color: "purple"
+  comment:
+    enabled: 1
+    branch_message: "%branch% - %author% : %message%"
+    file_message: "%branch% - %author% : %message%"
+    line_message: "%branch% - %author% : %message%"
+    add-links: 1
+    notify: 0
+  projects:
+    2:
+      token: "2718a778gavde59a8fa51aa7aze"
+      room: "developers"
+      user: "Crew"
 
