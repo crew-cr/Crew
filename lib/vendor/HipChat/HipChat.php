@@ -1,7 +1,5 @@
 <?php
 
-namespace HipChat;
-
 /**
  * Library for interacting with the HipChat REST API.
  *

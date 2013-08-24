@@ -31,14 +31,14 @@ class HipchatNotifier extends SimpleNotifier
 
     $notify = isset($eventConfig['notify']) && $eventConfig['notify'] == '1';
 
-    $color = HipChat\Hipchat::COLOR_YELLOW;
+    $color = Hipchat::COLOR_YELLOW;
     if (isset($eventConfig['color']))
     {
       $color = $eventConfig['color'];
     }
 
-    $hipChat = new HipChat\HipChat($token);
-    $hipChat->message_room($room, $user, $message, $notify, $color, HipChat\Hipchat::FORMAT_TEXT);
+    $hipChat = new HipChat($token);
+    $hipChat->message_room($room, $user, $message, $notify, $color, Hipchat::FORMAT_TEXT);
 
     return $this;
   }
