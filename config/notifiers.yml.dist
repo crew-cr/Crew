@@ -43,13 +43,13 @@ XmppNotifier:
       type: groupchat
 HipchatNotifier:
   review-request:
-    enabled: 1
+    enabled: 0
     message: "New review request for branch %branch%"
     add-links: 1
     notify: 0
     color: "purple"
   comment:
-    enabled: 1
+    enabled: 0
     branch_message: "%branch% - %author% : %message%"
     file_message: "%branch% - %author% : %message%"
     line_message: "%branch% - %author% : %message%"
