@@ -13,7 +13,6 @@ class ProjectConfiguration extends sfProjectConfiguration
     require_once sfConfig::get('sf_root_dir') . '/lib/vendor/XMPPHP/XMPP.php';
     require_once sfConfig::get('sf_root_dir') . '/lib/vendor/HipChat/HipChat.php';
 
-
     $this->dispatcher->connect('context.load_factories', array($this, 'listenLoadFactoriesEvent'));
   }
 
