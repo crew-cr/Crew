@@ -1,2 +1,3 @@
 markdown: rdiscount
 permalink: /news/:title
+baseurl: "http://crew-cr.github.io/Crew"
