@@ -1,0 +1,24 @@
+---
+layout: nil
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ 
+ <title>Crew - Code Review Tool</title>
+ <link href="http://crew-cr.org/atom.xml" rel="self"/>
+ <link href="http://crew-cr.org/"/>
+ <updated>{{ site.time | date_to_xmlschema }}</updated>
+ <id>http://crew-cr.org/</id>
+ {% for post in site.posts %}
+   <entry>
+     <title>{{ post.title }}</title>
+     <link href="http://crew-cr.org{{ post.url }}"/>
+     <updated>{{ post.date | date_to_xmlschema }}</updated>
+     <id>http://crew-cr.org{{ post.id }}</id>
+     <author>
+       <name>{{ post.author }}</name>
+     </author>
+     <content type="html">{{ post.content | xml_escape }}</content>
+   </entry>
+ {% endfor %}
+</feed>
