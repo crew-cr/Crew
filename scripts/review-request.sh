@@ -15,13 +15,12 @@ BRANCH_TO_REVIEW=`git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/*
 BASE_BRANCH=master
 CREW_SERVER=http://crew
 
-
 function usage {
   echo "$SCRIPT_NAME ($SCRIPT_VERSION), $SCRIPT_SHORT_DESC."
-  echo "-b <branch to review> (default: current branch)"
-  echo "-f <base branch> "
-  echo "-p <crew project id> (default: 1)"
-  echo "-s <crew server url> (default: http://crew)"
+  echo "-b <branch to review> (default: $BRANCH_TO_REVIEW)"
+  echo "-f <base branch> (default: $BASE_BRANCH)"
+  echo "-p <crew project id> (default: $CREW_PROJECT_ID)"
+  echo "-s <crew server url> (default: $CREW_SERVER)"
   echo "-h : this help"
   echo "-v : version of $SCRIPT_NAME"
   exit 0
